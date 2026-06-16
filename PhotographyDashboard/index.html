@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photography Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+</head>
+<body>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <i class="ti ti-aperture"></i>
+      <span>LensStudio</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item active">
+        <i class="ti ti-layout-dashboard"></i> Dashboard
+      </a>
+      <a href="pages/gallery.html" class="nav-item">
+        <i class="ti ti-photo"></i> Gallery
+      </a>
+      <a href="pages/bookings.html" class="nav-item">
+        <i class="ti ti-calendar"></i> Bookings
+      </a>
+      <a href="pages/portfolio.html" class="nav-item">
+        <i class="ti ti-briefcase"></i> Portfolio
+      </a>
+      <a href="#" class="nav-item">
+        <i class="ti ti-users"></i> Clients
+      </a>
+      <a href="#" class="nav-item">
+        <i class="ti ti-settings"></i> Settings
+      </a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="avatar">TM</div>
+      <div class="user-info">
+        <p class="user-name">Thamizh M.</p>
+        <p class="user-role">Photographer</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main">
+
+    <!-- Header -->
+    <header class="topbar">
+      <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-sub">Welcome back, Thamizh</p>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn-icon" aria-label="Notifications"><i class="ti ti-bell"></i></button>
+        <button class="btn-primary"><i class="ti ti-plus"></i> New Booking</button>
+      </div>
+    </header>
+
+    <!-- Metric Cards -->
+    <section class="metrics" aria-label="Key stats">
+      <div class="metric-card">
+        <div class="metric-icon" style="background:#E6F1FB; color:#185FA5;">
+          <i class="ti ti-camera"></i>
+        </div>
+        <div>
+          <p class="metric-label">Total Shoots</p>
+          <p class="metric-value">248</p>
+          <p class="metric-delta up"><i class="ti ti-trending-up"></i> +12 this month</p>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon" style="background:#EAF3DE; color:#3B6D11;">
+          <i class="ti ti-photo"></i>
+        </div>
+        <div>
+          <p class="metric-label">Photos Delivered</p>
+          <p class="metric-value">14,200</p>
+          <p class="metric-delta up"><i class="ti ti-trending-up"></i> +8% vs last month</p>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon" style="background:#FAEEDA; color:#854F0B;">
+          <i class="ti ti-currency-dollar"></i>
+        </div>
+        <div>
+          <p class="metric-label">Revenue (YTD)</p>
+          <p class="metric-value">$38,400</p>
+          <p class="metric-delta up"><i class="ti ti-trending-up"></i> +22% vs last year</p>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon" style="background:#EEEDFE; color:#534AB7;">
+          <i class="ti ti-star"></i>
+        </div>
+        <div>
+          <p class="metric-label">Avg Rating</p>
+          <p class="metric-value">4.9 <span style="font-size:13px;font-weight:400;color:#888;">/5</span></p>
+          <p class="metric-delta neutral">186 reviews</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Middle Row -->
+    <div class="row-2col">
+
+      <!-- Recent Shoots -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title"><i class="ti ti-clock"></i> Recent Shoots</h2>
+          <a href="pages/bookings.html" class="card-link">View all</a>
+        </div>
+        <ul class="shoot-list">
+          <li class="shoot-item">
+            <div class="shoot-thumb wedding"><i class="ti ti-heart"></i></div>
+            <div class="shoot-info">
+              <p class="shoot-name">Emma &amp; Jake — Wedding</p>
+              <p class="shoot-meta">Jun 10 · Central Park</p>
+            </div>
+            <span class="badge badge-done">Done</span>
+          </li>
+          <li class="shoot-item">
+            <div class="shoot-thumb corporate"><i class="ti ti-building"></i></div>
+            <div class="shoot-info">
+              <p class="shoot-name">Nexus Corp — Headshots</p>
+              <p class="shoot-meta">Jun 12 · Studio 4</p>
+            </div>
+            <span class="badge badge-upcoming">Today</span>
+          </li>
+          <li class="shoot-item">
+            <div class="shoot-thumb family"><i class="ti ti-users"></i></div>
+            <div class="shoot-info">
+              <p class="shoot-name">Liu Family — Portrait</p>
+              <p class="shoot-meta">Jun 8 · Riverside</p>
+            </div>
+            <span class="badge badge-pending">Editing</span>
+          </li>
+          <li class="shoot-item">
+            <div class="shoot-thumb fashion"><i class="ti ti-shirt"></i></div>
+            <div class="shoot-info">
+              <p class="shoot-name">Luma Brand — Fashion</p>
+              <p class="shoot-meta">Jun 6 · Rooftop</p>
+            </div>
+            <span class="badge badge-done">Done</span>
+          </li>
+          <li class="shoot-item">
+            <div class="shoot-thumb nature"><i class="ti ti-tree"></i></div>
+            <div class="shoot-info">
+              <p class="shoot-name">NatGeo — Landscape</p>
+              <p class="shoot-meta">Jun 3 · Blue Mountains</p>
+            </div>
+            <span class="badge badge-done">Done</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Upcoming Bookings -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title"><i class="ti ti-calendar-event"></i> Upcoming Bookings</h2>
+          <a href="pages/bookings.html" class="card-link">View all</a>
+        </div>
+        <table class="booking-table">
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Type</th>
+              <th>Date</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Sarah &amp; Tom</td>
+              <td>Engagement</td>
+              <td>Jun 18</td>
+              <td class="amount">$1,200</td>
+            </tr>
+            <tr>
+              <td>Bloom Studio</td>
+              <td>Product</td>
+              <td>Jun 20</td>
+              <td class="amount">$850</td>
+            </tr>
+            <tr>
+              <td>Martinez Family</td>
+              <td>Portrait</td>
+              <td>Jun 22</td>
+              <td class="amount">$450</td>
+            </tr>
+            <tr>
+              <td>Horizon Events</td>
+              <td>Corporate</td>
+              <td>Jun 28</td>
+              <td class="amount">$2,400</td>
+            </tr>
+            <tr>
+              <td>Riley Wedding</td>
+              <td>Wedding</td>
+              <td>Jul 4</td>
+              <td class="amount">$3,500</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Bottom Row -->
+    <div class="row-2col">
+
+      <!-- Monthly Chart -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title"><i class="ti ti-chart-bar"></i> Monthly Shoots</h2>
+        </div>
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#378ADD;"></span>Weddings</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#639922;"></span>Portraits</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#BA7517;"></span>Commercial</span>
+        </div>
+        <div class="bar-chart" id="barChart" aria-label="Bar chart of monthly shoots by category"></div>
+      </div>
+
+      <!-- Portfolio Categories -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title"><i class="ti ti-category"></i> Portfolio by Category</h2>
+        </div>
+        <div class="category-grid">
+          <div class="cat-item">
+            <p class="cat-name">Wedding</p>
+            <p class="cat-count">82</p>
+            <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:80%;background:#378ADD;"></div></div>
+          </div>
+          <div class="cat-item">
+            <p class="cat-name">Portrait</p>
+            <p class="cat-count">67</p>
+            <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:65%;background:#639922;"></div></div>
+          </div>
+          <div class="cat-item">
+            <p class="cat-name">Commercial</p>
+            <p class="cat-count">44</p>
+            <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:43%;background:#BA7517;"></div></div>
+          </div>
+          <div class="cat-item">
+            <p class="cat-name">Event</p>
+            <p class="cat-count">31</p>
+            <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:30%;background:#7F77DD;"></div></div>
+          </div>
+          <div class="cat-item">
+            <p class="cat-name">Nature</p>
+            <p class="cat-count">15</p>
+            <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:15%;background:#1D9E75;"></div></div>
+          </div>
+          <div class="cat-item">
+            <p class="cat-name">Fashion</p>
+            <p class="cat-count">9</p>
+            <div class="cat-bar-bg"><div class="cat-bar-fill" style="width:9%;background:#D4537E;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

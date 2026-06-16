@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bookings — Photography Dashboard</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+  <style>
+    .booking-filters { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; align-items:center; }
+    .booking-filters input { padding:7px 12px; border:1px solid #ddd; border-radius:8px; font-size:13px; flex:1; min-width:200px; }
+    .booking-filters select { padding:7px 12px; border:1px solid #ddd; border-radius:8px; font-size:13px; background:#fff; cursor:pointer; }
+    .full-booking-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .full-booking-table th { text-align:left; padding:10px 12px; color:#6b6b67; font-weight:500; border-bottom:1px solid #eee; background:#f9f9f7; }
+    .full-booking-table td { padding:11px 12px; border-bottom:1px solid #f0f0ee; vertical-align:middle; }
+    .full-booking-table tr:last-child td { border-bottom:none; }
+    .full-booking-table tr:hover td { background:#f9f9f7; }
+    .type-pill { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:500; }
+    .type-wedding    { background:#EAF3DE; color:#3B6D11; }
+    .type-portrait   { background:#E6F1FB; color:#185FA5; }
+    .type-commercial { background:#FAEEDA; color:#854F0B; }
+    .type-event      { background:#EEEDFE; color:#534AB7; }
+    .col-amount { font-weight:600; color:#185FA5; }
+    .action-btn { padding:4px 10px; border:1px solid #ddd; border-radius:6px; background:#fff; font-size:12px; cursor:pointer; color:#555; }
+    .action-btn:hover { background:#f0f0ee; }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo"><i class="ti ti-aperture"></i><span>LensStudio</span></div>
+    <nav class="sidebar-nav">
+      <a href="../index.html" class="nav-item"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+      <a href="gallery.html" class="nav-item"><i class="ti ti-photo"></i> Gallery</a>
+      <a href="bookings.html" class="nav-item active"><i class="ti ti-calendar"></i> Bookings</a>
+      <a href="portfolio.html" class="nav-item"><i class="ti ti-briefcase"></i> Portfolio</a>
+      <a href="#" class="nav-item"><i class="ti ti-users"></i> Clients</a>
+      <a href="#" class="nav-item"><i class="ti ti-settings"></i> Settings</a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="avatar">TM</div>
+      <div class="user-info"><p class="user-name">Thamizh M.</p><p class="user-role">Photographer</p></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1 class="page-title">Bookings</h1>
+        <p class="page-sub">All upcoming and past sessions</p>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn-icon" aria-label="Notifications"><i class="ti ti-bell"></i></button>
+        <button class="btn-primary"><i class="ti ti-plus"></i> New Booking</button>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="booking-filters">
+        <input type="search" placeholder="Search client or shoot type…" aria-label="Search bookings" />
+        <select aria-label="Filter by type">
+          <option>All types</option>
+          <option>Wedding</option>
+          <option>Portrait</option>
+          <option>Commercial</option>
+          <option>Event</option>
+        </select>
+        <select aria-label="Filter by status">
+          <option>All statuses</option>
+          <option>Upcoming</option>
+          <option>Editing</option>
+          <option>Done</option>
+        </select>
+      </div>
+
+      <table class="full-booking-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Client</th>
+            <th>Type</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Amount</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>001</td><td>Emma &amp; Jake</td>
+            <td><span class="type-pill type-wedding">Wedding</span></td>
+            <td>Jun 10, 2026</td><td>Central Park</td>
+            <td><span class="badge badge-done">Done</span></td>
+            <td class="col-amount">$3,200</td>
+            <td><button class="action-btn"><i class="ti ti-eye"></i> View</button></td>
+          </tr>
+          <tr>
+            <td>002</td><td>Nexus Corp</td>
+            <td><span class="type-pill type-commercial">Commercial</span></td>
+            <td>Jun 12, 2026</td><td>Studio 4</td>
+            <td><span class="badge badge-upcoming">Today</span></td>
+            <td class="col-amount">$1,500</td>
+            <td><button class="action-btn"><i class="ti ti-eye"></i> View</button></td>
+          </tr>
+          <tr>
+            <td>003</td><td>Liu Family</td>
+            <td><span class="type-pill type-portrait">Portrait</span></td>
+            <td>Jun 8, 2026</td><td>Riverside</td>
+            <td><span class="badge badge-pending">Editing</span></td>
+            <td class="col-amount">$450</td>
+            <td><button class="action-btn"><i class="ti ti-eye"></i> View</button></td>
+          </tr>
+          <tr>
+            <td>004</td><td>Sarah &amp; Tom</td>
+            <td><span class="type-pill type-wedding">Wedding</span></td>
+            <td>Jun 18, 2026</td><td>Botanical Garden</td>
+            <td><span class="badge badge-upcoming">Upcoming</span></td>
+            <td class="col-amount">$1,200</td>
+            <td><button class="action-btn"><i class="ti ti-eye"></i> View</button></td>
+          </tr>
+          <tr>
+            <td>005</td><td>Bloom Studio</td>
+            <td><span class="type-pill type-commercial">Commercial</span></td>
+            <td>Jun 20, 2026</td><td>Warehouse District</td>
+            <td><span class="badge badge-upcoming">Upcoming</span></td>
+            <td class="col-amount">$850</td>
+            <td><button class="action-btn"><i class="ti ti-eye"></i> View</button></td>
+          </tr>
+          <tr>
+            <td>006</td><td>Horizon Events</td>
+            <td><span class="type-pill type-event">Event</span></td>
+            <td>Jun 28, 2026</td><td>Grand Ballroom</td>
+            <td><span class="badge badge-upcoming">Upcoming</span></td>
+            <td class="col-amount">$2,400</td>
+            <td><button class="action-btn"><i class="ti ti-eye"></i> View</button></td>
+          </tr>
+          <tr>
+            <td>007</td><td>Riley Wedding</td>
+            <td><span class="type-pill type-wedding">Wedding</span></td>
+            <td>Jul 4, 2026</td><td>Lakeside Villa</td>
+            <td><span class="badge badge-upcoming">Upcoming</span></td>
+            <td class="col-amount">$3,500</td>
+            <td><button class="action-btn"><i class="ti ti-eye"></i> View</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

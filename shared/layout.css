@@ -1,0 +1,243 @@
+/* =============================================================
+   LensFlow — Shared Layout Standards
+   Injected by sidebar.js. Normalises alignment across all pages.
+   ============================================================= */
+
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f0f2f7;
+  color: #1a1d2e;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; }
+
+/* ── Sidebar placeholder ── */
+#sidebar-root { display: block; }
+
+/* ── Main content wrapper — works for .main / .main-wrapper / .main-wrap ── */
+.main,
+.main-wrapper,
+.main-wrap {
+  margin-left: 250px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* ── Topbar — sticky, consistent height, padding, shadow ── */
+.topbar,
+header.topbar {
+  height: 62px;
+  min-height: 62px;
+  max-height: 62px;
+  background: #ffffff;
+  border-bottom: 1px solid #e8edf3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  gap: 12px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* ── Topbar left / right sections ── */
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.topbar-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1d2e;
+  white-space: nowrap;
+}
+
+/* ── Breadcrumb ── */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  color: #94a3b8;
+  list-style: none;
+}
+.breadcrumb a { color: #64748b; }
+.breadcrumb a:hover { color: #2563eb; }
+.breadcrumb i { font-size: 12px; }
+
+/* ── Subtab bar — sticky just below topbar ── */
+.subtab-bar,
+.subtabs-bar,
+.sub-tabs {
+  background: #ffffff;
+  border-bottom: 1px solid #e8edf3;
+  padding: 0 28px;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  position: sticky;
+  top: 62px;
+  z-index: 80;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+.subtab-bar::-webkit-scrollbar,
+.subtabs-bar::-webkit-scrollbar,
+.sub-tabs::-webkit-scrollbar { height: 0; }
+
+/* Subtab buttons */
+.subtab,
+.sub-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 13px 16px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  white-space: nowrap;
+  transition: color 0.13s, border-color 0.13s;
+  line-height: 1;
+}
+.subtab:hover, .sub-tab:hover { color: #1a1d2e; }
+.subtab.active, .sub-tab.active {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+}
+
+/* ── Main content padding ── */
+.content,
+.page-content {
+  padding: 24px 28px 40px;
+  flex: 1;
+}
+
+/* ── Topbar search box ── */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f4f6fb;
+  border: 1px solid #e8edf3;
+  border-radius: 8px;
+  padding: 7px 13px;
+  min-width: 200px;
+  max-width: 260px;
+}
+.search-box i { color: #94a3b8; font-size: 15px; flex-shrink: 0; }
+.search-box input {
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 13.5px;
+  color: #1a1d2e;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+}
+.search-box input::placeholder { color: #94a3b8; }
+
+/* ── Topbar icon buttons ── */
+.topbar-avatar,
+.s-avatar-top {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.bell-wrap,
+.notif-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid #e8edf3;
+  background: #fff;
+  cursor: pointer;
+  color: #64748b;
+  font-size: 17px;
+  transition: background 0.13s;
+}
+.bell-wrap:hover, .notif-btn:hover { background: #f8fafc; color: #1a1d2e; }
+.bell-dot,
+.notif-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  background: #ef4444;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+}
+
+/* ── Primary button (blue) ── */
+.btn-primary,
+.btn-blue {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.13s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.btn-primary:hover, .btn-blue:hover { background: #1d4ed8; }
+.btn-primary i, .btn-blue i { font-size: 15px; }
+
+/* ── Outline button ── */
+.btn-outline-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  background: transparent;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.13s;
+  white-space: nowrap;
+}
+.btn-outline-sm:hover { background: #f8fafc; color: #1a1d2e; }

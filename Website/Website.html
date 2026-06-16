@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LensFlow — Website</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <link rel="stylesheet" href="Website.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <!-- sidebar injected by shared/sidebar.js -->
+  <div id="sidebar-root"></div>
+
+<!-- MAIN WRAPPER -->
+<div class="main-wrapper">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-title">Website</div>
+      <nav class="breadcrumb"><a href="../index.html">Dashboard</a> <i class="ti ti-chevron-right"></i> <span>Website</span></nav>
+    </div>
+    <div class="topbar-right">
+      <div class="search-box"><i class="ti ti-search"></i><input type="text" placeholder="Search pages, posts…"></div>
+      <button class="btn-outline-sm">Preview Site</button>
+      <button class="btn-primary-sm"><i class="ti ti-cloud-upload"></i> Publish Changes</button>
+      <div class="topbar-bell"><i class="ti ti-bell"></i><span class="bell-dot"></span></div>
+      <div class="topbar-avatar">SK</div>
+    </div>
+  </header>
+
+  <!-- SUB NAV TABS -->
+  <div class="subtab-bar">
+    <button class="subtab active" onclick="switchTab(this,'pages')">Pages</button>
+    <button class="subtab" onclick="switchTab(this,'portfolio')">Portfolio</button>
+    <button class="subtab" onclick="switchTab(this,'blog')">Blog</button>
+    <button class="subtab" onclick="switchTab(this,'seo')">SEO</button>
+    <button class="subtab" onclick="switchTab(this,'analytics')">Analytics</button>
+    <button class="subtab" onclick="switchTab(this,'forms')">Forms</button>
+  </div>
+
+    <!-- PAGE CONTENT -->
+    <main class="content">
+
+      <!-- LIVE BANNER -->
+      <div class="live-banner-card">
+        <div class="live-banner-left">
+          <div class="live-dot-wrap">
+            <span class="live-dot"></span>
+            <span class="live-label">LIVE</span>
+          </div>
+          <div class="live-info">
+            <div class="live-title">Your website is live</div>
+            <div class="live-domain">sarahkimphotography.com</div>
+          </div>
+        </div>
+        <div class="live-banner-right">
+          <span class="live-pub">Last published: <strong>2 hours ago</strong></span>
+          <a href="#" class="live-visit">Visit Site <i class="ti ti-arrow-up-right"></i></a>
+        </div>
+      </div>
+
+      <!-- KPI STATS ROW -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon-wrap stat-green">
+            <i class="ti ti-users"></i>
+          </div>
+          <div class="stat-body">
+            <div class="stat-label">Monthly Visitors</div>
+            <div class="stat-value">4,218</div>
+            <div class="stat-change positive"><i class="ti ti-trending-up"></i> +12% vs last month</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon-wrap stat-blue">
+            <i class="ti ti-eye"></i>
+          </div>
+          <div class="stat-body">
+            <div class="stat-label">Page Views</div>
+            <div class="stat-value">12,840</div>
+            <div class="stat-change neutral">This month</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon-wrap stat-yellow">
+            <i class="ti ti-mail"></i>
+          </div>
+          <div class="stat-body">
+            <div class="stat-label">Contact Forms</div>
+            <div class="stat-value">24</div>
+            <div class="stat-change neutral">This month</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon-wrap stat-purple">
+            <i class="ti ti-clock"></i>
+          </div>
+          <div class="stat-body">
+            <div class="stat-label">Avg. Session</div>
+            <div class="stat-value">3:42 <span class="stat-unit">min</span></div>
+            <div class="stat-change neutral">Per visitor</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TWO-COLUMN: PAGES MANAGER + SEO HEALTH -->
+      <div class="two-col-layout">
+
+        <!-- PAGES MANAGER -->
+        <div class="card pages-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Pages Manager</div>
+              <div class="card-subtitle">Manage your website pages and content</div>
+            </div>
+            <button class="btn btn-outline btn-sm">
+              <i class="ti ti-plus"></i> Add Page
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Page</th>
+                  <th>Status</th>
+                  <th>Last Edited</th>
+                  <th>Views</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="page-name"><i class="ti ti-file-text page-icon"></i> Home</div></td>
+                  <td><span class="badge badge-success">Published</span></td>
+                  <td class="td-muted">2h ago</td>
+                  <td class="td-num">4,218</td>
+                  <td><button class="btn-edit">Edit <i class="ti ti-pencil"></i></button></td>
+                </tr>
+                <tr>
+                  <td><div class="page-name"><i class="ti ti-file-text page-icon"></i> About Me</div></td>
+                  <td><span class="badge badge-success">Published</span></td>
+                  <td class="td-muted">3 days ago</td>
+                  <td class="td-num">1,840</td>
+                  <td><button class="btn-edit">Edit <i class="ti ti-pencil"></i></button></td>
+                </tr>
+                <tr>
+                  <td><div class="page-name"><i class="ti ti-file-text page-icon"></i> Portfolio</div></td>
+                  <td><span class="badge badge-success">Published</span></td>
+                  <td class="td-muted">1 day ago</td>
+                  <td class="td-num">5,120</td>
+                  <td><button class="btn-edit">Edit <i class="ti ti-pencil"></i></button></td>
+                </tr>
+                <tr>
+                  <td><div class="page-name"><i class="ti ti-file-text page-icon"></i> Pricing</div></td>
+                  <td><span class="badge badge-success">Published</span></td>
+                  <td class="td-muted">1 week ago</td>
+                  <td class="td-num">2,940</td>
+                  <td><button class="btn-edit">Edit <i class="ti ti-pencil"></i></button></td>
+                </tr>
+                <tr>
+                  <td><div class="page-name"><i class="ti ti-file-text page-icon"></i> Blog</div></td>
+                  <td><span class="badge badge-success">Published</span></td>
+                  <td class="td-muted">4 hours ago</td>
+                  <td class="td-num">980</td>
+                  <td><button class="btn-edit">Edit <i class="ti ti-pencil"></i></button></td>
+                </tr>
+                <tr>
+                  <td><div class="page-name"><i class="ti ti-file-text page-icon"></i> Contact</div></td>
+                  <td><span class="badge badge-success">Published</span></td>
+                  <td class="td-muted">2 weeks ago</td>
+                  <td class="td-num">3,210</td>
+                  <td><button class="btn-edit">Edit <i class="ti ti-pencil"></i></button></td>
+                </tr>
+                <tr>
+                  <td><div class="page-name"><i class="ti ti-file-text page-icon"></i> Packages</div></td>
+                  <td><span class="badge badge-gray">Draft</span></td>
+                  <td class="td-muted">1 day ago</td>
+                  <td class="td-num td-muted">—</td>
+                  <td><button class="btn-edit">Edit <i class="ti ti-pencil"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-outline btn-sm add-page-btn">
+              <i class="ti ti-plus"></i> Add Page
+            </button>
+          </div>
+        </div>
+
+        <!-- SEO HEALTH SCORE -->
+        <div class="card seo-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">SEO Health Score</div>
+              <div class="card-subtitle">Site optimization status</div>
+            </div>
+          </div>
+
+          <div class="seo-score-wrap">
+            <div class="seo-donut">
+              <svg viewBox="0 0 120 120" class="donut-svg">
+                <circle class="donut-bg" cx="60" cy="60" r="50" />
+                <circle class="donut-fill" cx="60" cy="60" r="50"
+                  stroke-dasharray="274.89 314.16"
+                  stroke-dashoffset="78.54" />
+              </svg>
+              <div class="donut-label">
+                <span class="donut-num">87</span>
+                <span class="donut-denom">/100</span>
+              </div>
+            </div>
+            <div class="seo-score-label">Good Score</div>
+          </div>
+
+          <ul class="seo-checklist">
+            <li class="seo-check-item seo-pass">
+              <span class="seo-check-icon"><i class="ti ti-circle-check-filled"></i></span>
+              <span class="seo-check-text">Meta titles optimized</span>
+            </li>
+            <li class="seo-check-item seo-pass">
+              <span class="seo-check-icon"><i class="ti ti-circle-check-filled"></i></span>
+              <span class="seo-check-text">Images have alt text</span>
+            </li>
+            <li class="seo-check-item seo-pass">
+              <span class="seo-check-icon"><i class="ti ti-circle-check-filled"></i></span>
+              <span class="seo-check-text">Site speed: <strong>94/100</strong></span>
+            </li>
+            <li class="seo-check-item seo-pass">
+              <span class="seo-check-icon"><i class="ti ti-circle-check-filled"></i></span>
+              <span class="seo-check-text">Mobile responsive</span>
+            </li>
+            <li class="seo-check-item seo-warn">
+              <span class="seo-check-icon"><i class="ti ti-alert-triangle-filled"></i></span>
+              <span class="seo-check-text">Missing sitemap</span>
+            </li>
+            <li class="seo-check-item seo-warn">
+              <span class="seo-check-icon"><i class="ti ti-alert-triangle-filled"></i></span>
+              <span class="seo-check-text">2 pages missing meta description</span>
+            </li>
+          </ul>
+
+          <button class="btn btn-outline btn-sm seo-btn-full">
+            <i class="ti ti-chart-bar"></i> Full SEO Report
+          </button>
+        </div>
+
+      </div><!-- end two-col -->
+
+      <!-- BLOG POSTS TABLE -->
+      <div class="card blog-card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Blog Posts</div>
+            <div class="card-subtitle">Manage your published and draft articles</div>
+          </div>
+          <button class="btn btn-gold btn-sm">
+            <i class="ti ti-plus"></i> New Post
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Views</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="blog-title-cell"><i class="ti ti-article blog-icon"></i>How to Choose Your Wedding Photographer</div></td>
+                <td><span class="badge badge-success">Published</span></td>
+                <td><span class="cat-tag cat-wedding">Wedding Tips</span></td>
+                <td class="td-muted">Jun 10</td>
+                <td class="td-num">842</td>
+                <td><button class="btn-edit">Edit <i class="ti ti-pencil"></i></button></td>
+              </tr>
+              <tr>
+                <td><div class="blog-title-cell"><i class="ti ti-article blog-icon"></i>Behind the Scenes: Liu Family Session</div></td>
+                <td><span class="badge badge-success">Published</span></td>
+                <td><span class="cat-tag cat-behind">Behind Scenes</span></td>
+                <td class="td-muted">Jun 5</td>
+                <td class="td-num">234</td>
+                <td><button class="btn-edit">Edit <i class="ti ti-pencil"></i></button></td>
+              </tr>
+              <tr>
+                <td><div class="blog-title-cell"><i class="ti ti-article blog-icon"></i>Golden Hour Photography Guide</div></td>
+                <td><span class="badge badge-success">Published</span></td>
+                <td><span class="cat-tag cat-tips">Tips &amp; Tricks</span></td>
+                <td class="td-muted">May 28</td>
+                <td class="td-num">1,204</td>
+                <td><button class="btn-edit">Edit <i class="ti ti-pencil"></i></button></td>
+              </tr>
+              <tr>
+                <td><div class="blog-title-cell"><i class="ti ti-article blog-icon"></i>My Favorite Locations in NYC</div></td>
+                <td><span class="badge badge-gray">Draft</span></td>
+                <td><span class="cat-tag cat-loc">Locations</span></td>
+                <td class="td-muted">May 20</td>
+                <td class="td-num td-muted">—</td>
+                <td><button class="btn-edit">Edit <i class="ti ti-pencil"></i></button></td>
+              </tr>
+              <tr>
+                <td><div class="blog-title-cell"><i class="ti ti-article blog-icon"></i>Client Gallery: Emma &amp; Jake Wedding</div></td>
+                <td><span class="badge badge-success">Published</span></td>
+                <td><span class="cat-tag cat-client">Client Story</span></td>
+                <td class="td-muted">May 15</td>
+                <td class="td-num">567</td>
+                <td><button class="btn-edit">Edit <i class="ti ti-pencil"></i></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ANALYTICS OVERVIEW -->
+      <div class="two-col-layout analytics-layout">
+
+        <div class="card analytics-chart-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Analytics Overview</div>
+              <div class="card-subtitle">Daily visitors — last 30 days</div>
+            </div>
+            <div class="chart-legend">
+              <span class="legend-dot legend-visitors"></span> Visitors
+              <span class="legend-dot legend-views" style="margin-left:14px;"></span> Page Views
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="trafficChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card traffic-sources-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Traffic Sources</div>
+              <div class="card-subtitle">Top 5 referrers</div>
+            </div>
+          </div>
+          <ul class="traffic-list">
+            <li class="traffic-item">
+              <div class="traffic-source">
+                <span class="traffic-icon traffic-google"><i class="ti ti-brand-google"></i></span>
+                <span class="traffic-name">Google</span>
+              </div>
+              <div class="traffic-bar-wrap">
+                <div class="traffic-bar" style="width:62%"></div>
+              </div>
+              <span class="traffic-pct">62%</span>
+            </li>
+            <li class="traffic-item">
+              <div class="traffic-source">
+                <span class="traffic-icon traffic-direct"><i class="ti ti-link"></i></span>
+                <span class="traffic-name">Direct</span>
+              </div>
+              <div class="traffic-bar-wrap">
+                <div class="traffic-bar traffic-bar-blue" style="width:18%"></div>
+              </div>
+              <span class="traffic-pct">18%</span>
+            </li>
+            <li class="traffic-item">
+              <div class="traffic-source">
+                <span class="traffic-icon traffic-ig"><i class="ti ti-brand-instagram"></i></span>
+                <span class="traffic-name">Instagram</span>
+              </div>
+              <div class="traffic-bar-wrap">
+                <div class="traffic-bar traffic-bar-pink" style="width:12%"></div>
+              </div>
+              <span class="traffic-pct">12%</span>
+            </li>
+            <li class="traffic-item">
+              <div class="traffic-source">
+                <span class="traffic-icon traffic-pin"><i class="ti ti-brand-pinterest"></i></span>
+                <span class="traffic-name">Pinterest</span>
+              </div>
+              <div class="traffic-bar-wrap">
+                <div class="traffic-bar traffic-bar-red" style="width:5%"></div>
+              </div>
+              <span class="traffic-pct">5%</span>
+            </li>
+            <li class="traffic-item">
+              <div class="traffic-source">
+                <span class="traffic-icon traffic-other"><i class="ti ti-world"></i></span>
+                <span class="traffic-name">Other</span>
+              </div>
+              <div class="traffic-bar-wrap">
+                <div class="traffic-bar traffic-bar-gray" style="width:3%"></div>
+              </div>
+              <span class="traffic-pct">3%</span>
+            </li>
+          </ul>
+
+          <div class="sources-table-wrap">
+            <table class="sources-table">
+              <thead>
+                <tr>
+                  <th>Source</th>
+                  <th>Visitors</th>
+                  <th>Share</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Google</td><td>2,615</td><td><span class="badge badge-success">62%</span></td></tr>
+                <tr><td>Direct</td><td>759</td><td><span class="badge badge-blue">18%</span></td></tr>
+                <tr><td>Instagram</td><td>506</td><td><span class="badge badge-pink">12%</span></td></tr>
+                <tr><td>Pinterest</td><td>211</td><td><span class="badge badge-warn">5%</span></td></tr>
+                <tr><td>Other</td><td>127</td><td><span class="badge badge-gray">3%</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CONTACT FORM SUBMISSIONS -->
+      <div class="card form-submissions-card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Contact Form Submissions</div>
+            <div class="card-subtitle">Recent inquiries from your website</div>
+          </div>
+          <button class="btn btn-outline btn-sm">
+            <i class="ti ti-download"></i> Export
+          </button>
+        </div>
+
+        <div class="submissions-list">
+
+          <div class="submission-item">
+            <div class="sub-avatar sub-av-1">JR</div>
+            <div class="sub-body">
+              <div class="sub-top">
+                <span class="sub-name">Jessica Rodriguez</span>
+                <span class="sub-date">Jun 14, 2026</span>
+              </div>
+              <div class="sub-email">jessica.r@gmail.com</div>
+              <div class="sub-msg">"Hi Sarah! I'm planning my wedding for next September and I absolutely love your work. Would love to chat about availability..."</div>
+            </div>
+            <div class="sub-actions">
+              <span class="badge badge-new">New</span>
+              <button class="btn btn-gold btn-sm sub-reply-btn"><i class="ti ti-send"></i> Reply</button>
+            </div>
+          </div>
+
+          <div class="submission-item">
+            <div class="sub-avatar sub-av-2">MT</div>
+            <div class="sub-body">
+              <div class="sub-top">
+                <span class="sub-name">Marcus Thompson</span>
+                <span class="sub-date">Jun 12, 2026</span>
+              </div>
+              <div class="sub-email">m.thompson@outlook.com</div>
+              <div class="sub-msg">"We're looking for a family portrait photographer for a session in Central Park. Could you send me your pricing for family sessions?"</div>
+            </div>
+            <div class="sub-actions">
+              <span class="badge badge-new">New</span>
+              <button class="btn btn-gold btn-sm sub-reply-btn"><i class="ti ti-send"></i> Reply</button>
+            </div>
+          </div>
+
+          <div class="submission-item submission-replied">
+            <div class="sub-avatar sub-av-3">AL</div>
+            <div class="sub-body">
+              <div class="sub-top">
+                <span class="sub-name">Amanda Liu</span>
+                <span class="sub-date">Jun 10, 2026</span>
+              </div>
+              <div class="sub-email">amanda.liu@company.com</div>
+              <div class="sub-msg">"We need headshots for our 12-person team. Do you offer corporate packages? We'd love to book sometime in July..."</div>
+            </div>
+            <div class="sub-actions">
+              <span class="badge badge-replied">Replied</span>
+              <button class="btn btn-outline btn-sm sub-reply-btn"><i class="ti ti-message"></i> View</button>
+            </div>
+          </div>
+
+          <div class="submission-item submission-replied">
+            <div class="sub-avatar sub-av-4">CP</div>
+            <div class="sub-body">
+              <div class="sub-top">
+                <span class="sub-name">Chris Patel</span>
+                <span class="sub-date">Jun 8, 2026</span>
+              </div>
+              <div class="sub-email">chrispatel@hotmail.com</div>
+              <div class="sub-msg">"Hi, I wanted to reach out about engagement photos. My fiancée and I got engaged last week and we are so excited..."</div>
+            </div>
+            <div class="sub-actions">
+              <span class="badge badge-replied">Replied</span>
+              <button class="btn btn-outline btn-sm sub-reply-btn"><i class="ti ti-message"></i> View</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // Traffic chart
+    const ctx = document.getElementById('trafficChart').getContext('2d');
+
+    // Generate 30 days of mock data
+    const labels = [];
+    const visitorsData = [];
+    const viewsData = [];
+    const today = new Date(2026, 5, 15); // June 15 2026
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      labels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+      const base = 100 + Math.floor(Math.random() * 120);
+      visitorsData.push(base);
+      viewsData.push(Math.floor(base * (2.8 + Math.random() * 0.8)));
+    }
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Visitors',
+            data: visitorsData,
+            borderColor: '#2563eb',
+            backgroundColor: 'rgba(201,168,76,0.10)',
+            borderWidth: 2.5,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#2563eb',
+            fill: true,
+            tension: 0.4
+          },
+          {
+            label: 'Page Views',
+            data: viewsData,
+            borderColor: '#6366f1',
+            backgroundColor: 'rgba(99,102,241,0.07)',
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#6366f1',
+            fill: true,
+            tension: 0.4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1a1d2e',
+            titleColor: '#e2e8f0',
+            bodyColor: '#94a3b8',
+            borderColor: '#2d3148',
+            borderWidth: 1,
+            padding: 10,
+            cornerRadius: 8
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: {
+              color: '#94a3b8',
+              font: { family: 'Inter', size: 11 },
+              maxTicksLimit: 8,
+              maxRotation: 0
+            }
+          },
+          y: {
+            grid: { color: '#f0f2f7', drawBorder: false },
+            ticks: {
+              color: '#94a3b8',
+              font: { family: 'Inter', size: 11 },
+              padding: 8
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+  </main>
+</div><!-- /main-wrapper -->
+
+<script>
+function switchTab(btn,name){
+  document.querySelectorAll(".subtab").forEach(t=>t.classList.remove("active"));
+  btn.classList.add("active");
+}
+</script>
+
+<script src="../shared/sidebar.js"></script>
+</body>
+</html>

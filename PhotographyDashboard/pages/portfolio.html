@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — Photography Dashboard</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+  <style>
+    .portfolio-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; }
+    .portfolio-card { background:#fff; border:1px solid #eee; border-radius:12px; overflow:hidden; cursor:pointer; transition:transform .15s, box-shadow .15s; }
+    .portfolio-card:hover { transform:translateY(-3px); box-shadow:0 6px 20px rgba(0,0,0,0.09); }
+    .portfolio-thumb { height:150px; display:flex; align-items:center; justify-content:center; font-size:48px; }
+    .portfolio-body { padding:12px 14px; }
+    .portfolio-title { font-size:14px; font-weight:500; margin-bottom:4px; }
+    .portfolio-meta { font-size:12px; color:#6b6b67; }
+    .portfolio-footer { display:flex; align-items:center; justify-content:space-between; margin-top:10px; }
+    .portfolio-count { font-size:12px; color:#6b6b67; }
+    .portfolio-rating { font-size:12px; color:#BA7517; display:flex; align-items:center; gap:3px; }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo"><i class="ti ti-aperture"></i><span>LensStudio</span></div>
+    <nav class="sidebar-nav">
+      <a href="../index.html" class="nav-item"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+      <a href="gallery.html" class="nav-item"><i class="ti ti-photo"></i> Gallery</a>
+      <a href="bookings.html" class="nav-item"><i class="ti ti-calendar"></i> Bookings</a>
+      <a href="portfolio.html" class="nav-item active"><i class="ti ti-briefcase"></i> Portfolio</a>
+      <a href="#" class="nav-item"><i class="ti ti-users"></i> Clients</a>
+      <a href="#" class="nav-item"><i class="ti ti-settings"></i> Settings</a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="avatar">TM</div>
+      <div class="user-info"><p class="user-name">Thamizh M.</p><p class="user-role">Photographer</p></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1 class="page-title">Portfolio</h1>
+        <p class="page-sub">248 shoots across 6 categories</p>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn-icon" aria-label="Notifications"><i class="ti ti-bell"></i></button>
+        <button class="btn-primary"><i class="ti ti-plus"></i> Add Project</button>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="portfolio-grid">
+        <div class="portfolio-card">
+          <div class="portfolio-thumb" style="background:#EAF3DE;">💒</div>
+          <div class="portfolio-body">
+            <p class="portfolio-title">Wedding Photography</p>
+            <p class="portfolio-meta">Capturing timeless moments</p>
+            <div class="portfolio-footer">
+              <span class="portfolio-count"><i class="ti ti-photo"></i> 82 shoots</span>
+              <span class="portfolio-rating"><i class="ti ti-star-filled"></i> 5.0</span>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-card">
+          <div class="portfolio-thumb" style="background:#E6F1FB;">🙋</div>
+          <div class="portfolio-body">
+            <p class="portfolio-title">Portrait Sessions</p>
+            <p class="portfolio-meta">People & personality</p>
+            <div class="portfolio-footer">
+              <span class="portfolio-count"><i class="ti ti-photo"></i> 67 shoots</span>
+              <span class="portfolio-rating"><i class="ti ti-star-filled"></i> 4.9</span>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-card">
+          <div class="portfolio-thumb" style="background:#FAEEDA;">📦</div>
+          <div class="portfolio-body">
+            <p class="portfolio-title">Commercial Work</p>
+            <p class="portfolio-meta">Brands & products</p>
+            <div class="portfolio-footer">
+              <span class="portfolio-count"><i class="ti ti-photo"></i> 44 shoots</span>
+              <span class="portfolio-rating"><i class="ti ti-star-filled"></i> 4.8</span>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-card">
+          <div class="portfolio-thumb" style="background:#EEEDFE;">🎉</div>
+          <div class="portfolio-body">
+            <p class="portfolio-title">Event Coverage</p>
+            <p class="portfolio-meta">Galas, launches & more</p>
+            <div class="portfolio-footer">
+              <span class="portfolio-count"><i class="ti ti-photo"></i> 31 shoots</span>
+              <span class="portfolio-rating"><i class="ti ti-star-filled"></i> 4.9</span>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-card">
+          <div class="portfolio-thumb" style="background:#E1F5EE;">🌿</div>
+          <div class="portfolio-body">
+            <p class="portfolio-title">Nature & Landscape</p>
+            <p class="portfolio-meta">Outdoors & wildlife</p>
+            <div class="portfolio-footer">
+              <span class="portfolio-count"><i class="ti ti-photo"></i> 15 shoots</span>
+              <span class="portfolio-rating"><i class="ti ti-star-filled"></i> 4.7</span>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-card">
+          <div class="portfolio-thumb" style="background:#FBEAF0;">👗</div>
+          <div class="portfolio-body">
+            <p class="portfolio-title">Fashion & Editorial</p>
+            <p class="portfolio-meta">Style & creative direction</p>
+            <div class="portfolio-footer">
+              <span class="portfolio-count"><i class="ti ti-photo"></i> 9 shoots</span>
+              <span class="portfolio-rating"><i class="ti ti-star-filled"></i> 5.0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

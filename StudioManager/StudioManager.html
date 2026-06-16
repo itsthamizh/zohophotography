@@ -1,0 +1,2821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Studio Manager — LensFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+  <link rel="stylesheet" href="StudioManager.css" />
+  <style>
+    /* ── Tab panel visibility ── */
+    .tab-panel.hidden { display: none !important; }
+    .tab-panel { display: block; }
+
+    /* ── Subtab button resets ── */
+    .subtab {
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+    .subtab.active {
+      color: #2563eb;
+      border-bottom-color: #2563eb;
+    }
+
+    /* ── Blue accent overrides (replace gold #c9a84c) ── */
+    .btn-gold {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-gold:hover { background: #1d4ed8; }
+
+    .tl-dot--gold { background: #2563eb; }
+    .tl-body--gold { border-left-color: #2563eb; background: #eff6ff; }
+    .event-dot.dot-gold { background: #2563eb; }
+    .ca-gold { background: #2563eb; }
+    .cal-cell--today .cal-num { background: #2563eb; color: #fff; }
+
+    /* ── Equipment category tab count badges ── */
+    .cat-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.18); color: inherit;
+      font-size: 10px; font-weight: 600;
+      min-width: 18px; height: 16px; padding: 0 5px;
+      border-radius: 8px; margin-left: 5px; line-height: 1;
+    }
+    .cat-tab.active .cat-count {
+      background: #2563eb; color: #fff;
+    }
+
+    /* ── Equipment category pills (in table) ── */
+    .cat-pill {
+      display: inline-block; padding: 2px 9px;
+      border-radius: 20px; font-size: 11.5px; font-weight: 500;
+    }
+    .pill-cameras     { background: #dbeafe; color: #1d4ed8; }
+    .pill-lenses      { background: #f3e8ff; color: #7e22ce; }
+    .pill-lighting    { background: #fef9c3; color: #a16207; }
+    .pill-memory      { background: #dcfce7; color: #15803d; }
+    .pill-accessories { background: #ffedd5; color: #c2410c; }
+    /* ── Owned / Rental type badges ── */
+    .type-badge { display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:600; }
+    .type-owned  { background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0; }
+    .type-rental { background:#fff7ed;color:#c2410c;border:1px solid #fed7aa; }
+
+    /* ── Equipment action buttons ── */
+    .eq-action-btn { display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid #e2e8f0;background:#f8fafc;color:#475569;font-family:inherit;transition:all .13s;white-space:nowrap; }
+    .eq-action-btn:hover { background:#f1f5f9;color:#1a1d2e; }
+    .vendor-btn { border-color:#fed7aa;color:#c2410c;background:#fff7ed; }
+    .vendor-btn:hover { background:#ffedd5;border-color:#fb923c; }
+
+
+    /* ── Add Item form ── */
+    .add-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .add-form-full { grid-column: 1 / -1; }
+    .add-form-field { display:flex; flex-direction:column; gap:5px; }
+    .add-form-label { font-size:11.5px; font-weight:600; color:#475569; text-transform:uppercase; letter-spacing:.4px; }
+    .add-form-input { border:1px solid #e2e8f0; border-radius:8px; padding:8px 12px; font-size:13.5px; font-family:inherit; color:#1a1d2e; outline:none; background:#fff; }
+    .add-form-input:focus { border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,.1); }
+    .add-type-toggle { display:flex; gap:10px; }
+    .type-toggle-opt { display:flex; align-items:center; cursor:pointer; }
+    .type-toggle-opt input[type=radio] { display:none; }
+    .type-toggle-btn { display:flex; align-items:center; gap:6px; padding:8px 18px; border-radius:8px; border:2px solid #e2e8f0; font-size:13px; font-weight:500; color:#64748b; cursor:pointer; transition:all .13s; }
+    .type-toggle-opt input[type=radio]:checked + .type-toggle-btn { border-color:#2563eb; color:#2563eb; background:#eff6ff; }
+
+    /* ── Shoot checklist modal ── */
+    .cl-shoot-card { border:1px solid #e8edf3; border-radius:10px; overflow:hidden; margin-bottom:14px; }
+    .cl-shoot-header { padding:12px 16px; border-bottom:1px solid; display:flex; align-items:center; justify-content:space-between; }
+    .cl-shoot-name { font-size:14px; font-weight:600; color:#1a1d2e; }
+    .cl-shoot-meta { font-size:12px; color:#64748b; margin-top:3px; }
+    .cl-items-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; padding:12px 16px; background:#fff; }
+    .cl-item { display:flex; align-items:center; gap:7px; font-size:13px; color:#374151; padding:6px 10px; border-radius:6px; }
+    .cl-item-owned  { background:#f0fdf4; }
+    .cl-item-rental { background:#fff7ed; }
+    .cl-serial { font-size:11px; color:#94a3b8; margin-left:auto; font-family:monospace; }
+    .cl-serial-rental { color:#c2410c; }
+    .cl-check-row { display:flex; gap:20px; padding:10px 16px; background:#f8fafc; border-top:1px solid #f1f5f9; flex-wrap:wrap; }
+    .cl-check-label { display:flex; align-items:center; gap:6px; font-size:12.5px; color:#475569; cursor:pointer; }
+    .cl-check-label input[type=checkbox] { accent-color:#2563eb; width:14px; height:14px; }
+
+    /* ── Vendor modal ── */
+    .vendor-modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px; }
+    .vendor-modal-overlay.hidden { display:none; }
+    .vendor-modal { background:#fff;border-radius:14px;width:100%;max-width:560px;box-shadow:0 20px 60px rgba(0,0,0,.18);overflow:hidden; }
+    .vm-header { padding:18px 22px 14px;border-bottom:1px solid #f1f5f9;display:flex;align-items:flex-start;justify-content:space-between; }
+    .vm-title { font-size:15px;font-weight:700;color:#1a1d2e; }
+    .vm-subtitle { font-size:12.5px;color:#64748b;margin-top:3px; }
+    .vm-close { background:none;border:none;cursor:pointer;color:#94a3b8;font-size:22px;padding:0;line-height:1;flex-shrink:0; }
+    .vm-close:hover { color:#1a1d2e; }
+    .vm-body { padding:20px 22px; }
+    .vm-vendor-header { display:flex;align-items:center;gap:14px;padding:14px 16px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;margin-bottom:18px; }
+    .vm-vendor-logo { width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#c2410c,#fb923c);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0; }
+    .vm-vendor-name { font-size:14.5px;font-weight:600;color:#1a1d2e; }
+    .vm-vendor-type { font-size:12px;color:#64748b;margin-top:2px; }
+    .vm-grid { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+    .vm-field { display:flex;flex-direction:column;gap:3px; }
+    .vm-field-label { font-size:10.5px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px; }
+    .vm-field-value { font-size:13.5px;color:#1a1d2e;font-weight:500; }
+    .vm-field-value a { color:#2563eb; }
+    .vm-divider { height:1px;background:#f1f5f9;margin:16px 0; }
+    .vm-cost-row { display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#fff7ed;border-radius:8px;border:1px solid #fed7aa;margin-bottom:14px; }
+    .vm-cost-label { font-size:12.5px;color:#9a3412; }
+    .vm-cost-value { font-size:16px;font-weight:700;color:#c2410c; }
+    .vm-footer { padding:14px 22px;border-top:1px solid #f1f5f9;display:flex;justify-content:flex-end;gap:10px; }
+    .vm-btn-outline { padding:8px 16px;border-radius:8px;border:1px solid #e2e8f0;background:transparent;color:#64748b;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit; }
+    .vm-btn-outline:hover { background:#f8fafc; }
+    .vm-btn-primary { padding:8px 16px;border-radius:8px;border:none;background:#2563eb;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit; }
+    .vm-btn-primary:hover { background:#1d4ed8; }
+
+    /* ── Rental Summary card ── */
+    .rental-summary { background:#fff;border-radius:12px;border:1px solid #e2e8f0;margin-top:20px;overflow:hidden; }
+    .rs-header { padding:14px 20px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between; }
+    .rs-title { font-size:14px;font-weight:600;color:#1a1d2e;display:flex;align-items:center;gap:7px; }
+    .rs-kpi-row { display:grid;grid-template-columns:repeat(4,1fr);padding:16px 20px;gap:14px;border-bottom:1px solid #f1f5f9; }
+    .rs-stat { text-align:center; }
+    .rs-stat-val { font-size:22px;font-weight:700;color:#1a1d2e; }
+    .rs-stat-lbl { font-size:11.5px;color:#64748b;margin-top:3px; }
+    .rs-tbl { width:100%;border-collapse:collapse; }
+    .rs-tbl thead th { background:#f8fafc;padding:9px 16px;font-size:11px;font-weight:600;color:#94a3b8;text-align:left;border-bottom:1px solid #e2e8f0;text-transform:uppercase;letter-spacing:.5px; }
+    .rs-tbl tbody td { padding:11px 16px;font-size:13px;color:#1a1d2e;border-bottom:1px solid #f8fafc; }
+    .rs-tbl tbody tr:last-child td { border-bottom:none; }
+    .rs-tbl tbody tr { cursor:pointer; }
+    .rs-tbl tbody tr:hover td { background:#fafbfd; }
+    .rental-row td { background: rgba(255,247,237,0.4); }
+
+    /* ── Filter bar shared styles ── */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .filter-bar select,
+    .filter-bar input[type="text"],
+    .filter-bar input[type="date"] {
+      border: 1px solid #e2e8f0;
+      border-radius: 7px;
+      padding: 7px 12px;
+      font-size: 0.84rem;
+      font-family: inherit;
+      background: #fff;
+      color: #374151;
+      outline: none;
+    }
+    .filter-bar select:focus,
+    .filter-bar input:focus { border-color: #2563eb; }
+    .filter-spacer { flex: 1; }
+
+    /* ── Blue button variant ── */
+    .btn-blue {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 8px 15px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .btn-blue:hover { background: #1d4ed8; }
+
+    /* ── Pipeline progress bar ── */
+    .pipeline-bar {
+      display: flex;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      height: 36px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pipe-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      color: #fff;
+      padding: 0 12px;
+      white-space: nowrap;
+    }
+    .pipe-seg--enquiry  { background: #3b82f6; flex: 6; }
+    .pipe-seg--qualified{ background: #8b5cf6; flex: 4; }
+    .pipe-seg--confirmed{ background: #22c55e; flex: 18; }
+    .pipe-seg--completed{ background: #6b7280; flex: 248; max-width: 45%; }
+    .pipe-seg--lost     { background: #ef4444; flex: 12; }
+
+    /* ── Status badge helpers ── */
+    .badge-enquiry  { background: #dbeafe; color: #1d4ed8; }
+    .badge-qualified{ background: #ede9fe; color: #6d28d9; }
+    .badge-confirmed{ background: #dcfce7; color: #15803d; }
+    .badge-completed{ background: #f3f4f6; color: #4b5563; }
+    .badge-lost     { background: #fee2e2; color: #b91c1c; }
+    .badge-active-g { background: #dcfce7; color: #15803d; }
+    .badge-inactive { background: #f3f4f6; color: #6b7280; }
+    .badge-paid     { background: #dcfce7; color: #15803d; }
+    .badge-sent-inv { background: #dbeafe; color: #1d4ed8; }
+    .badge-draft-inv{ background: #f3f4f6; color: #4b5563; }
+    .badge-overdue  { background: #fee2e2; color: #b91c1c; }
+    .badge-avail    { background: #dcfce7; color: #15803d; }
+    .badge-checkout { background: #fef9c3; color: #854d0e; }
+    .badge-inservice{ background: #fee2e2; color: #b91c1c; }
+    .badge-signed   { background: #dcfce7; color: #15803d; }
+    .badge-sent-con { background: #dbeafe; color: #1d4ed8; }
+    .badge-draft-con{ background: #f3f4f6; color: #4b5563; }
+
+    .status-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* ── Stats mini-row ── */
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .mini-stat {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .mini-stat-label { font-size: 0.78rem; color: #6b7280; margin-bottom: 4px; }
+    .mini-stat-value { font-size: 1.45rem; font-weight: 700; color: #111827; }
+    .mini-stat-sub   { font-size: 0.76rem; color: #9ca3af; margin-top: 2px; }
+
+    /* ── Action buttons ── */
+    .btn-view-sm {
+      background: #f3f4f6;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 4px 11px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #374151;
+    }
+    .btn-view-sm:hover { background: #e5e7eb; }
+    .btn-convert {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 4px 11px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #1d4ed8;
+    }
+    .btn-convert:hover { background: #dbeafe; }
+    .btn-remind {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 6px;
+      padding: 4px 11px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #c2410c;
+    }
+    .btn-remind:hover { background: #ffedd5; }
+    .btn-send-sm {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 6px;
+      padding: 4px 11px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #15803d;
+    }
+    .btn-send-sm:hover { background: #dcfce7; }
+
+    /* ── Nurture info card ── */
+    .nurture-card {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-top: 16px;
+      font-size: 0.84rem;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ── Footer note ── */
+    .table-footer-note {
+      font-size: 0.78rem;
+      color: #9ca3af;
+      padding: 10px 0 2px;
+      border-top: 1px solid #f3f4f6;
+      margin-top: 14px;
+    }
+
+
+    /* ── Equipment KPI row ── */
+    .eq-kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+      padding: 18px 20px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e8edf3;
+    }
+    .eq-kpi-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #fff;
+      border: 1px solid #e8edf3;
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+    .eq-kpi-icon {
+      width: 46px; height: 46px;
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .eq-kpi-val  { font-size: 26px; font-weight: 800; color: #1a1d2e; line-height: 1; }
+    .eq-kpi-lbl  { font-size: 12px; font-weight: 600; color: #64748b; margin-top: 4px; text-transform: uppercase; letter-spacing: .4px; }
+    .eq-kpi-sub  { font-size: 11.5px; color: #94a3b8; margin-top: 3px; }
+
+    /* ── Category filter tab strip ── */
+    .cat-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .cat-tab {
+      border: 1px solid #e2e8f0;
+      background: #fff;
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      color: #374151;
+      font-family: inherit;
+    }
+    .cat-tab.active,
+    .cat-tab:hover {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #fff;
+    }
+
+    /* ── Shoot checklist cards ── */
+    .checklist-section { margin-top: 22px; }
+    .checklist-title { font-size: 0.9rem; font-weight: 700; color: #111827; margin-bottom: 12px; }
+    .checklist-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .checklist-card {
+      background: #f9fafb;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .cc-shoot { font-weight: 700; font-size: 0.88rem; color: #111827; margin-bottom: 4px; }
+    .cc-date  { font-size: 0.78rem; color: #6b7280; margin-bottom: 10px; }
+    .cc-items { list-style: none; padding: 0; margin: 0; }
+    .cc-items li { font-size: 0.8rem; color: #374151; padding: 3px 0; display: flex; align-items: center; gap: 6px; }
+    .cc-items li::before { content: '•'; color: #2563eb; font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <!-- ======================== SIDEBAR ======================== -->
+  <!-- sidebar injected by shared/sidebar.js -->
+  <div id="sidebar-root"></div>
+
+    <!-- ======================== MAIN ======================== -->
+    <div class="main-wrapper">
+
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="topbar-title">Studio Manager</div>
+          <div class="topbar-breadcrumb">
+            <span>Dashboard</span>
+            <i class="ti ti-chevron-right"></i>
+            <span class="bc-active">Studio Manager</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="search-box">
+            <i class="ti ti-search search-icon"></i>
+            <input type="text" placeholder="Search bookings, clients…" class="search-input" />
+          </div>
+          <button class="icon-btn notif-btn">
+            <i class="ti ti-bell"></i>
+            <span class="notif-dot"></span>
+          </button>
+          <button class="btn-gold">
+            <i class="ti ti-plus"></i> New Booking
+          </button>
+          <div class="topbar-avatar">SK</div>
+        </div>
+      </header>
+
+      <!-- SUB-NAV TABS -->
+      <div class="subtabs-bar">
+        <nav class="subtabs">
+          <button class="subtab active" onclick="switchTab('overview', this)">Overview</button>
+          <button class="subtab" onclick="switchTab('bookings', this)">Bookings</button>
+          <button class="subtab" onclick="switchTab('clients', this)">Clients</button>
+          <button class="subtab" onclick="switchTab('invoices', this)">Invoices</button>
+          <button class="subtab" onclick="switchTab('equipment', this)">Equipment</button>
+          <button class="subtab" onclick="switchTab('contracts', this)">Contracts</button>
+        </nav>
+      </div>
+
+      <!-- PAGE CONTENT -->
+      <main class="content">
+
+        <!-- ══════════════════════════════════════════
+             TAB 1 — OVERVIEW
+        ══════════════════════════════════════════ -->
+        <div id="tab-overview" class="tab-panel">
+
+          <!-- KPI STATS ROW -->
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-icon stat-icon--blue">
+                <i class="ti ti-camera"></i>
+              </div>
+              <div class="stat-body">
+                <div class="stat-label">Total Bookings (June)</div>
+                <div class="stat-value">34</div>
+                <div class="stat-delta delta-up">
+                  <i class="ti ti-trending-up"></i> +5 vs last month
+                </div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon stat-icon--yellow">
+                <i class="ti ti-file-invoice"></i>
+              </div>
+              <div class="stat-body">
+                <div class="stat-label">Pending Invoices</div>
+                <div class="stat-value">$12,400</div>
+                <div class="stat-delta delta-warn">
+                  <i class="ti ti-clock"></i> 8 invoices
+                </div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon stat-icon--purple">
+                <i class="ti ti-user-plus"></i>
+              </div>
+              <div class="stat-body">
+                <div class="stat-label">New Inquiries</div>
+                <div class="stat-value">6</div>
+                <div class="stat-delta delta-up">
+                  <i class="ti ti-trending-up"></i> This week
+                </div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon stat-icon--green">
+                <i class="ti ti-check-circle"></i>
+              </div>
+              <div class="stat-body">
+                <div class="stat-label">Completed Sessions</div>
+                <div class="stat-value">248</div>
+                <div class="stat-delta delta-up">
+                  <i class="ti ti-star"></i> All time
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TWO-COLUMN: CALENDAR + TODAY'S SCHEDULE -->
+          <div class="two-col">
+
+            <!-- LEFT: CALENDAR -->
+            <div class="card calendar-card">
+              <div class="card-header">
+                <div class="card-title"><i class="ti ti-calendar-month"></i> Booking Calendar</div>
+                <div class="cal-nav">
+                  <button class="cal-nav-btn"><i class="ti ti-chevron-left"></i></button>
+                  <span class="cal-month">June 2026</span>
+                  <button class="cal-nav-btn"><i class="ti ti-chevron-right"></i></button>
+                </div>
+              </div>
+
+              <div class="calendar-grid">
+                <div class="cal-day-header">Sun</div>
+                <div class="cal-day-header">Mon</div>
+                <div class="cal-day-header">Tue</div>
+                <div class="cal-day-header">Wed</div>
+                <div class="cal-day-header">Thu</div>
+                <div class="cal-day-header">Fri</div>
+                <div class="cal-day-header">Sat</div>
+
+                <!-- Week 1 -->
+                <div class="cal-cell cal-cell--empty"></div>
+                <div class="cal-cell"><span class="cal-num">1</span></div>
+                <div class="cal-cell"><span class="cal-num">2</span></div>
+                <div class="cal-cell"><span class="cal-num">3</span></div>
+                <div class="cal-cell"><span class="cal-num">4</span></div>
+                <div class="cal-cell">
+                  <span class="cal-num">5</span>
+                  <span class="event-dot dot-blue"></span>
+                </div>
+                <div class="cal-cell"><span class="cal-num">6</span></div>
+
+                <!-- Week 2 -->
+                <div class="cal-cell"><span class="cal-num">7</span></div>
+                <div class="cal-cell">
+                  <span class="cal-num">8</span>
+                  <span class="event-dot dot-green"></span>
+                </div>
+                <div class="cal-cell"><span class="cal-num">9</span></div>
+                <div class="cal-cell"><span class="cal-num">10</span></div>
+                <div class="cal-cell"><span class="cal-num">11</span></div>
+                <div class="cal-cell">
+                  <span class="cal-num">12</span>
+                  <span class="event-dot dot-purple"></span>
+                </div>
+                <div class="cal-cell"><span class="cal-num">13</span></div>
+
+                <!-- Week 3 -->
+                <div class="cal-cell"><span class="cal-num">14</span></div>
+                <div class="cal-cell cal-cell--today">
+                  <span class="cal-num">15</span>
+                  <span class="event-dot dot-gold"></span>
+                  <div class="cal-event-label">Emma &amp; Jake</div>
+                </div>
+                <div class="cal-cell"><span class="cal-num">16</span></div>
+                <div class="cal-cell">
+                  <span class="cal-num">17</span>
+                  <span class="event-dot dot-blue"></span>
+                  <div class="cal-event-label">Nexus Corp</div>
+                </div>
+                <div class="cal-cell"><span class="cal-num">18</span></div>
+                <div class="cal-cell"><span class="cal-num">19</span></div>
+                <div class="cal-cell">
+                  <span class="cal-num">20</span>
+                  <span class="event-dot dot-green"></span>
+                  <div class="cal-event-label">Liu Family</div>
+                </div>
+
+                <!-- Week 4 -->
+                <div class="cal-cell"><span class="cal-num">21</span></div>
+                <div class="cal-cell">
+                  <span class="cal-num">22</span>
+                  <span class="event-dot dot-purple"></span>
+                  <div class="cal-event-label">Engagement</div>
+                </div>
+                <div class="cal-cell"><span class="cal-num">23</span></div>
+                <div class="cal-cell"><span class="cal-num">24</span></div>
+                <div class="cal-cell"><span class="cal-num">25</span></div>
+                <div class="cal-cell"><span class="cal-num">26</span></div>
+                <div class="cal-cell"><span class="cal-num">27</span></div>
+
+                <!-- Week 5 -->
+                <div class="cal-cell">
+                  <span class="cal-num">28</span>
+                  <span class="event-dot dot-orange"></span>
+                  <div class="cal-event-label">Horizon Events</div>
+                </div>
+                <div class="cal-cell"><span class="cal-num">29</span></div>
+                <div class="cal-cell"><span class="cal-num">30</span></div>
+                <div class="cal-cell cal-cell--empty"></div>
+                <div class="cal-cell cal-cell--empty"></div>
+                <div class="cal-cell cal-cell--empty"></div>
+                <div class="cal-cell cal-cell--empty"></div>
+              </div>
+
+              <div class="cal-legend">
+                <div class="legend-item"><span class="event-dot dot-gold"></span> Wedding</div>
+                <div class="legend-item"><span class="event-dot dot-blue"></span> Corporate</div>
+                <div class="legend-item"><span class="event-dot dot-green"></span> Portrait</div>
+                <div class="legend-item"><span class="event-dot dot-purple"></span> Engagement</div>
+                <div class="legend-item"><span class="event-dot dot-orange"></span> Event</div>
+              </div>
+            </div>
+
+            <!-- RIGHT: TODAY'S SCHEDULE -->
+            <div class="card schedule-card">
+              <div class="card-header">
+                <div class="card-title"><i class="ti ti-clock"></i> Today's Schedule</div>
+                <div class="schedule-date">Mon, Jun 15</div>
+              </div>
+
+              <div class="timeline">
+                <div class="tl-item">
+                  <div class="tl-time">8:00 AM</div>
+                  <div class="tl-dot tl-dot--gold"></div>
+                  <div class="tl-body tl-body--gold">
+                    <div class="tl-title">Pre-shoot Prep</div>
+                    <div class="tl-meta">Equipment check &amp; setup</div>
+                  </div>
+                </div>
+
+                <div class="tl-item tl-item--active">
+                  <div class="tl-time">10:00 AM</div>
+                  <div class="tl-dot tl-dot--green"></div>
+                  <div class="tl-body tl-body--green">
+                    <div class="tl-title-row">
+                      <span class="tl-title">Emma &amp; Jake Wedding</span>
+                      <span class="badge badge-live">LIVE</span>
+                    </div>
+                    <div class="tl-meta"><i class="ti ti-map-pin"></i> Central Park</div>
+                    <div class="tl-meta">Duration: 4 hrs · $3,800</div>
+                  </div>
+                </div>
+
+                <div class="tl-item tl-item--muted">
+                  <div class="tl-time">12:30 PM</div>
+                  <div class="tl-dot tl-dot--muted"></div>
+                  <div class="tl-body tl-body--muted">
+                    <div class="tl-title">Break</div>
+                    <div class="tl-meta">30 min</div>
+                  </div>
+                </div>
+
+                <div class="tl-item">
+                  <div class="tl-time">2:00 PM</div>
+                  <div class="tl-dot tl-dot--blue"></div>
+                  <div class="tl-body tl-body--blue">
+                    <div class="tl-title">Gallery Editing</div>
+                    <div class="tl-meta">Emma &amp; Jake — 240 photos</div>
+                  </div>
+                </div>
+
+                <div class="tl-item">
+                  <div class="tl-time">5:00 PM</div>
+                  <div class="tl-dot tl-dot--purple"></div>
+                  <div class="tl-body tl-body--purple">
+                    <div class="tl-title">Client Call</div>
+                    <div class="tl-meta">Liu Family — Pre-session consult</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- CLIENT LIST TABLE -->
+          <div class="card table-card">
+            <div class="card-header">
+              <div class="card-title"><i class="ti ti-users"></i> Client List</div>
+              <div class="card-actions">
+                <button class="btn-outline"><i class="ti ti-filter"></i> Filter</button>
+                <button class="btn-outline"><i class="ti ti-download"></i> Export</button>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Client</th>
+                    <th>Type</th>
+                    <th>Next Session</th>
+                    <th>Total Value</th>
+                    <th>Sessions</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="client-cell">
+                        <div class="client-avatar ca-gold">EJ</div>
+                        <div>
+                          <div class="client-name">Emma &amp; Jake Wilson</div>
+                          <div class="client-email">emma@example.com</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="type-tag type-wedding">Wedding</span></td>
+                    <td><span class="date-cell">Jun 15, 2026</span></td>
+                    <td><strong>$3,800</strong></td>
+                    <td><span class="session-count">1</span></td>
+                    <td><span class="badge badge-success">Confirmed</span></td>
+                    <td><button class="btn-view">View</button></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="client-cell">
+                        <div class="client-avatar ca-blue">NC</div>
+                        <div>
+                          <div class="client-name">Nexus Corp</div>
+                          <div class="client-email">hr@nexuscorp.com</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="type-tag type-corporate">Corporate</span></td>
+                    <td><span class="date-cell">Jun 17, 2026</span></td>
+                    <td><strong>$1,200</strong></td>
+                    <td><span class="session-count">3</span></td>
+                    <td><span class="badge badge-warning">Deposit Paid</span></td>
+                    <td><button class="btn-view">View</button></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="client-cell">
+                        <div class="client-avatar ca-green">LF</div>
+                        <div>
+                          <div class="client-name">Liu Family</div>
+                          <div class="client-email">liu.family@email.com</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="type-tag type-portrait">Portrait</span></td>
+                    <td><span class="date-cell">Jun 20, 2026</span></td>
+                    <td><strong>$650</strong></td>
+                    <td><span class="session-count">2</span></td>
+                    <td><span class="badge badge-info">Inquiry</span></td>
+                    <td><button class="btn-view">View</button></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="client-cell">
+                        <div class="client-avatar ca-purple">SR</div>
+                        <div>
+                          <div class="client-name">Sarah &amp; Tom Reed</div>
+                          <div class="client-email">sreed@email.com</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="type-tag type-engagement">Engagement</span></td>
+                    <td><span class="date-cell">Jun 22, 2026</span></td>
+                    <td><strong>$950</strong></td>
+                    <td><span class="session-count">1</span></td>
+                    <td><span class="badge badge-success">Confirmed</span></td>
+                    <td><button class="btn-view">View</button></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="client-cell">
+                        <div class="client-avatar ca-orange">HE</div>
+                        <div>
+                          <div class="client-name">Horizon Events</div>
+                          <div class="client-email">events@horizon.co</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="type-tag type-event">Event</span></td>
+                    <td><span class="date-cell">Jun 28, 2026</span></td>
+                    <td><strong>$2,400</strong></td>
+                    <td><span class="session-count">5</span></td>
+                    <td><span class="badge badge-contract">Contract Sent</span></td>
+                    <td><button class="btn-view">View</button></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="client-cell">
+                        <div class="client-avatar ca-teal">MF</div>
+                        <div>
+                          <div class="client-name">Martinez Family</div>
+                          <div class="client-email">martinez@email.com</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="type-tag type-portrait">Portrait</span></td>
+                    <td><span class="date-cell">Jul 4, 2026</span></td>
+                    <td><strong>$700</strong></td>
+                    <td><span class="session-count">1</span></td>
+                    <td><span class="badge badge-info">New Inquiry</span></td>
+                    <td><button class="btn-view">View</button></td>
+                  </tr></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- INVOICE SUMMARY -->
+          <div class="invoice-row">
+            <div class="invoice-card invoice-card--draft">
+              <div class="inv-top">
+                <div class="inv-label">Draft</div>
+                <div class="inv-icon inv-icon--gray"><i class="ti ti-file"></i></div>
+              </div>
+              <div class="inv-amount">$0</div>
+              <div class="inv-count">0 invoices</div>
+              <div class="inv-progress-bar">
+                <div class="inv-progress-fill" style="width:0%"></div>
+              </div>
+            </div>
+
+            <div class="invoice-card invoice-card--sent">
+              <div class="inv-top">
+                <div class="inv-label">Sent</div>
+                <div class="inv-icon inv-icon--blue"><i class="ti ti-send"></i></div>
+              </div>
+              <div class="inv-amount">$5,200</div>
+              <div class="inv-count">3 invoices</div>
+              <div class="inv-progress-bar">
+                <div class="inv-progress-fill inv-fill--blue" style="width:21%"></div>
+              </div>
+            </div>
+
+            <div class="invoice-card invoice-card--paid">
+              <div class="inv-top">
+                <div class="inv-label">Paid</div>
+                <div class="inv-icon inv-icon--green"><i class="ti ti-circle-check"></i></div>
+              </div>
+              <div class="inv-amount">$19,240</div>
+              <div class="inv-count">12 invoices</div>
+              <div class="inv-progress-bar">
+                <div class="inv-progress-fill inv-fill--green" style="width:79%"></div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /tab-overview -->
+
+
+        <!-- ══════════════════════════════════════════
+             TAB 2 — BOOKINGS
+        ══════════════════════════════════════════ -->
+        <div id="tab-bookings" class="tab-panel hidden">
+          <div class="card table-card">
+            <div class="card-header">
+              <div class="card-title"><i class="ti ti-calendar-event"></i> Booking Enquiries &amp; Pipeline</div>
+            </div>
+
+            <!-- Pipeline progress bar -->
+            <div class="pipeline-bar">
+              <div class="pipe-seg pipe-seg--enquiry"><i class="ti ti-inbox"></i> Enquiry (6)</div>
+              <div class="pipe-seg pipe-seg--qualified"><i class="ti ti-star"></i> Qualified (4)</div>
+              <div class="pipe-seg pipe-seg--confirmed"><i class="ti ti-circle-check"></i> Confirmed (18)</div>
+              <div class="pipe-seg pipe-seg--completed"><i class="ti ti-trophy"></i> Completed (248)</div>
+              <div class="pipe-seg pipe-seg--lost"><i class="ti ti-x"></i> Lost (12)</div>
+            </div>
+
+            <!-- Filter bar -->
+            <div class="filter-bar">
+              <select id="bk-status" onchange="filterBookings()">
+                <option value="">All Statuses</option>
+                <option value="enquiry">Enquiry</option>
+                <option value="qualified">Qualified</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="completed">Completed</option>
+                <option value="lost">Lost</option>
+              </select>
+              <input type="date" id="bk-date-from" value="2026-06-01" onchange="filterBookings()" />
+              <input type="date" id="bk-date-to"   value="2026-06-30" onchange="filterBookings()" />
+              <input type="text" id="bk-search" placeholder="Search enquiries…" style="min-width:180px;" oninput="filterBookings()" />
+              <div class="filter-spacer"></div>
+              <button class="btn-blue" onclick="openEnquiryModal()"><i class="ti ti-plus"></i> New Enquiry</button>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Client Name</th>
+                    <th>Enquiry Source</th>
+                    <th>Shoot Type</th>
+                    <th>Shoot Date</th>
+                    <th>Budget</th>
+                    <th>Status</th>
+                    <th>Follow-up Task</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="bk-tbody">
+                  <tr>
+                    <td>1</td>
+                    <td><strong>Emma Wilson</strong></td>
+                    <td>Website Form</td>
+                    <td><span class="type-tag type-wedding">Wedding</span></td>
+                    <td>Jun 15</td>
+                    <td><strong>$3,800</strong></td>
+                    <td><span class="status-badge badge-confirmed">Confirmed</span></td>
+                    <td>Contract signed</td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td><strong>Nexus Corp</strong></td>
+                    <td>Social / Referral</td>
+                    <td><span class="type-tag type-corporate">Headshots</span></td>
+                    <td>Jun 17</td>
+                    <td><strong>$1,200</strong></td>
+                    <td><span class="status-badge badge-confirmed">Confirmed</span></td>
+                    <td>Deposit due</td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td><strong>Liu Family</strong></td>
+                    <td>Walk-in</td>
+                    <td><span class="type-tag type-portrait">Portrait</span></td>
+                    <td>Jun 20</td>
+                    <td><strong>$650</strong></td>
+                    <td><span class="status-badge badge-confirmed">Confirmed</span></td>
+                    <td>—</td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td><strong>Sarah Reed</strong></td>
+                    <td>Website Form</td>
+                    <td><span class="type-tag type-engagement">Engagement</span></td>
+                    <td>Jun 22</td>
+                    <td><strong>$950</strong></td>
+                    <td><span class="status-badge badge-confirmed">Confirmed</span></td>
+                    <td>—</td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td><strong>Horizon Events</strong></td>
+                    <td>Referral</td>
+                    <td><span class="type-tag type-event">Event</span></td>
+                    <td>Jun 28</td>
+                    <td><strong>$2,400</strong></td>
+                    <td><span class="status-badge badge-confirmed">Confirmed</span></td>
+                    <td>Contract sent</td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td><strong>Martinez Family</strong></td>
+                    <td>Instagram</td>
+                    <td><span class="type-tag type-portrait">Portrait</span></td>
+                    <td>Jul 4</td>
+                    <td><strong>$700</strong></td>
+                    <td><span class="status-badge badge-enquiry">Enquiry</span></td>
+                    <td>Call within 24h</td>
+                    <td><button class="btn-convert">Convert</button></td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td><strong>Patel Wedding</strong></td>
+                    <td>Website Form</td>
+                    <td><span class="type-tag type-wedding">Wedding</span></td>
+                    <td>Jul 12</td>
+                    <td><strong>$4,200</strong></td>
+                    <td><span class="status-badge badge-qualified">Qualified</span></td>
+                    <td>Ready to convert</td>
+                    <td><button class="btn-convert">Convert</button></td>
+                  </tr>
+                  <tr>
+                    <td>8</td>
+                    <td><strong>Chen Studio</strong></td>
+                    <td>Social / Referral</td>
+                    <td><span class="type-tag type-corporate">Commercial</span></td>
+                    <td>Jul 18</td>
+                    <td><strong>$1,800</strong></td>
+                    <td><span class="status-badge badge-qualified">Qualified</span></td>
+                    <td>Awaiting budget</td>
+                    <td><button class="btn-convert">Convert</button></td>
+                  </tr>
+                  <tr>
+                    <td>9</td>
+                    <td><strong>Thompson Family</strong></td>
+                    <td>Walk-in</td>
+                    <td><span class="type-tag type-portrait">Portrait</span></td>
+                    <td>May 28</td>
+                    <td><strong>$550</strong></td>
+                    <td><span class="status-badge badge-completed">Completed</span></td>
+                    <td>Gallery delivered</td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td>10</td>
+                    <td><strong>Park Wedding</strong></td>
+                    <td>Referral</td>
+                    <td><span class="type-tag type-wedding">Wedding</span></td>
+                    <td>May 10</td>
+                    <td><strong>$3,500</strong></td>
+                    <td><span class="status-badge badge-completed">Completed</span></td>
+                    <td>Review requested</td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td>11</td>
+                    <td><strong>Williams Corp</strong></td>
+                    <td>Website Form</td>
+                    <td><span class="type-tag type-corporate">Headshots</span></td>
+                    <td>Apr 22</td>
+                    <td><strong>$900</strong></td>
+                    <td><span class="status-badge badge-lost">Lost</span></td>
+                    <td>Nurture: 30 days</td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td>12</td>
+                    <td><strong>Brown Family</strong></td>
+                    <td>Instagram</td>
+                    <td><span class="type-tag type-portrait">Portrait</span></td>
+                    <td>Apr 15</td>
+                    <td><strong>$600</strong></td>
+                    <td><span class="status-badge badge-lost">Lost</span></td>
+                    <td>Archived</td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr></tbody>
+              </table>
+            </div>
+
+            <div class="nurture-card">
+              <i class="ti ti-refresh" style="font-size:1.2rem;"></i>
+              <div>
+                <strong>Nurture Sequence Active:</strong>
+                2 lost enquiries re-queued for 30-day follow-up via Zoho CRM
+              </div>
+            </div>
+          </div>
+        </div><!-- /tab-bookings -->
+
+
+        <!-- ══════════════════════════════════════════
+             TAB 3 — CLIENTS
+        ══════════════════════════════════════════ -->
+        <div id="tab-clients" class="tab-panel hidden">
+          <div class="card table-card">
+            <div class="card-header">
+              <div class="card-title"><i class="ti ti-users"></i> Client CRM</div>
+            </div>
+
+            <!-- Stats -->
+            <div class="eq-kpi-row">
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(37,99,235,.1);color:#2563eb;">
+                  <i class="ti ti-users" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val">84</div>
+                  <div class="eq-kpi-lbl">Total Clients</div>
+                  <div class="eq-kpi-sub">All time</div>
+                </div>
+              </div>
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(34,197,94,.1);color:#15803d;">
+                  <i class="ti ti-user-check" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val" style="color:#15803d;">31</div>
+                  <div class="eq-kpi-lbl">Active (last 6 mo)</div>
+                  <div class="eq-kpi-sub">37% of total base</div>
+                </div>
+              </div>
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(139,92,246,.1);color:#7e22ce;">
+                  <i class="ti ti-currency-dollar" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val">$2,840</div>
+                  <div class="eq-kpi-lbl">Avg. Lifetime Value</div>
+                  <div class="eq-kpi-sub">per client</div>
+                </div>
+              </div>
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(201,168,76,.1);color:#a16207;">
+                  <i class="ti ti-trending-up" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val">$238,560</div>
+                  <div class="eq-kpi-lbl">Total Revenue</div>
+                  <div class="eq-kpi-sub">from all clients</div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Filter bar -->
+            <div class="filter-bar">
+              <input type="text" id="cl-search" placeholder="Search clients…" style="min-width:200px;" oninput="filterClients()" />
+              <select id="cl-status" onchange="filterClients()">
+                <option value="">All Statuses</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+              <div class="filter-spacer"></div>
+              <button class="btn-blue" onclick="openAddClientModal()"><i class="ti ti-user-plus"></i> Add Client</button>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Client</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Shoot Types</th>
+                    <th>Total Sessions</th>
+                    <th>Total Spent</th>
+                    <th>Last Session</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="cl-tbody">
+                  <tr>
+                    <td><div class="client-cell"><div class="client-avatar ca-gold">EJ</div><strong>Emma &amp; Jake Wilson</strong></div></td>
+                    <td>emma@example.com</td>
+                    <td>(555) 234-5678</td>
+                    <td><span class="type-tag type-wedding">Wedding</span></td>
+                    <td style="text-align:center;">1</td>
+                    <td><strong>$3,800</strong></td>
+                    <td>Jun 15, 2026</td>
+                    <td><span class="status-badge badge-active-g">Active</span></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                  </tr>
+                  <tr>
+                    <td><div class="client-cell"><div class="client-avatar ca-blue">NC</div><strong>Nexus Corp</strong></div></td>
+                    <td>hr@nexus.com</td>
+                    <td>(555) 345-6789</td>
+                    <td><span class="type-tag type-corporate">Corporate</span></td>
+                    <td style="text-align:center;">3</td>
+                    <td><strong>$3,600</strong></td>
+                    <td>Jun 17, 2026</td>
+                    <td><span class="status-badge badge-active-g">Active</span></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                  </tr>
+                  <tr>
+                    <td><div class="client-cell"><div class="client-avatar ca-green">LF</div><strong>Liu Family</strong></div></td>
+                    <td>liu@example.com</td>
+                    <td>(555) 456-7890</td>
+                    <td><span class="type-tag type-portrait">Portrait</span></td>
+                    <td style="text-align:center;">2</td>
+                    <td><strong>$1,300</strong></td>
+                    <td>Jun 20, 2026</td>
+                    <td><span class="status-badge badge-active-g">Active</span></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                  </tr>
+                  <tr>
+                    <td><div class="client-cell"><div class="client-avatar ca-purple">SR</div><strong>Sarah &amp; Tom Reed</strong></div></td>
+                    <td>sarah@example.com</td>
+                    <td>(555) 567-8901</td>
+                    <td><span class="type-tag type-engagement">Engagement, Wedding</span></td>
+                    <td style="text-align:center;">2</td>
+                    <td><strong>$5,750</strong></td>
+                    <td>Jun 22, 2026</td>
+                    <td><span class="status-badge badge-active-g">Active</span></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                  </tr>
+                  <tr>
+                    <td><div class="client-cell"><div class="client-avatar ca-teal">RT</div><strong>Rachel Thompson</strong></div></td>
+                    <td>rachel@example.com</td>
+                    <td>(555) 678-9012</td>
+                    <td><span class="type-tag type-portrait">Portrait</span></td>
+                    <td style="text-align:center;">4</td>
+                    <td><strong>$2,800</strong></td>
+                    <td>May 28, 2026</td>
+                    <td><span class="status-badge badge-active-g">Active</span></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                  </tr>
+                  <tr>
+                    <td><div class="client-cell"><div class="client-avatar ca-orange">CF</div><strong>Chen Family</strong></div></td>
+                    <td>chen@example.com</td>
+                    <td>(555) 789-0123</td>
+                    <td><span class="type-tag type-portrait">Portrait</span></td>
+                    <td style="text-align:center;">3</td>
+                    <td><strong>$1,950</strong></td>
+                    <td>Apr 12, 2026</td>
+                    <td><span class="status-badge badge-inactive">Inactive</span></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                  </tr>
+                  <tr>
+                    <td><div class="client-cell"><div class="client-avatar ca-blue">HE</div><strong>Horizon Events</strong></div></td>
+                    <td>events@horizon.com</td>
+                    <td>(555) 890-1234</td>
+                    <td><span class="type-tag type-event">Event, Commercial</span></td>
+                    <td style="text-align:center;">5</td>
+                    <td><strong>$8,400</strong></td>
+                    <td>Jun 28, 2026</td>
+                    <td><span class="status-badge badge-active-g">Active</span></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                  </tr>
+                  <tr>
+                    <td><div class="client-cell"><div class="client-avatar ca-purple">PF</div><strong>Park Family</strong></div></td>
+                    <td>park@example.com</td>
+                    <td>(555) 901-2345</td>
+                    <td><span class="type-tag type-wedding">Wedding, Portrait</span></td>
+                    <td style="text-align:center;">3</td>
+                    <td><strong>$4,200</strong></td>
+                    <td>Mar 10, 2026</td>
+                    <td><span class="status-badge badge-inactive">Inactive</span></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                  </tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div><!-- /tab-clients -->
+
+
+        <!-- ══════════════════════════════════════════
+             TAB 4 — INVOICES
+        ══════════════════════════════════════════ -->
+        <div id="tab-invoices" class="tab-panel hidden">
+          <div class="card table-card">
+            <div class="card-header">
+              <div class="card-title"><i class="ti ti-file-invoice"></i> Invoice Management</div>
+            </div>
+
+            <!-- Stats -->
+            <div class="eq-kpi-row">
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(100,116,139,.1);color:#475569;">
+                  <i class="ti ti-file-description" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val" style="color:#475569;">$0</div>
+                  <div class="eq-kpi-lbl">Draft</div>
+                  <div class="eq-kpi-sub">0 invoices</div>
+                </div>
+              </div>
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(37,99,235,.1);color:#1d4ed8;">
+                  <i class="ti ti-send" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val" style="color:#1d4ed8;">$5,200</div>
+                  <div class="eq-kpi-lbl">Sent</div>
+                  <div class="eq-kpi-sub">3 invoices awaiting</div>
+                </div>
+              </div>
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(34,197,94,.1);color:#15803d;">
+                  <i class="ti ti-circle-check" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val" style="color:#15803d;">$19,240</div>
+                  <div class="eq-kpi-lbl">Paid</div>
+                  <div class="eq-kpi-sub">12 invoices collected</div>
+                </div>
+              </div>
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(220,38,38,.1);color:#dc2626;">
+                  <i class="ti ti-alert-circle" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val" style="color:#dc2626;">$2,100</div>
+                  <div class="eq-kpi-lbl">Overdue</div>
+                  <div class="eq-kpi-sub">2 invoices past due</div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Filter bar -->
+            <div class="filter-bar">
+              <input type="text" id="inv-search" placeholder="Search invoices…" style="min-width:180px;" oninput="filterInvoices()" />
+              <select id="inv-status" onchange="filterInvoices()">
+                <option value="">All Statuses</option>
+                <option value="draft">Draft</option>
+                <option value="sent">Sent</option>
+                <option value="paid">Paid</option>
+                <option value="overdue">Overdue</option>
+              </select>
+              <div class="filter-spacer"></div>
+              <button class="btn-blue" onclick="openCreateInvoiceModal()"><i class="ti ti-plus"></i> Create Invoice</button>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Invoice #</th>
+                    <th>Client</th>
+                    <th>Type</th>
+                    <th>Issue Date</th>
+                    <th>Due Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Zoho Books</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="inv-tbody">
+                  <tr>
+                    <td><strong>INV-2847</strong></td>
+                    <td>Emma Wilson</td>
+                    <td>Balance Payment</td>
+                    <td>Jun 15</td>
+                    <td>Jun 15</td>
+                    <td><strong>$2,280</strong></td>
+                    <td><span class="status-badge badge-paid">Paid</span></td>
+                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>INV-2846</strong></td>
+                    <td>Emma Wilson</td>
+                    <td>Deposit (50%)</td>
+                    <td>May 28</td>
+                    <td>Jun 1</td>
+                    <td><strong>$1,520</strong></td>
+                    <td><span class="status-badge badge-paid">Paid</span></td>
+                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>INV-2845</strong></td>
+                    <td>Nexus Corp</td>
+                    <td>Deposit (30%)</td>
+                    <td>Jun 10</td>
+                    <td>Jun 14</td>
+                    <td><strong>$360</strong></td>
+                    <td><span class="status-badge badge-paid">Paid</span></td>
+                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>INV-2844</strong></td>
+                    <td>Nexus Corp</td>
+                    <td>Balance</td>
+                    <td>Jun 17</td>
+                    <td>Jun 17</td>
+                    <td><strong>$840</strong></td>
+                    <td><span class="status-badge badge-sent-inv">Sent</span></td>
+                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>INV-2843</strong></td>
+                    <td>Horizon Events</td>
+                    <td>Deposit (30%)</td>
+                    <td>Jun 8</td>
+                    <td>Jun 12</td>
+                    <td><strong>$720</strong></td>
+                    <td><span class="status-badge badge-paid">Paid</span></td>
+                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>INV-2842</strong></td>
+                    <td>Horizon Events</td>
+                    <td>Balance</td>
+                    <td>Jun 28</td>
+                    <td>Jun 28</td>
+                    <td><strong>$1,680</strong></td>
+                    <td><span class="status-badge badge-sent-inv">Sent</span></td>
+                    <td><span style="color:#6b7280;">Pending</span></td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>INV-2841</strong></td>
+                    <td>Liu Family</td>
+                    <td>Full Payment</td>
+                    <td>Jun 20</td>
+                    <td>Jun 25</td>
+                    <td><strong>$650</strong></td>
+                    <td><span class="status-badge badge-sent-inv">Sent</span></td>
+                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>INV-2840</strong></td>
+                    <td>Martinez Family</td>
+                    <td>Deposit</td>
+                    <td>Jun 14</td>
+                    <td>Jun 18</td>
+                    <td><strong>$210</strong></td>
+                    <td><span class="status-badge badge-draft-inv">Draft</span></td>
+                    <td><span style="color:#9ca3af;">Not sent</span></td>
+                    <td><button class="btn-send-sm">Send</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>INV-2839</strong></td>
+                    <td>Sarah Reed</td>
+                    <td>Balance</td>
+                    <td>May 22</td>
+                    <td>May 28</td>
+                    <td><strong>$570</strong></td>
+                    <td><span class="status-badge badge-overdue">Overdue</span></td>
+                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><button class="btn-remind">Remind</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>INV-2838</strong></td>
+                    <td>Williams Corp</td>
+                    <td>Full Payment</td>
+                    <td>Apr 15</td>
+                    <td>Apr 22</td>
+                    <td><strong>$900</strong></td>
+                    <td><span class="status-badge badge-overdue">Overdue</span></td>
+                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><button class="btn-remind">Remind</button></td>
+                  </tr></tbody>
+              </table>
+            </div>
+
+            <div class="table-footer-note">
+              Invoices sync automatically with Zoho Books &nbsp;·&nbsp; Last sync: 2 minutes ago
+            </div>
+          </div>
+        </div><!-- /tab-invoices -->
+
+
+        <!-- ══════════════════════════════════════════
+             TAB 5 — EQUIPMENT
+        ══════════════════════════════════════════ -->
+        <div id="tab-equipment" class="tab-panel hidden">
+          <div class="card table-card">
+            <div class="card-header">
+              <div class="card-title"><i class="ti ti-camera"></i> Equipment Inventory</div>
+            </div>
+
+            <!-- Equipment KPI Cards -->
+            <div class="eq-kpi-row">
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(37,99,235,.1);color:#2563eb;">
+                  <i class="ti ti-package" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val">47</div>
+                  <div class="eq-kpi-lbl">Total Items</div>
+                  <div class="eq-kpi-sub">12 owned &middot; 4 rental</div>
+                </div>
+              </div>
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(217,119,6,.1);color:#d97706;">
+                  <i class="ti ti-arrow-right-circle" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val" style="color:#d97706;">3</div>
+                  <div class="eq-kpi-lbl">Checked Out</div>
+                  <div class="eq-kpi-sub">Emma &amp; Jake &middot; Horizon Events</div>
+                </div>
+              </div>
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(220,38,38,.1);color:#dc2626;">
+                  <i class="ti ti-tool" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val" style="color:#dc2626;">2</div>
+                  <div class="eq-kpi-lbl">Due for Service</div>
+                  <div class="eq-kpi-sub">Profoto B10X &middot; Sep 2026</div>
+                </div>
+              </div>
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(194,65,12,.1);color:#c2410c;">
+                  <i class="ti ti-building-store" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val" style="color:#c2410c;">4</div>
+                  <div class="eq-kpi-lbl">Active Rentals</div>
+                  <div class="eq-kpi-sub">$6,390 total rental cost</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filter bar -->
+            <div class="filter-bar">
+              <input type="text" placeholder="Search equipment…" style="min-width:200px;" />
+              <div class="filter-spacer"></div>
+              <button class="btn-blue" style="margin-right:8px;" onclick="openAddItemModal()"><i class="ti ti-plus"></i> Add Item</button>
+              <button class="btn-blue" onclick="openChecklistModal()"><i class="ti ti-checklist"></i> Generate Shoot Checklist</button>
+            </div>
+
+            <!-- Category tabs -->
+            <div class="cat-tabs">
+              <button class="cat-tab active" data-cat="all">All <span class="cat-count" id="count-all">12</span></button>
+              <button class="cat-tab" data-cat="cameras">Cameras <span class="cat-count" id="count-cameras">3</span></button>
+              <button class="cat-tab" data-cat="lenses">Lenses <span class="cat-count" id="count-lenses">3</span></button>
+              <button class="cat-tab" data-cat="lighting">Lighting <span class="cat-count" id="count-lighting">3</span></button>
+              <button class="cat-tab" data-cat="accessories">Accessories <span class="cat-count" id="count-accessories">1</span></button>
+              <button class="cat-tab" data-cat="memory">Memory <span class="cat-count" id="count-memory">2</span></button>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Serial #</th>
+                    <th>Status</th>
+                    <th>Assigned To</th>
+                    <th>Next Service / Return</th>
+                    <th>Notes</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="eq-row" data-cat="cameras">
+                    <td><strong>Sony A7R V</strong></td>
+                    <td><span class="cat-pill pill-cameras">Camera</span></td>
+                    <td><span class="type-badge type-owned">Owned</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">SON-A7RV-001</td>
+                    <td><span class="status-badge badge-avail">Available</span></td>
+                    <td>—</td>
+                    <td>Dec 2026</td>
+                    <td>Primary body</td>
+                                      <td><button class="eq-action-btn" onclick="editEquipment(this)"><i class="ti ti-edit"></i> Edit</button></td>
+                  </tr>
+                  <tr class="eq-row" data-cat="cameras">
+                    <td><strong>Sony A7R V</strong></td>
+                    <td><span class="cat-pill pill-cameras">Camera</span></td>
+                    <td><span class="type-badge type-owned">Owned</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">SON-A7RV-002</td>
+                    <td><span class="status-badge badge-checkout">Checked Out</span></td>
+                    <td>Emma &amp; Jake shoot</td>
+                    <td>Dec 2026</td>
+                    <td>Backup body</td>
+                                      <td><button class="eq-action-btn" onclick="editEquipment(this)"><i class="ti ti-edit"></i> Edit</button></td>
+                  </tr>
+                  <tr class="eq-row" data-cat="cameras">
+                    <td><strong>Sony A1</strong></td>
+                    <td><span class="cat-pill pill-cameras">Camera</span></td>
+                    <td><span class="type-badge type-owned">Owned</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">SON-A1-001</td>
+                    <td><span class="status-badge badge-avail">Available</span></td>
+                    <td>—</td>
+                    <td>Mar 2027</td>
+                    <td>Studio body</td>
+                                      <td><button class="eq-action-btn" onclick="editEquipment(this)"><i class="ti ti-edit"></i> Edit</button></td>
+                  </tr>
+                  <tr class="eq-row" data-cat="lenses">
+                    <td><strong>Sony 24-70mm f/2.8 GM</strong></td>
+                    <td><span class="cat-pill pill-lenses">Lens</span></td>
+                    <td><span class="type-badge type-owned">Owned</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">SON-2470-001</td>
+                    <td><span class="status-badge badge-avail">Available</span></td>
+                    <td>—</td>
+                    <td>Jun 2027</td>
+                    <td>Workhorse zoom</td>
+                                      <td><button class="eq-action-btn" onclick="editEquipment(this)"><i class="ti ti-edit"></i> Edit</button></td>
+                  </tr>
+                  <tr class="eq-row" data-cat="lenses">
+                    <td><strong>Sony 85mm f/1.4 GM</strong></td>
+                    <td><span class="cat-pill pill-lenses">Lens</span></td>
+                    <td><span class="type-badge type-owned">Owned</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">SON-85GM-001</td>
+                    <td><span class="status-badge badge-checkout">Checked Out</span></td>
+                    <td>Emma &amp; Jake shoot</td>
+                    <td>Jun 2027</td>
+                    <td>Portrait prime</td>
+                                      <td><button class="eq-action-btn" onclick="editEquipment(this)"><i class="ti ti-edit"></i> Edit</button></td>
+                  </tr>
+                  <tr class="eq-row" data-cat="lenses">
+                    <td><strong>Sony 135mm f/1.8 GM</strong></td>
+                    <td><span class="cat-pill pill-lenses">Lens</span></td>
+                    <td><span class="type-badge type-owned">Owned</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">SON-135GM-001</td>
+                    <td><span class="status-badge badge-avail">Available</span></td>
+                    <td>—</td>
+                    <td>Jun 2027</td>
+                    <td>Telephoto prime</td>
+                                      <td><button class="eq-action-btn" onclick="editEquipment(this)"><i class="ti ti-edit"></i> Edit</button></td>
+                  </tr>
+                  <tr class="eq-row" data-cat="lighting">
+                    <td><strong>Profoto B10X Plus</strong></td>
+                    <td><span class="cat-pill pill-lighting">Lighting</span></td>
+                    <td><span class="type-badge type-owned">Owned</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">PRO-B10X-001</td>
+                    <td><span class="status-badge badge-avail">Available</span></td>
+                    <td>—</td>
+                    <td>Sep 2026</td>
+                    <td>Off-camera flash</td>
+                                      <td><button class="eq-action-btn" onclick="editEquipment(this)"><i class="ti ti-edit"></i> Edit</button></td>
+                  </tr>
+                  <tr class="eq-row" data-cat="lighting">
+                    <td><strong>Profoto B10X Plus</strong></td>
+                    <td><span class="cat-pill pill-lighting">Lighting</span></td>
+                    <td><span class="type-badge type-owned">Owned</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">PRO-B10X-002</td>
+                    <td><span class="status-badge badge-inservice">In Service</span></td>
+                    <td>Service center</td>
+                    <td>—</td>
+                    <td>Due back Jun 20</td>
+                                      <td><button class="eq-action-btn" onclick="editEquipment(this)"><i class="ti ti-edit"></i> Edit</button></td>
+                  </tr>
+                  <tr class="eq-row" data-cat="lighting">
+                    <td><strong>Godox AD600 Pro</strong></td>
+                    <td><span class="cat-pill pill-lighting">Lighting</span></td>
+                    <td><span class="type-badge type-owned">Owned</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">GOD-600-001</td>
+                    <td><span class="status-badge badge-avail">Available</span></td>
+                    <td>—</td>
+                    <td>Aug 2026</td>
+                    <td>Backup flash</td>
+                                      <td><button class="eq-action-btn" onclick="editEquipment(this)"><i class="ti ti-edit"></i> Edit</button></td>
+                  </tr>
+                  <tr class="eq-row" data-cat="memory">
+                    <td><strong>SanDisk 256GB CFexpress</strong></td>
+                    <td><span class="cat-pill pill-memory">Memory</span></td>
+                    <td><span class="type-badge type-owned">Owned</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">SD-256-001</td>
+                    <td><span class="status-badge badge-avail">Available</span></td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>×6 cards</td>
+                                      <td><button class="eq-action-btn" onclick="editEquipment(this)"><i class="ti ti-edit"></i> Edit</button></td>
+                  </tr>
+                  <tr class="eq-row" data-cat="memory">
+                    <td><strong>Sony UHS-II 128GB</strong></td>
+                    <td><span class="cat-pill pill-memory">Memory</span></td>
+                    <td><span class="type-badge type-owned">Owned</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">SON-128-001</td>
+                    <td><span class="status-badge badge-checkout">Checked Out</span></td>
+                    <td>Studio session</td>
+                    <td>—</td>
+                    <td>×4 cards</td>
+                                      <td><button class="eq-action-btn" onclick="editEquipment(this)"><i class="ti ti-edit"></i> Edit</button></td>
+                  </tr>
+                  <tr class="eq-row" data-cat="accessories">
+                    <td><strong>Manfrotto 055 Tripod</strong></td>
+                    <td><span class="cat-pill pill-accessories">Accessory</span></td>
+                    <td><span class="type-badge type-owned">Owned</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">MAN-055-001</td>
+                    <td><span class="status-badge badge-avail">Available</span></td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>Carbon fiber</td>
+                                      <td><button class="eq-action-btn" onclick="editEquipment(this)"><i class="ti ti-edit"></i> Edit</button></td>
+                  </tr>
+                  <!-- ── RENTAL EQUIPMENT ── -->
+                  <tr class="eq-row rental-row" data-cat="cameras">
+                    <td><strong>DJI Ronin 4D Cinema Rig</strong><br><span style="font-size:11px;color:#94a3b8;">Includes Leica M75 lens set</span></td>
+                    <td><span class="cat-pill pill-cameras">Camera</span></td>
+                    <td><span class="type-badge type-rental">Rental</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">DJI-R4D-EXT</td>
+                    <td><span class="status-badge badge-avail">Available</span></td>
+                    <td>—</td>
+                    <td style="color:#b45309;font-weight:500;">Return: Jun 30, 2026</td>
+                    <td>4K cinema, 4-axis gimbal</td>
+                    <td><button class="eq-action-btn vendor-btn" onclick="openVendorModal('DJI-R4D-EXT')"><i class="ti ti-building-store"></i> Vendor</button></td>
+                  </tr>
+                  <tr class="eq-row rental-row" data-cat="lenses">
+                    <td><strong>Canon EF 400mm f/2.8L IS III</strong><br><span style="font-size:11px;color:#94a3b8;">Super-telephoto, sports &amp; events</span></td>
+                    <td><span class="cat-pill pill-lenses">Lens</span></td>
+                    <td><span class="type-badge type-rental">Rental</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">CNL-400-EXT</td>
+                    <td><span class="status-badge badge-checkout">Checked Out</span></td>
+                    <td>Horizon Events shoot</td>
+                    <td style="color:#b45309;font-weight:500;">Return: Jun 28, 2026</td>
+                    <td>Includes lens cap &amp; case</td>
+                    <td><button class="eq-action-btn vendor-btn" onclick="openVendorModal('CNL-400-EXT')"><i class="ti ti-building-store"></i> Vendor</button></td>
+                  </tr>
+                  <tr class="eq-row rental-row" data-cat="lighting">
+                    <td><strong>Profoto Pro-11 2400W Kit</strong><br><span style="font-size:11px;color:#94a3b8;">Studio strobe kit × 2 heads</span></td>
+                    <td><span class="cat-pill pill-lighting">Lighting</span></td>
+                    <td><span class="type-badge type-rental">Rental</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">PRT-PRO11-EXT</td>
+                    <td><span class="status-badge badge-avail">Available</span></td>
+                    <td>—</td>
+                    <td style="color:#b45309;font-weight:500;">Return: Jul 5, 2026</td>
+                    <td>Softboxes &amp; grids included</td>
+                    <td><button class="eq-action-btn vendor-btn" onclick="openVendorModal('PRT-PRO11-EXT')"><i class="ti ti-building-store"></i> Vendor</button></td>
+                  </tr>
+                  <tr class="eq-row rental-row" data-cat="accessories">
+                    <td><strong>DJI Mavic 3 Pro Drone</strong><br><span style="font-size:11px;color:#94a3b8;">Aerial photography, FAA licensed op.</span></td>
+                    <td><span class="cat-pill pill-accessories">Accessory</span></td>
+                    <td><span class="type-badge type-rental">Rental</span></td>
+                    <td style="font-family:monospace;font-size:0.8rem;">DJI-M3P-EXT</td>
+                    <td><span class="status-badge badge-avail">Available</span></td>
+                    <td>—</td>
+                    <td style="color:#b45309;font-weight:500;">Return: Jun 20, 2026</td>
+                    <td>3 batteries, RC Pro controller</td>
+                    <td><button class="eq-action-btn vendor-btn" onclick="openVendorModal('DJI-M3P-EXT')"><i class="ti ti-building-store"></i> Vendor</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Shoot Checklist section -->
+            <div class="checklist-section">
+              <div class="checklist-title"><i class="ti ti-checklist"></i> Shoot Checklist — Equipment Allocated to Upcoming Sessions</div>
+              <div class="checklist-cards">
+                <div class="checklist-card">
+                  <div class="cc-shoot">Emma &amp; Jake Wilson — Wedding</div>
+                  <div class="cc-date">Jun 15, 2026 · Central Park</div>
+                  <ul class="cc-items">
+                    <li>Sony A7R V (SON-A7RV-002)</li>
+                    <li>Sony 85mm f/1.4 GM</li>
+                    <li>SanDisk 256GB CFexpress ×2</li>
+                    <li>Profoto B10X Plus (PRO-B10X-001)</li>
+                  </ul>
+                </div>
+                <div class="checklist-card">
+                  <div class="cc-shoot">Nexus Corp — Headshots</div>
+                  <div class="cc-date">Jun 17, 2026 · Studio</div>
+                  <ul class="cc-items">
+                    <li>Sony A1</li>
+                    <li>Sony 24-70mm f/2.8 GM</li>
+                    <li>Godox AD600 Pro</li>
+                    <li>Sony UHS-II 128GB ×2</li>
+                  </ul>
+                </div>
+                <div class="checklist-card">
+                  <div class="cc-shoot">Liu Family — Portrait</div>
+                  <div class="cc-date">Jun 20, 2026 · Location TBD</div>
+                  <ul class="cc-items">
+                    <li>Sony A7R V (SON-A7RV-001)</li>
+                    <li>Sony 135mm f/1.8 GM</li>
+                    <li>Manfrotto 055 Tripod</li>
+                    <li>SanDisk 256GB CFexpress ×1</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ══ RENTAL EQUIPMENT SUMMARY ══ -->
+          <div class="rental-summary">
+            <div class="rs-header">
+              <div class="rs-title">
+                <i class="ti ti-building-store" style="color:#c2410c;font-size:17px;"></i>
+                Rental Equipment Summary
+              </div>
+              <span class="type-badge type-rental">4 Active Rentals</span>
+            </div>
+            <div class="rs-kpi-row">
+              <div class="rs-stat">
+                <div class="rs-stat-val">4</div>
+                <div class="rs-stat-lbl">Active Rentals</div>
+              </div>
+              <div class="rs-stat">
+                <div class="rs-stat-val" style="color:#c2410c;">$6,390</div>
+                <div class="rs-stat-lbl">Total Rental Cost</div>
+              </div>
+              <div class="rs-stat">
+                <div class="rs-stat-val" style="color:#15803d;">$4,470</div>
+                <div class="rs-stat-lbl">Paid</div>
+              </div>
+              <div class="rs-stat">
+                <div class="rs-stat-val" style="color:#b45309;">$1,920</div>
+                <div class="rs-stat-lbl">Pending Payment</div>
+              </div>
+            </div>
+            <table class="rs-tbl">
+              <thead>
+                <tr>
+                  <th>Equipment</th>
+                  <th>Vendor</th>
+                  <th>Contact</th>
+                  <th>Rental Period</th>
+                  <th>Rate</th>
+                  <th>Total</th>
+                  <th>Payment</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr onclick="openVendorModal('DJI-R4D-EXT')">
+                  <td><strong>DJI Ronin 4D Cinema Rig</strong><br><span style="font-size:11.5px;color:#94a3b8;">DJI-R4D-EXT</span></td>
+                  <td>CineGear Rentals Ltd.</td>
+                  <td><span style="color:#64748b;">Mark Stevens<br>(555) 812-4400</span></td>
+                  <td>Jun 10 – Jun 30, 2026</td>
+                  <td>$450/week</td>
+                  <td style="font-weight:600;">$900</td>
+                  <td><span class="status-badge badge-avail">Paid</span></td>
+                  <td><button class="eq-action-btn vendor-btn" onclick="event.stopPropagation();openVendorModal('DJI-R4D-EXT')"><i class="ti ti-eye"></i> View</button></td>
+                </tr>
+                <tr onclick="openVendorModal('CNL-400-EXT')">
+                  <td><strong>Canon EF 400mm f/2.8L IS III</strong><br><span style="font-size:11.5px;color:#94a3b8;">CNL-400-EXT</span></td>
+                  <td>Pro Gear Rentals NYC</td>
+                  <td><span style="color:#64748b;">Lisa Huang<br>(555) 920-3311</span></td>
+                  <td>Jun 22 – Jun 28, 2026</td>
+                  <td>$220/day</td>
+                  <td style="font-weight:600;">$1,320</td>
+                  <td><span class="status-badge badge-checkout" style="background:#fef9c3;color:#a16207;">Pending</span></td>
+                  <td><button class="eq-action-btn vendor-btn" onclick="event.stopPropagation();openVendorModal('CNL-400-EXT')"><i class="ti ti-eye"></i> View</button></td>
+                </tr>
+                <tr onclick="openVendorModal('PRT-PRO11-EXT')">
+                  <td><strong>Profoto Pro-11 2400W Kit</strong><br><span style="font-size:11.5px;color:#94a3b8;">PRT-PRO11-EXT</span></td>
+                  <td>LightHouse Pro Rentals</td>
+                  <td><span style="color:#64748b;">David Okafor<br>(555) 344-7799</span></td>
+                  <td>Jun 15 – Jul 5, 2026</td>
+                  <td>$180/day</td>
+                  <td style="font-weight:600;">$3,600</td>
+                  <td><span class="status-badge badge-avail">Paid</span></td>
+                  <td><button class="eq-action-btn vendor-btn" onclick="event.stopPropagation();openVendorModal('PRT-PRO11-EXT')"><i class="ti ti-eye"></i> View</button></td>
+                </tr>
+                <tr onclick="openVendorModal('DJI-M3P-EXT')">
+                  <td><strong>DJI Mavic 3 Pro Drone</strong><br><span style="font-size:11.5px;color:#94a3b8;">DJI-M3P-EXT</span></td>
+                  <td>SkyRent Drones</td>
+                  <td><span style="color:#64748b;">Tom Rivera<br>(555) 678-2200</span></td>
+                  <td>Jun 14 – Jun 20, 2026</td>
+                  <td>$95/day</td>
+                  <td style="font-weight:600;">$570</td>
+                  <td><span class="status-badge badge-avail">Paid</span></td>
+                  <td><button class="eq-action-btn vendor-btn" onclick="event.stopPropagation();openVendorModal('DJI-M3P-EXT')"><i class="ti ti-eye"></i> View</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div><!-- /tab-equipment -->
+
+
+        <!-- ══════════════════════════════════════════
+             TAB 6 — CONTRACTS
+        ══════════════════════════════════════════ -->
+        <div id="tab-contracts" class="tab-panel hidden">
+          <div class="card table-card">
+            <div class="card-header">
+              <div class="card-title"><i class="ti ti-file-text"></i> Contract Management</div>
+            </div>
+
+            <!-- Stats -->
+            <div class="eq-kpi-row">
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(100,116,139,.1);color:#475569;">
+                  <i class="ti ti-file" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val" style="color:#475569;">2</div>
+                  <div class="eq-kpi-lbl">Draft</div>
+                  <div class="eq-kpi-sub">Not yet sent</div>
+                </div>
+              </div>
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(37,99,235,.1);color:#1d4ed8;">
+                  <i class="ti ti-clock" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val" style="color:#1d4ed8;">3</div>
+                  <div class="eq-kpi-lbl">Sent — Awaiting</div>
+                  <div class="eq-kpi-sub">Pending client signature</div>
+                </div>
+              </div>
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(34,197,94,.1);color:#15803d;">
+                  <i class="ti ti-signature" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val" style="color:#15803d;">29</div>
+                  <div class="eq-kpi-lbl">Signed</div>
+                  <div class="eq-kpi-sub">Zoho Sign completed</div>
+                </div>
+              </div>
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(201,168,76,.1);color:#a16207;">
+                  <i class="ti ti-cash" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val">$58,450</div>
+                  <div class="eq-kpi-lbl">Total Contract Value</div>
+                  <div class="eq-kpi-sub">across all contracts</div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Filter bar -->
+            <div class="filter-bar">
+              <input type="text" id="con-search" placeholder="Search contracts…" style="min-width:180px;" oninput="filterContracts()" />
+              <select id="con-status" onchange="filterContracts()">
+                <option value="">All Statuses</option>
+                <option value="draft">Draft</option>
+                <option value="sent">Sent</option>
+                <option value="signed">Signed</option>
+                <option value="expired">Expired</option>
+              </select>
+              <div class="filter-spacer"></div>
+              <button class="btn-blue" onclick="openNewContractModal()"><i class="ti ti-plus"></i> New Contract</button>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Contract #</th>
+                    <th>Client</th>
+                    <th>Shoot Type</th>
+                    <th>Sent Date</th>
+                    <th>Signed Date</th>
+                    <th>Value</th>
+                    <th>Status</th>
+                    <th>Zoho Sign</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="con-tbody">
+                  <tr>
+                    <td><strong>CON-2847</strong></td>
+                    <td>Emma &amp; Jake Wilson</td>
+                    <td><span class="type-tag type-wedding">Wedding</span></td>
+                    <td>Jun 1</td>
+                    <td>Jun 3</td>
+                    <td><strong>$3,800</strong></td>
+                    <td><span class="status-badge badge-signed">Signed</span></td>
+                    <td><span style="color:#15803d;">Completed ✓</span></td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>CON-2846</strong></td>
+                    <td>Nexus Corp</td>
+                    <td><span class="type-tag type-corporate">Headshots</span></td>
+                    <td>Jun 8</td>
+                    <td>Jun 10</td>
+                    <td><strong>$1,200</strong></td>
+                    <td><span class="status-badge badge-signed">Signed</span></td>
+                    <td><span style="color:#15803d;">Completed ✓</span></td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>CON-2845</strong></td>
+                    <td>Horizon Events</td>
+                    <td><span class="type-tag type-event">Event</span></td>
+                    <td>Jun 9</td>
+                    <td>—</td>
+                    <td><strong>$2,400</strong></td>
+                    <td><span class="status-badge badge-sent-con">Sent</span></td>
+                    <td><span style="color:#6b7280;">Awaiting sig.</span></td>
+                    <td><button class="btn-remind">Remind</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>CON-2844</strong></td>
+                    <td>Sarah &amp; Tom Reed</td>
+                    <td><span class="type-tag type-engagement">Engagement</span></td>
+                    <td>Jun 5</td>
+                    <td>Jun 6</td>
+                    <td><strong>$950</strong></td>
+                    <td><span class="status-badge badge-signed">Signed</span></td>
+                    <td><span style="color:#15803d;">Completed ✓</span></td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>CON-2843</strong></td>
+                    <td>Liu Family</td>
+                    <td><span class="type-tag type-portrait">Portrait</span></td>
+                    <td>Jun 12</td>
+                    <td>Jun 13</td>
+                    <td><strong>$650</strong></td>
+                    <td><span class="status-badge badge-signed">Signed</span></td>
+                    <td><span style="color:#15803d;">Completed ✓</span></td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>CON-2842</strong></td>
+                    <td>Patel Wedding</td>
+                    <td><span class="type-tag type-wedding">Wedding</span></td>
+                    <td>Jun 14</td>
+                    <td>—</td>
+                    <td><strong>$4,200</strong></td>
+                    <td><span class="status-badge badge-sent-con">Sent</span></td>
+                    <td><span style="color:#6b7280;">Awaiting sig.</span></td>
+                    <td><button class="btn-remind">Remind</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>CON-2841</strong></td>
+                    <td>Chen Studio</td>
+                    <td><span class="type-tag type-corporate">Commercial</span></td>
+                    <td>Jun 14</td>
+                    <td>—</td>
+                    <td><strong>$1,800</strong></td>
+                    <td><span class="status-badge badge-sent-con">Sent</span></td>
+                    <td><span style="color:#6b7280;">Awaiting sig.</span></td>
+                    <td><button class="btn-remind">Remind</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>CON-2840</strong></td>
+                    <td>Martinez Family</td>
+                    <td><span class="type-tag type-portrait">Portrait</span></td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td><strong>$700</strong></td>
+                    <td><span class="status-badge badge-draft-con">Draft</span></td>
+                    <td><span style="color:#9ca3af;">Not sent</span></td>
+                    <td><button class="btn-send-sm">Send</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>CON-2839</strong></td>
+                    <td>Park Wedding</td>
+                    <td><span class="type-tag type-wedding">Wedding</span></td>
+                    <td>Mar 1</td>
+                    <td>Mar 4</td>
+                    <td><strong>$3,500</strong></td>
+                    <td><span class="status-badge badge-signed">Signed</span></td>
+                    <td><span style="color:#15803d;">Completed ✓</span></td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>CON-2838</strong></td>
+                    <td>Thompson Family</td>
+                    <td><span class="type-tag type-portrait">Portrait</span></td>
+                    <td>Apr 10</td>
+                    <td>Apr 12</td>
+                    <td><strong>$550</strong></td>
+                    <td><span class="status-badge badge-signed">Signed</span></td>
+                    <td><span style="color:#15803d;">Completed ✓</span></td>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr></tbody>
+              </table>
+            </div>
+
+            <div class="table-footer-note">
+              Contracts sent via Zoho Sign &nbsp;·&nbsp; e-sign link emailed to client automatically &nbsp;·&nbsp; Last sync: 5 minutes ago
+            </div>
+          </div>
+        </div><!-- /tab-contracts -->
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(name, btn) {
+      document.querySelectorAll('.tab-panel').forEach(function(p) {
+        p.classList.add('hidden');
+      });
+      document.querySelectorAll('.subtab').forEach(function(t) {
+        t.classList.remove('active');
+      });
+      var panel = document.getElementById('tab-' + name);
+      if (panel) panel.classList.remove('hidden');
+      btn.classList.add('active');
+    }
+
+
+    // ── Vendor data ────────────────────────────────────────────
+    var vendorData = {
+      'DJI-R4D-EXT': {
+        equipName: 'DJI Ronin 4D Cinema Rig',
+        serial: 'DJI-R4D-EXT',
+        vendor: 'CineGear Rentals Ltd.',
+        vendorType: 'Cinema & Video Equipment Rentals',
+        contact: 'Mark Stevens',
+        phone: '(555) 812-4400',
+        email: 'mark@cinegear.com',
+        website: 'www.cinegear.com',
+        rentStart: 'Jun 10, 2026',
+        rentEnd: 'Jun 30, 2026',
+        rate: '$450 / week',
+        payment: '✅ Paid — $900',
+        total: '$900.00',
+        notes: 'Full payment made upfront. Includes operator manual, 4 batteries, carry case. Late return fee: $150/day. Damage waiver signed.'
+      },
+      'CNL-400-EXT': {
+        equipName: 'Canon EF 400mm f/2.8L IS III',
+        serial: 'CNL-400-EXT',
+        vendor: 'Pro Gear Rentals NYC',
+        vendorType: 'Professional Photography Equipment',
+        contact: 'Lisa Huang',
+        phone: '(555) 920-3311',
+        email: 'rentals@progearnyc.com',
+        website: 'www.progearnyc.com',
+        rentStart: 'Jun 22, 2026',
+        rentEnd: 'Jun 28, 2026',
+        rate: '$220 / day',
+        payment: '⏳ Pending — invoice due on return',
+        total: '$1,320.00',
+        notes: 'Lens currently checked out to Horizon Events shoot. Requires insurance certificate on pickup. Deposit: $500 held.'
+      },
+      'PRT-PRO11-EXT': {
+        equipName: 'Profoto Pro-11 2400W Studio Kit',
+        serial: 'PRT-PRO11-EXT',
+        vendor: 'LightHouse Pro Rentals',
+        vendorType: 'Studio Lighting & Grip Equipment',
+        contact: 'David Okafor',
+        phone: '(555) 344-7799',
+        email: 'david@lighthousepro.com',
+        website: 'www.lighthousepro.com',
+        rentStart: 'Jun 15, 2026',
+        rentEnd: 'Jul 5, 2026',
+        rate: '$180 / day (min. 3 days)',
+        payment: '✅ Paid — $3,600',
+        total: '$3,600.00',
+        notes: 'Kit includes: 2 × Pro-11 heads, 2 × large octaboxes, 2 × grids, 2 × stands, power cable extensions. Setup included in price.'
+      },
+      'DJI-M3P-EXT': {
+        equipName: 'DJI Mavic 3 Pro Drone',
+        serial: 'DJI-M3P-EXT',
+        vendor: 'SkyRent Drones',
+        vendorType: 'Aerial Photography & Drone Rentals',
+        contact: 'Tom Rivera',
+        phone: '(555) 678-2200',
+        email: 'tom@skyrent.com',
+        website: 'www.skyrent.com',
+        rentStart: 'Jun 14, 2026',
+        rentEnd: 'Jun 20, 2026',
+        rate: '$95 / day',
+        payment: '✅ Paid — $570',
+        total: '$570.00',
+        notes: '3 × smart batteries, RC Pro controller, ND filter kit included. FAA Part 107 licence required — copy on file. No flying within 5 miles of airport without LAANC approval.'
+      }
+    };
+
+
+    function openAddItemModal() {
+      document.getElementById('add-item-modal').classList.remove('hidden');
+    }
+    function closeAddItemModal() {
+      document.getElementById('add-item-modal').classList.add('hidden');
+    }
+    function toggleRentalFields(show) {
+      document.getElementById('rental-fields').style.display = show ? 'block' : 'none';
+    }
+    function saveNewItem() {
+      var name = document.getElementById('af-name').value.trim();
+      var cat  = document.getElementById('af-category').value;
+      if (!name || !cat) {
+        alert('Please fill in Item Name and Category.');
+        return;
+      }
+      // In a real app this would POST to an API.
+      // For the prototype we just close and show a success toast.
+      closeAddItemModal();
+      showToast('Equipment item "' + name + '" added successfully!');
+    }
+    function openChecklistModal() {
+      document.getElementById('checklist-modal').classList.remove('hidden');
+    }
+    function closeChecklistModal() {
+      document.getElementById('checklist-modal').classList.add('hidden');
+    }
+    function showToast(msg) {
+      var t = document.createElement('div');
+      t.style.cssText = 'position:fixed;bottom:28px;right:28px;background:#1a1d2e;color:#fff;padding:13px 20px;border-radius:10px;font-size:13.5px;font-family:Inter,sans-serif;z-index:99999;box-shadow:0 6px 24px rgba(0,0,0,.22);display:flex;align-items:center;gap:10px;';
+      t.innerHTML = '<i class="ti ti-circle-check" style="font-size:18px;color:#4ade80;"></i>' + msg;
+      document.body.appendChild(t);
+      setTimeout(function() { t.remove(); }, 3500);
+    }
+
+    function openVendorModal(serial) {
+      var d = vendorData[serial];
+      if (!d) return;
+      var modal = document.getElementById('vendor-modal');
+      if (!modal) return;                          // modal not in DOM yet — safety guard
+
+      function set(id, val)  { var el = document.getElementById(id); if (el) el.textContent = val; }
+      function html(id, val) { var el = document.getElementById(id); if (el) el.innerHTML  = val; }
+
+      set('vm-eq-name',     d.equipName);
+      set('vm-serial',      'Serial: ' + d.serial);
+      set('vm-vendor-name', d.vendor);
+      set('vm-vendor-type', d.vendorType);
+      set('vm-contact',     d.contact);
+      set('vm-phone',       d.phone);
+      html('vm-email',      '<a href="mailto:' + d.email + '">' + d.email + '</a>');
+      html('vm-website',    '<a href="https://' + d.website + '" target="_blank">' + d.website + '</a>');
+      set('vm-start',       d.rentStart);
+      set('vm-end',         d.rentEnd);
+      set('vm-rate',        d.rate);
+      set('vm-payment',     d.payment);
+      set('vm-total',       d.total);
+      set('vm-notes',       d.notes);
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeVendorModal() {
+      var m = document.getElementById('vendor-modal');
+      if (m) m.classList.add('hidden');
+    }
+
+    // Close modal on overlay click — guard against null (modal HTML loads after this script)
+    // We defer binding until DOMContentLoaded so the element definitely exists
+    document.addEventListener('DOMContentLoaded', function() {
+
+      var addModal = document.getElementById('add-item-modal');
+      if (addModal) addModal.addEventListener('click', function(e){ if(e.target===this) closeAddItemModal(); });
+      var clModal = document.getElementById('checklist-modal');
+      if (clModal) clModal.addEventListener('click', function(e){ if(e.target===this) closeChecklistModal(); });
+      var overlay = document.getElementById('vendor-modal');
+      if (overlay) {
+        overlay.addEventListener('click', function(e) {
+          if (e.target === this) closeVendorModal();
+        });
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeVendorModal();
+    });
+
+    function editEquipment(btn) {
+      var row = btn.closest('tr');
+      var name = row.cells[0].querySelector('strong').textContent;
+      alert('Edit: ' + name + '\n(Connect to equipment form in future sprint)');
+    }
+
+    // ── Equipment category filter tabs ──────────────────────
+    var currentCat = 'all';
+    var currentSearch = '';
+
+    function applyEquipmentFilter() {
+      var rows = document.querySelectorAll('.eq-row');
+      var visible = 0;
+      rows.forEach(function(row) {
+        var catMatch = (currentCat === 'all') || (row.dataset.cat === currentCat);
+        var searchText = row.textContent.toLowerCase();
+        var searchMatch = currentSearch === '' || searchText.indexOf(currentSearch) > -1;
+        if (catMatch && searchMatch) {
+          row.style.display = '';
+          visible++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+      // Update the "All" count badge to reflect visible items
+      var allCount = document.getElementById('count-all');
+      if (allCount) allCount.textContent = visible;
+
+      // Update empty state message
+      var tbody = document.querySelector('#tab-equipment tbody');
+      var emptyRow = document.getElementById('eq-empty-row');
+      if (visible === 0) {
+        if (!emptyRow) {
+          emptyRow = document.createElement('tr');
+          emptyRow.id = 'eq-empty-row';
+          emptyRow.innerHTML = '<td colspan="7" style="text-align:center;padding:32px;color:#94a3b8;">No equipment found matching your filter.</td>';
+          tbody.appendChild(emptyRow);
+        }
+        emptyRow.style.display = '';
+      } else if (emptyRow) {
+        emptyRow.style.display = 'none';
+      }
+    }
+
+    // Tab click handler
+    document.querySelectorAll('.cat-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.cat-tab').forEach(function(t) {
+          t.classList.remove('active');
+        });
+        this.classList.add('active');
+        currentCat = this.dataset.cat;
+        applyEquipmentFilter();
+      });
+    });
+
+    // Search input handler (inside Equipment tab)
+    var eqSearch = document.querySelector('#tab-equipment input[type="text"]');
+    if (eqSearch) {
+      eqSearch.addEventListener('input', function() {
+        currentSearch = this.value.toLowerCase().trim();
+        applyEquipmentFilter();
+      });
+    }
+  </script>
+
+<!-- ══ VENDOR DETAILS MODAL ══ -->
+<div id="vendor-modal" class="vendor-modal-overlay hidden">
+  <div class="vendor-modal">
+    <div class="vm-header">
+      <div>
+        <div class="vm-title" id="vm-eq-name">Equipment Name</div>
+        <div class="vm-subtitle" id="vm-serial">Serial #</div>
+      </div>
+      <button class="vm-close" onclick="closeVendorModal()">&#x2715;</button>
+    </div>
+    <div class="vm-body">
+      <div class="vm-vendor-header">
+        <div class="vm-vendor-logo">🏪</div>
+        <div>
+          <div class="vm-vendor-name" id="vm-vendor-name">—</div>
+          <div class="vm-vendor-type" id="vm-vendor-type">Equipment Rental Vendor</div>
+        </div>
+      </div>
+      <div class="vm-grid">
+        <div class="vm-field">
+          <div class="vm-field-label">Contact Person</div>
+          <div class="vm-field-value" id="vm-contact">—</div>
+        </div>
+        <div class="vm-field">
+          <div class="vm-field-label">Phone</div>
+          <div class="vm-field-value" id="vm-phone">—</div>
+        </div>
+        <div class="vm-field">
+          <div class="vm-field-label">Email</div>
+          <div class="vm-field-value" id="vm-email">—</div>
+        </div>
+        <div class="vm-field">
+          <div class="vm-field-label">Website</div>
+          <div class="vm-field-value" id="vm-website">—</div>
+        </div>
+        <div class="vm-field">
+          <div class="vm-field-label">Rental Start</div>
+          <div class="vm-field-value" id="vm-start">—</div>
+        </div>
+        <div class="vm-field">
+          <div class="vm-field-label">Rental End / Return</div>
+          <div class="vm-field-value" id="vm-end">—</div>
+        </div>
+        <div class="vm-field">
+          <div class="vm-field-label">Rate</div>
+          <div class="vm-field-value" id="vm-rate">—</div>
+        </div>
+        <div class="vm-field">
+          <div class="vm-field-label">Payment Status</div>
+          <div class="vm-field-value" id="vm-payment">—</div>
+        </div>
+      </div>
+      <div class="vm-divider"></div>
+      <div class="vm-cost-row">
+        <span class="vm-cost-label"><i class="ti ti-currency-dollar"></i> Total Rental Cost</span>
+        <span class="vm-cost-value" id="vm-total">—</span>
+      </div>
+      <div class="vm-field">
+        <div class="vm-field-label">Notes / Conditions</div>
+        <div class="vm-field-value" id="vm-notes" style="font-weight:400;color:#64748b;font-size:13px;line-height:1.5;margin-top:4px;">—</div>
+      </div>
+    </div>
+    <div class="vm-footer">
+      <button class="vm-btn-outline" onclick="closeVendorModal()">Close</button>
+      <button class="vm-btn-primary"><i class="ti ti-phone"></i> Contact Vendor</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADD ITEM MODAL ══ -->
+<div id="add-item-modal" class="vendor-modal-overlay hidden">
+  <div class="vendor-modal" style="max-width:600px;">
+    <div class="vm-header">
+      <div>
+        <div class="vm-title"><i class="ti ti-plus"></i> Add Equipment Item</div>
+        <div class="vm-subtitle">Enter details for the new equipment</div>
+      </div>
+      <button class="vm-close" onclick="closeAddItemModal()">&#x2715;</button>
+    </div>
+    <div class="vm-body" style="max-height:72vh;overflow-y:auto;">
+
+      <div class="add-form-grid">
+        <!-- Item Name -->
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Item Name <span style="color:#ef4444">*</span></label>
+          <input type="text" class="add-form-input" placeholder="e.g. Sony A7R V, Profoto B10X Plus…" id="af-name">
+        </div>
+
+        <!-- Category -->
+        <div class="add-form-field">
+          <label class="add-form-label">Category <span style="color:#ef4444">*</span></label>
+          <select class="add-form-input" id="af-category">
+            <option value="">— Select category —</option>
+            <option value="cameras">Camera Body</option>
+            <option value="lenses">Lens</option>
+            <option value="lighting">Lighting</option>
+            <option value="memory">Memory</option>
+            <option value="accessories">Accessories</option>
+          </select>
+        </div>
+
+        <!-- Serial Number -->
+        <div class="add-form-field">
+          <label class="add-form-label">Serial Number</label>
+          <input type="text" class="add-form-input" placeholder="e.g. SON-A7RV-003" id="af-serial">
+        </div>
+
+        <!-- Ownership Type -->
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Ownership Type <span style="color:#ef4444">*</span></label>
+          <div class="add-type-toggle">
+            <label class="type-toggle-opt">
+              <input type="radio" name="af-type" value="owned" checked onchange="toggleRentalFields(false)">
+              <span class="type-toggle-btn"><i class="ti ti-lock"></i> Owned</span>
+            </label>
+            <label class="type-toggle-opt">
+              <input type="radio" name="af-type" value="rental" onchange="toggleRentalFields(true)">
+              <span class="type-toggle-btn"><i class="ti ti-building-store"></i> Rental</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="add-form-field">
+          <label class="add-form-label">Status</label>
+          <select class="add-form-input" id="af-status">
+            <option value="available">Available</option>
+            <option value="checkout">Checked Out</option>
+            <option value="inservice">In Service</option>
+          </select>
+        </div>
+
+        <!-- Assigned To -->
+        <div class="add-form-field">
+          <label class="add-form-label">Assigned To</label>
+          <input type="text" class="add-form-input" placeholder="Shoot name or staff member" id="af-assigned">
+        </div>
+
+        <!-- Next Service -->
+        <div class="add-form-field">
+          <label class="add-form-label">Next Service Date</label>
+          <input type="date" class="add-form-input" id="af-service">
+        </div>
+
+        <!-- Notes -->
+        <div class="add-form-field">
+          <label class="add-form-label">Notes</label>
+          <input type="text" class="add-form-input" placeholder="Any extra notes" id="af-notes">
+        </div>
+      </div>
+
+      <!-- Rental fields (hidden by default) -->
+      <div id="rental-fields" style="display:none;">
+        <div class="vm-divider" style="margin:18px 0 14px;"></div>
+        <div style="font-size:13px;font-weight:600;color:#c2410c;margin-bottom:14px;display:flex;align-items:center;gap:6px;">
+          <i class="ti ti-building-store"></i> Vendor / Rental Details
+        </div>
+        <div class="add-form-grid">
+          <div class="add-form-field add-form-full">
+            <label class="add-form-label">Vendor Company Name <span style="color:#ef4444">*</span></label>
+            <input type="text" class="add-form-input" placeholder="e.g. CineGear Rentals Ltd." id="af-vendor">
+          </div>
+          <div class="add-form-field">
+            <label class="add-form-label">Contact Person</label>
+            <input type="text" class="add-form-input" placeholder="Full name" id="af-contact">
+          </div>
+          <div class="add-form-field">
+            <label class="add-form-label">Phone</label>
+            <input type="text" class="add-form-input" placeholder="(555) 000-0000" id="af-phone">
+          </div>
+          <div class="add-form-field">
+            <label class="add-form-label">Email</label>
+            <input type="email" class="add-form-input" placeholder="vendor@example.com" id="af-email">
+          </div>
+          <div class="add-form-field">
+            <label class="add-form-label">Website</label>
+            <input type="text" class="add-form-input" placeholder="www.vendor.com" id="af-website">
+          </div>
+          <div class="add-form-field">
+            <label class="add-form-label">Rental Start Date</label>
+            <input type="date" class="add-form-input" id="af-rent-start">
+          </div>
+          <div class="add-form-field">
+            <label class="add-form-label">Rental End / Return Date</label>
+            <input type="date" class="add-form-input" id="af-rent-end">
+          </div>
+          <div class="add-form-field">
+            <label class="add-form-label">Daily / Weekly Rate</label>
+            <input type="text" class="add-form-input" placeholder="e.g. $220/day or $450/week" id="af-rate">
+          </div>
+          <div class="add-form-field">
+            <label class="add-form-label">Total Rental Cost</label>
+            <input type="text" class="add-form-input" placeholder="e.g. $1,320.00" id="af-total">
+          </div>
+          <div class="add-form-field add-form-full">
+            <label class="add-form-label">Rental Conditions / Notes</label>
+            <textarea class="add-form-input" rows="3" placeholder="Insurance requirements, deposit, late fees, included accessories…" id="af-vendor-notes" style="resize:vertical;"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="vm-footer">
+      <button class="vm-btn-outline" onclick="closeAddItemModal()">Cancel</button>
+      <button class="vm-btn-primary" onclick="saveNewItem()"><i class="ti ti-device-floppy"></i> Save Equipment</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SHOOT CHECKLIST MODAL ══ -->
+<div id="checklist-modal" class="vendor-modal-overlay hidden">
+  <div class="vendor-modal" style="max-width:700px;">
+    <div class="vm-header">
+      <div>
+        <div class="vm-title"><i class="ti ti-checklist"></i> Shoot Equipment Checklist</div>
+        <div class="vm-subtitle">Equipment allocated to upcoming sessions — June 2026</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button class="vm-btn-outline" onclick="window.print()" style="font-size:12px;padding:6px 12px;">
+          <i class="ti ti-printer"></i> Print
+        </button>
+        <button class="vm-close" onclick="closeChecklistModal()">&#x2715;</button>
+      </div>
+    </div>
+    <div class="vm-body" style="max-height:75vh;overflow-y:auto;">
+
+      <div class="cl-shoot-card">
+        <div class="cl-shoot-header" style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25);">
+          <div class="cl-shoot-info">
+            <div class="cl-shoot-name">Emma &amp; Jake Wilson — Wedding</div>
+            <div class="cl-shoot-meta"><i class="ti ti-calendar"></i> Jun 15, 2026 &nbsp;·&nbsp; <i class="ti ti-map-pin"></i> Central Park &nbsp;·&nbsp; <i class="ti ti-clock"></i> 10:00 AM</div>
+          </div>
+          <span class="status-badge badge-avail">Today</span>
+        </div>
+        <div class="cl-items-grid">
+          <div class="cl-item cl-item-owned"><i class="ti ti-camera"></i> Sony A7R V <span class="cl-serial">SON-A7RV-002</span></div>
+          <div class="cl-item cl-item-owned"><i class="ti ti-adjustments"></i> Sony 85mm f/1.4 GM <span class="cl-serial">SON-85GM-001</span></div>
+          <div class="cl-item cl-item-owned"><i class="ti ti-bolt"></i> Profoto B10X Plus <span class="cl-serial">PRO-B10X-001</span></div>
+          <div class="cl-item cl-item-owned"><i class="ti ti-database"></i> SanDisk 256GB CFexpress ×2 <span class="cl-serial">SD-256-001</span></div>
+        </div>
+        <div class="cl-check-row">
+          <label class="cl-check-label"><input type="checkbox" id="chk-ej-packed"> All items packed</label>
+          <label class="cl-check-label"><input type="checkbox" id="chk-ej-charged"> Batteries charged</label>
+          <label class="cl-check-label"><input type="checkbox" id="chk-ej-tested"> Equipment tested</label>
+        </div>
+      </div>
+
+      <div class="cl-shoot-card">
+        <div class="cl-shoot-header" style="background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.25);">
+          <div class="cl-shoot-info">
+            <div class="cl-shoot-name">Nexus Corp — Corporate Headshots</div>
+            <div class="cl-shoot-meta"><i class="ti ti-calendar"></i> Jun 17, 2026 &nbsp;·&nbsp; <i class="ti ti-map-pin"></i> Studio 4 &nbsp;·&nbsp; <i class="ti ti-clock"></i> 2:00 PM</div>
+          </div>
+          <span class="status-badge badge-sent-inv">2 days</span>
+        </div>
+        <div class="cl-items-grid">
+          <div class="cl-item cl-item-owned"><i class="ti ti-camera"></i> Sony A1 <span class="cl-serial">SON-A1-001</span></div>
+          <div class="cl-item cl-item-owned"><i class="ti ti-adjustments"></i> Sony 24-70mm f/2.8 GM <span class="cl-serial">SON-2470-001</span></div>
+          <div class="cl-item cl-item-owned"><i class="ti ti-bolt"></i> Godox AD600 Pro <span class="cl-serial">GOD-600-001</span></div>
+          <div class="cl-item cl-item-owned"><i class="ti ti-database"></i> Sony UHS-II 128GB ×2 <span class="cl-serial">SON-128-001</span></div>
+        </div>
+        <div class="cl-check-row">
+          <label class="cl-check-label"><input type="checkbox"> All items packed</label>
+          <label class="cl-check-label"><input type="checkbox"> Batteries charged</label>
+          <label class="cl-check-label"><input type="checkbox"> Equipment tested</label>
+        </div>
+      </div>
+
+      <div class="cl-shoot-card">
+        <div class="cl-shoot-header" style="background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.25);">
+          <div class="cl-shoot-info">
+            <div class="cl-shoot-name">Liu Family — Portrait Session</div>
+            <div class="cl-shoot-meta"><i class="ti ti-calendar"></i> Jun 20, 2026 &nbsp;·&nbsp; <i class="ti ti-map-pin"></i> Riverside Park &nbsp;·&nbsp; <i class="ti ti-clock"></i> 4:30 PM</div>
+          </div>
+          <span class="status-badge" style="background:#ede9fe;color:#6d28d9;">5 days</span>
+        </div>
+        <div class="cl-items-grid">
+          <div class="cl-item cl-item-owned"><i class="ti ti-camera"></i> Sony A7R V <span class="cl-serial">SON-A7RV-001</span></div>
+          <div class="cl-item cl-item-owned"><i class="ti ti-adjustments"></i> Sony 135mm f/1.8 GM <span class="cl-serial">SON-135GM-001</span></div>
+          <div class="cl-item cl-item-owned"><i class="ti ti-ruler-2"></i> Manfrotto 055 Tripod <span class="cl-serial">MAN-055-001</span></div>
+          <div class="cl-item cl-item-owned"><i class="ti ti-database"></i> SanDisk 256GB CFexpress ×1 <span class="cl-serial">SD-256-001</span></div>
+        </div>
+        <div class="cl-check-row">
+          <label class="cl-check-label"><input type="checkbox"> All items packed</label>
+          <label class="cl-check-label"><input type="checkbox"> Batteries charged</label>
+          <label class="cl-check-label"><input type="checkbox"> Equipment tested</label>
+        </div>
+      </div>
+
+      <div class="cl-shoot-card">
+        <div class="cl-shoot-header" style="background:rgba(194,65,12,.08);border-color:rgba(194,65,12,.25);">
+          <div class="cl-shoot-info">
+            <div class="cl-shoot-name">Horizon Events — Corporate Event</div>
+            <div class="cl-shoot-meta"><i class="ti ti-calendar"></i> Jun 28, 2026 &nbsp;·&nbsp; <i class="ti ti-map-pin"></i> Marriott Hotel &nbsp;·&nbsp; <i class="ti ti-clock"></i> 8:00 AM</div>
+          </div>
+          <span class="status-badge badge-checkout">13 days</span>
+        </div>
+        <div class="cl-items-grid">
+          <div class="cl-item cl-item-rental"><i class="ti ti-camera"></i> Canon EF 400mm f/2.8L IS III <span class="cl-serial cl-serial-rental">Rental · CNL-400-EXT</span></div>
+          <div class="cl-item cl-item-owned"><i class="ti ti-camera"></i> Sony A1 <span class="cl-serial">SON-A1-001</span></div>
+          <div class="cl-item cl-item-owned"><i class="ti ti-database"></i> SanDisk 256GB CFexpress ×3 <span class="cl-serial">SD-256-001</span></div>
+        </div>
+        <div class="cl-check-row">
+          <label class="cl-check-label"><input type="checkbox"> All items packed</label>
+          <label class="cl-check-label"><input type="checkbox"> Rental collected from vendor</label>
+          <label class="cl-check-label"><input type="checkbox"> Equipment tested</label>
+        </div>
+      </div>
+
+    </div>
+    <div class="vm-footer">
+      <button class="vm-btn-outline" onclick="closeChecklistModal()">Close</button>
+      <button class="vm-btn-primary" onclick="window.print()"><i class="ti ti-printer"></i> Print Checklist</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NEW ENQUIRY MODAL ══ -->
+<div id="modal-enquiry" class="vendor-modal-overlay hidden">
+  <div class="vendor-modal" style="max-width:520px;">
+    <div class="vm-header">
+      <div><div class="vm-title"><i class="ti ti-user-plus"></i> New Booking Enquiry</div>
+           <div class="vm-subtitle">Log a new inbound enquiry (Phase 1)</div></div>
+      <button class="vm-close" onclick="closeEnquiryModal()">&#x2715;</button>
+    </div>
+    <div class="vm-body">
+      <div class="add-form-grid">
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Client Name <span style="color:#ef4444">*</span></label>
+          <input class="add-form-input" type="text" placeholder="Full name or company">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Email</label>
+          <input class="add-form-input" type="email" placeholder="client@email.com">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Phone</label>
+          <input class="add-form-input" type="text" placeholder="(555) 000-0000">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Enquiry Source</label>
+          <select class="add-form-input">
+            <option>Website Form</option><option>Social / Referral</option>
+            <option>Walk-in</option><option>Instagram</option><option>Other</option>
+          </select>
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Shoot Type</label>
+          <select class="add-form-input">
+            <option>Wedding</option><option>Portrait</option><option>Engagement</option>
+            <option>Corporate</option><option>Event</option><option>Commercial</option>
+          </select>
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Preferred Shoot Date</label>
+          <input class="add-form-input" type="date">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Budget (approx)</label>
+          <input class="add-form-input" type="text" placeholder="e.g. $1,200">
+        </div>
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Notes / Message</label>
+          <textarea class="add-form-input" rows="3" placeholder="Any details from the enquiry…" style="resize:vertical;"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="vm-footer">
+      <button class="vm-btn-outline" onclick="closeEnquiryModal()">Cancel</button>
+      <button class="vm-btn-primary" onclick="saveForm(closeEnquiryModal)"><i class="ti ti-device-floppy"></i> Save Enquiry</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADD CLIENT MODAL ══ -->
+<div id="modal-add-client" class="vendor-modal-overlay hidden">
+  <div class="vendor-modal" style="max-width:520px;">
+    <div class="vm-header">
+      <div><div class="vm-title"><i class="ti ti-user-plus"></i> Add New Client</div>
+           <div class="vm-subtitle">Create a client record (Phase 4)</div></div>
+      <button class="vm-close" onclick="closeAddClientModal()">&#x2715;</button>
+    </div>
+    <div class="vm-body">
+      <div class="add-form-grid">
+        <div class="add-form-field">
+          <label class="add-form-label">First Name <span style="color:#ef4444">*</span></label>
+          <input class="add-form-input" type="text" placeholder="First name">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Last Name <span style="color:#ef4444">*</span></label>
+          <input class="add-form-input" type="text" placeholder="Last name">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Email <span style="color:#ef4444">*</span></label>
+          <input class="add-form-input" type="email" placeholder="client@email.com">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Phone</label>
+          <input class="add-form-input" type="text" placeholder="(555) 000-0000">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Shoot Types</label>
+          <select class="add-form-input">
+            <option>Wedding</option><option>Portrait</option><option>Engagement</option>
+            <option>Corporate</option><option>Event</option>
+          </select>
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Status</label>
+          <select class="add-form-input">
+            <option>Active</option><option>Inactive</option>
+          </select>
+        </div>
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Notes</label>
+          <textarea class="add-form-input" rows="2" style="resize:vertical;" placeholder="Any notes about this client…"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="vm-footer">
+      <button class="vm-btn-outline" onclick="closeAddClientModal()">Cancel</button>
+      <button class="vm-btn-primary" onclick="saveForm(closeAddClientModal)"><i class="ti ti-device-floppy"></i> Save Client</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CREATE INVOICE MODAL ══ -->
+<div id="modal-create-invoice" class="vendor-modal-overlay hidden">
+  <div class="vendor-modal" style="max-width:520px;">
+    <div class="vm-header">
+      <div><div class="vm-title"><i class="ti ti-file-invoice"></i> Create Invoice</div>
+           <div class="vm-subtitle">Syncs automatically with Zoho Books</div></div>
+      <button class="vm-close" onclick="closeCreateInvoiceModal()">&#x2715;</button>
+    </div>
+    <div class="vm-body">
+      <div class="add-form-grid">
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Client <span style="color:#ef4444">*</span></label>
+          <select class="add-form-input">
+            <option>— Select client —</option>
+            <option>Emma &amp; Jake Wilson</option><option>Nexus Corp</option>
+            <option>Liu Family</option><option>Sarah &amp; Tom Reed</option>
+            <option>Horizon Events</option><option>Martinez Family</option>
+          </select>
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Invoice Type</label>
+          <select class="add-form-input">
+            <option>Deposit (30%)</option><option>Deposit (50%)</option>
+            <option>Balance Payment</option><option>Full Payment</option>
+          </select>
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Amount ($) <span style="color:#ef4444">*</span></label>
+          <input class="add-form-input" type="number" placeholder="0.00" step="0.01">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Issue Date</label>
+          <input class="add-form-input" type="date" value="2026-06-15">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Due Date</label>
+          <input class="add-form-input" type="date">
+        </div>
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Notes / Payment Terms</label>
+          <textarea class="add-form-input" rows="2" style="resize:vertical;" placeholder="e.g. Payment due within 7 days…"></textarea>
+        </div>
+      </div>
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;margin-top:14px;font-size:12.5px;color:#1d4ed8;">
+        <i class="ti ti-info-circle"></i> Invoice will sync to <strong>Zoho Books</strong> automatically on save.
+      </div>
+    </div>
+    <div class="vm-footer">
+      <button class="vm-btn-outline" onclick="closeCreateInvoiceModal()">Cancel</button>
+      <button class="vm-btn-primary" onclick="saveForm(closeCreateInvoiceModal)"><i class="ti ti-device-floppy"></i> Create Invoice</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NEW CONTRACT MODAL ══ -->
+<div id="modal-new-contract" class="vendor-modal-overlay hidden">
+  <div class="vendor-modal" style="max-width:520px;">
+    <div class="vm-header">
+      <div><div class="vm-title"><i class="ti ti-file-text"></i> New Contract</div>
+           <div class="vm-subtitle">Sent via Zoho Sign — e-signature link emailed to client</div></div>
+      <button class="vm-close" onclick="closeNewContractModal()">&#x2715;</button>
+    </div>
+    <div class="vm-body">
+      <div class="add-form-grid">
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Client <span style="color:#ef4444">*</span></label>
+          <select class="add-form-input">
+            <option>— Select client —</option>
+            <option>Emma &amp; Jake Wilson</option><option>Nexus Corp</option>
+            <option>Liu Family</option><option>Sarah &amp; Tom Reed</option>
+            <option>Horizon Events</option><option>Patel Wedding</option>
+          </select>
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Shoot Type</label>
+          <select class="add-form-input">
+            <option>Wedding</option><option>Portrait</option><option>Engagement</option>
+            <option>Corporate</option><option>Event</option><option>Commercial</option>
+          </select>
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Contract Value ($)</label>
+          <input class="add-form-input" type="number" placeholder="0.00" step="0.01">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Shoot Date</label>
+          <input class="add-form-input" type="date">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Contract Template</label>
+          <select class="add-form-input">
+            <option>Standard Photography Agreement</option>
+            <option>Wedding Photography Contract</option>
+            <option>Corporate Headshot Agreement</option>
+            <option>Event Photography Contract</option>
+          </select>
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Send Method</label>
+          <select class="add-form-input">
+            <option>Zoho Sign (e-signature)</option>
+            <option>Email PDF (manual)</option>
+            <option>Save as Draft</option>
+          </select>
+        </div>
+      </div>
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;margin-top:14px;font-size:12.5px;color:#1d4ed8;">
+        <i class="ti ti-send"></i> Client will receive an e-signature link via <strong>Zoho Sign</strong> on send.
+      </div>
+    </div>
+    <div class="vm-footer">
+      <button class="vm-btn-outline" onclick="closeNewContractModal()">Cancel</button>
+      <button class="vm-btn-primary" onclick="saveForm(closeNewContractModal)"><i class="ti ti-send"></i> Send Contract</button>
+    </div>
+  </div>
+</div>
+
+<script src="../shared/sidebar.js"></script>
+</body>
+</html>

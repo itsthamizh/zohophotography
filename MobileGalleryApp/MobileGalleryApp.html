@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mobile Gallery App — LensFlow</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+
+  <!-- Page stylesheet -->
+  <link rel="stylesheet" href="MobileGalleryApp.css" />
+</head>
+<body>
+
+<!-- =============================================
+     SIDEBAR
+     ============================================= -->
+  <!-- sidebar injected by shared/sidebar.js -->
+  <div id="sidebar-root"></div>
+
+<!-- =============================================
+     MAIN WRAPPER
+     ============================================= -->
+<div class="main-wrapper">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="page-title">Mobile Gallery App</div>
+    </div>
+    <div class="topbar-right">
+      <div class="search-box">
+        <i class="ti ti-search"></i>
+        <input type="text" placeholder="Search clients, galleries…" />
+      </div>
+      <button class="btn btn-outline">
+        <i class="ti ti-bell-ringing"></i> Send Notification
+      </button>
+      <button class="btn btn-gold">
+        <i class="ti ti-link"></i> Get App Link
+      </button>
+      <div class="bell-btn">
+        <i class="ti ti-bell"></i>
+        <span class="dot"></span>
+      </div>
+      <div class="user-chip">SK</div>
+    </div>
+  </header>
+
+  <!-- SUB-NAV TABS -->
+  <nav class="sub-nav">
+    <div class="sub-nav-tab active">Overview</div>
+    <div class="sub-nav-tab">Connected Clients</div>
+    <div class="sub-nav-tab">Notifications</div>
+    <div class="sub-nav-tab">Branding</div>
+    <div class="sub-nav-tab">Analytics</div>
+    <div class="sub-nav-tab">Reviews</div>
+  </nav>
+
+  <!-- PAGE CONTENT -->
+  <main class="page-content">
+
+    <!-- =============================================
+         APP STORE BANNER
+         ============================================= -->
+    <div class="app-banner">
+      <div class="banner-left">
+        <div class="banner-app-name">LensFlow Client App</div>
+        <div class="banner-tagline">Your gallery, beautifully delivered to every client's pocket.</div>
+
+        <div class="store-badges">
+          <a href="#" class="store-badge">
+            <i class="ti ti-brand-apple"></i>
+            <div class="store-badge-label">
+              <small>Download on the</small>
+              <span>App Store</span>
+            </div>
+          </a>
+          <a href="#" class="store-badge">
+            <i class="ti ti-brand-google-play"></i>
+            <div class="store-badge-label">
+              <small>Get it on</small>
+              <span>Google Play</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="banner-meta">
+          <span class="banner-version">v2.4.1</span>
+          <div class="banner-rating">
+            <span class="stars">★★★★★</span>
+            <strong>4.9</strong>
+            <span>(186 reviews)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone Mockup -->
+      <div class="banner-right">
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-screen-inner">
+              <div class="phone-status-bar">
+                <span>9:41</span>
+                <span>●●● 100%</span>
+              </div>
+              <div class="phone-app-header">
+                <div class="phone-app-header-dot">📷</div>
+                <div class="phone-app-header-title">LensFlow</div>
+              </div>
+              <div class="phone-gallery-grid">
+                <div class="phone-gallery-cell"></div>
+                <div class="phone-gallery-cell"></div>
+                <div class="phone-gallery-cell"></div>
+                <div class="phone-gallery-cell"></div>
+                <div class="phone-gallery-cell"></div>
+                <div class="phone-gallery-cell"></div>
+                <div class="phone-gallery-cell"></div>
+                <div class="phone-gallery-cell"></div>
+                <div class="phone-gallery-cell"></div>
+                <div class="phone-gallery-cell"></div>
+                <div class="phone-gallery-cell"></div>
+                <div class="phone-gallery-cell"></div>
+              </div>
+              <div class="phone-bottom-nav">
+                <div class="phone-nav-dot active">⊞</div>
+                <div class="phone-nav-dot">♡</div>
+                <div class="phone-nav-dot">⬇</div>
+                <div class="phone-nav-dot">☰</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================
+         KPI STATS ROW
+         ============================================= -->
+    <div class="stats-row">
+      <!-- Total Downloads -->
+      <div class="stat-card">
+        <div class="stat-icon purple">
+          <i class="ti ti-download"></i>
+        </div>
+        <div>
+          <div class="stat-label">Total Downloads</div>
+          <div class="stat-value">892</div>
+          <div class="stat-change positive">+34 this week</div>
+        </div>
+      </div>
+
+      <!-- Active Users -->
+      <div class="stat-card">
+        <div class="stat-icon green">
+          <i class="ti ti-users"></i>
+        </div>
+        <div>
+          <div class="stat-label">Active Users (30d)</div>
+          <div class="stat-value">647</div>
+          <div class="stat-change">of 892 total downloads</div>
+        </div>
+      </div>
+
+      <!-- Avg Session -->
+      <div class="stat-card">
+        <div class="stat-icon blue">
+          <i class="ti ti-clock"></i>
+        </div>
+        <div>
+          <div class="stat-label">Avg. Session</div>
+          <div class="stat-value">8:24</div>
+          <div class="stat-change">min per session</div>
+        </div>
+      </div>
+
+      <!-- Galleries Viewed -->
+      <div class="stat-card">
+        <div class="stat-icon gold">
+          <i class="ti ti-photo"></i>
+        </div>
+        <div>
+          <div class="stat-label">Client Galleries Viewed</div>
+          <div class="stat-value">3,240</div>
+          <div class="stat-change">this month</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================
+         THREE-COLUMN LAYOUT
+         ============================================= -->
+    <div class="three-col">
+
+      <!-- COL 1: Connected Clients -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Connected Clients</div>
+            <div class="card-subtitle">8 Connected / 18 galleries</div>
+          </div>
+          <button class="btn btn-outline btn-sm">
+            <i class="ti ti-plus"></i> Invite
+          </button>
+        </div>
+
+        <div class="clients-list">
+
+          <div class="client-row">
+            <div class="client-avatar avatar-ew">EW</div>
+            <div class="client-info">
+              <div class="client-name">Emma Wilson</div>
+              <div class="client-gallery">Wedding Gallery</div>
+            </div>
+            <div class="client-meta">
+              <div class="client-time">Active now</div>
+              <div class="status-dot online"></div>
+            </div>
+          </div>
+
+          <div class="client-row">
+            <div class="client-avatar avatar-nc">NC</div>
+            <div class="client-info">
+              <div class="client-name">Nexus Corp</div>
+              <div class="client-gallery">Headshots</div>
+            </div>
+            <div class="client-meta">
+              <div class="client-time">2h ago</div>
+              <div class="status-dot offline"></div>
+            </div>
+          </div>
+
+          <div class="client-row">
+            <div class="client-avatar avatar-lf">LF</div>
+            <div class="client-info">
+              <div class="client-name">Liu Family</div>
+              <div class="client-gallery">Portrait Gallery</div>
+            </div>
+            <div class="client-meta">
+              <div class="client-time">Yesterday</div>
+              <div class="status-dot offline"></div>
+            </div>
+          </div>
+
+          <div class="client-row">
+            <div class="client-avatar avatar-sr">SR</div>
+            <div class="client-info">
+              <div class="client-name">Sarah Reed</div>
+              <div class="client-gallery">Engagement</div>
+            </div>
+            <div class="client-meta">
+              <div class="client-time">3 days ago</div>
+              <div class="status-dot offline"></div>
+            </div>
+          </div>
+
+          <div class="client-row">
+            <div class="client-avatar avatar-rt">RT</div>
+            <div class="client-info">
+              <div class="client-name">Rachel Thompson</div>
+              <div class="client-gallery">Fall Portraits</div>
+            </div>
+            <div class="client-meta">
+              <div class="client-time">1 week ago</div>
+              <div class="status-dot offline"></div>
+            </div>
+          </div>
+
+          <div class="client-row">
+            <div class="client-avatar avatar-jm">JM</div>
+            <div class="client-info">
+              <div class="client-name">Jake Martinez</div>
+              <div class="client-gallery">Wedding</div>
+            </div>
+            <div class="client-meta">
+              <div class="client-time">2 weeks ago</div>
+              <div class="status-dot offline"></div>
+            </div>
+          </div>
+
+          <div class="client-row">
+            <div class="client-avatar avatar-cf">CF</div>
+            <div class="client-info">
+              <div class="client-name">Chen Family</div>
+              <div class="client-gallery">Holiday</div>
+            </div>
+            <div class="client-meta">
+              <div class="client-time">1 month ago</div>
+              <div class="status-dot offline"></div>
+            </div>
+          </div>
+
+          <div class="client-row">
+            <div class="client-avatar avatar-pw">PW</div>
+            <div class="client-info">
+              <div class="client-name">Park Wedding</div>
+              <div class="client-gallery">Wedding</div>
+            </div>
+            <div class="client-meta">
+              <div class="client-time">2 months ago</div>
+              <div class="status-dot offline"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- COL 2: Push Notification Composer -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Push Notification Composer</div>
+            <div class="card-subtitle">Send to app users instantly</div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="form-group">
+          <label class="form-label">Send To</label>
+          <select class="form-control" id="sendTo">
+            <option value="all">All Clients</option>
+            <option value="gallery">Specific Gallery</option>
+            <option value="client">Specific Client</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Notification Title</label>
+          <input type="text" class="form-control" placeholder="Gallery is ready!" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-control" rows="3" placeholder="Your photos are ready to view…"></textarea>
+        </div>
+
+        <!-- Schedule Toggle -->
+        <div class="schedule-toggle-row">
+          <span class="schedule-label">Schedule for later</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="scheduleToggle" onchange="toggleDatetime(this)" />
+            <div class="toggle-track"></div>
+          </label>
+        </div>
+
+        <div class="datetime-group" id="datetimeGroup">
+          <label class="form-label">Send Date &amp; Time</label>
+          <input type="datetime-local" class="form-control" />
+        </div>
+
+        <button class="btn btn-gold w-full" style="justify-content:center;">
+          <i class="ti ti-send"></i> Send Notification
+        </button>
+
+        <!-- Recent Notifications -->
+        <div class="recent-notifs-title">Recently Sent</div>
+
+        <div class="notif-row">
+          <div class="notif-icon-wrap"><i class="ti ti-bell"></i></div>
+          <div>
+            <div class="notif-title">Gallery Ready!</div>
+            <div class="notif-meta">Emma Wilson · Jun 10</div>
+          </div>
+          <div class="notif-opened">1 opened</div>
+        </div>
+
+        <div class="notif-row">
+          <div class="notif-icon-wrap"><i class="ti ti-bell"></i></div>
+          <div>
+            <div class="notif-title">New photos added!</div>
+            <div class="notif-meta">All clients · Jun 8</div>
+          </div>
+          <div class="notif-opened">14 opened</div>
+        </div>
+
+        <div class="notif-row">
+          <div class="notif-icon-wrap"><i class="ti ti-bell"></i></div>
+          <div>
+            <div class="notif-title">Don't forget to download!</div>
+            <div class="notif-meta">3 clients · Jun 5</div>
+          </div>
+          <div class="notif-opened">3 opened</div>
+        </div>
+      </div>
+
+      <!-- COL 3: App Branding Settings -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">App Branding</div>
+            <div class="card-subtitle">Customize client experience</div>
+          </div>
+          <span class="badge badge-success"><i class="ti ti-check"></i> Saved</span>
+        </div>
+
+        <div class="branding-row">
+          <span class="branding-key">Brand Color</span>
+          <div class="color-swatch-wrap">
+            <input type="color" value="#2563eb" style="opacity:0;position:absolute;width:28px;height:28px;cursor:pointer;" id="colorInput" onchange="updateSwatch(this)" />
+            <div class="color-swatch" id="colorSwatch" style="background:#2563eb;" onclick="document.getElementById('colorInput').click()"></div>
+            <span id="colorHex">#2563eb</span>
+          </div>
+        </div>
+
+        <div class="branding-row">
+          <span class="branding-key">Studio Name</span>
+          <span class="branding-val" style="font-weight:600;">Sarah Kim Photography</span>
+        </div>
+
+        <div class="form-group" style="margin-top:14px;">
+          <div class="form-label">Studio Logo</div>
+          <div class="upload-area">
+            <i class="ti ti-cloud-upload"></i>
+            <p>Click to upload logo<br><span style="font-size:10px;">PNG, SVG recommended · Max 2MB</span></p>
+          </div>
+        </div>
+
+        <div class="preview-row">
+          <div class="preview-item">
+            <div class="preview-label">Splash Screen</div>
+            <div class="splash-preview">
+              <div class="splash-preview-dot"></div>
+              <span style="font-size:11px;font-weight:700;">LensFlow</span>
+            </div>
+          </div>
+          <div class="preview-item" style="flex:0;">
+            <div class="preview-label">App Icon</div>
+            <div class="app-icon-preview">📷</div>
+          </div>
+        </div>
+
+        <button class="btn btn-gold w-full" style="justify-content:center;margin-top:6px;">
+          <i class="ti ti-device-floppy"></i> Save Branding
+        </button>
+      </div>
+
+    </div><!-- /.three-col -->
+
+    <!-- =============================================
+         APP ANALYTICS CHART
+         ============================================= -->
+    <div class="analytics-section">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">App Opens — Last 14 Days</div>
+            <div class="card-subtitle">iOS vs Android daily usage</div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:center;">
+            <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-secondary);">
+              <span style="width:12px;height:3px;background:#3b82f6;border-radius:2px;display:inline-block;"></span> iOS
+            </span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-secondary);">
+              <span style="width:12px;height:3px;background:#22c55e;border-radius:2px;display:inline-block;"></span> Android
+            </span>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="analyticsChart"></canvas>
+        </div>
+
+        <div class="platform-stats">
+          <div class="platform-stat">
+            <div class="platform-icon ios"><i class="ti ti-brand-apple"></i></div>
+            <div>
+              <div class="platform-stat-label">iOS Downloads</div>
+              <div class="platform-stat-value">542 <span class="platform-stat-pct">61%</span></div>
+            </div>
+          </div>
+          <div class="platform-stat">
+            <div class="platform-icon android"><i class="ti ti-brand-android"></i></div>
+            <div>
+              <div class="platform-stat-label">Android Downloads</div>
+              <div class="platform-stat-value">350 <span class="platform-stat-pct">39%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================
+         CLIENT REVIEWS
+         ============================================= -->
+    <div class="section-header">
+      <div>
+        <div class="section-title">Client Reviews</div>
+        <div class="section-subtitle">What your clients say about the app experience</div>
+      </div>
+      <span class="badge badge-gold"><i class="ti ti-star-filled"></i> 4.9 avg</span>
+    </div>
+
+    <div class="reviews-grid">
+
+      <!-- Review 1 -->
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"The app makes it so easy to download photos! Love how organized everything is."</p>
+        <div class="review-author">
+          <div class="review-avatar r-ew">EW</div>
+          <div>
+            <div class="review-author-name">Emma Wilson</div>
+            <div class="review-author-type">Wedding</div>
+          </div>
+          <div class="review-date">Jun 12</div>
+        </div>
+      </div>
+
+      <!-- Review 2 -->
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Best photographer AND the delivery process is seamless. Highly recommend!"</p>
+        <div class="review-author">
+          <div class="review-avatar r-rt">RT</div>
+          <div>
+            <div class="review-author-name">Rachel Thompson</div>
+            <div class="review-author-type">Portrait</div>
+          </div>
+          <div class="review-date">Jun 8</div>
+        </div>
+      </div>
+
+      <!-- Review 3 -->
+      <div class="review-card">
+        <div class="review-stars">★★★★<span style="color:var(--border);">★</span></div>
+        <p class="review-text">"Great quality photos, the gallery viewer is beautiful. Very intuitive UI."</p>
+        <div class="review-author">
+          <div class="review-avatar r-lf">LF</div>
+          <div>
+            <div class="review-author-name">Liu Family</div>
+            <div class="review-author-type">Portrait</div>
+          </div>
+          <div class="review-date">Jun 5</div>
+        </div>
+      </div>
+
+      <!-- Review 4 -->
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Our wedding photos were delivered so fast! Amazing experience from start to finish."</p>
+        <div class="review-author">
+          <div class="review-avatar r-sr">SR</div>
+          <div>
+            <div class="review-author-name">Sarah Reed</div>
+            <div class="review-author-type">Engagement</div>
+          </div>
+          <div class="review-date">May 28</div>
+        </div>
+      </div>
+
+    </div><!-- /.reviews-grid -->
+
+  </main>
+</div><!-- /.main-wrapper -->
+
+<!-- =============================================
+     SCRIPTS
+     ============================================= -->
+<script>
+  /* --- Schedule toggle --- */
+  function toggleDatetime(checkbox) {
+    var group = document.getElementById('datetimeGroup');
+    group.classList.toggle('visible', checkbox.checked);
+  }
+
+  /* --- Color swatch update --- */
+  function updateSwatch(input) {
+    document.getElementById('colorSwatch').style.background = input.value;
+    document.getElementById('colorHex').textContent = input.value;
+  }
+
+  /* --- Sub-nav tab switching --- */
+  document.querySelectorAll('.sub-nav-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.sub-nav-tab').forEach(function(t) { t.classList.remove('active'); });
+      this.classList.add('active');
+    });
+  });
+
+  /* --- Analytics Chart --- */
+  (function() {
+    var today = new Date();
+    var labels = [];
+    for (var i = 13; i >= 0; i--) {
+      var d = new Date(today);
+      d.setDate(d.getDate() - i);
+      labels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+    }
+
+    var iosData    = [38, 42, 35, 50, 47, 55, 62, 58, 70, 65, 72, 68, 80, 75];
+    var androidData = [22, 28, 25, 30, 34, 38, 40, 37, 45, 42, 48, 44, 52, 50];
+
+    var ctx = document.getElementById('analyticsChart').getContext('2d');
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'iOS',
+            data: iosData,
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59,130,246,.08)',
+            borderWidth: 2.5,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            pointBackgroundColor: '#3b82f6',
+            tension: 0.4,
+            fill: true
+          },
+          {
+            label: 'Android',
+            data: androidData,
+            borderColor: '#22c55e',
+            backgroundColor: 'rgba(34,197,94,.08)',
+            borderWidth: 2.5,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            pointBackgroundColor: '#22c55e',
+            tension: 0.4,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1a1d2e',
+            titleColor: '#fff',
+            bodyColor: 'rgba(255,255,255,.7)',
+            padding: 10,
+            cornerRadius: 8,
+            displayColors: true
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: {
+              color: '#94a3b8',
+              font: { size: 11, family: 'Inter' },
+              maxRotation: 0
+            },
+            border: { display: false }
+          },
+          y: {
+            grid: { color: '#f1f5f9', lineWidth: 1 },
+            ticks: {
+              color: '#94a3b8',
+              font: { size: 11, family: 'Inter' },
+              stepSize: 20
+            },
+            border: { display: false, dash: [3, 3] },
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  })();
+</script>
+
+<script src="../shared/sidebar.js"></script>
+</body>
+</html>
