@@ -470,10 +470,10 @@ img { display: block; max-width: 100%; }
    CONTENT AREA
    ============================================================ */
 .content {
-  padding: 26px 28px 40px;
+  padding: 28px 28px 48px;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 32px;
 }
 
 /* ============================================================
@@ -517,7 +517,8 @@ img { display: block; max-width: 100%; }
 .stats-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: 18px;
+  margin-bottom: 32px;
 }
 
 .stat-card {
@@ -594,8 +595,9 @@ img { display: block; max-width: 100%; }
 .two-col {
   display: grid;
   grid-template-columns: 1fr 340px;
-  gap: 16px;
+  gap: 20px;
   align-items: start;
+  margin-bottom: 32px;
 }
 
 /* ============================================================
@@ -985,7 +987,7 @@ img { display: block; max-width: 100%; }
   font-size: 11px;
   font-weight: 600;
   padding: 3px 9px;
-  border-radius: 20px;
+  border-radius: 4px;
   white-space: nowrap;
 }
 
@@ -1003,7 +1005,7 @@ img { display: block; max-width: 100%; }
   font-size: 11px;
   font-weight: 600;
   padding: 3px 10px;
-  border-radius: 20px;
+  border-radius: 4px;
   white-space: nowrap;
 }
 
@@ -1171,3 +1173,65 @@ img { display: block; max-width: 100%; }
   .topbar    { padding: 0 14px; }
   .search-box { display: none; }
 }
+
+/* ── Section spacing inside tab panels ── */
+.eq-kpi-row   { margin-bottom: 28px; }
+.filter-bar   { margin-bottom: 20px; }
+.pipeline-bar { margin-bottom: 28px; }
+.mini-stats   { margin-bottom: 24px; }
+.table-card + .table-card { margin-top: 32px; }
+.card.table-card { margin-bottom: 32px; }
+
+
+/* ══ FONT SIZE NORMALISATION — ensures all table text is consistent ══ */
+
+/* All td content — single base size */
+.data-table td {
+  font-size: 13.5px !important;
+  color: var(--text-primary);
+}
+.data-table td strong {
+  font-size: 13.5px !important;
+  font-weight: 600;
+}
+
+/* Serial numbers — slightly smaller, monospace, muted */
+.data-table td [style*="monospace"],
+.data-table td span[style*="monospace"] {
+  font-size: 12.5px !important;
+  color: #64748b;
+}
+
+/* ALL status / type / category badges — one consistent size */
+.status-badge,
+.cat-pill, .pill-cameras, .pill-lenses, .pill-lighting,
+.pill-memory, .pill-accessories,
+.type-badge, .type-owned, .type-rental,
+.badge, .type-tag,
+.badge-avail, .badge-checkout, .badge-inservice,
+.badge-confirmed, .badge-enquiry, .badge-qualified,
+.badge-completed, .badge-lost,
+.badge-active-g, .badge-inactive,
+.badge-paid, .badge-sent-inv, .badge-draft-inv, .badge-overdue,
+.badge-signed, .badge-sent-con, .badge-draft-con,
+.badge-success, .badge-warning, .badge-danger, .badge-info,
+.b-green, .b-yellow, .b-red, .b-blue, .b-purple, .b-gray, .b-orange {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+/* Equipment action buttons — consistent small */
+.eq-action-btn {
+  font-size: 12.5px !important;
+}
+
+/* Table header — consistent */
+.data-table th {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: .6px !important;
+}
+
+/* Mini-stat labels/values inside tables */
+.mini-stat-label { font-size: 12px !important; }
+.mini-stat-value { font-size: 22px !important; }

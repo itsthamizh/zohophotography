@@ -128,7 +128,7 @@ header.topbar {
 /* ── Main content padding ── */
 .content,
 .page-content {
-  padding: 24px 28px 40px;
+  padding: 28px 28px 48px;
   flex: 1;
 }
 
@@ -241,3 +241,127 @@ header.topbar {
   white-space: nowrap;
 }
 .btn-outline-sm:hover { background: #f8fafc; color: #1a1d2e; }
+
+/* ═══════════════════════════════════════════════════════════════
+   GLOBAL FONT NORMALISATION — applies to every page
+   Single source of truth for all text sizes in the application.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Body & base ── */
+body { font-size: 14px; line-height: 1.5; }
+
+/* ── All table headers (th) ── */
+table thead th,
+.data-table th,
+.rs-tbl thead th,
+.gallery-table thead th {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.6px !important;
+  color: #94a3b8 !important;
+}
+
+/* ── All table cell text (td) ── */
+table tbody td,
+.data-table td,
+.rs-tbl tbody td,
+.gallery-table tbody td {
+  font-size: 13.5px !important;
+  color: #1a1d2e;
+}
+
+/* ── Bold/strong inside cells — same size, just heavier ── */
+table tbody td strong,
+.data-table td strong {
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+}
+
+/* ── Serial / code text in tables ── */
+table tbody td code,
+table tbody td [style*="monospace"],
+.data-table td [style*="monospace"] {
+  font-size: 12.5px !important;
+  color: #64748b !important;
+}
+
+/* ── ALL status & type badges — one consistent size everywhere ── */
+.badge, .status-badge, .type-tag,
+.cat-pill, .type-badge, .role-badge,
+.gallery-status-badge, .integ-status,
+[class*="badge-"], [class*="pill-"],
+.b-green, .b-yellow, .b-red, .b-blue,
+.b-purple, .b-gray, .b-orange,
+.type-owned, .type-rental {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+/* ── Card section titles ── */
+.card-title,
+.card-title div,
+.section-title,
+.panel-title { font-size: 14.5px !important; font-weight: 600 !important; }
+
+/* ── Card subtitles ── */
+.card-subtitle,
+.panel-subtitle { font-size: 12.5px !important; color: #94a3b8 !important; }
+
+/* ── KPI stat values ── */
+.stat-value,
+.eq-kpi-val,
+.rs-stat-val { font-size: 26px !important; font-weight: 800 !important; }
+
+/* ── KPI stat labels ── */
+.stat-label,
+.eq-kpi-lbl,
+.stat-lbl,
+.rs-stat-lbl { font-size: 12px !important; font-weight: 600 !important; }
+
+/* ── KPI sub text / delta ── */
+.stat-change, .stat-delta,
+.eq-kpi-sub,
+.stat-change.positive,
+.stat-change.neutral,
+.stat-change.warning,
+.delta-up, .delta-down, .delta-neutral,
+.up, .dn, .nt { font-size: 12px !important; }
+
+/* ── Sub-tab navigation buttons ── */
+.subtab, .sub-tab,
+.subtabs-bar button { font-size: 13.5px !important; }
+
+/* ── Filter bar inputs / selects ── */
+.filter-bar input,
+.filter-bar select { font-size: 13px !important; }
+
+/* ── Topbar title ── */
+.topbar-title { font-size: 16px !important; font-weight: 600 !important; }
+
+/* ── Breadcrumb ── */
+.breadcrumb,
+.breadcrumb a,
+.breadcrumb span { font-size: 12.5px !important; }
+
+/* ── Gallery card info ── */
+.gallery-name { font-size: 13.5px !important; font-weight: 700 !important; }
+.gallery-client { font-size: 12px !important; }
+.gallery-stat { font-size: 12px !important; }
+.gallery-stat strong { font-size: 12px !important; }
+.gallery-expiry { font-size: 11.5px !important; }
+
+/* ── Setting rows (Settings page) ── */
+.setting-row-label { font-size: 13.5px !important; }
+.setting-row-sub { font-size: 12px !important; }
+
+/* ── Form inputs ── */
+.form-input, .form-select,
+.filter-bar input[type="text"],
+.filter-bar input[type="date"] { font-size: 13.5px !important; }
+
+/* ── Action / outline buttons ── */
+.btn-action { font-size: 12.5px !important; }
+.eq-action-btn { font-size: 12.5px !important; }
+.btn-blue, .btn-primary, .btn-save { font-size: 13.5px !important; }
+.btn-outline, .btn-outline-sm { font-size: 13px !important; }

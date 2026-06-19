@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — LensFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="Settings.css">
+  <!-- Shared sidebar + layout (explicit link ensures consistent styling) -->
+  <link rel="stylesheet" href="../shared/sidebar.css">
+  <link rel="stylesheet" href="../shared/layout.css">
+</head>
+<body>
+
+  <!-- Sidebar injected by shared/sidebar.js -->
+  <div id="sidebar-root"></div>
+
+  <div class="main-wrapper">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">Settings</div>
+        <nav class="breadcrumb">
+          <a href="../index.html">Dashboard</a>
+          <i class="ti ti-chevron-right"></i>
+          <span>Settings</span>
+        </nav>
+      </div>
+      <div class="topbar-right">
+        <div class="bell-wrap"><i class="ti ti-bell"></i><span class="bell-dot"></span></div>
+        <div class="topbar-avatar">SK</div>
+      </div>
+    </header>
+
+    <!-- SETTINGS LAYOUT -->
+    <div class="settings-layout">
+
+      <!-- ── LEFT NAV ── -->
+      <nav class="settings-nav">
+        <div class="settings-nav-section">Studio</div>
+        <a class="settings-nav-item active" onclick="showSection('profile')">
+          <i class="ti ti-building-store"></i> Studio Profile
+        </a>
+        <a class="settings-nav-item" onclick="showSection('branding')">
+          <i class="ti ti-palette"></i> Branding
+        </a>
+        <div class="settings-nav-divider"></div>
+        <div class="settings-nav-section">Platform</div>
+        <a class="settings-nav-item" onclick="showSection('notifications')">
+          <i class="ti ti-bell"></i> Notifications
+        </a>
+        <a class="settings-nav-item" onclick="showSection('integrations')">
+          <i class="ti ti-plug"></i> Integrations
+        </a>
+        <a class="settings-nav-item" onclick="showSection('gallery-defaults')">
+          <i class="ti ti-photo"></i> Gallery Defaults
+        </a>
+        <div class="settings-nav-divider"></div>
+        <div class="settings-nav-section">Account</div>
+        <a class="settings-nav-item" onclick="showSection('team')">
+          <i class="ti ti-users"></i> Team & Access
+        </a>
+        <a class="settings-nav-item" onclick="showSection('billing')">
+          <i class="ti ti-credit-card"></i> Billing & Plan
+        </a>
+        <a class="settings-nav-item" onclick="showSection('security')">
+          <i class="ti ti-shield-lock"></i> Security
+        </a>
+      </nav>
+
+      <!-- ── RIGHT PANELS ── -->
+      <div class="settings-panels">
+
+        <!-- ════ STUDIO PROFILE ════ -->
+        <div class="settings-panel" id="section-profile">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title"><i class="ti ti-building-store"></i> Studio Profile</div>
+              <div class="panel-subtitle">Your public business information shown on contracts, invoices & galleries</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="avatar-row">
+              <div class="studio-avatar" title="Click to upload logo">SK</div>
+              <div class="avatar-info">
+                <div class="avatar-name">Sarah Kim Photography</div>
+                <div class="avatar-hint">Upload your studio logo — PNG or SVG, max 2MB</div>
+                <div class="avatar-actions">
+                  <button class="btn-outline"><i class="ti ti-upload"></i> Upload Logo</button>
+                  <button class="btn-outline">Remove</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div><div class="setting-row-label">Studio Name</div><div class="setting-row-sub">Shown on all client-facing documents</div></div>
+              <div class="setting-row-control"><input class="form-input" type="text" value="Sarah Kim Photography"></div>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Business Email</div><div class="setting-row-sub">Used for client communications</div></div>
+              <div class="setting-row-control"><input class="form-input" type="email" value="hello@sarahkimphotography.com"></div>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Phone Number</div><div class="setting-row-sub">Displayed on contracts & invoices</div></div>
+              <div class="setting-row-control"><input class="form-input" type="tel" value="+1 (555) 234-5678"></div>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Studio Address</div><div class="setting-row-sub">Printed on invoices & contracts</div></div>
+              <div class="setting-row-control"><input class="form-input" type="text" value="123 Photography Lane, New York, NY 10001"></div>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Website URL</div><div class="setting-row-sub">Linked from client galleries</div></div>
+              <div class="setting-row-control"><input class="form-input" type="url" value="https://sarahkimphotography.com"></div>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Tax / ABN Number</div><div class="setting-row-sub">Shown on official invoices</div></div>
+              <div class="setting-row-control"><input class="form-input" type="text" value="12-345-6789"></div>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Time Zone</div><div class="setting-row-sub">Used for calendar & reminders</div></div>
+              <div class="setting-row-control">
+                <select class="form-select">
+                  <option selected>America/New_York (EST)</option>
+                  <option>America/Los_Angeles (PST)</option>
+                  <option>America/Chicago (CST)</option>
+                  <option>Europe/London (GMT)</option>
+                  <option>Asia/Kolkata (IST)</option>
+                </select>
+              </div>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Currency</div><div class="setting-row-sub">Used for all pricing & invoices</div></div>
+              <div class="setting-row-control">
+                <select class="form-select">
+                  <option selected>USD — US Dollar ($)</option>
+                  <option>GBP — British Pound (£)</option>
+                  <option>EUR — Euro (€)</option>
+                  <option>AUD — Australian Dollar (A$)</option>
+                  <option>INR — Indian Rupee (₹)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <button class="btn-outline">Discard</button>
+            <button class="btn-save" onclick="showToast()"><i class="ti ti-device-floppy"></i> Save Profile</button>
+          </div>
+        </div>
+
+        <!-- ════ BRANDING ════ -->
+        <div class="settings-panel" id="section-branding">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title"><i class="ti ti-palette"></i> Branding</div>
+              <div class="panel-subtitle">Customise how your brand appears in galleries, emails & documents</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="setting-row">
+              <div><div class="setting-row-label">Brand Primary Colour</div><div class="setting-row-sub">Used on gallery cover, buttons & email headers</div></div>
+              <div class="setting-row-control" style="display:flex;align-items:center;gap:10px;">
+                <input type="color" value="#2563eb" style="width:42px;height:36px;border:1px solid #e8edf3;border-radius:8px;cursor:pointer;padding:2px;">
+                <input class="form-input" type="text" value="#2563eb" style="width:100px;">
+              </div>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Email Signature</div><div class="setting-row-sub">Appended to all client notification emails</div></div>
+              <div class="setting-row-control">
+                <textarea class="form-input" rows="3" style="resize:vertical;">Sarah Kim
+Sarah Kim Photography
+hello@sarahkimphotography.com | +1 (555) 234-5678</textarea>
+              </div>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Gallery Watermark Text</div><div class="setting-row-sub">Overlaid on preview images before download</div></div>
+              <div class="setting-row-control"><input class="form-input" type="text" value="© Sarah Kim Photography"></div>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Invoice Footer Note</div><div class="setting-row-sub">Printed at the bottom of all invoices</div></div>
+              <div class="setting-row-control"><input class="form-input" type="text" value="Thank you for choosing Sarah Kim Photography!"></div>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Gallery Favicon</div><div class="setting-row-sub">Browser tab icon for client gallery pages</div></div>
+              <div class="setting-row-control"><button class="btn-outline"><i class="ti ti-upload"></i> Upload Favicon</button></div>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <button class="btn-outline">Discard</button>
+            <button class="btn-save" onclick="showToast()"><i class="ti ti-device-floppy"></i> Save Branding</button>
+          </div>
+        </div>
+
+        <!-- ════ NOTIFICATIONS ════ -->
+        <div class="settings-panel" id="section-notifications">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title"><i class="ti ti-bell"></i> Notifications</div>
+              <div class="panel-subtitle">Choose when you and your clients receive automated emails</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div style="padding:12px 24px 6px;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;">Studio Owner Alerts</div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">New Booking Enquiry</div><div class="setting-row-sub">Email me when a new enquiry comes in via website form</div></div>
+              <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Contract Signed</div><div class="setting-row-sub">Notify me when a client signs via Zoho Sign</div></div>
+              <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Invoice Paid</div><div class="setting-row-sub">Email me when a payment is confirmed via Zoho Books</div></div>
+              <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Gallery Viewed</div><div class="setting-row-sub">Notify me when a client first opens their gallery</div></div>
+              <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Gallery Expiry Warning</div><div class="setting-row-sub">Alert me 7 days before a gallery is set to expire</div></div>
+              <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div style="padding:12px 24px 6px;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;border-top:1px solid #f8fafc;margin-top:4px;">Client Notifications</div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Gallery Ready Email</div><div class="setting-row-sub">Automatically email client when gallery is published</div></div>
+              <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Expiry Reminder to Client</div><div class="setting-row-sub">Send client a reminder 7 days before gallery expires</div></div>
+              <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Order Confirmation</div><div class="setting-row-sub">Email client when they place a print store order</div></div>
+              <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <button class="btn-save" onclick="showToast()"><i class="ti ti-device-floppy"></i> Save Preferences</button>
+          </div>
+        </div>
+
+        <!-- ════ INTEGRATIONS ════ -->
+        <div class="settings-panel" id="section-integrations">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title"><i class="ti ti-plug"></i> Integrations</div>
+              <div class="panel-subtitle">Connect your photography workflow with Zoho business apps</div>
+            </div>
+          </div>
+          <div class="integration-grid">
+
+            <div class="integration-card connected">
+              <div class="integ-icon" style="background:#fff3e0;"><i class="ti ti-file-invoice" style="color:#e65100;font-size:22px;"></i></div>
+              <div style="flex:1;">
+                <div class="integ-name">Zoho Books</div>
+                <div class="integ-status connected-badge"><i class="ti ti-circle-check" style="font-size:12px;"></i> Connected — Invoices sync automatically</div>
+              </div>
+              <button class="integ-btn btn-disconnect">Disconnect</button>
+            </div>
+
+            <div class="integration-card connected">
+              <div class="integ-icon" style="background:#e8f5e9;"><i class="ti ti-signature" style="color:#2e7d32;font-size:22px;"></i></div>
+              <div style="flex:1;">
+                <div class="integ-name">Zoho Sign</div>
+                <div class="integ-status connected-badge"><i class="ti ti-circle-check" style="font-size:12px;"></i> Connected — e-Signatures active</div>
+              </div>
+              <button class="integ-btn btn-disconnect">Disconnect</button>
+            </div>
+
+            <div class="integration-card connected">
+              <div class="integ-icon" style="background:#e3f2fd;"><i class="ti ti-mail" style="color:#1565c0;font-size:22px;"></i></div>
+              <div style="flex:1;">
+                <div class="integ-name">Zoho Mail</div>
+                <div class="integ-status connected-badge"><i class="ti ti-circle-check" style="font-size:12px;"></i> Connected — Emails sent from studio address</div>
+              </div>
+              <button class="integ-btn btn-disconnect">Disconnect</button>
+            </div>
+
+            <div class="integration-card connected">
+              <div class="integ-icon" style="background:#fce4ec;"><i class="ti ti-users" style="color:#c62828;font-size:22px;"></i></div>
+              <div style="flex:1;">
+                <div class="integ-name">Zoho CRM</div>
+                <div class="integ-status connected-badge"><i class="ti ti-circle-check" style="font-size:12px;"></i> Connected — Client records synced</div>
+              </div>
+              <button class="integ-btn btn-disconnect">Disconnect</button>
+            </div>
+
+            <div class="integration-card">
+              <div class="integ-icon" style="background:#f3e5f5;"><i class="ti ti-brand-google" style="color:#7b1fa2;font-size:22px;"></i></div>
+              <div style="flex:1;">
+                <div class="integ-name">Google Calendar</div>
+                <div class="integ-status disconnected-badge">Not connected — Sync shoots to Google Cal</div>
+              </div>
+              <button class="integ-btn btn-connect">Connect</button>
+            </div>
+
+            <div class="integration-card">
+              <div class="integ-icon" style="background:#e8eaf6;"><i class="ti ti-brand-stripe" style="color:#5c35cc;font-size:22px;"></i></div>
+              <div style="flex:1;">
+                <div class="integ-name">Stripe</div>
+                <div class="integ-status disconnected-badge">Not connected — Accept card payments directly</div>
+              </div>
+              <button class="integ-btn btn-connect">Connect</button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ════ GALLERY DEFAULTS ════ -->
+        <div class="settings-panel" id="section-gallery-defaults">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title"><i class="ti ti-photo"></i> Gallery Defaults</div>
+              <div class="panel-subtitle">Default settings applied to every new gallery you create</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="setting-row">
+              <div><div class="setting-row-label">Default Expiry</div><div class="setting-row-sub">Days a gallery stays live after delivery</div></div>
+              <select class="form-select"><option selected>90 days</option><option>30 days</option><option>60 days</option><option>180 days</option><option>1 year</option></select>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Download Quality</div><div class="setting-row-sub">Resolution available to clients for download</div></div>
+              <select class="form-select"><option selected>Full Resolution</option><option>Web Optimised (2048px)</option><option>Medium (1200px)</option></select>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Watermark on Previews</div><div class="setting-row-sub">Overlay watermark until client downloads full res</div></div>
+              <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Password Protection</div><div class="setting-row-sub">Require clients to enter a password to view gallery</div></div>
+              <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Client Favouriting</div><div class="setting-row-sub">Allow clients to mark their favourite photos</div></div>
+              <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Mobile App Delivery</div><div class="setting-row-sub">Push notification to client app when gallery is ready</div></div>
+              <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Print Store Enabled</div><div class="setting-row-sub">Show print ordering options inside the gallery</div></div>
+              <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <button class="btn-save" onclick="showToast()"><i class="ti ti-device-floppy"></i> Save Defaults</button>
+          </div>
+        </div>
+
+        <!-- ════ TEAM & ACCESS ════ -->
+        <div class="settings-panel" id="section-team">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title"><i class="ti ti-users"></i> Team & Access</div>
+              <div class="panel-subtitle">Manage who can access LensFlow and what they can do</div>
+            </div>
+            <button class="btn-save" style="padding:8px 16px;font-size:13px;"><i class="ti ti-user-plus"></i> Invite Member</button>
+          </div>
+          <div class="panel-body">
+            <div class="team-row">
+              <div class="team-avatar" style="background:linear-gradient(135deg,#667eea,#764ba2);">SK</div>
+              <div style="flex:1;">
+                <div class="team-name">Sarah Kim</div>
+                <div class="team-email">sarah@sarahkimphotography.com</div>
+              </div>
+              <span class="role-badge role-owner">Owner</span>
+            </div>
+            <div class="team-row">
+              <div class="team-avatar" style="background:linear-gradient(135deg,#11998e,#38ef7d);">JL</div>
+              <div style="flex:1;">
+                <div class="team-name">James Lee</div>
+                <div class="team-email">james@sarahkimphotography.com</div>
+              </div>
+              <span class="role-badge role-editor">Editor</span>
+              <button class="btn-outline btn-danger" style="margin-left:12px;font-size:12px;padding:5px 10px;">Remove</button>
+            </div>
+            <div class="team-row">
+              <div class="team-avatar" style="background:linear-gradient(135deg,#f093fb,#f5576c);">AP</div>
+              <div style="flex:1;">
+                <div class="team-name">Amy Patel</div>
+                <div class="team-email">amy@sarahkimphotography.com</div>
+              </div>
+              <span class="role-badge role-viewer">Viewer</span>
+              <button class="btn-outline btn-danger" style="margin-left:12px;font-size:12px;padding:5px 10px;">Remove</button>
+            </div>
+          </div>
+          <div style="padding:16px 24px;border-top:1px solid #f1f5f9;background:#fafbfc;">
+            <div style="font-size:12.5px;color:#94a3b8;"><i class="ti ti-info-circle" style="font-size:14px;vertical-align:-2px;"></i> <strong>Owner</strong> — full access &nbsp;·&nbsp; <strong>Editor</strong> — can manage bookings & galleries &nbsp;·&nbsp; <strong>Viewer</strong> — read only</div>
+          </div>
+        </div>
+
+        <!-- ════ BILLING & PLAN ════ -->
+        <div class="settings-panel" id="section-billing">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title"><i class="ti ti-credit-card"></i> Billing & Plan</div>
+              <div class="panel-subtitle">Manage your LensFlow subscription and payment method</div>
+            </div>
+          </div>
+          <div class="panel-body">
+
+            <!-- Current plan highlight card -->
+            <div class="plan-card">
+              <div>
+                <div class="plan-name">Pro Plan</div>
+                <div class="plan-desc">Unlimited galleries · Zoho integrations · Mobile App · Team access</div>
+              </div>
+              <div style="text-align:right;">
+                <div class="plan-price">$49<span class="plan-per">/mo</span></div>
+                <button class="btn-upgrade" style="margin-top:10px;">Upgrade to Business</button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div>
+                <div class="setting-row-label">Next Billing Date</div>
+                <div class="setting-row-sub">Your card will be charged automatically on this date</div>
+              </div>
+              <div style="font-size:13.5px;font-weight:600;color:#1a1d2e;">July 15, 2026</div>
+            </div>
+
+            <div class="setting-row">
+              <div>
+                <div class="setting-row-label">Payment Method</div>
+                <div class="setting-row-sub">Visa ending in 4242 · Expires 09/28</div>
+              </div>
+              <button class="btn-outline"><i class="ti ti-pencil"></i> Update Card</button>
+            </div>
+
+            <div class="setting-row">
+              <div>
+                <div class="setting-row-label">Billing Email</div>
+                <div class="setting-row-sub">LensFlow invoices are sent to this address</div>
+              </div>
+              <div class="setting-row-control">
+                <input class="form-input" type="email" value="billing@sarahkimphotography.com">
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div>
+                <div class="setting-row-label">Invoices & Receipts</div>
+                <div class="setting-row-sub">Download your past LensFlow payment history</div>
+              </div>
+              <button class="btn-outline"><i class="ti ti-download"></i> Download History</button>
+            </div>
+
+            <div class="setting-row" style="border-bottom:none;">
+              <div>
+                <div class="setting-row-label">Cancel Subscription</div>
+                <div class="setting-row-sub">Your account will remain active until the end of the billing period</div>
+              </div>
+              <button class="btn-danger"><i class="ti ti-x"></i> Cancel Plan</button>
+            </div>
+
+          </div>
+        </div><!-- /section-billing -->
+
+        <!-- ════ SECURITY ════ -->
+        <div class="settings-panel" id="section-security">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title"><i class="ti ti-shield-lock"></i> Security</div>
+              <div class="panel-subtitle">Protect your studio account with strong authentication</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="setting-row">
+              <div><div class="setting-row-label">Change Password</div><div class="setting-row-sub">Last changed 3 months ago</div></div>
+              <button class="btn-outline"><i class="ti ti-lock"></i> Change Password</button>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Two-Factor Authentication (2FA)</div><div class="setting-row-sub">Add an extra layer of security using an authenticator app</div></div>
+              <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Active Sessions</div><div class="setting-row-sub">MacBook Pro — Chrome — New York · Current session</div></div>
+              <button class="btn-outline"><i class="ti ti-logout"></i> Sign out all devices</button>
+            </div>
+            <div class="setting-row">
+              <div><div class="setting-row-label">Login Activity</div><div class="setting-row-sub">View all recent logins to your account</div></div>
+              <button class="btn-outline"><i class="ti ti-list"></i> View Activity Log</button>
+            </div>
+          </div>
+          <div class="panel-body" style="border-top:1px solid #f1f5f9;">
+            <div class="danger-zone">
+              <div class="danger-title"><i class="ti ti-alert-triangle" style="font-size:15px;vertical-align:-2px;"></i> Danger Zone</div>
+              <div class="danger-desc">Deleting your studio account is permanent. All your bookings, galleries, and client data will be erased and cannot be recovered.</div>
+              <button class="btn-danger"><i class="ti ti-trash"></i> Delete Studio Account</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /settings-panels -->
+    </div><!-- /settings-layout -->
+  </div><!-- /main-wrapper -->
+
+  <!-- Saved toast -->
+  <div class="saved-toast" id="saved-toast">
+    <i class="ti ti-circle-check" style="font-size:18px;color:#4ade80;"></i> Settings saved successfully
+  </div>
+
+  <script>
+    function showSection(id) {
+      // Update nav active state
+      document.querySelectorAll('.settings-nav-item').forEach(function(el) {
+        el.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+
+      // Scroll to the section
+      var el = document.getElementById('section-' + id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function showToast() {
+      var toast = document.getElementById('saved-toast');
+      toast.classList.add('show');
+      setTimeout(function() { toast.classList.remove('show'); }, 3000);
+    }
+  </script>
+  <script src="../shared/sidebar.js"></script>
+</body>
+</html>

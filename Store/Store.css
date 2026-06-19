@@ -307,7 +307,7 @@ html, body {
    PAGE CONTENT
    ============================================ */
 .page-content {
-  padding: 26px 28px 40px;
+  padding: 28px 28px 48px;
   flex: 1;
 }
 
@@ -616,7 +616,7 @@ html, body {
   font-size: 10.5px;
   font-weight: 600;
   padding: 2px 8px;
-  border-radius: 20px;
+  border-radius: 4px;
 }
 .badge.green   { background: var(--success-bg);  color: var(--success-text); }
 .badge.yellow  { background: var(--warn-bg);     color: var(--warn-text); }

@@ -80,7 +80,7 @@ input, textarea, select, button { font-family: inherit; font-size: inherit; outl
 }
 
 .page-content {
-  padding: 26px 28px 40px;
+  padding: 28px 28px 48px;
   flex: 1;
 }
 
@@ -1198,7 +1198,7 @@ select.form-control { cursor: pointer; appearance: none; background-image: url("
   align-items: center;
   gap: 4px;
   padding: 3px 9px;
-  border-radius: 20px;
+  border-radius: 4px;
   font-size: 11.5px;
   font-weight: 600;
 }

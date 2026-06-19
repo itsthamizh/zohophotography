@@ -54,7 +54,7 @@
       background: rgba(255,255,255,0.18); color: inherit;
       font-size: 10px; font-weight: 600;
       min-width: 18px; height: 16px; padding: 0 5px;
-      border-radius: 8px; margin-left: 5px; line-height: 1;
+      border-radius: 4px; margin-left: 5px; line-height: 1;
     }
     .cat-tab.active .cat-count {
       background: #2563eb; color: #fff;
@@ -63,7 +63,7 @@
     /* ── Equipment category pills (in table) ── */
     .cat-pill {
       display: inline-block; padding: 2px 9px;
-      border-radius: 20px; font-size: 11.5px; font-weight: 500;
+      border-radius: 4px; font-size: 11.5px; font-weight: 500;
     }
     .pill-cameras     { background: #dbeafe; color: #1d4ed8; }
     .pill-lenses      { background: #f3e8ff; color: #7e22ce; }
@@ -71,7 +71,7 @@
     .pill-memory      { background: #dcfce7; color: #15803d; }
     .pill-accessories { background: #ffedd5; color: #c2410c; }
     /* ── Owned / Rental type badges ── */
-    .type-badge { display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:600; }
+    .type-badge { display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius: 4px;font-size:11.5px;font-weight:600; }
     .type-owned  { background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0; }
     .type-rental { background:#fff7ed;color:#c2410c;border:1px solid #fed7aa; }
 
@@ -243,7 +243,7 @@
     .status-badge {
       display: inline-block;
       padding: 3px 10px;
-      border-radius: 20px;
+      border-radius: 4px;
       font-size: 0.75rem;
       font-weight: 600;
     }
@@ -405,6 +405,9 @@
     .cc-items li { font-size: 0.8rem; color: #374151; padding: 3px 0; display: flex; align-items: center; gap: 6px; }
     .cc-items li::before { content: '•'; color: #2563eb; font-size: 1rem; }
   </style>
+  <!-- Shared sidebar + layout (explicit link ensures consistent styling) -->
+  <link rel="stylesheet" href="../shared/sidebar.css">
+  <link rel="stylesheet" href="../shared/layout.css">
 </head>
 <body>
   <div class="app">
@@ -908,7 +911,7 @@
                   </tr>
                 </thead>
                 <tbody id="bk-tbody">
-                  <tr>
+                  <tr data-status="confirmed">
                     <td>1</td>
                     <td><strong>Emma Wilson</strong></td>
                     <td>Website Form</td>
@@ -919,7 +922,7 @@
                     <td>Contract signed</td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="confirmed">
                     <td>2</td>
                     <td><strong>Nexus Corp</strong></td>
                     <td>Social / Referral</td>
@@ -930,7 +933,7 @@
                     <td>Deposit due</td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="confirmed">
                     <td>3</td>
                     <td><strong>Liu Family</strong></td>
                     <td>Walk-in</td>
@@ -941,7 +944,7 @@
                     <td>—</td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="confirmed">
                     <td>4</td>
                     <td><strong>Sarah Reed</strong></td>
                     <td>Website Form</td>
@@ -952,7 +955,7 @@
                     <td>—</td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="confirmed">
                     <td>5</td>
                     <td><strong>Horizon Events</strong></td>
                     <td>Referral</td>
@@ -963,7 +966,7 @@
                     <td>Contract sent</td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="enquiry">
                     <td>6</td>
                     <td><strong>Martinez Family</strong></td>
                     <td>Instagram</td>
@@ -974,7 +977,7 @@
                     <td>Call within 24h</td>
                     <td><button class="btn-convert">Convert</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="qualified">
                     <td>7</td>
                     <td><strong>Patel Wedding</strong></td>
                     <td>Website Form</td>
@@ -985,7 +988,7 @@
                     <td>Ready to convert</td>
                     <td><button class="btn-convert">Convert</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="qualified">
                     <td>8</td>
                     <td><strong>Chen Studio</strong></td>
                     <td>Social / Referral</td>
@@ -996,7 +999,7 @@
                     <td>Awaiting budget</td>
                     <td><button class="btn-convert">Convert</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="completed">
                     <td>9</td>
                     <td><strong>Thompson Family</strong></td>
                     <td>Walk-in</td>
@@ -1007,7 +1010,7 @@
                     <td>Gallery delivered</td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="completed">
                     <td>10</td>
                     <td><strong>Park Wedding</strong></td>
                     <td>Referral</td>
@@ -1018,7 +1021,7 @@
                     <td>Review requested</td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="lost">
                     <td>11</td>
                     <td><strong>Williams Corp</strong></td>
                     <td>Website Form</td>
@@ -1029,7 +1032,7 @@
                     <td>Nurture: 30 days</td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="lost">
                     <td>12</td>
                     <td><strong>Brown Family</strong></td>
                     <td>Instagram</td>
@@ -1136,7 +1139,7 @@
                   </tr>
                 </thead>
                 <tbody id="cl-tbody">
-                  <tr>
+                  <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-gold">EJ</div><strong>Emma &amp; Jake Wilson</strong></div></td>
                     <td>emma@example.com</td>
                     <td>(555) 234-5678</td>
@@ -1147,7 +1150,7 @@
                     <td><span class="status-badge badge-active-g">Active</span></td>
                     <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-blue">NC</div><strong>Nexus Corp</strong></div></td>
                     <td>hr@nexus.com</td>
                     <td>(555) 345-6789</td>
@@ -1158,7 +1161,7 @@
                     <td><span class="status-badge badge-active-g">Active</span></td>
                     <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-green">LF</div><strong>Liu Family</strong></div></td>
                     <td>liu@example.com</td>
                     <td>(555) 456-7890</td>
@@ -1169,7 +1172,7 @@
                     <td><span class="status-badge badge-active-g">Active</span></td>
                     <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-purple">SR</div><strong>Sarah &amp; Tom Reed</strong></div></td>
                     <td>sarah@example.com</td>
                     <td>(555) 567-8901</td>
@@ -1180,7 +1183,7 @@
                     <td><span class="status-badge badge-active-g">Active</span></td>
                     <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-teal">RT</div><strong>Rachel Thompson</strong></div></td>
                     <td>rachel@example.com</td>
                     <td>(555) 678-9012</td>
@@ -1191,7 +1194,7 @@
                     <td><span class="status-badge badge-active-g">Active</span></td>
                     <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="inactive">
                     <td><div class="client-cell"><div class="client-avatar ca-orange">CF</div><strong>Chen Family</strong></div></td>
                     <td>chen@example.com</td>
                     <td>(555) 789-0123</td>
@@ -1202,7 +1205,7 @@
                     <td><span class="status-badge badge-inactive">Inactive</span></td>
                     <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-blue">HE</div><strong>Horizon Events</strong></div></td>
                     <td>events@horizon.com</td>
                     <td>(555) 890-1234</td>
@@ -1213,7 +1216,7 @@
                     <td><span class="status-badge badge-active-g">Active</span></td>
                     <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="inactive">
                     <td><div class="client-cell"><div class="client-avatar ca-purple">PF</div><strong>Park Family</strong></div></td>
                     <td>park@example.com</td>
                     <td>(555) 901-2345</td>
@@ -1314,7 +1317,7 @@
                   </tr>
                 </thead>
                 <tbody id="inv-tbody">
-                  <tr>
+                  <tr data-status="paid">
                     <td><strong>INV-2847</strong></td>
                     <td>Emma Wilson</td>
                     <td>Balance Payment</td>
@@ -1322,10 +1325,10 @@
                     <td>Jun 15</td>
                     <td><strong>$2,280</strong></td>
                     <td><span class="status-badge badge-paid">Paid</span></td>
-                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="paid">
                     <td><strong>INV-2846</strong></td>
                     <td>Emma Wilson</td>
                     <td>Deposit (50%)</td>
@@ -1333,10 +1336,10 @@
                     <td>Jun 1</td>
                     <td><strong>$1,520</strong></td>
                     <td><span class="status-badge badge-paid">Paid</span></td>
-                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="paid">
                     <td><strong>INV-2845</strong></td>
                     <td>Nexus Corp</td>
                     <td>Deposit (30%)</td>
@@ -1344,10 +1347,10 @@
                     <td>Jun 14</td>
                     <td><strong>$360</strong></td>
                     <td><span class="status-badge badge-paid">Paid</span></td>
-                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="sent">
                     <td><strong>INV-2844</strong></td>
                     <td>Nexus Corp</td>
                     <td>Balance</td>
@@ -1355,10 +1358,10 @@
                     <td>Jun 17</td>
                     <td><strong>$840</strong></td>
                     <td><span class="status-badge badge-sent-inv">Sent</span></td>
-                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="paid">
                     <td><strong>INV-2843</strong></td>
                     <td>Horizon Events</td>
                     <td>Deposit (30%)</td>
@@ -1366,10 +1369,10 @@
                     <td>Jun 12</td>
                     <td><strong>$720</strong></td>
                     <td><span class="status-badge badge-paid">Paid</span></td>
-                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="sent">
                     <td><strong>INV-2842</strong></td>
                     <td>Horizon Events</td>
                     <td>Balance</td>
@@ -1380,7 +1383,7 @@
                     <td><span style="color:#6b7280;">Pending</span></td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="sent">
                     <td><strong>INV-2841</strong></td>
                     <td>Liu Family</td>
                     <td>Full Payment</td>
@@ -1388,10 +1391,10 @@
                     <td>Jun 25</td>
                     <td><strong>$650</strong></td>
                     <td><span class="status-badge badge-sent-inv">Sent</span></td>
-                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="draft">
                     <td><strong>INV-2840</strong></td>
                     <td>Martinez Family</td>
                     <td>Deposit</td>
@@ -1402,7 +1405,7 @@
                     <td><span style="color:#9ca3af;">Not sent</span></td>
                     <td><button class="btn-send-sm">Send</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="overdue">
                     <td><strong>INV-2839</strong></td>
                     <td>Sarah Reed</td>
                     <td>Balance</td>
@@ -1410,10 +1413,10 @@
                     <td>May 28</td>
                     <td><strong>$570</strong></td>
                     <td><span class="status-badge badge-overdue">Overdue</span></td>
-                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
                     <td><button class="btn-remind">Remind</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="overdue">
                     <td><strong>INV-2838</strong></td>
                     <td>Williams Corp</td>
                     <td>Full Payment</td>
@@ -1421,15 +1424,12 @@
                     <td>Apr 22</td>
                     <td><strong>$900</strong></td>
                     <td><span class="status-badge badge-overdue">Overdue</span></td>
-                    <td><span style="color:#15803d;">Synced ✓</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
                     <td><button class="btn-remind">Remind</button></td>
                   </tr></tbody>
               </table>
             </div>
 
-            <div class="table-footer-note">
-              Invoices sync automatically with Zoho Books &nbsp;·&nbsp; Last sync: 2 minutes ago
-            </div>
           </div>
         </div><!-- /tab-invoices -->
 
@@ -1525,7 +1525,7 @@
                     <td><strong>Sony A7R V</strong></td>
                     <td><span class="cat-pill pill-cameras">Camera</span></td>
                     <td><span class="type-badge type-owned">Owned</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">SON-A7RV-001</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">SON-A7RV-001</td>
                     <td><span class="status-badge badge-avail">Available</span></td>
                     <td>—</td>
                     <td>Dec 2026</td>
@@ -1536,7 +1536,7 @@
                     <td><strong>Sony A7R V</strong></td>
                     <td><span class="cat-pill pill-cameras">Camera</span></td>
                     <td><span class="type-badge type-owned">Owned</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">SON-A7RV-002</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">SON-A7RV-002</td>
                     <td><span class="status-badge badge-checkout">Checked Out</span></td>
                     <td>Emma &amp; Jake shoot</td>
                     <td>Dec 2026</td>
@@ -1547,7 +1547,7 @@
                     <td><strong>Sony A1</strong></td>
                     <td><span class="cat-pill pill-cameras">Camera</span></td>
                     <td><span class="type-badge type-owned">Owned</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">SON-A1-001</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">SON-A1-001</td>
                     <td><span class="status-badge badge-avail">Available</span></td>
                     <td>—</td>
                     <td>Mar 2027</td>
@@ -1558,7 +1558,7 @@
                     <td><strong>Sony 24-70mm f/2.8 GM</strong></td>
                     <td><span class="cat-pill pill-lenses">Lens</span></td>
                     <td><span class="type-badge type-owned">Owned</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">SON-2470-001</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">SON-2470-001</td>
                     <td><span class="status-badge badge-avail">Available</span></td>
                     <td>—</td>
                     <td>Jun 2027</td>
@@ -1569,7 +1569,7 @@
                     <td><strong>Sony 85mm f/1.4 GM</strong></td>
                     <td><span class="cat-pill pill-lenses">Lens</span></td>
                     <td><span class="type-badge type-owned">Owned</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">SON-85GM-001</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">SON-85GM-001</td>
                     <td><span class="status-badge badge-checkout">Checked Out</span></td>
                     <td>Emma &amp; Jake shoot</td>
                     <td>Jun 2027</td>
@@ -1580,7 +1580,7 @@
                     <td><strong>Sony 135mm f/1.8 GM</strong></td>
                     <td><span class="cat-pill pill-lenses">Lens</span></td>
                     <td><span class="type-badge type-owned">Owned</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">SON-135GM-001</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">SON-135GM-001</td>
                     <td><span class="status-badge badge-avail">Available</span></td>
                     <td>—</td>
                     <td>Jun 2027</td>
@@ -1591,7 +1591,7 @@
                     <td><strong>Profoto B10X Plus</strong></td>
                     <td><span class="cat-pill pill-lighting">Lighting</span></td>
                     <td><span class="type-badge type-owned">Owned</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">PRO-B10X-001</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">PRO-B10X-001</td>
                     <td><span class="status-badge badge-avail">Available</span></td>
                     <td>—</td>
                     <td>Sep 2026</td>
@@ -1602,7 +1602,7 @@
                     <td><strong>Profoto B10X Plus</strong></td>
                     <td><span class="cat-pill pill-lighting">Lighting</span></td>
                     <td><span class="type-badge type-owned">Owned</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">PRO-B10X-002</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">PRO-B10X-002</td>
                     <td><span class="status-badge badge-inservice">In Service</span></td>
                     <td>Service center</td>
                     <td>—</td>
@@ -1613,7 +1613,7 @@
                     <td><strong>Godox AD600 Pro</strong></td>
                     <td><span class="cat-pill pill-lighting">Lighting</span></td>
                     <td><span class="type-badge type-owned">Owned</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">GOD-600-001</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">GOD-600-001</td>
                     <td><span class="status-badge badge-avail">Available</span></td>
                     <td>—</td>
                     <td>Aug 2026</td>
@@ -1624,7 +1624,7 @@
                     <td><strong>SanDisk 256GB CFexpress</strong></td>
                     <td><span class="cat-pill pill-memory">Memory</span></td>
                     <td><span class="type-badge type-owned">Owned</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">SD-256-001</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">SD-256-001</td>
                     <td><span class="status-badge badge-avail">Available</span></td>
                     <td>—</td>
                     <td>—</td>
@@ -1635,7 +1635,7 @@
                     <td><strong>Sony UHS-II 128GB</strong></td>
                     <td><span class="cat-pill pill-memory">Memory</span></td>
                     <td><span class="type-badge type-owned">Owned</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">SON-128-001</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">SON-128-001</td>
                     <td><span class="status-badge badge-checkout">Checked Out</span></td>
                     <td>Studio session</td>
                     <td>—</td>
@@ -1646,7 +1646,7 @@
                     <td><strong>Manfrotto 055 Tripod</strong></td>
                     <td><span class="cat-pill pill-accessories">Accessory</span></td>
                     <td><span class="type-badge type-owned">Owned</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">MAN-055-001</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">MAN-055-001</td>
                     <td><span class="status-badge badge-avail">Available</span></td>
                     <td>—</td>
                     <td>—</td>
@@ -1658,7 +1658,7 @@
                     <td><strong>DJI Ronin 4D Cinema Rig</strong><br><span style="font-size:11px;color:#94a3b8;">Includes Leica M75 lens set</span></td>
                     <td><span class="cat-pill pill-cameras">Camera</span></td>
                     <td><span class="type-badge type-rental">Rental</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">DJI-R4D-EXT</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">DJI-R4D-EXT</td>
                     <td><span class="status-badge badge-avail">Available</span></td>
                     <td>—</td>
                     <td style="color:#b45309;font-weight:500;">Return: Jun 30, 2026</td>
@@ -1669,7 +1669,7 @@
                     <td><strong>Canon EF 400mm f/2.8L IS III</strong><br><span style="font-size:11px;color:#94a3b8;">Super-telephoto, sports &amp; events</span></td>
                     <td><span class="cat-pill pill-lenses">Lens</span></td>
                     <td><span class="type-badge type-rental">Rental</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">CNL-400-EXT</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">CNL-400-EXT</td>
                     <td><span class="status-badge badge-checkout">Checked Out</span></td>
                     <td>Horizon Events shoot</td>
                     <td style="color:#b45309;font-weight:500;">Return: Jun 28, 2026</td>
@@ -1680,7 +1680,7 @@
                     <td><strong>Profoto Pro-11 2400W Kit</strong><br><span style="font-size:11px;color:#94a3b8;">Studio strobe kit × 2 heads</span></td>
                     <td><span class="cat-pill pill-lighting">Lighting</span></td>
                     <td><span class="type-badge type-rental">Rental</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">PRT-PRO11-EXT</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">PRT-PRO11-EXT</td>
                     <td><span class="status-badge badge-avail">Available</span></td>
                     <td>—</td>
                     <td style="color:#b45309;font-weight:500;">Return: Jul 5, 2026</td>
@@ -1691,7 +1691,7 @@
                     <td><strong>DJI Mavic 3 Pro Drone</strong><br><span style="font-size:11px;color:#94a3b8;">Aerial photography, FAA licensed op.</span></td>
                     <td><span class="cat-pill pill-accessories">Accessory</span></td>
                     <td><span class="type-badge type-rental">Rental</span></td>
-                    <td style="font-family:monospace;font-size:0.8rem;">DJI-M3P-EXT</td>
+                    <td style="font-family:'SF Mono','Fira Mono',monospace;color:#64748b;">DJI-M3P-EXT</td>
                     <td><span class="status-badge badge-avail">Available</span></td>
                     <td>—</td>
                     <td style="color:#b45309;font-weight:500;">Return: Jun 20, 2026</td>
@@ -1700,43 +1700,6 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
-
-            <!-- Shoot Checklist section -->
-            <div class="checklist-section">
-              <div class="checklist-title"><i class="ti ti-checklist"></i> Shoot Checklist — Equipment Allocated to Upcoming Sessions</div>
-              <div class="checklist-cards">
-                <div class="checklist-card">
-                  <div class="cc-shoot">Emma &amp; Jake Wilson — Wedding</div>
-                  <div class="cc-date">Jun 15, 2026 · Central Park</div>
-                  <ul class="cc-items">
-                    <li>Sony A7R V (SON-A7RV-002)</li>
-                    <li>Sony 85mm f/1.4 GM</li>
-                    <li>SanDisk 256GB CFexpress ×2</li>
-                    <li>Profoto B10X Plus (PRO-B10X-001)</li>
-                  </ul>
-                </div>
-                <div class="checklist-card">
-                  <div class="cc-shoot">Nexus Corp — Headshots</div>
-                  <div class="cc-date">Jun 17, 2026 · Studio</div>
-                  <ul class="cc-items">
-                    <li>Sony A1</li>
-                    <li>Sony 24-70mm f/2.8 GM</li>
-                    <li>Godox AD600 Pro</li>
-                    <li>Sony UHS-II 128GB ×2</li>
-                  </ul>
-                </div>
-                <div class="checklist-card">
-                  <div class="cc-shoot">Liu Family — Portrait</div>
-                  <div class="cc-date">Jun 20, 2026 · Location TBD</div>
-                  <ul class="cc-items">
-                    <li>Sony A7R V (SON-A7RV-001)</li>
-                    <li>Sony 135mm f/1.8 GM</li>
-                    <li>Manfrotto 055 Tripod</li>
-                    <li>SanDisk 256GB CFexpress ×1</li>
-                  </ul>
-                </div>
-              </div>
             </div>
 
           </div>
@@ -1913,7 +1876,7 @@
                   </tr>
                 </thead>
                 <tbody id="con-tbody">
-                  <tr>
+                  <tr data-status="signed">
                     <td><strong>CON-2847</strong></td>
                     <td>Emma &amp; Jake Wilson</td>
                     <td><span class="type-tag type-wedding">Wedding</span></td>
@@ -1921,10 +1884,10 @@
                     <td>Jun 3</td>
                     <td><strong>$3,800</strong></td>
                     <td><span class="status-badge badge-signed">Signed</span></td>
-                    <td><span style="color:#15803d;">Completed ✓</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Signed</span></td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="signed">
                     <td><strong>CON-2846</strong></td>
                     <td>Nexus Corp</td>
                     <td><span class="type-tag type-corporate">Headshots</span></td>
@@ -1932,10 +1895,10 @@
                     <td>Jun 10</td>
                     <td><strong>$1,200</strong></td>
                     <td><span class="status-badge badge-signed">Signed</span></td>
-                    <td><span style="color:#15803d;">Completed ✓</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Signed</span></td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="sent">
                     <td><strong>CON-2845</strong></td>
                     <td>Horizon Events</td>
                     <td><span class="type-tag type-event">Event</span></td>
@@ -1946,7 +1909,7 @@
                     <td><span style="color:#6b7280;">Awaiting sig.</span></td>
                     <td><button class="btn-remind">Remind</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="signed">
                     <td><strong>CON-2844</strong></td>
                     <td>Sarah &amp; Tom Reed</td>
                     <td><span class="type-tag type-engagement">Engagement</span></td>
@@ -1954,10 +1917,10 @@
                     <td>Jun 6</td>
                     <td><strong>$950</strong></td>
                     <td><span class="status-badge badge-signed">Signed</span></td>
-                    <td><span style="color:#15803d;">Completed ✓</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Signed</span></td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="signed">
                     <td><strong>CON-2843</strong></td>
                     <td>Liu Family</td>
                     <td><span class="type-tag type-portrait">Portrait</span></td>
@@ -1965,10 +1928,10 @@
                     <td>Jun 13</td>
                     <td><strong>$650</strong></td>
                     <td><span class="status-badge badge-signed">Signed</span></td>
-                    <td><span style="color:#15803d;">Completed ✓</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Signed</span></td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="sent">
                     <td><strong>CON-2842</strong></td>
                     <td>Patel Wedding</td>
                     <td><span class="type-tag type-wedding">Wedding</span></td>
@@ -1979,7 +1942,7 @@
                     <td><span style="color:#6b7280;">Awaiting sig.</span></td>
                     <td><button class="btn-remind">Remind</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="sent">
                     <td><strong>CON-2841</strong></td>
                     <td>Chen Studio</td>
                     <td><span class="type-tag type-corporate">Commercial</span></td>
@@ -1990,7 +1953,7 @@
                     <td><span style="color:#6b7280;">Awaiting sig.</span></td>
                     <td><button class="btn-remind">Remind</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="draft">
                     <td><strong>CON-2840</strong></td>
                     <td>Martinez Family</td>
                     <td><span class="type-tag type-portrait">Portrait</span></td>
@@ -2001,7 +1964,7 @@
                     <td><span style="color:#9ca3af;">Not sent</span></td>
                     <td><button class="btn-send-sm">Send</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="signed">
                     <td><strong>CON-2839</strong></td>
                     <td>Park Wedding</td>
                     <td><span class="type-tag type-wedding">Wedding</span></td>
@@ -2009,10 +1972,10 @@
                     <td>Mar 4</td>
                     <td><strong>$3,500</strong></td>
                     <td><span class="status-badge badge-signed">Signed</span></td>
-                    <td><span style="color:#15803d;">Completed ✓</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Signed</span></td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr>
+                  <tr data-status="signed">
                     <td><strong>CON-2838</strong></td>
                     <td>Thompson Family</td>
                     <td><span class="type-tag type-portrait">Portrait</span></td>
@@ -2020,7 +1983,7 @@
                     <td>Apr 12</td>
                     <td><strong>$550</strong></td>
                     <td><span class="status-badge badge-signed">Signed</span></td>
-                    <td><span style="color:#15803d;">Completed ✓</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Signed</span></td>
                     <td><button class="btn-view-sm">View</button></td>
                   </tr></tbody>
               </table>
@@ -2064,7 +2027,7 @@
         rentStart: 'Jun 10, 2026',
         rentEnd: 'Jun 30, 2026',
         rate: '$450 / week',
-        payment: '✅ Paid — $900',
+        payment: 'Paid — $900',
         total: '$900.00',
         notes: 'Full payment made upfront. Includes operator manual, 4 batteries, carry case. Late return fee: $150/day. Damage waiver signed.'
       },
@@ -2080,7 +2043,7 @@
         rentStart: 'Jun 22, 2026',
         rentEnd: 'Jun 28, 2026',
         rate: '$220 / day',
-        payment: '⏳ Pending — invoice due on return',
+        payment: 'Pending — invoice due on return',
         total: '$1,320.00',
         notes: 'Lens currently checked out to Horizon Events shoot. Requires insurance certificate on pickup. Deposit: $500 held.'
       },
@@ -2096,7 +2059,7 @@
         rentStart: 'Jun 15, 2026',
         rentEnd: 'Jul 5, 2026',
         rate: '$180 / day (min. 3 days)',
-        payment: '✅ Paid — $3,600',
+        payment: 'Paid — $3,600',
         total: '$3,600.00',
         notes: 'Kit includes: 2 × Pro-11 heads, 2 × large octaboxes, 2 × grids, 2 × stands, power cable extensions. Setup included in price.'
       },
@@ -2112,7 +2075,7 @@
         rentStart: 'Jun 14, 2026',
         rentEnd: 'Jun 20, 2026',
         rate: '$95 / day',
-        payment: '✅ Paid — $570',
+        payment: 'Paid — $570',
         total: '$570.00',
         notes: '3 × smart batteries, RC Pro controller, ND filter kit included. FAA Part 107 licence required — copy on file. No flying within 5 miles of airport without LAANC approval.'
       }
@@ -2271,7 +2234,93 @@
         applyEquipmentFilter();
       });
     }
-  </script>
+  
+    /* ═══════════════════════════════════════════════
+       FILTER FUNCTIONS — Bookings / Clients / Invoices / Contracts
+       ═══════════════════════════════════════════════ */
+
+    function filterTab(tbodyId, search, status) {
+      var s  = (search  || '').toLowerCase().trim();
+      var st = (status  || '').toLowerCase().trim();
+      var rows = document.querySelectorAll('#' + tbodyId + ' tr[data-status]');
+      var shown = 0;
+      rows.forEach(function(row) {
+        var statusOk = !st || row.dataset.status === st;
+        var searchOk = !s  || row.textContent.toLowerCase().indexOf(s) > -1;
+        if (statusOk && searchOk) { row.style.display = ''; shown++; }
+        else                       { row.style.display = 'none'; }
+      });
+      return shown;
+    }
+
+    function filterBookings() {
+      var s  = (document.getElementById('bk-search')    || {value:''}).value;
+      var st = (document.getElementById('bk-status')    || {value:''}).value;
+      filterTab('bk-tbody', s, st);
+    }
+
+    function filterClients() {
+      var s  = (document.getElementById('cl-search')    || {value:''}).value;
+      var st = (document.getElementById('cl-status')    || {value:''}).value;
+      filterTab('cl-tbody', s, st);
+    }
+
+    function filterInvoices() {
+      var s  = (document.getElementById('inv-search')   || {value:''}).value;
+      var st = (document.getElementById('inv-status')   || {value:''}).value;
+      filterTab('inv-tbody', s, st);
+    }
+
+    function filterContracts() {
+      var s  = (document.getElementById('con-search')   || {value:''}).value;
+      var st = (document.getElementById('con-status')   || {value:''}).value;
+      filterTab('con-tbody', s, st);
+    }
+
+    /* Wire search inputs (oninput already on elements, but also add listener here) */
+    document.addEventListener('DOMContentLoaded', function() {
+      var bkS = document.getElementById('bk-search');
+      if (bkS) bkS.addEventListener('input', filterBookings);
+      var clS = document.getElementById('cl-search');
+      if (clS) clS.addEventListener('input', filterClients);
+      var inS = document.getElementById('inv-search');
+      if (inS) inS.addEventListener('input', filterInvoices);
+      var coS = document.getElementById('con-search');
+      if (coS) coS.addEventListener('input', filterContracts);
+    });
+
+    /* ═══════════════════════════════════════════════
+       MODAL HELPERS — New Enquiry / Add Client / Create Invoice / New Contract
+       ═══════════════════════════════════════════════ */
+
+    function openModal(id)  { var m = document.getElementById(id); if (m) m.classList.remove('hidden'); }
+    function closeModal(id) { var m = document.getElementById(id); if (m) m.classList.add('hidden'); }
+
+    function openEnquiryModal()        { openModal('modal-enquiry'); }
+    function closeEnquiryModal()       { closeModal('modal-enquiry'); }
+    function openAddClientModal()      { openModal('modal-add-client'); }
+    function closeAddClientModal()     { closeModal('modal-add-client'); }
+    function openCreateInvoiceModal()  { openModal('modal-create-invoice'); }
+    function closeCreateInvoiceModal() { closeModal('modal-create-invoice'); }
+    function openNewContractModal()    { openModal('modal-new-contract'); }
+    function closeNewContractModal()   { closeModal('modal-new-contract'); }
+
+    function saveForm(closeFn) {
+      if (typeof closeFn === 'function') closeFn();
+      showToast('Record saved successfully!');
+    }
+
+    /* Close any modal when clicking outside it */
+    document.addEventListener('DOMContentLoaded', function() {
+      ['modal-enquiry','modal-add-client','modal-create-invoice','modal-new-contract',
+       'vendor-modal','add-item-modal','checklist-modal'].forEach(function(id) {
+        var m = document.getElementById(id);
+        if (m) m.addEventListener('click', function(e) {
+          if (e.target === this) this.classList.add('hidden');
+        });
+      });
+    });
+</script>
 
 <!-- ══ VENDOR DETAILS MODAL ══ -->
 <div id="vendor-modal" class="vendor-modal-overlay hidden">
@@ -2285,7 +2334,7 @@
     </div>
     <div class="vm-body">
       <div class="vm-vendor-header">
-        <div class="vm-vendor-logo">🏪</div>
+        <div class="vm-vendor-logo"><i class="ph-fill ph-storefront" style="color:#fff;font-size:22px;"></i></div>
         <div>
           <div class="vm-vendor-name" id="vm-vendor-name">—</div>
           <div class="vm-vendor-type" id="vm-vendor-type">Equipment Rental Vendor</div>

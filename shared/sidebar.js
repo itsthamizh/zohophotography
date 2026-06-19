@@ -15,6 +15,23 @@
   })();
   document.head.appendChild(_layout);
 
+
+  /* ── 1c. Inject Phosphor Icons (replaces all emoji icons in UI) ── */
+  var _ph = document.createElement('link');
+  _ph.rel = 'stylesheet';
+  _ph.href = 'https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css';
+  document.head.appendChild(_ph);
+
+  var _phf = document.createElement('link');
+  _phf.rel = 'stylesheet';
+  _phf.href = 'https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css';
+  document.head.appendChild(_phf);
+
+  var _phb = document.createElement('link');
+  _phb.rel = 'stylesheet';
+  _phb.href = 'https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css';
+  document.head.appendChild(_phb);
+
   /* ── 1b. Inject sidebar CSS (self-contained, no external file needed) ── */
   var style = document.createElement('style');
   style.textContent = [
@@ -90,7 +107,7 @@
     '<nav class="sidebar">' +
 
       '<div class="sidebar-logo">' +
-        '<div class="logo-icon">📷</div>' +
+        '<div class="logo-icon"><i class="ph-fill ph-camera" style="color:#fff;font-size:20px;"></i></div>' +
         '<div>' +
           '<div class="logo-name">LensFlow</div>' +
           '<div class="logo-tag">Studio Platform</div>' +
@@ -111,14 +128,12 @@
         '</a>' +
         '<a href="' + r + 'ClientGallery/ClientGallery.html" class="' + a('clientgallery') + '">' +
           '<i class="ti ti-photo"></i> Client Gallery' +
-          '<span class="nav-badge">3</span>' +
         '</a>' +
         '<a href="' + r + 'Website/Website.html" class="' + a('website') + '">' +
           '<i class="ti ti-world"></i> Website' +
         '</a>' +
         '<a href="' + r + 'Store/Store.html" class="' + a('/store/') + '">' +
           '<i class="ti ti-shopping-bag"></i> Store' +
-          '<span class="nav-badge">7</span>' +
         '</a>' +
         '<a href="' + r + 'MobileGalleryApp/MobileGalleryApp.html" class="' + a('mobilegalleryapp') + '">' +
           '<i class="ti ti-device-mobile"></i> Mobile App' +
@@ -131,9 +146,6 @@
         '<div class="nav-group-label">Account</div>' +
         '<a href="' + r + 'Settings/Settings.html" class="' + a('settings') + '">' +
           '<i class="ti ti-settings"></i> Settings' +
-        '</a>' +
-        '<a href="#" class="nav-item">' +
-          '<i class="ti ti-credit-card"></i> Billing' +
         '</a>' +
       '</div>' +
 
@@ -157,5 +169,130 @@
     tmp.innerHTML = html;
     document.body.insertBefore(tmp.firstElementChild, document.body.firstChild);
   }
+
+  /* ── 5. SPA navigation — swap main content, keep sidebar fixed ─────
+     When any sidebar nav link is clicked, fetch the target page,
+     replace ONLY the main content wrapper, update active state + URL.
+     Sidebar never reloads or flickers. ──────────────────────────── */
+
+  function getMainEl() {
+    return document.querySelector('.main-wrapper') ||
+           document.querySelector('.main-wrap')    ||
+           document.querySelector('.main');
+  }
+
+  function updateActiveLinks(url) {
+    var path = url.toLowerCase();
+    document.querySelectorAll('.nav-item').forEach(function(link) {
+      link.classList.remove('active');
+    });
+    var links = document.querySelectorAll('.nav-item[href]');
+    links.forEach(function(link) {
+      var href = (link.getAttribute('href') || '').toLowerCase();
+      // resolve relative href against current path for matching
+      if (href && path.indexOf(href.replace(/^(\.\.\/)+/, '').split('/')[0]) > -1) {
+        link.classList.add('active');
+      }
+    });
+    // Dashboard special case
+    var isDash = path.indexOf('index.html') > -1 || (!path.match(/\/(studiomanager|clientgallery|website|store|mobilegalleryapp|settings)\//));
+    if (isDash) {
+      var dashLink = document.querySelector('.nav-item[href*="index.html"]');
+      if (dashLink) dashLink.classList.add('active');
+    }
+  }
+
+  function runScripts(container) {
+    // Re-execute inline scripts from newly loaded content
+    var scripts = container.querySelectorAll('script');
+    scripts.forEach(function(s) {
+      if (s.src) return; // external scripts already loaded globally
+      try { new Function(s.textContent)(); } catch(e) {}
+    });
+  }
+
+  function navigateTo(url) {
+    var mainEl = getMainEl();
+    if (!mainEl) { window.location.href = url; return; }
+
+    // Dim content during load
+    mainEl.style.opacity = '0.5';
+    mainEl.style.transition = 'opacity 0.12s';
+
+    fetch(url)
+      .then(function(res) { return res.text(); })
+      .then(function(htmlText) {
+        var parser  = new DOMParser();
+        var newDoc  = parser.parseFromString(htmlText, 'text/html');
+        var newMain = newDoc.querySelector('.main-wrapper') ||
+                      newDoc.querySelector('.main-wrap')    ||
+                      newDoc.querySelector('.main');
+
+        if (!newMain) { window.location.href = url; return; }
+
+        // Swap content
+        mainEl.innerHTML = newMain.innerHTML;
+        mainEl.className = newMain.className;
+
+        // Load any new CSS that this page needs (link tags in new head)
+        newDoc.querySelectorAll('link[rel="stylesheet"]').forEach(function(lnk) {
+          var href = lnk.getAttribute('href');
+          if (!href || document.querySelector('link[href="' + href + '"]')) return;
+          // Skip shared CSS already loaded globally
+          if (href.indexOf('shared/') > -1 || href.indexOf('googleapis') > -1 ||
+              href.indexOf('tabler') > -1) return;
+          var newLink = document.createElement('link');
+          newLink.rel = 'stylesheet';
+          newLink.href = new URL(href, url).href;
+          document.head.appendChild(newLink);
+        });
+
+        // Load Chart.js if new page needs it
+        if (htmlText.indexOf('chart.umd.js') > -1 && !window.Chart) {
+          var cs = document.createElement('script');
+          cs.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js';
+          cs.onload = function() { runScripts(mainEl); };
+          document.head.appendChild(cs);
+        } else {
+          runScripts(mainEl);
+        }
+
+        // Update browser URL + title
+        history.pushState({ url: url }, newDoc.title, url);
+        document.title = newDoc.title;
+
+        // Update active nav item
+        updateActiveLinks(url);
+
+        // Restore opacity
+        mainEl.style.opacity = '1';
+        window.scrollTo(0, 0);
+      })
+      .catch(function() {
+        // Network error — fall back to normal navigation
+        window.location.href = url;
+      });
+  }
+
+  // Intercept sidebar nav link clicks
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('.nav-item[href]');
+    if (!link) return;
+    var href = link.getAttribute('href');
+    if (!href || href === '#') return;
+
+    e.preventDefault();
+
+    // Resolve the href relative to the current page
+    var absoluteUrl = new URL(href, window.location.href).href;
+    navigateTo(absoluteUrl);
+  });
+
+  // Handle browser back/forward buttons
+  window.addEventListener('popstate', function(e) {
+    if (e.state && e.state.url) {
+      navigateTo(e.state.url);
+    }
+  });
 
 })();

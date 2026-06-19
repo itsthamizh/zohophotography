@@ -18,6 +18,9 @@
 
   <!-- Page stylesheet -->
   <link rel="stylesheet" href="MobileGalleryApp.css" />
+  <!-- Shared sidebar + layout (explicit link ensures consistent styling) -->
+  <link rel="stylesheet" href="../shared/sidebar.css">
+  <link rel="stylesheet" href="../shared/layout.css">
 </head>
 <body>
 
@@ -97,7 +100,7 @@
         <div class="banner-meta">
           <span class="banner-version">v2.4.1</span>
           <div class="banner-rating">
-            <span class="stars">★★★★★</span>
+            <span class="stars"><i class="ph-fill ph-star" style="color:#f59e0b;font-size:13px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:13px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:13px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:13px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:13px;"></i></span>
             <strong>4.9</strong>
             <span>(186 reviews)</span>
           </div>
@@ -112,10 +115,10 @@
             <div class="phone-screen-inner">
               <div class="phone-status-bar">
                 <span>9:41</span>
-                <span>●●● 100%</span>
+                <span style="display:flex;align-items:center;gap:2px;"><i class="ph-fill ph-cell-signal-full" style="font-size:13px;"></i> 100%</span>
               </div>
               <div class="phone-app-header">
-                <div class="phone-app-header-dot">📷</div>
+                <div class="phone-app-header-dot"><i class="ph-fill ph-camera" style="font-size:13px;color:#2563eb;"></i></div>
                 <div class="phone-app-header-title">LensFlow</div>
               </div>
               <div class="phone-gallery-grid">
@@ -133,10 +136,10 @@
                 <div class="phone-gallery-cell"></div>
               </div>
               <div class="phone-bottom-nav">
-                <div class="phone-nav-dot active">⊞</div>
-                <div class="phone-nav-dot">♡</div>
-                <div class="phone-nav-dot">⬇</div>
-                <div class="phone-nav-dot">☰</div>
+                <div class="phone-nav-dot active"><i class="ph-fill ph-grid-four" style="font-size:16px;"></i></div>
+                <div class="phone-nav-dot"><i class="ph ph-heart" style="font-size:16px;"></i></div>
+                <div class="phone-nav-dot"><i class="ph ph-download-simple" style="font-size:16px;"></i></div>
+                <div class="phone-nav-dot"><i class="ph ph-list" style="font-size:16px;"></i></div>
               </div>
             </div>
           </div>
@@ -435,7 +438,7 @@
           </div>
           <div class="preview-item" style="flex:0;">
             <div class="preview-label">App Icon</div>
-            <div class="app-icon-preview">📷</div>
+            <div class="app-icon-preview"><i class="ph-fill ph-camera" style="font-size:28px;color:#fff;"></i></div>
           </div>
         </div>
 
@@ -504,7 +507,7 @@
 
       <!-- Review 1 -->
       <div class="review-card">
-        <div class="review-stars">★★★★★</div>
+        <div class="review-stars"><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i></div>
         <p class="review-text">"The app makes it so easy to download photos! Love how organized everything is."</p>
         <div class="review-author">
           <div class="review-avatar r-ew">EW</div>
@@ -518,7 +521,7 @@
 
       <!-- Review 2 -->
       <div class="review-card">
-        <div class="review-stars">★★★★★</div>
+        <div class="review-stars"><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i></div>
         <p class="review-text">"Best photographer AND the delivery process is seamless. Highly recommend!"</p>
         <div class="review-author">
           <div class="review-avatar r-rt">RT</div>
@@ -532,7 +535,7 @@
 
       <!-- Review 3 -->
       <div class="review-card">
-        <div class="review-stars">★★★★<span style="color:var(--border);">★</span></div>
+        <div class="review-stars"><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph ph-star" style="color:#e2e8f0;font-size:14px;"></i></div>
         <p class="review-text">"Great quality photos, the gallery viewer is beautiful. Very intuitive UI."</p>
         <div class="review-author">
           <div class="review-avatar r-lf">LF</div>
@@ -546,7 +549,7 @@
 
       <!-- Review 4 -->
       <div class="review-card">
-        <div class="review-stars">★★★★★</div>
+        <div class="review-stars"><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i><i class="ph-fill ph-star" style="color:#f59e0b;font-size:14px;"></i></div>
         <p class="review-text">"Our wedding photos were delivered so fast! Amazing experience from start to finish."</p>
         <div class="review-author">
           <div class="review-avatar r-sr">SR</div>
