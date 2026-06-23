@@ -170,6 +170,86 @@
     document.body.insertBefore(tmp.firstElementChild, document.body.firstChild);
   }
 
+  // ── NOTIFICATION SYSTEM ───────────────────────────────────────
+  var notifications = [
+    { id: 1, type: 'warning', icon: 'ti ti-file-invoice', title: 'Invoice Overdue', body: 'Sarah Reed — Balance $570 is 5 days past due', time: '2h ago', read: false, action: 'StudioManager/StudioManager.html' },
+    { id: 2, type: 'info', icon: 'ti ti-photo-up', title: 'Gallery Uploaded', body: 'Emma & Jake — 347 photos ready for client review', time: '3h ago', read: false, action: 'ClientGallery/ClientGallery.html' },
+    { id: 3, type: 'success', icon: 'ti ti-circle-check', title: 'Contract Signed', body: 'Nexus Corp signed their headshot contract via Zoho Sign', time: '5h ago', read: true, action: 'StudioManager/StudioManager.html' },
+    { id: 4, type: 'warning', icon: 'ti ti-alert-triangle', title: 'Equipment Due', body: 'Canon EF 400mm f/2.8L — return to Pro Gear Rentals Jun 28', time: '1 day ago', read: false, action: 'StudioManager/StudioManager.html' },
+    { id: 5, type: 'info', icon: 'ti ti-user-plus', title: 'New Enquiry', body: 'Martinez Family submitted a booking enquiry for July 4', time: '2 days ago', read: true, action: 'StudioManager/StudioManager.html' },
+    { id: 6, type: 'warning', icon: 'ti ti-clock', title: 'Gallery Expiring Soon', body: 'Sarah & Tom Engagement gallery expires in 7 days', time: '2 days ago', read: false, action: 'ClientGallery/ClientGallery.html' }
+  ];
+
+  function buildNotifPanel() {
+    var unread = notifications.filter(function(n) { return !n.read; }).length;
+
+    // Update badge
+    var dot = document.querySelector('.notif-dot, .bell-dot');
+    if (dot) dot.style.display = unread > 0 ? '' : 'none';
+
+    var typeColors = { warning: '#f59e0b', info: '#2563eb', success: '#22c55e', danger: '#ef4444' };
+    var typeBg = { warning: '#fffbeb', info: '#eff6ff', success: '#f0fdf4', danger: '#fff1f2' };
+
+    var panel = document.getElementById('notif-panel');
+    if (!panel) {
+      panel = document.createElement('div');
+      panel.id = 'notif-panel';
+      panel.style.cssText = 'position:fixed;top:70px;right:16px;width:360px;background:#fff;border:1px solid #e8edf3;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.14);z-index:9999;overflow:hidden;display:none;font-family:Inter,sans-serif;';
+      document.body.appendChild(panel);
+    }
+
+    panel.innerHTML =
+      '<div style="padding:14px 18px 10px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">' +
+        '<div style="font-size:14.5px;font-weight:700;color:#1a1d2e;">Notifications' + (unread > 0 ? ' <span style="background:#ef4444;color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px;margin-left:4px;">' + unread + '</span>' : '') + '</div>' +
+        '<button onclick="markAllRead()" style="font-size:12px;color:#2563eb;background:none;border:none;cursor:pointer;font-family:inherit;">Mark all read</button>' +
+      '</div>' +
+      '<div style="max-height:380px;overflow-y:auto;">' +
+      notifications.map(function(n) {
+        return '<div onclick="readNotif(' + n.id + ',this)" style="display:flex;gap:12px;padding:12px 18px;border-bottom:1px solid #f8fafc;cursor:pointer;background:' + (n.read ? '#fff' : '#f8faff') + ';transition:background .13s;" onmouseover="this.style.background=\'#f4f6fb\'" onmouseout="this.style.background=\'' + (n.read ? '#fff' : '#f8faff') + '\'">' +
+          '<div style="width:34px;height:34px;border-radius:8px;background:' + typeBg[n.type] + ';display:flex;align-items:center;justify-content:center;flex-shrink:0;">' +
+            '<i class="' + n.icon + '" style="font-size:16px;color:' + typeColors[n.type] + ';"></i>' +
+          '</div>' +
+          '<div style="flex:1;min-width:0;">' +
+            '<div style="font-size:13px;font-weight:' + (n.read ? '400' : '600') + ';color:#1a1d2e;">' + n.title + '</div>' +
+            '<div style="font-size:12px;color:#64748b;margin-top:2px;line-height:1.4;">' + n.body + '</div>' +
+            '<div style="font-size:11px;color:#94a3b8;margin-top:4px;">' + n.time + '</div>' +
+          '</div>' +
+          (!n.read ? '<div style="width:8px;height:8px;background:#2563eb;border-radius:50%;margin-top:4px;flex-shrink:0;"></div>' : '') +
+        '</div>';
+      }).join('') +
+      '</div>' +
+      '<div style="padding:10px 18px;border-top:1px solid #f1f5f9;text-align:center;">' +
+        '<a style="font-size:12.5px;color:#2563eb;cursor:pointer;">View all notifications →</a>' +
+      '</div>';
+
+    return panel;
+  }
+
+  function readNotif(id, el) {
+    var n = notifications.find(function(x) { return x.id === id; });
+    if (n) { n.read = true; el.style.background = '#fff'; buildNotifPanel(); }
+  }
+
+  function markAllRead() {
+    notifications.forEach(function(n) { n.read = true; });
+    buildNotifPanel();
+  }
+
+  function toggleNotifPanel(e) {
+    if (e) e.stopPropagation();
+    var panel = buildNotifPanel();
+    var isOpen = panel.style.display === 'block';
+    panel.style.display = isOpen ? 'none' : 'block';
+  }
+
+  // Wire bell icon click
+  document.addEventListener('click', function(e) {
+    var bell = e.target.closest('.icon-btn[title="Notifications"], .bell-wrap, .notif-btn');
+    if (bell) { toggleNotifPanel(e); return; }
+    var panel = document.getElementById('notif-panel');
+    if (panel && !panel.contains(e.target)) panel.style.display = 'none';
+  });
+
   /* ── 5. SPA navigation — swap main content, keep sidebar fixed ─────
      When any sidebar nav link is clicked, fetch the target page,
      replace ONLY the main content wrapper, update active state + URL.
@@ -292,7 +372,46 @@
   window.addEventListener('popstate', function(e) {
     if (e.state && e.state.url) {
       navigateTo(e.state.url);
+    } else {
+      // Fallback: do a real navigation to handle edge cases
+      window.location.reload();
     }
   });
+
+  // Store initial page state
+  if (!history.state) {
+    history.replaceState({ url: window.location.href }, document.title, window.location.href);
+  }
+
+  // ── Mobile hamburger menu ─────────────────────────────────────
+  (function() {
+    var btn = document.createElement('button');
+    btn.className = 'hamburger-btn';
+    btn.innerHTML = '<i class="ti ti-menu-2"></i>';
+    btn.setAttribute('aria-label', 'Open menu');
+    document.body.appendChild(btn);
+
+    var overlay = document.createElement('div');
+    overlay.className = 'sidebar-mobile-overlay';
+    document.body.appendChild(overlay);
+
+    function openSidebar() {
+      var s = document.querySelector('.sidebar');
+      if (s) s.classList.add('mobile-open');
+      overlay.classList.add('active');
+    }
+    function closeSidebar() {
+      var s = document.querySelector('.sidebar');
+      if (s) s.classList.remove('mobile-open');
+      overlay.classList.remove('active');
+    }
+    btn.addEventListener('click', openSidebar);
+    overlay.addEventListener('click', closeSidebar);
+    document.querySelectorAll('.nav-item').forEach(function(link) {
+      link.addEventListener('click', function() {
+        if (window.innerWidth <= 768) closeSidebar();
+      });
+    });
+  })();
 
 })();

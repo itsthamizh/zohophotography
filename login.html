@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LensFlow — Sign In</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #0f1117; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .login-wrap { width: 100%; max-width: 420px; }
+    .logo-area { text-align: center; margin-bottom: 32px; }
+    .logo-icon { width: 52px; height: 52px; background: linear-gradient(135deg, #2563eb, #60a5fa); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 14px; }
+    .logo-name { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -.5px; }
+    .logo-tag { font-size: 13px; color: rgba(255,255,255,.45); margin-top: 4px; }
+    .login-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 36px; }
+    .card-title { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .card-sub { font-size: 13.5px; color: rgba(255,255,255,.45); margin-bottom: 28px; }
+    .field { margin-bottom: 18px; }
+    .field label { display: block; font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,.6); margin-bottom: 7px; text-transform: uppercase; letter-spacing: .5px; }
+    .field input {
+      width: 100%; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 9px;
+      padding: 11px 14px; font-size: 14px; color: #fff; font-family: inherit; outline: none; transition: border-color .13s;
+    }
+    .field input:focus { border-color: #2563eb; background: rgba(37,99,235,.08); }
+    .field input::placeholder { color: rgba(255,255,255,.25); }
+    .role-select {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px;
+    }
+    .role-opt { border: 1px solid rgba(255,255,255,.1); border-radius: 9px; padding: 12px 14px; cursor: pointer; transition: all .13s; }
+    .role-opt:hover { border-color: rgba(255,255,255,.25); background: rgba(255,255,255,.05); }
+    .role-opt.selected { border-color: #2563eb; background: rgba(37,99,235,.12); }
+    .role-opt input { display: none; }
+    .role-name { font-size: 13.5px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .role-name i { font-size: 16px; color: #60a5fa; }
+    .role-desc { font-size: 11.5px; color: rgba(255,255,255,.4); margin-top: 3px; }
+    .btn-signin {
+      width: 100%; background: #2563eb; color: #fff; border: none; border-radius: 9px;
+      padding: 13px; font-size: 15px; font-weight: 600; cursor: pointer;
+      font-family: inherit; transition: background .13s; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-signin:hover { background: #1d4ed8; }
+    .demo-creds { margin-top: 20px; padding: 14px; background: rgba(255,255,255,.04); border-radius: 9px; border: 1px solid rgba(255,255,255,.06); }
+    .demo-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .demo-row { display: flex; justify-content: space-between; font-size: 12.5px; color: rgba(255,255,255,.5); margin-bottom: 4px; }
+    .demo-val { font-family: monospace; color: rgba(255,255,255,.7); }
+    .error-msg { background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.25); border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #fca5a5; margin-bottom: 16px; display: none; }
+  </style>
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="logo-area">
+      <div class="logo-icon"><i class="ti ti-camera" style="color:#fff;font-size:22px;"></i></div>
+      <div class="logo-name">LensFlow</div>
+      <div class="logo-tag">Photography Studio Platform</div>
+    </div>
+
+    <div class="login-card">
+      <div class="card-title">Welcome back</div>
+      <div class="card-sub">Sign in to your studio dashboard</div>
+
+      <div class="error-msg" id="error-msg">Incorrect email or password. Please try again.</div>
+
+      <div class="field">
+        <label>Email address</label>
+        <input type="email" id="email" placeholder="hello@sarahkimphotography.com" value="sarah@lensflow.io">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="••••••••" value="studio2026">
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <div style="font-size:12.5px;font-weight:600;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Sign in as</div>
+        <div class="role-select">
+          <label class="role-opt selected" id="role-admin">
+            <input type="radio" name="role" value="admin" checked>
+            <div class="role-name"><i class="ti ti-crown"></i> Studio Owner</div>
+            <div class="role-desc">Full admin access</div>
+          </label>
+          <label class="role-opt" id="role-staff">
+            <input type="radio" name="role" value="staff">
+            <div class="role-name"><i class="ti ti-camera"></i> Photographer</div>
+            <div class="role-desc">Operational access</div>
+          </label>
+        </div>
+      </div>
+
+      <button class="btn-signin" onclick="doLogin()">
+        <i class="ti ti-login"></i> Sign In to Studio
+      </button>
+
+      <div class="demo-creds">
+        <div class="demo-title">Demo Credentials</div>
+        <div class="demo-row"><span>Email</span><span class="demo-val">sarah@lensflow.io</span></div>
+        <div class="demo-row"><span>Password</span><span class="demo-val">studio2026</span></div>
+        <div class="demo-row"><span>Staff email</span><span class="demo-val">james@lensflow.io</span></div>
+        <div class="demo-row"><span>Staff password</span><span class="demo-val">photo2026</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Role toggle UX
+    document.querySelectorAll('.role-opt').forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        document.querySelectorAll('.role-opt').forEach(function(o) { o.classList.remove('selected'); });
+        this.classList.add('selected');
+      });
+    });
+
+    var CREDENTIALS = {
+      'sarah@lensflow.io': { password: 'studio2026', role: 'admin',   name: 'Sarah Kim',  title: 'Studio Owner' },
+      'james@lensflow.io': { password: 'photo2026',  role: 'staff',   name: 'James Lee',  title: 'Photographer' },
+      'amy@lensflow.io':   { password: 'photo2026',  role: 'staff',   name: 'Amy Patel',  title: 'Photographer' }
+    };
+
+    function doLogin() {
+      var email    = document.getElementById('email').value.trim().toLowerCase();
+      var password = document.getElementById('password').value;
+      var errEl    = document.getElementById('error-msg');
+      var cred = CREDENTIALS[email];
+
+      if (!cred || cred.password !== password) {
+        errEl.style.display = 'block';
+        document.getElementById('password').style.border = '1.5px solid #ef4444';
+        return;
+      }
+      errEl.style.display = 'none';
+
+      // Store session
+      localStorage.setItem('lf_session', JSON.stringify({
+        email: email, name: cred.name, role: cred.role,
+        title: cred.title, loginAt: new Date().toISOString()
+      }));
+
+      // Redirect based on role
+      window.location.href = cred.role === 'admin' ? 'index.html' : 'StudioManager/StudioManager.html';
+    }
+
+    // Enter key support
+    document.addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+
+    // If already logged in, redirect
+    if (localStorage.getItem('lf_session')) { window.location.href = 'index.html'; }
+  </script>
+</body>
+</html>
