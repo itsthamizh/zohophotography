@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emma & Jake — Wedding Gallery · Sarah Kim Photography</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
+  <style>
+    /* Reset & Base */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Studio Header ── */
+    .studio-header {
+      background: #111; border-bottom: 1px solid rgba(255,255,255,.08);
+      padding: 14px 32px; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .studio-logo { display: flex; align-items: center; gap: 10px; }
+    .studio-logo-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
+      display: flex; align-items: center; justify-content: center; font-size: 15px;
+    }
+    .studio-logo-name { font-size: 15px; font-weight: 700; color: #fff; }
+    .studio-logo-tag { font-size: 10px; color: rgba(255,255,255,.4); }
+    .header-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-portal {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: 8px; font-size: 13px;
+      font-weight: 500; cursor: pointer; border: none; font-family: inherit; transition: all .13s;
+    }
+    .btn-download-all { background: #2563eb; color: #fff; }
+    .btn-download-all:hover { background: #1d4ed8; }
+    .btn-favs { background: rgba(255,255,255,.1); color: #fff; border: 1px solid rgba(255,255,255,.15); }
+    .btn-favs:hover { background: rgba(255,255,255,.18); }
+    .btn-approve { background: #22c55e; color: #fff; }
+    .btn-approve:hover { background: #16a34a; }
+
+    /* ── Gallery Info Banner ── */
+    .gallery-info {
+      background: linear-gradient(135deg, #1e1b4b, #312e81);
+      padding: 40px 32px 32px; text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .gallery-title { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 6px; }
+    .gallery-subtitle { font-size: 15px; color: rgba(255,255,255,.65); margin-bottom: 20px; }
+    .gallery-meta { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; }
+    .gallery-meta-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: rgba(255,255,255,.55); }
+    .expiry-warning { background: rgba(245,158,11,.15); border: 1px solid rgba(245,158,11,.3); border-radius: 8px; padding: 8px 16px; font-size: 12.5px; color: #fbbf24; margin-top: 14px; display: inline-flex; align-items: center; gap: 6px; }
+
+    /* ── Photo Filter Bar ── */
+    .filter-bar {
+      background: #111; border-bottom: 1px solid rgba(255,255,255,.07);
+      padding: 12px 32px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 6px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 500;
+      cursor: pointer; border: 1px solid rgba(255,255,255,.12); background: transparent;
+      color: rgba(255,255,255,.55); font-family: inherit; transition: all .13s;
+    }
+    .filter-btn.active { background: #2563eb; border-color: #2563eb; color: #fff; }
+    .filter-btn:hover:not(.active) { background: rgba(255,255,255,.08); color: #fff; }
+    .selection-info { margin-left: auto; font-size: 13px; color: rgba(255,255,255,.5); }
+
+    /* ── Photo Grid ── */
+    .photo-grid {
+      padding: 24px 32px 48px;
+      columns: 4; column-gap: 12px;
+    }
+    .photo-item {
+      break-inside: avoid; margin-bottom: 12px; position: relative;
+      cursor: pointer; border-radius: 6px; overflow: hidden;
+      border: 2px solid transparent; transition: border-color .15s, transform .15s;
+    }
+    .photo-item:hover { transform: scale(1.01); }
+    .photo-item.selected { border-color: #2563eb; }
+    .photo-item.favourite { border-color: #e11d48; }
+    .photo-item img {
+      width: 100%; display: block; border-radius: 4px;
+      transition: filter .2s;
+    }
+
+    /* Watermark overlay */
+    .watermark-overlay {
+      position: absolute; inset: 0; pointer-events: none;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2;
+    }
+    .watermark-text {
+      font-size: 13px; font-weight: 700; color: rgba(255,255,255,.35);
+      transform: rotate(-30deg); text-shadow: 0 1px 2px rgba(0,0,0,.5);
+      letter-spacing: 1px; user-select: none; white-space: nowrap;
+    }
+
+    /* Photo actions overlay */
+    .photo-actions {
+      position: absolute; top: 8px; right: 8px; display: flex; gap: 6px; z-index: 5;
+      opacity: 0; transition: opacity .15s;
+    }
+    .photo-item:hover .photo-actions { opacity: 1; }
+    .photo-action-btn {
+      width: 30px; height: 30px; border-radius: 50%; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 14px;
+      transition: all .13s;
+    }
+    .btn-fav { background: rgba(0,0,0,.6); color: rgba(255,255,255,.8); }
+    .btn-fav:hover, .photo-item.favourite .btn-fav { background: #e11d48; color: #fff; }
+    .btn-dl  { background: rgba(0,0,0,.6); color: rgba(255,255,255,.8); }
+    .btn-dl:hover { background: #2563eb; color: #fff; }
+    .photo-num {
+      position: absolute; bottom: 8px; left: 8px;
+      background: rgba(0,0,0,.55); color: rgba(255,255,255,.7);
+      font-size: 10px; padding: 2px 7px; border-radius: 10px; z-index: 3;
+    }
+
+    /* ── Approval Section ── */
+    .approval-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(15,15,15,.97); border-top: 1px solid rgba(255,255,255,.1);
+      backdrop-filter: blur(12px);
+      padding: 14px 32px; display: flex; align-items: center; justify-content: space-between;
+      transform: translateY(100%); transition: transform .3s ease;
+    }
+    .approval-bar.visible { transform: translateY(0); }
+    .approval-count { font-size: 14px; font-weight: 500; color: rgba(255,255,255,.8); }
+    .approval-actions { display: flex; gap: 10px; }
+
+    /* ── Proofing complete banner ── */
+    .proofing-done {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,.75); z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      display: none;
+    }
+    .proofing-done-box {
+      background: #111; border: 1px solid rgba(255,255,255,.12); border-radius: 16px;
+      padding: 40px 48px; text-align: center; max-width: 440px;
+    }
+    .proofing-done-icon { font-size: 56px; margin-bottom: 16px; }
+    .proofing-done-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+    .proofing-done-sub { font-size: 14px; color: rgba(255,255,255,.55); line-height: 1.6; }
+
+    @media (max-width: 900px) { .photo-grid { columns: 3; } }
+    @media (max-width: 600px) { .photo-grid { columns: 2; padding: 16px; } .gallery-title { font-size: 22px; } }
+  </style>
+</head>
+<body>
+
+  <!-- Studio Header -->
+  <header class="studio-header">
+    <div class="studio-logo">
+      <div class="studio-logo-icon"><i class="ti ti-camera" style="color:#fff;"></i></div>
+      <div>
+        <div class="studio-logo-name">Sarah Kim Photography</div>
+        <div class="studio-logo-tag">Private Client Gallery</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-portal btn-favs" onclick="showFavsOnly()">
+        <i class="ti ti-heart"></i> <span id="fav-count">0</span> Favourites
+      </button>
+      <button class="btn-portal btn-approve" onclick="submitApproval()">
+        <i class="ti ti-check"></i> Submit Selection
+      </button>
+      <button class="btn-portal btn-download-all" onclick="simulateDownload()">
+        <i class="ti ti-download"></i> Download All
+      </button>
+    </div>
+  </header>
+
+  <!-- Gallery Info -->
+  <div class="gallery-info">
+    <div class="gallery-title">Emma &amp; Jake — Wedding</div>
+    <div class="gallery-subtitle">Photographed by Sarah Kim · Central Park, New York</div>
+    <div class="gallery-meta">
+      <div class="gallery-meta-item"><i class="ti ti-calendar"></i> June 15, 2026</div>
+      <div class="gallery-meta-item"><i class="ti ti-photo"></i> <span id="photo-total">347</span> photos</div>
+      <div class="gallery-meta-item"><i class="ti ti-clock"></i> Expires Sep 10, 2026</div>
+      <div class="gallery-meta-item"><i class="ti ti-shield-check"></i> Password protected</div>
+    </div>
+    <div class="expiry-warning">
+      <i class="ti ti-alert-triangle"></i> Gallery expires in <strong>87 days</strong> — download your photos before Sep 10, 2026
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterPhotos('all', this)">All Photos <span style="color:rgba(255,255,255,.35);margin-left:4px;" id="count-all"></span></button>
+    <button class="filter-btn" onclick="filterPhotos('ceremony', this)">Ceremony</button>
+    <button class="filter-btn" onclick="filterPhotos('reception', this)">Reception</button>
+    <button class="filter-btn" onclick="filterPhotos('portrait', this)">Couple Portraits</button>
+    <button class="filter-btn" onclick="filterPhotos('detail', this)">Details</button>
+    <button class="filter-btn" onclick="filterPhotos('fav', this)"><i class="ti ti-heart" style="font-size:12px;"></i> Favourites only</button>
+    <div class="selection-info" id="selection-info">Click <i class="ti ti-heart" style="font-size:12px;"></i> on any photo to favourite it</div>
+  </div>
+
+  <!-- Photo Grid -->
+  <div class="photo-grid" id="photo-grid"></div>
+
+  <!-- Approval Bar (appears when photos selected) -->
+  <div class="approval-bar" id="approval-bar">
+    <div class="approval-count">
+      <strong id="selected-count">0</strong> photos favourited — ready to share with your photographer
+    </div>
+    <div class="approval-actions">
+      <button class="btn-portal btn-favs" onclick="clearFavs()">Clear all</button>
+      <button class="btn-portal btn-approve" onclick="submitApproval()">
+        <i class="ti ti-send"></i> Send to Sarah Kim
+      </button>
+    </div>
+  </div>
+
+  <!-- Proofing Complete Modal -->
+  <div class="proofing-done" id="proofing-done">
+    <div class="proofing-done-box">
+      <div class="proofing-done-icon">🎉</div>
+      <div class="proofing-done-title">Selection Submitted!</div>
+      <div class="proofing-done-sub">Sarah Kim has been notified of your <strong id="submitted-count">0</strong> favourite photos. She'll be in touch within 24 hours to discuss your album and prints.</div>
+      <button class="btn-portal btn-approve" style="margin-top:24px;justify-content:center;width:100%;" onclick="document.getElementById('proofing-done').style.display='none'">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // ── Sample photo data ─────────────────────────────────────
+    var watermarkEnabled = localStorage.getItem('lf_watermark') !== 'false';
+    var galleryExpiry = new Date('2026-09-10');
+    var today = new Date('2026-06-15');
+    var isExpired = today > galleryExpiry;
+
+    // Generate 32 sample photos using picsum
+    var photoCategories = ['ceremony','ceremony','ceremony','ceremony','ceremony','ceremony',
+      'ceremony','portrait','portrait','portrait','portrait','portrait','portrait',
+      'reception','reception','reception','reception','reception','reception',
+      'detail','detail','detail','detail','detail',
+      'portrait','portrait','ceremony','reception','reception','detail','portrait','ceremony'];
+
+    var picIds = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
+                  21,22,23,24,25,26,27,28,29,30,31,32];
+
+    var photos = picIds.map(function(id, i) {
+      return { id: id, num: i + 1, category: photoCategories[i], fav: false };
+    });
+
+    var favs = JSON.parse(localStorage.getItem('gallery_emma_favs') || '[]');
+    photos.forEach(function(p) { p.fav = favs.indexOf(p.id) > -1; });
+
+    var currentFilter = 'all';
+    var showingFavsOnly = false;
+
+    // ── Render photos ─────────────────────────────────────────
+    function renderGrid() {
+      var grid = document.getElementById('photo-grid');
+      var visible = photos.filter(function(p) {
+        if (currentFilter !== 'all' && currentFilter !== 'fav' && p.category !== currentFilter) return false;
+        if (showingFavsOnly && !p.fav) return false;
+        return true;
+      });
+
+      grid.innerHTML = visible.map(function(p) {
+        return '<div class="photo-item' + (p.fav ? ' favourite' : '') + '" id="photo-'+p.id+'" onclick="toggleFav('+p.id+',event)">' +
+          '<img src="https://picsum.photos/seed/emma'+p.id+'/600/800" alt="Photo ' + p.num + '" loading="lazy">' +
+          (watermarkEnabled ? '<div class="watermark-overlay"><div class="watermark-text">© Sarah Kim Photography</div></div>' : '') +
+          '<div class="photo-actions">' +
+            '<button class="photo-action-btn btn-fav" title="Favourite" onclick="toggleFav('+p.id+',event)">' +
+              '<i class="ti ti-heart' + (p.fav ? '-filled' : '') + '"></i>' +
+            '</button>' +
+            '<button class="photo-action-btn btn-dl" title="Download" onclick="downloadPhoto('+p.id+',event)">' +
+              '<i class="ti ti-download"></i>' +
+            '</button>' +
+          '</div>' +
+          '<div class="photo-num">#' + p.num + '</div>' +
+        '</div>';
+      }).join('');
+
+      updateCounts();
+    }
+
+    function toggleFav(id, e) {
+      if (e) e.stopPropagation();
+      var photo = photos.find(function(p) { return p.id === id; });
+      if (!photo) return;
+      photo.fav = !photo.fav;
+      localStorage.setItem('gallery_emma_favs', JSON.stringify(photos.filter(function(p){return p.fav;}).map(function(p){return p.id;})));
+      renderGrid();
+      // Show approval bar
+      var favCount = photos.filter(function(p){return p.fav;}).length;
+      var bar = document.getElementById('approval-bar');
+      bar.classList.toggle('visible', favCount > 0);
+    }
+
+    function updateCounts() {
+      var favCount = photos.filter(function(p){return p.fav;}).length;
+      document.getElementById('fav-count').textContent = favCount;
+      document.getElementById('selected-count').textContent = favCount;
+    }
+
+    function filterPhotos(cat, btn) {
+      currentFilter = cat; showingFavsOnly = (cat === 'fav');
+      document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      renderGrid();
+    }
+
+    function showFavsOnly() {
+      showingFavsOnly = !showingFavsOnly;
+      renderGrid();
+    }
+
+    function clearFavs() {
+      photos.forEach(function(p) { p.fav = false; });
+      localStorage.removeItem('gallery_emma_favs');
+      renderGrid();
+      document.getElementById('approval-bar').classList.remove('visible');
+    }
+
+    function submitApproval() {
+      var count = photos.filter(function(p){return p.fav;}).length;
+      if (count === 0) { alert('Please favourite at least one photo first!'); return; }
+      document.getElementById('submitted-count').textContent = count;
+      var done = document.getElementById('proofing-done');
+      done.style.display = 'flex';
+    }
+
+    function downloadPhoto(id, e) {
+      if (e) e.stopPropagation();
+      // Simulate download
+      var link = document.createElement('a');
+      link.href = 'https://picsum.photos/seed/emma'+id+'/2400/3200';
+      link.download = 'emma-jake-wedding-' + id + '.jpg';
+      link.target = '_blank';
+      link.click();
+    }
+
+    function simulateDownload() {
+      var toast = document.createElement('div');
+      toast.style.cssText = 'position:fixed;bottom:90px;right:24px;background:#1a1d2e;color:#fff;padding:14px 20px;border-radius:10px;font-size:13.5px;font-family:Inter,sans-serif;z-index:9999;display:flex;align-items:center;gap:10px;box-shadow:0 6px 24px rgba(0,0,0,.4);';
+      toast.innerHTML = '<i class="ti ti-download" style="color:#4ade80;font-size:18px;"></i> Preparing 347 photos for download (2.4 GB)… this may take a few minutes.';
+      document.body.appendChild(toast);
+      setTimeout(function() { toast.remove(); }, 4500);
+    }
+
+    // ── Check expiry ──────────────────────────────────────────
+    if (isExpired) {
+      document.querySelector('.gallery-info').innerHTML = '<div style="padding:60px 32px;text-align:center;"><div style="font-size:48px;margin-bottom:16px;">🔒</div><div style="font-size:24px;font-weight:700;margin-bottom:8px;">Gallery Expired</div><div style="font-size:15px;color:rgba(255,255,255,.55);">This gallery expired on Sep 10, 2026. Please contact your photographer to request an extension.</div><a href="mailto:hello@sarahkimphotography.com" style="display:inline-block;margin-top:20px;background:#2563eb;color:#fff;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;">Contact Sarah Kim</a></div>';
+      document.querySelector('.filter-bar').style.display = 'none';
+      document.querySelector('.photo-grid').style.display = 'none';
+    } else {
+      renderGrid();
+    }
+  </script>
+</body>
+</html>

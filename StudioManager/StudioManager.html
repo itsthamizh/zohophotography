@@ -408,6 +408,7 @@
   <!-- Shared sidebar + layout (explicit link ensures consistent styling) -->
   <link rel="stylesheet" href="../shared/sidebar.css">
   <link rel="stylesheet" href="../shared/layout.css">
+<script src="../shared/dataStore.js"></script>
 </head>
 <body>
   <div class="app">
@@ -427,6 +428,8 @@
             <span>Dashboard</span>
             <i class="ti ti-chevron-right"></i>
             <span class="bc-active">Studio Manager</span>
+            <i class="ti ti-chevron-right" style="font-size:10px;"></i>
+            <span id="bc-subtab" style="color:#64748b;">Overview</span>
           </div>
         </div>
         <div class="topbar-right">
@@ -545,73 +548,73 @@
 
                 <!-- Week 1 -->
                 <div class="cal-cell cal-cell--empty"></div>
-                <div class="cal-cell"><span class="cal-num">1</span></div>
-                <div class="cal-cell"><span class="cal-num">2</span></div>
-                <div class="cal-cell"><span class="cal-num">3</span></div>
-                <div class="cal-cell"><span class="cal-num">4</span></div>
-                <div class="cal-cell">
+                <div class="cal-cell" onclick="openCalendarDay(1, 'Jun')"><span class="cal-num">1</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(2, 'Jun')"><span class="cal-num">2</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(3, 'Jun')"><span class="cal-num">3</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(4, 'Jun')"><span class="cal-num">4</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(5, 'Jun')">
                   <span class="cal-num">5</span>
                   <span class="event-dot dot-blue"></span>
                 </div>
-                <div class="cal-cell"><span class="cal-num">6</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(6, 'Jun')"><span class="cal-num">6</span></div>
 
                 <!-- Week 2 -->
-                <div class="cal-cell"><span class="cal-num">7</span></div>
-                <div class="cal-cell">
+                <div class="cal-cell" onclick="openCalendarDay(7, 'Jun')"><span class="cal-num">7</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(8, 'Jun')">
                   <span class="cal-num">8</span>
                   <span class="event-dot dot-green"></span>
                 </div>
-                <div class="cal-cell"><span class="cal-num">9</span></div>
-                <div class="cal-cell"><span class="cal-num">10</span></div>
-                <div class="cal-cell"><span class="cal-num">11</span></div>
-                <div class="cal-cell">
+                <div class="cal-cell" onclick="openCalendarDay(9, 'Jun')"><span class="cal-num">9</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(10, 'Jun')"><span class="cal-num">10</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(11, 'Jun')"><span class="cal-num">11</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(12, 'Jun')">
                   <span class="cal-num">12</span>
                   <span class="event-dot dot-purple"></span>
                 </div>
-                <div class="cal-cell"><span class="cal-num">13</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(13, 'Jun')"><span class="cal-num">13</span></div>
 
                 <!-- Week 3 -->
-                <div class="cal-cell"><span class="cal-num">14</span></div>
-                <div class="cal-cell cal-cell--today">
+                <div class="cal-cell" onclick="openCalendarDay(14, 'Jun')"><span class="cal-num">14</span></div>
+                <div class="cal-cell cal-cell--today" onclick="openCalendarDay(15, 'Jun')">
                   <span class="cal-num">15</span>
                   <span class="event-dot dot-gold"></span>
                   <div class="cal-event-label">Emma &amp; Jake</div>
                 </div>
-                <div class="cal-cell"><span class="cal-num">16</span></div>
-                <div class="cal-cell">
+                <div class="cal-cell" onclick="openCalendarDay(16, 'Jun')"><span class="cal-num">16</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(17, 'Jun')">
                   <span class="cal-num">17</span>
                   <span class="event-dot dot-blue"></span>
                   <div class="cal-event-label">Nexus Corp</div>
                 </div>
-                <div class="cal-cell"><span class="cal-num">18</span></div>
-                <div class="cal-cell"><span class="cal-num">19</span></div>
-                <div class="cal-cell">
+                <div class="cal-cell" onclick="openCalendarDay(18, 'Jun')"><span class="cal-num">18</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(19, 'Jun')"><span class="cal-num">19</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(20, 'Jun')">
                   <span class="cal-num">20</span>
                   <span class="event-dot dot-green"></span>
                   <div class="cal-event-label">Liu Family</div>
                 </div>
 
                 <!-- Week 4 -->
-                <div class="cal-cell"><span class="cal-num">21</span></div>
-                <div class="cal-cell">
+                <div class="cal-cell" onclick="openCalendarDay(21, 'Jun')"><span class="cal-num">21</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(22, 'Jun')">
                   <span class="cal-num">22</span>
                   <span class="event-dot dot-purple"></span>
                   <div class="cal-event-label">Engagement</div>
                 </div>
-                <div class="cal-cell"><span class="cal-num">23</span></div>
-                <div class="cal-cell"><span class="cal-num">24</span></div>
-                <div class="cal-cell"><span class="cal-num">25</span></div>
-                <div class="cal-cell"><span class="cal-num">26</span></div>
-                <div class="cal-cell"><span class="cal-num">27</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(23, 'Jun')"><span class="cal-num">23</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(24, 'Jun')"><span class="cal-num">24</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(25, 'Jun')"><span class="cal-num">25</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(26, 'Jun')"><span class="cal-num">26</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(27, 'Jun')"><span class="cal-num">27</span></div>
 
                 <!-- Week 5 -->
-                <div class="cal-cell">
+                <div class="cal-cell" onclick="openCalendarDay(28, 'Jun')">
                   <span class="cal-num">28</span>
                   <span class="event-dot dot-orange"></span>
                   <div class="cal-event-label">Horizon Events</div>
                 </div>
-                <div class="cal-cell"><span class="cal-num">29</span></div>
-                <div class="cal-cell"><span class="cal-num">30</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(29, 'Jun')"><span class="cal-num">29</span></div>
+                <div class="cal-cell" onclick="openCalendarDay(30, 'Jun')"><span class="cal-num">30</span></div>
                 <div class="cal-cell cal-cell--empty"></div>
                 <div class="cal-cell cal-cell--empty"></div>
                 <div class="cal-cell cal-cell--empty"></div>
@@ -878,6 +881,55 @@
               <div class="pipe-seg pipe-seg--lost"><i class="ti ti-x"></i> Lost (12)</div>
             </div>
 
+            <!-- ── Phase Guide ── -->
+<div class="phase-guide" style="background:#fff;border:1px solid #e8edf3;border-radius:12px;padding:18px 22px;margin-bottom:20px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+    <div style="font-size:13.5px;font-weight:600;color:#1a1d2e;"><i class="ti ti-route" style="color:#2563eb;margin-right:6px;"></i> Enquiry-to-Delivery Pipeline</div>
+    <div style="font-size:12px;color:#64748b;">Click any phase to see required actions</div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:0;position:relative;">
+    <div class="phase-step phase-done" onclick="showPhase(1)" style="text-align:center;cursor:pointer;padding:10px 6px;position:relative;">
+      <div style="width:32px;height:32px;border-radius:50%;background:#dcfce7;border:2px solid #22c55e;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:14px;color:#16a34a;">✓</div>
+      <div style="font-size:11px;font-weight:600;color:#16a34a;">Ph 1</div>
+      <div style="font-size:10.5px;color:#64748b;margin-top:2px;">Inbound<br>Enquiry</div>
+      <div style="position:absolute;top:22px;left:50%;width:100%;height:2px;background:#22c55e;z-index:0;"></div>
+    </div>
+    <div class="phase-step phase-done" onclick="showPhase(2)" style="text-align:center;cursor:pointer;padding:10px 6px;position:relative;">
+      <div style="width:32px;height:32px;border-radius:50%;background:#dcfce7;border:2px solid #22c55e;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:14px;color:#16a34a;">✓</div>
+      <div style="font-size:11px;font-weight:600;color:#16a34a;">Ph 2</div>
+      <div style="font-size:10.5px;color:#64748b;margin-top:2px;">Enquiry<br>Record</div>
+      <div style="position:absolute;top:22px;left:0;width:100%;height:2px;background:#22c55e;z-index:0;"></div>
+    </div>
+    <div class="phase-step phase-active" onclick="showPhase(3)" style="text-align:center;cursor:pointer;padding:10px 6px;position:relative;">
+      <div style="width:32px;height:32px;border-radius:50%;background:#eff6ff;border:2px solid #2563eb;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:13px;color:#2563eb;font-weight:700;">3</div>
+      <div style="font-size:11px;font-weight:700;color:#2563eb;">Ph 3</div>
+      <div style="font-size:10.5px;color:#64748b;margin-top:2px;">Qualify<br>Decision</div>
+      <div style="position:absolute;top:22px;left:0;width:50%;height:2px;background:#22c55e;z-index:0;"></div>
+      <div style="position:absolute;top:22px;left:50%;width:50%;height:2px;background:#e2e8f0;z-index:0;"></div>
+    </div>
+    <div class="phase-step phase-pending" onclick="showPhase(4)" style="text-align:center;cursor:pointer;padding:10px 6px;position:relative;opacity:0.6;">
+      <div style="width:32px;height:32px;border-radius:50%;background:#f8fafc;border:2px solid #e2e8f0;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:13px;color:#94a3b8;font-weight:700;">4</div>
+      <div style="font-size:11px;font-weight:600;color:#94a3b8;">Ph 4</div>
+      <div style="font-size:10.5px;color:#94a3b8;margin-top:2px;">Convert<br>Booking</div>
+      <div style="position:absolute;top:22px;left:0;width:100%;height:2px;background:#e2e8f0;z-index:0;"></div>
+    </div>
+    <div class="phase-step phase-pending" onclick="showPhase(5)" style="text-align:center;cursor:pointer;padding:10px 6px;position:relative;opacity:0.6;">
+      <div style="width:32px;height:32px;border-radius:50%;background:#f8fafc;border:2px solid #e2e8f0;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:13px;color:#94a3b8;font-weight:700;">5</div>
+      <div style="font-size:11px;font-weight:600;color:#94a3b8;">Ph 5</div>
+      <div style="font-size:10.5px;color:#94a3b8;margin-top:2px;">Contracts<br>&amp; Invoices</div>
+      <div style="position:absolute;top:22px;left:0;width:100%;height:2px;background:#e2e8f0;z-index:0;"></div>
+    </div>
+    <div class="phase-step phase-pending" onclick="showPhase(6)" style="text-align:center;cursor:pointer;padding:10px 6px;position:relative;opacity:0.6;">
+      <div style="width:32px;height:32px;border-radius:50%;background:#f8fafc;border:2px solid #e2e8f0;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:13px;color:#94a3b8;font-weight:700;">6</div>
+      <div style="font-size:11px;font-weight:600;color:#94a3b8;">Ph 6</div>
+      <div style="font-size:10.5px;color:#94a3b8;margin-top:2px;">Shoot &amp;<br>Deliver</div>
+    </div>
+  </div>
+  <div id="phase-detail" style="margin-top:16px;padding:14px 16px;background:#f8fafc;border-radius:8px;border-left:3px solid #2563eb;display:none;">
+    <div id="phase-detail-content" style="font-size:13px;color:#1a1d2e;line-height:1.6;"></div>
+  </div>
+</div>
+
             <!-- Filter bar -->
             <div class="filter-bar">
               <select id="bk-status" onchange="filterBookings()">
@@ -888,11 +940,15 @@
                 <option value="completed">Completed</option>
                 <option value="lost">Lost</option>
               </select>
-              <input type="date" id="bk-date-from" value="2026-06-01" onchange="filterBookings()" />
-              <input type="date" id="bk-date-to"   value="2026-06-30" onchange="filterBookings()" />
+              <input type="date" id="bk-date-from" value="2026-06-01" min="2020-01-01" max="2030-12-31" onchange="filterBookings()" />
+              <input type="date" id="bk-date-to"   value="2026-06-30" min="2020-01-01" max="2030-12-31" onchange="filterBookings()" />
               <input type="text" id="bk-search" placeholder="Search enquiries…" style="min-width:180px;" oninput="filterBookings()" />
               <div class="filter-spacer"></div>
+              <button class="btn-blue" onclick="openEmailTemplates()" style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;"><i class="ti ti-mail"></i> Templates</button>
+              <button class="btn-blue" onclick="openPackageBuilder()" style="background:#0ea5e9;"><i class="ti ti-package"></i> Packages</button>
               <button class="btn-blue" onclick="openEnquiryModal()"><i class="ti ti-plus"></i> New Enquiry</button>
+              <button class="btn-blue" onclick="openCancellationModal()" style="background:#ef4444;"><i class="ti ti-ban"></i> Cancel Booking</button>
+              <button class="btn-blue" onclick="openQuestionnaire()" style="background:#7c3aed;border-color:#7c3aed;"><i class="ti ti-clipboard-list"></i> Questionnaire</button>
             </div>
 
             <div class="table-wrapper">
@@ -1148,7 +1204,7 @@
                     <td><strong>$3,800</strong></td>
                     <td>Jun 15, 2026</td>
                     <td><span class="status-badge badge-active-g">Active</span></td>
-                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm" onclick="openClient360('Emma &amp; Jake Wilson','emma@example.com','(555) 234-5678')">View Profile</button><button class="btn-view-sm">Email</button></td>
                   </tr>
                   <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-blue">NC</div><strong>Nexus Corp</strong></div></td>
@@ -1159,7 +1215,7 @@
                     <td><strong>$3,600</strong></td>
                     <td>Jun 17, 2026</td>
                     <td><span class="status-badge badge-active-g">Active</span></td>
-                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm" onclick="openClient360('Nexus Corp','hr@nexus.com','(555) 345-6789')">View Profile</button><button class="btn-view-sm">Email</button></td>
                   </tr>
                   <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-green">LF</div><strong>Liu Family</strong></div></td>
@@ -1170,7 +1226,7 @@
                     <td><strong>$1,300</strong></td>
                     <td>Jun 20, 2026</td>
                     <td><span class="status-badge badge-active-g">Active</span></td>
-                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm" onclick="openClient360('Liu Family','liu@example.com','(555) 456-7890')">View Profile</button><button class="btn-view-sm">Email</button></td>
                   </tr>
                   <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-purple">SR</div><strong>Sarah &amp; Tom Reed</strong></div></td>
@@ -1181,7 +1237,7 @@
                     <td><strong>$5,750</strong></td>
                     <td>Jun 22, 2026</td>
                     <td><span class="status-badge badge-active-g">Active</span></td>
-                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm" onclick="openClient360('Sarah &amp; Tom Reed','sarah@example.com','(555) 567-8901')">View Profile</button><button class="btn-view-sm">Email</button></td>
                   </tr>
                   <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-teal">RT</div><strong>Rachel Thompson</strong></div></td>
@@ -1192,7 +1248,7 @@
                     <td><strong>$2,800</strong></td>
                     <td>May 28, 2026</td>
                     <td><span class="status-badge badge-active-g">Active</span></td>
-                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm" onclick="openClient360('Rachel Thompson','rachel@example.com','(555) 678-9012')">View Profile</button><button class="btn-view-sm">Email</button></td>
                   </tr>
                   <tr data-status="inactive">
                     <td><div class="client-cell"><div class="client-avatar ca-orange">CF</div><strong>Chen Family</strong></div></td>
@@ -1203,7 +1259,7 @@
                     <td><strong>$1,950</strong></td>
                     <td>Apr 12, 2026</td>
                     <td><span class="status-badge badge-inactive">Inactive</span></td>
-                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm" onclick="openClient360('Chen Family','chen@example.com','(555) 789-0123')">View Profile</button><button class="btn-view-sm">Email</button></td>
                   </tr>
                   <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-blue">HE</div><strong>Horizon Events</strong></div></td>
@@ -1214,7 +1270,7 @@
                     <td><strong>$8,400</strong></td>
                     <td>Jun 28, 2026</td>
                     <td><span class="status-badge badge-active-g">Active</span></td>
-                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm" onclick="openClient360('Horizon Events','events@horizon.com','(555) 890-1234')">View Profile</button><button class="btn-view-sm">Email</button></td>
                   </tr>
                   <tr data-status="inactive">
                     <td><div class="client-cell"><div class="client-avatar ca-purple">PF</div><strong>Park Family</strong></div></td>
@@ -1225,7 +1281,7 @@
                     <td><strong>$4,200</strong></td>
                     <td>Mar 10, 2026</td>
                     <td><span class="status-badge badge-inactive">Inactive</span></td>
-                    <td style="display:flex;gap:5px;"><button class="btn-view-sm">View</button><button class="btn-view-sm">Email</button></td>
+                    <td style="display:flex;gap:5px;"><button class="btn-view-sm" onclick="openClient360('Park Family','park@example.com','(555) 901-2345')">View Profile</button><button class="btn-view-sm">Email</button></td>
                   </tr></tbody>
               </table>
             </div>
@@ -1326,7 +1382,7 @@
                     <td><strong>$2,280</strong></td>
                     <td><span class="status-badge badge-paid">Paid</span></td>
                     <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
-                    <td><button class="btn-view-sm">View</button></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-view-sm">View</button><button class="btn-view-sm" onclick="printInvoice('INV-2847','Emma Wilson','$2,280.00','Jun 15','Balance Payment','Paid')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
                   </tr>
                   <tr data-status="paid">
                     <td><strong>INV-2846</strong></td>
@@ -1337,7 +1393,7 @@
                     <td><strong>$1,520</strong></td>
                     <td><span class="status-badge badge-paid">Paid</span></td>
                     <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
-                    <td><button class="btn-view-sm">View</button></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-view-sm">View</button><button class="btn-view-sm" onclick="printInvoice('INV-2846','Emma Wilson','$1,520.00','Jun 1','Deposit (50%)','Paid')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
                   </tr>
                   <tr data-status="paid">
                     <td><strong>INV-2845</strong></td>
@@ -1348,7 +1404,7 @@
                     <td><strong>$360</strong></td>
                     <td><span class="status-badge badge-paid">Paid</span></td>
                     <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
-                    <td><button class="btn-view-sm">View</button></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-view-sm">View</button><button class="btn-view-sm" onclick="printInvoice('INV-2845','Nexus Corp','$360.00','Jun 14','Deposit (30%)','Paid')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
                   </tr>
                   <tr data-status="sent">
                     <td><strong>INV-2844</strong></td>
@@ -1359,7 +1415,7 @@
                     <td><strong>$840</strong></td>
                     <td><span class="status-badge badge-sent-inv">Sent</span></td>
                     <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
-                    <td><button class="btn-view-sm">View</button></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-view-sm">View</button><button class="btn-view-sm" onclick="printInvoice('INV-2844','Nexus Corp','$840.00','Jun 17','Balance','Sent')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
                   </tr>
                   <tr data-status="paid">
                     <td><strong>INV-2843</strong></td>
@@ -1370,7 +1426,7 @@
                     <td><strong>$720</strong></td>
                     <td><span class="status-badge badge-paid">Paid</span></td>
                     <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
-                    <td><button class="btn-view-sm">View</button></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-view-sm">View</button><button class="btn-view-sm" onclick="printInvoice('INV-2843','Horizon Events','$720.00','Jun 12','Deposit (30%)','Paid')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
                   </tr>
                   <tr data-status="sent">
                     <td><strong>INV-2842</strong></td>
@@ -1381,7 +1437,7 @@
                     <td><strong>$1,680</strong></td>
                     <td><span class="status-badge badge-sent-inv">Sent</span></td>
                     <td><span style="color:#6b7280;">Pending</span></td>
-                    <td><button class="btn-view-sm">View</button></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-view-sm">View</button><button class="btn-view-sm" onclick="printInvoice('INV-2842','Horizon Events','$1,680.00','Jun 28','Balance','Sent')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
                   </tr>
                   <tr data-status="sent">
                     <td><strong>INV-2841</strong></td>
@@ -1392,7 +1448,7 @@
                     <td><strong>$650</strong></td>
                     <td><span class="status-badge badge-sent-inv">Sent</span></td>
                     <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
-                    <td><button class="btn-view-sm">View</button></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-view-sm">View</button><button class="btn-view-sm" onclick="printInvoice('INV-2841','Liu Family','$650.00','Jun 25','Full Payment','Sent')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
                   </tr>
                   <tr data-status="draft">
                     <td><strong>INV-2840</strong></td>
@@ -1403,7 +1459,7 @@
                     <td><strong>$210</strong></td>
                     <td><span class="status-badge badge-draft-inv">Draft</span></td>
                     <td><span style="color:#9ca3af;">Not sent</span></td>
-                    <td><button class="btn-send-sm">Send</button></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-send-sm">Send</button><button class="btn-view-sm" onclick="printInvoice('INV-2840','Martinez Family','$210.00','Jun 18','Deposit','Draft')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
                   </tr>
                   <tr data-status="overdue">
                     <td><strong>INV-2839</strong></td>
@@ -1414,7 +1470,7 @@
                     <td><strong>$570</strong></td>
                     <td><span class="status-badge badge-overdue">Overdue</span></td>
                     <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
-                    <td><button class="btn-remind">Remind</button></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-remind">Remind</button><button class="btn-view-sm" onclick="printInvoice('INV-2839','Sarah Reed','$570.00','May 28','Balance','Overdue')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
                   </tr>
                   <tr data-status="overdue">
                     <td><strong>INV-2838</strong></td>
@@ -1425,7 +1481,7 @@
                     <td><strong>$900</strong></td>
                     <td><span class="status-badge badge-overdue">Overdue</span></td>
                     <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
-                    <td><button class="btn-remind">Remind</button></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-remind">Remind</button><button class="btn-view-sm" onclick="printInvoice('INV-2838','Williams Corp','$900.00','Apr 22','Full Payment','Overdue')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
                   </tr></tbody>
               </table>
             </div>
@@ -1438,6 +1494,16 @@
              TAB 5 — EQUIPMENT
         ══════════════════════════════════════════ -->
         <div id="tab-equipment" class="tab-panel hidden">
+          <!-- Equipment return alert banner (auto-shown when items are due) -->
+<div id="equip-alert-banner" style="display:none;background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px 18px;margin-bottom:18px;align-items:flex-start;gap:12px;">
+  <i class="ti ti-alert-triangle" style="color:#c2410c;font-size:20px;flex-shrink:0;margin-top:1px;"></i>
+  <div style="flex:1;">
+    <div style="font-size:13.5px;font-weight:600;color:#9a3412;margin-bottom:6px;">Equipment Return Alerts</div>
+    <div id="equip-alert-list" style="font-size:13px;color:#c2410c;line-height:1.6;"></div>
+  </div>
+  <button onclick="document.getElementById('equip-alert-banner').style.display='none'" style="background:none;border:none;cursor:pointer;color:#c2410c;font-size:18px;">&#x2715;</button>
+</div>
+
           <div class="card table-card">
             <div class="card-header">
               <div class="card-title"><i class="ti ti-camera"></i> Equipment Inventory</div>
@@ -1789,6 +1855,39 @@
             </table>
           </div>
 
+          <!-- ── SHOOT PROFITABILITY ── -->
+<div class="card table-card" style="margin-top:20px;">
+  <div class="card-header">
+    <div class="card-title"><i class="ti ti-trending-up" style="color:#22c55e;"></i> Shoot Profitability Calculator</div>
+    <button class="btn-blue btn-sm" onclick="calcProfit()" style="font-size:12px;padding:6px 12px;"><i class="ti ti-calculator"></i> Calculate</button>
+  </div>
+  <div style="padding:18px 20px;">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;">
+      <div>
+        <label style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">Session Revenue ($)</label>
+        <input class="form-input" type="number" id="profit-revenue" placeholder="3800" style="border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:13.5px;font-family:inherit;width:100%;outline:none;">
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">Equipment Rental ($)</label>
+        <input class="form-input" type="number" id="profit-equip" placeholder="900" style="border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:13.5px;font-family:inherit;width:100%;outline:none;">
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">Second Shooter ($)</label>
+        <input class="form-input" type="number" id="profit-shooter" placeholder="350" style="border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:13.5px;font-family:inherit;width:100%;outline:none;">
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">Travel & Other ($)</label>
+        <input class="form-input" type="number" id="profit-travel" placeholder="150" style="border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:13.5px;font-family:inherit;width:100%;outline:none;">
+      </div>
+    </div>
+    <div id="profit-result" style="display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:20px;">
+      <div><div style="font-size:12px;color:#64748b;margin-bottom:3px;">Total Expenses</div><div style="font-size:20px;font-weight:700;color:#dc2626;" id="res-expenses">$0</div></div>
+      <div style="font-size:24px;color:#94a3b8;">→</div>
+      <div><div style="font-size:12px;color:#64748b;margin-bottom:3px;">Net Profit</div><div style="font-size:28px;font-weight:800;color:#16a34a;" id="res-profit">$0</div></div>
+      <div><div style="font-size:12px;color:#64748b;margin-bottom:3px;">Profit Margin</div><div style="font-size:28px;font-weight:800;color:#2563eb;" id="res-margin">0%</div></div>
+    </div>
+  </div>
+</div>
         </div><!-- /tab-equipment -->
 
 
@@ -1858,6 +1957,7 @@
               </select>
               <div class="filter-spacer"></div>
               <button class="btn-blue" onclick="openNewContractModal()"><i class="ti ti-plus"></i> New Contract</button>
+              <button class="btn-blue" onclick="exportAllData()" style="background:#475569;"><i class="ti ti-download"></i> Export</button>
             </div>
 
             <div class="table-wrapper">
@@ -2104,7 +2204,63 @@
       showToast('Equipment item "' + name + '" added successfully!');
     }
     function openChecklistModal() {
-      document.getElementById('checklist-modal').classList.remove('hidden');
+      var bookings = typeof LFData !== 'undefined' ? LFData.get('bookings') : [];
+      var upcoming = bookings.filter(function(b) {
+        return b.status === 'confirmed';
+      }).slice(0, 4);
+
+      var equipByType = {
+        'Wedding':   ['Sony A7R V (Primary)', 'Sony A7R V (Backup)', 'Sony 85mm f/1.4 GM', 'Sony 24-70mm f/2.8 GM', 'Profoto B10X × 2', 'SanDisk 256GB CFexpress × 4'],
+        'Portrait':  ['Sony A7R V', 'Sony 135mm f/1.8 GM', 'Manfrotto 055 Tripod', 'Godox AD600 Pro', 'SanDisk 256GB CFexpress × 2'],
+        'Corporate': ['Sony A1', 'Sony 24-70mm f/2.8 GM', 'Profoto B10X', 'Manfrotto 055 Tripod', 'Sony UHS-II 128GB × 2'],
+        'Engagement':['Sony A7R V', 'Sony 85mm f/1.4 GM', 'Sony 135mm f/1.8 GM', 'SanDisk 256GB CFexpress × 2'],
+        'Event':     ['Sony A1', 'Sony A7R V', 'Sony 24-70mm f/2.8 GM', 'Canon EF 400mm f/2.8L IS III', 'Profoto B10X', 'SanDisk 256GB × 4'],
+        'Commercial':['Sony A1', 'Sony 24-70mm f/2.8 GM', 'Profoto Pro-11 Kit', 'Manfrotto 055 Tripod', 'Memory Cards × 6']
+      };
+
+      var colors = {
+        'Wedding':'rgba(34,197,94,.08)','Portrait':'rgba(59,130,246,.08)',
+        'Corporate':'rgba(99,102,241,.08)','Engagement':'rgba(236,72,153,.08)',
+        'Event':'rgba(245,158,11,.08)','Commercial':'rgba(14,165,233,.08)'
+      };
+      var borderColors = {
+        'Wedding':'rgba(34,197,94,.25)','Portrait':'rgba(59,130,246,.25)',
+        'Corporate':'rgba(99,102,241,.25)','Engagement':'rgba(236,72,153,.25)',
+        'Event':'rgba(245,158,11,.25)','Commercial':'rgba(14,165,233,.25)'
+      };
+
+      var html = upcoming.length === 0
+        ? '<div style="padding:20px;text-align:center;color:#94a3b8;font-size:13px;">No confirmed upcoming bookings found. Add bookings to the calendar first.</div>'
+        : upcoming.map(function(b) {
+            var equip = equipByType[b.type] || equipByType['Portrait'];
+            var bg = colors[b.type] || 'rgba(37,99,235,.08)';
+            var bd = borderColors[b.type] || 'rgba(37,99,235,.25)';
+            var uid = b.id.replace(/[^a-z0-9]/gi,'');
+            return '<div class="cl-shoot-card">' +
+              '<div class="cl-shoot-header" style="background:' + bg + ';border-color:' + bd + ';">' +
+                '<div class="cl-shoot-info">' +
+                  '<div class="cl-shoot-name">' + b.client + ' — ' + b.type + '</div>' +
+                  '<div class="cl-shoot-meta"><i class="ti ti-calendar"></i> ' + b.date + ' &nbsp;·&nbsp; <i class="ti ti-map-pin"></i> ' + (b.location||'Location TBD') + '</div>' +
+                '</div>' +
+                '<span class="status-badge badge-confirmed">' + b.budget + '</span>' +
+              '</div>' +
+              '<div class="cl-items-grid">' +
+                equip.map(function(e) {
+                  return '<div class="cl-item cl-item-owned"><i class="ti ti-device-camera"></i> ' + e + '</div>';
+                }).join('') +
+              '</div>' +
+              '<div class="cl-check-row">' +
+                '<label class="cl-check-label"><input type="checkbox" id="chk-'+uid+'-1"> All items packed</label>' +
+                '<label class="cl-check-label"><input type="checkbox" id="chk-'+uid+'-2"> Batteries charged</label>' +
+                '<label class="cl-check-label"><input type="checkbox" id="chk-'+uid+'-3"> Memory cards formatted</label>' +
+                '<label class="cl-check-label"><input type="checkbox" id="chk-'+uid+'-4"> Equipment tested</label>' +
+              '</div>' +
+            '</div>';
+          }).join('');
+
+      var body = document.querySelector('#checklist-modal .vm-body');
+      if (body) body.innerHTML = html;
+      openModal('checklist-modal');
     }
     function closeChecklistModal() {
       document.getElementById('checklist-modal').classList.add('hidden');
@@ -2250,6 +2406,22 @@
         if (statusOk && searchOk) { row.style.display = ''; shown++; }
         else                       { row.style.display = 'none'; }
       });
+      // Show/hide empty state
+      var emptyId = tbodyId + '-empty';
+      var existing = document.getElementById(emptyId);
+      if (shown === 0) {
+        if (!existing) {
+          var tr = document.createElement('tr');
+          tr.id = emptyId;
+          tr.innerHTML = '<td colspan="10" style="text-align:center;padding:48px 20px;">' +
+            '<div style="font-size:32px;margin-bottom:12px;">🔍</div>' +
+            '<div style="font-size:14.5px;font-weight:600;color:#1a1d2e;margin-bottom:6px;">No results found</div>' +
+            '<div style="font-size:13px;color:#94a3b8;">Try adjusting your search or filter criteria</div>' +
+          '</td>';
+          var tbody = document.getElementById(tbodyId);
+          if (tbody) tbody.appendChild(tr);
+        } else { existing.style.display = ''; }
+      } else if (existing) { existing.style.display = 'none'; }
       return shown;
     }
 
@@ -2308,18 +2480,855 @@
     function saveForm(closeFn) {
       if (typeof closeFn === 'function') closeFn();
       showToast('Record saved successfully!');
+      // Refresh the active tab's table from LFData
+      var activeTab = document.querySelector('.subtab.active');
+      if (activeTab) {
+        var tabName = activeTab.textContent.trim().toLowerCase();
+        if (tabName.indexOf('booking') > -1) renderBookingsTable();
+        if (tabName.indexOf('invoice') > -1) renderInvoicesTable();
+        if (tabName.indexOf('contract') > -1) renderContractsTable();
+        if (tabName.indexOf('client') > -1) renderClientsTable();
+      }
     }
 
     /* Close any modal when clicking outside it */
     document.addEventListener('DOMContentLoaded', function() {
       ['modal-enquiry','modal-add-client','modal-create-invoice','modal-new-contract',
-       'vendor-modal','add-item-modal','checklist-modal'].forEach(function(id) {
+       'vendor-modal','add-item-modal','checklist-modal','questionnaire-modal'].forEach(function(id) {
         var m = document.getElementById(id);
         if (m) m.addEventListener('click', function(e) {
           if (e.target === this) this.classList.add('hidden');
         });
       });
     });
+
+    // ── INTERACTIVE CALENDAR ──────────────────────────────────────
+    var calendarBookings = JSON.parse(localStorage.getItem('calBookings') || '{}');
+
+    function openCalendarDay(day, month) {
+      var key = month + '-' + day;
+      var existing = calendarBookings[key] || {};
+      document.getElementById('cal-modal-title').textContent = day + ' ' + month + ' 2026';
+      document.getElementById('cal-day-key').value = key;
+      document.getElementById('cal-client').value = existing.client || '';
+      document.getElementById('cal-type').value = existing.type || 'Wedding';
+      document.getElementById('cal-time').value = existing.time || '10:00';
+      document.getElementById('cal-location').value = existing.location || '';
+      document.getElementById('cal-notes').value = existing.notes || '';
+      document.getElementById('cal-day-modal').classList.remove('hidden');
+    }
+
+    function saveCalendarEvent() {
+      var key = document.getElementById('cal-day-key').value;
+      var isUnavailable = document.getElementById('cal-unavailable') && document.getElementById('cal-unavailable').checked;
+      var data = {
+        client: document.getElementById('cal-client').value,
+        type: document.getElementById('cal-type').value,
+        time: document.getElementById('cal-time').value,
+        location: document.getElementById('cal-location').value,
+        notes: document.getElementById('cal-notes').value
+      };
+      if (isUnavailable) {
+        data.client = '🚫 UNAVAILABLE';
+        data.type = 'blocked';
+        data.notes = document.getElementById('cal-notes').value || 'Day blocked';
+      }
+      if (!data.client.trim()) { alert('Client name is required.'); return; }
+      calendarBookings[key] = data;
+      localStorage.setItem('calBookings', JSON.stringify(calendarBookings));
+      document.getElementById('cal-day-modal').classList.add('hidden');
+      renderCalendarEvents();
+      showToast('Booking saved to calendar!');
+    }
+
+    function deleteCalendarEvent() {
+      var key = document.getElementById('cal-day-key').value;
+      delete calendarBookings[key];
+      localStorage.setItem('calBookings', JSON.stringify(calendarBookings));
+      document.getElementById('cal-day-modal').classList.add('hidden');
+      renderCalendarEvents();
+      showToast('Booking removed.');
+    }
+
+    function closeCalendarModal() {
+      document.getElementById('cal-day-modal').classList.add('hidden');
+    }
+
+    function renderCalendarEvents() {
+      // Clear existing localStorage events (keep hardcoded ones)
+      document.querySelectorAll('.cal-ls-event').forEach(function(el) { el.remove(); });
+      Object.keys(calendarBookings).forEach(function(key) {
+        var parts = key.split('-');
+        var day = parts[1];
+        var booking = calendarBookings[key];
+        // Find the cell with this day number
+        document.querySelectorAll('.cal-cell').forEach(function(cell) {
+          var numEl = cell.querySelector('.cal-num');
+          if (numEl && numEl.textContent.trim() === String(day)) {
+            var label = document.createElement('div');
+            label.className = 'cal-event-label cal-ls-event';
+            label.style.cssText = 'background:#2563eb;color:#fff;border-radius:3px;padding:1px 5px;font-size:10px;margin-top:2px;cursor:pointer;';
+            label.textContent = (booking.time || '') + ' ' + booking.client.split(' ')[0];
+            label.title = booking.client + (booking.time ? ' at ' + booking.time : '') + (booking.location ? ' · ' + booking.location : '');
+            label.onclick = function(e) { e.stopPropagation(); openCalendarDay(day, parts[0]); };
+            cell.appendChild(label);
+          }
+        });
+      });
+    }
+
+    // Make all empty calendar cells clickable
+    document.querySelectorAll('.cal-cell:not(.cal-cell--empty)').forEach(function(cell) {
+      cell.style.cursor = 'pointer';
+      cell.addEventListener('click', function() {
+        var numEl = cell.querySelector('.cal-num');
+        if (numEl) openCalendarDay(numEl.textContent.trim(), 'Jun');
+      });
+    });
+
+    // Close on overlay click
+    document.addEventListener('DOMContentLoaded', function() {
+      var m = document.getElementById('cal-day-modal');
+      if (m) m.addEventListener('click', function(e) { if (e.target === this) closeCalendarModal(); });
+      renderCalendarEvents();
+    });
+
+// ── INVOICE PRINT / PDF / EMAIL ──────────────────────────────
+function printInvoice(invNum, client, amount, dueDate, type, status) {
+  var win = window.open('', '_blank', 'width=800,height=600');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Invoice ' + invNum + '</title><style>');
+  win.document.write('*{box-sizing:border-box;margin:0;padding:0;}');
+  win.document.write('body{font-family:Inter,Arial,sans-serif;color:#1a1d2e;padding:40px;background:#fff;}');
+  win.document.write('.inv-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px;padding-bottom:24px;border-bottom:2px solid #f0f2f7;}');
+  win.document.write('.logo{font-size:22px;font-weight:800;color:#2563eb;}.logo-sub{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-top:3px;}');
+  win.document.write('.inv-meta{text-align:right;}.inv-num{font-size:22px;font-weight:700;color:#1a1d2e;}.inv-date{font-size:13px;color:#64748b;margin-top:4px;}');
+  win.document.write('.inv-status{display:inline-block;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:700;background:#dcfce7;color:#15803d;margin-top:8px;}');
+  win.document.write('.parties{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-bottom:40px;}');
+  win.document.write('.party-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;margin-bottom:8px;}');
+  win.document.write('.party-name{font-size:15px;font-weight:600;color:#1a1d2e;}.party-detail{font-size:13px;color:#64748b;line-height:1.6;}');
+  win.document.write('table{width:100%;border-collapse:collapse;margin-bottom:32px;}');
+  win.document.write('thead th{background:#f8fafc;padding:12px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94a3b8;text-align:left;border-bottom:1px solid #e8edf3;}');
+  win.document.write('tbody td{padding:14px 16px;font-size:14px;color:#1a1d2e;border-bottom:1px solid #f8fafc;}');
+  win.document.write('.total-row{display:flex;justify-content:flex-end;margin-top:16px;}');
+  win.document.write('.total-box{background:#f8fafc;border-radius:10px;padding:18px 24px;min-width:240px;}');
+  win.document.write('.total-line{display:flex;justify-content:space-between;font-size:13.5px;color:#64748b;padding:4px 0;}');
+  win.document.write('.total-final{display:flex;justify-content:space-between;font-size:17px;font-weight:800;color:#1a1d2e;border-top:1px solid #e8edf3;padding-top:12px;margin-top:8px;}');
+  win.document.write('.footer{text-align:center;padding-top:32px;border-top:1px solid #f0f2f7;font-size:12px;color:#94a3b8;}');
+  win.document.write('@media print{body{padding:20px;}.no-print{display:none;}}');
+  win.document.write('</style></head><body>');
+  win.document.write('<div class="no-print" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 18px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;">');
+  win.document.write('<span style="font-size:13px;color:#1d4ed8;font-weight:500;">Ready to print or save as PDF</span>');
+  win.document.write('<div style="display:flex;gap:10px;">');
+  win.document.write('<button onclick="window.print()" style="background:#2563eb;color:#fff;border:none;padding:8px 18px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;">Print / Save PDF</button>');
+  win.document.write('<a href="mailto:client@example.com?subject=Invoice ' + invNum + ' — Sarah Kim Photography&body=Hi,\n\nPlease find your invoice ' + invNum + ' for ' + type + ' — Amount: ' + amount + ', Due: ' + dueDate + '.\n\nThank you,\nSarah Kim Photography" style="background:#f8fafc;color:#475569;border:1px solid #e2e8f0;padding:8px 18px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none;">Email Client</a>');
+  win.document.write('</div></div>');
+  win.document.write('<div class="inv-header">');
+  win.document.write('<div><div class="logo">Sarah Kim Photography</div><div class="logo-sub">Studio Platform · LensFlow</div><div style="font-size:12px;color:#64748b;margin-top:8px;">123 Photography Lane, New York, NY 10001<br>hello@sarahkimphotography.com · +1 (555) 234-5678</div></div>');
+  win.document.write('<div class="inv-meta"><div class="inv-num">Invoice #' + invNum + '</div><div class="inv-date">Issue Date: Jun 15, 2026</div><div class="inv-date">Due Date: ' + dueDate + '</div><div class="inv-status">' + status + '</div></div>');
+  win.document.write('</div>');
+  win.document.write('<div class="parties"><div><div class="party-label">From</div><div class="party-name">Sarah Kim Photography</div><div class="party-detail">Studio Owner<br>New York, NY</div></div>');
+  win.document.write('<div><div class="party-label">Bill To</div><div class="party-name">' + client + '</div><div class="party-detail">Photography Services</div></div></div>');
+  win.document.write('<table><thead><tr><th>Description</th><th>Type</th><th>Amount</th></tr></thead><tbody>');
+  win.document.write('<tr><td>' + client + ' — Photography Session</td><td>' + type + '</td><td>' + amount + '</td></tr>');
+  win.document.write('</tbody></table>');
+  win.document.write('<div class="total-row"><div class="total-box">');
+  win.document.write('<div class="total-line"><span>Subtotal</span><span>' + amount + '</span></div>');
+  win.document.write('<div class="total-line"><span>Tax (0%)</span><span>$0.00</span></div>');
+  win.document.write('<div class="total-final"><span>Total Due</span><span>' + amount + '</span></div>');
+  win.document.write('</div></div>');
+  win.document.write('<div class="footer">Thank you for choosing Sarah Kim Photography! Payment is due by ' + dueDate + '.<br>Bank Transfer · Zelle · Credit Card accepted.</div>');
+  win.document.write('</body></html>');
+  win.document.close();
+}
+
+// ── CLIENT 360 PANEL ─────────────────────────────────────────
+var client360Data = {
+  'Emma & Jake Wilson': {
+    email:'emma@example.com', phone:'(555) 234-5678',
+    sessions: 1, value: '$3,800', galleries: 1,
+    history: [{ date:'Jun 15, 2026', type:'Wedding', location:'Central Park', amount:'$3,800', status:'Confirmed' }],
+    invoices: [{ num:'INV-2846', type:'Deposit 50%', amount:'$1,520', status:'Paid' }, { num:'INV-2847', type:'Balance', amount:'$2,280', status:'Paid' }],
+    galleries_list: [{ name:'Emma & Jake Wedding', photos: 347, status:'Active', views:2840 }]
+  },
+  'Nexus Corp': {
+    email:'hr@nexuscorp.com', phone:'(555) 345-6789',
+    sessions: 3, value: '$3,600', galleries: 1,
+    history: [{ date:'Jun 17, 2026', type:'Headshots', location:'Studio 4', amount:'$1,200', status:'Confirmed' }],
+    invoices: [{ num:'INV-2845', type:'Deposit 30%', amount:'$360', status:'Paid' }, { num:'INV-2844', type:'Balance', amount:'$840', status:'Sent' }],
+    galleries_list: [{ name:'Nexus Corp Headshots', photos: 45, status:'Delivered', views:480 }]
+  },
+  'Liu Family': {
+    email:'liu@example.com', phone:'(555) 456-7890',
+    sessions: 2, value: '$1,300', galleries: 1,
+    history: [{ date:'Jun 20, 2026', type:'Portrait', location:'Riverside Park', amount:'$650', status:'Confirmed' }],
+    invoices: [{ num:'INV-2841', type:'Full Payment', amount:'$650', status:'Sent' }],
+    galleries_list: [{ name:'Liu Family Portrait', photos: 124, status:'Pending Review', views:0 }]
+  }
+};
+
+function openClient360(name, email, phone) {
+  var data = client360Data[name] || { email: email, phone: phone, sessions: 1, value: '$—', galleries: 0, history: [], invoices: [], galleries_list: [] };
+  document.getElementById('c360-name').textContent = name;
+  document.getElementById('c360-sub').textContent = 'Studio Client · ' + (data.history[0] ? data.history[0].type : 'Photography');
+  document.getElementById('c360-email').textContent = data.email || email;
+  document.getElementById('c360-phone').textContent = data.phone || phone;
+  document.getElementById('c360-sessions').textContent = data.sessions;
+  document.getElementById('c360-value').textContent = data.value;
+  document.getElementById('c360-galleries').textContent = data.galleries;
+
+  // History
+  document.getElementById('c360-history').innerHTML = (data.history || []).map(function(h) {
+    return '<div style="background:#f8fafc;border-radius:8px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;">' +
+      '<div><div style="font-size:13.5px;font-weight:600;color:#1a1d2e;">' + h.type + '</div>' +
+      '<div style="font-size:12px;color:#64748b;margin-top:2px;">' + h.date + ' · ' + h.location + '</div></div>' +
+      '<div style="text-align:right;"><div style="font-weight:700;color:#1a1d2e;">' + h.amount + '</div>' +
+      '<span style="font-size:11px;background:#dcfce7;color:#15803d;padding:2px 7px;border-radius:4px;">' + h.status + '</span></div>' +
+    '</div>';
+  }).join('') || '<div style="font-size:13px;color:#94a3b8;">No shoots recorded.</div>';
+
+  // Invoices
+  document.getElementById('c360-invoices').innerHTML = (data.invoices || []).map(function(inv) {
+    var bg = inv.status==='Paid' ? '#dcfce7' : inv.status==='Sent' ? '#dbeafe' : '#fef9c3';
+    var tc = inv.status==='Paid' ? '#15803d' : inv.status==='Sent' ? '#1d4ed8' : '#a16207';
+    return '<div style="background:#f8fafc;border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">' +
+      '<div><div style="font-size:12.5px;font-weight:600;color:#1a1d2e;">' + inv.num + ' — ' + inv.type + '</div></div>' +
+      '<div style="display:flex;align-items:center;gap:8px;"><span style="font-weight:700;">' + inv.amount + '</span>' +
+      '<span style="font-size:11px;background:' + bg + ';color:' + tc + ';padding:2px 7px;border-radius:4px;">' + inv.status + '</span></div>' +
+    '</div>';
+  }).join('') || '<div style="font-size:13px;color:#94a3b8;">No invoices.</div>';
+
+  // Galleries
+  document.getElementById('c360-gallery-list').innerHTML = (data.galleries_list || []).map(function(g) {
+    return '<div style="background:#f8fafc;border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">' +
+      '<div><div style="font-size:13px;font-weight:600;color:#1a1d2e;">' + g.name + '</div>' +
+      '<div style="font-size:12px;color:#64748b;">' + g.photos + ' photos · ' + g.views.toLocaleString() + ' views</div></div>' +
+      '<span style="font-size:11px;background:#eff6ff;color:#1d4ed8;padding:2px 7px;border-radius:4px;">' + g.status + '</span>' +
+    '</div>';
+  }).join('') || '<div style="font-size:13px;color:#94a3b8;">No galleries.</div>';
+
+  document.getElementById('client360-overlay').style.display = 'block';
+  setTimeout(function() { document.getElementById('client360-panel').style.right = '0'; }, 10);
+}
+
+function closeClient360() {
+  document.getElementById('client360-panel').style.right = '-520px';
+  setTimeout(function() { document.getElementById('client360-overlay').style.display = 'none'; }, 300);
+}
+
+// ── PHASE PIPELINE ────────────────────────────────────────────
+var phaseDetails = {
+  1: { title: 'Phase 1 — Inbound Enquiry', color: '#22c55e', actions: ['Enquiry received via website form / social / walk-in', 'Auto-creates Enquiry record in Studio Manager', 'VS Workflow fires: assign follow-up task within 24hrs', 'Check: name, email, shoot type, date, budget, source'] },
+  2: { title: 'Phase 2 — Enquiry Record & Follow-up', color: '#22c55e', actions: ['Log call/email as Activity on Enquiry record', 'Send initial response within 24 hours', 'Share portfolio link and pricing guide', 'Confirm date availability in calendar'] },
+  3: { title: 'Phase 3 — Qualification Decision ← YOU ARE HERE', color: '#2563eb', actions: ['Assess: date, budget, genre fit, style match', 'Decision: Qualified → proceed to Convert | Not qualified → Mark Lost + nurture sequence', '30-day re-engage sequence fires automatically for lost enquiries', 'Click "Convert" button on a qualified enquiry row to proceed to Phase 4'] },
+  4: { title: 'Phase 4 — VS Conversion Modal', color: '#f59e0b', actions: ['Click "Convert" opens VS conversion modal', 'Choice A — Client: create new contact or link existing', 'Choice B — Project: new project or skip', 'Auto-creates: Client record + Project record + Proposal record'] },
+  5: { title: 'Phase 5 — Contracts & Invoices (Automations Fire)', color: '#8b5cf6', actions: ['Stage → Confirmed: triggers all automations', 'Send Contract via Zoho Sign — e-signature link emailed to client', 'Create Deposit Invoice (30-50%) via Zoho Books', 'Assign shoot tasks checklist to lead photographer', 'Confirmation email sent via Zoho Mail'] },
+  6: { title: 'Phase 6 — Project Pipeline to Delivery', color: '#0ea5e9', actions: ['S1 Confirmed: Contract signed + deposit paid', 'S2 Shoot: Day-of tasks checklist, balance payment due', 'S3 Editing: Photos culled, editor assigned, delivery ETA set', 'S4 Delivered: Gallery shared, client notified, download link sent', 'S5 Closed: Enquiry archived, client record active, review requested'] }
+};
+
+function showPhase(num) {
+  var d = phaseDetails[num];
+  if (!d) return;
+  var box = document.getElementById('phase-detail');
+  var content = document.getElementById('phase-detail-content');
+  box.style.borderLeftColor = d.color;
+  content.innerHTML = '<strong>' + d.title + '</strong><ul style="margin:8px 0 0 16px;">' +
+    d.actions.map(function(a) { return '<li style="margin-bottom:4px;">' + a + '</li>'; }).join('') + '</ul>';
+  box.style.display = 'block';
+}
+
+// ── EQUIPMENT RETURN REMINDERS ────────────────────────────────
+(function checkEquipmentReturns() {
+  var rentals = [
+    { name: 'Canon EF 400mm f/2.8L IS III', returnDate: '2026-06-28', vendor: 'Pro Gear Rentals NYC' },
+    { name: 'DJI Mavic 3 Pro Drone',         returnDate: '2026-06-20', vendor: 'SkyRent Drones' },
+    { name: 'Profoto Pro-11 2400W Kit',       returnDate: '2026-07-05', vendor: 'LightHouse Pro Rentals' },
+    { name: 'DJI Ronin 4D Cinema Rig',        returnDate: '2026-06-30', vendor: 'CineGear Rentals Ltd.' }
+  ];
+  var today = new Date('2026-06-17');
+  var alerts = [];
+  rentals.forEach(function(r) {
+    var due = new Date(r.returnDate);
+    var diff = Math.ceil((due - today) / (1000*60*60*24));
+    if (diff < 0) {
+      alerts.push('<strong>' + r.name + '</strong> — <span style="color:#dc2626;font-weight:700;">OVERDUE by ' + Math.abs(diff) + ' day(s)</span> · ' + r.vendor);
+    } else if (diff <= 3) {
+      alerts.push('<strong>' + r.name + '</strong> — due in <span style="font-weight:700;">' + diff + ' day(s)</span> on ' + r.returnDate + ' · ' + r.vendor);
+    }
+  });
+  if (alerts.length > 0) {
+    var banner = document.getElementById('equip-alert-banner');
+    var list   = document.getElementById('equip-alert-list');
+    if (banner && list) {
+      list.innerHTML = alerts.map(function(a) { return '• ' + a; }).join('<br>');
+      banner.style.display = 'flex';
+    }
+  }
+})();
+
+// ── EMAIL TEMPLATE LIBRARY ────────────────────────────────────
+var emailTemplates = [
+  { name: 'Gallery Ready', icon: 'ti-photo', color: '#eff6ff',
+    subject: 'Your gallery is ready! — [CLIENT NAME] Photography',
+    body: 'Hi [CLIENT NAME],\n\nExciting news — your photo gallery is now live and ready to view!\n\n🔗 Gallery link: [GALLERY URL]\n🔒 Password: [PASSWORD]\n📅 Gallery expires: [EXPIRY DATE]\n\nYou can:\n• Browse and favourite your photos\n• Download full-resolution images\n• Order prints directly from the gallery\n\nIf you have any questions, just reply to this email.\n\nWith love,\nSarah Kim\nSarah Kim Photography' },
+  { name: 'Balance Due Reminder', icon: 'ti-file-invoice', color: '#fefce8',
+    subject: 'Friendly reminder — Invoice balance due [DATE]',
+    body: 'Hi [CLIENT NAME],\n\nJust a friendly reminder that your balance invoice is due soon.\n\n📄 Invoice: [INVOICE NUMBER]\n💰 Amount: [AMOUNT]\n📅 Due date: [DUE DATE]\n\nPayment options:\n• Bank transfer (details below)\n• Zelle: hello@sarahkimphotography.com\n• Credit card (reply for a payment link)\n\nBank: Chase · Account: 1234567890 · Routing: 021000021\n\nThank you for choosing Sarah Kim Photography!\n\nBest,\nSarah' },
+  { name: 'Booking Confirmation', icon: 'ti-calendar-check', color: '#f0fdf4',
+    subject: 'Booking confirmed! ✓ [SHOOT TYPE] — [DATE]',
+    body: 'Hi [CLIENT NAME],\n\nGreat news — your booking is confirmed! Here are your shoot details:\n\n📅 Date: [DATE]\n⏰ Time: [TIME]\n📍 Location: [LOCATION]\n📸 Shoot type: [SHOOT TYPE]\n\nNext steps:\n1. Check your email for your contract (via Zoho Sign)\n2. Your deposit invoice has been sent separately\n3. I\'ll be in touch closer to the date with a shoot prep questionnaire\n\nSo excited to work with you!\n\nSarah Kim\nSarah Kim Photography\nhello@sarahkimphotography.com · +1 (555) 234-5678' },
+  { name: 'Contract Sent', icon: 'ti-file-text', color: '#fdf4ff',
+    subject: 'Contract ready for signing — [SHOOT TYPE] [DATE]',
+    body: 'Hi [CLIENT NAME],\n\nYour photography contract is ready for your signature.\n\n✍️ Please review and sign via the link below:\n[ZOHO SIGN LINK]\n\nThe contract covers:\n• Session details and deliverables\n• Usage rights and licensing\n• Cancellation and rescheduling policy\n• Payment schedule\n\nPlease sign at your earliest convenience — your booking is not fully secured until both the contract is signed and the deposit is received.\n\nAny questions? Just reply!\n\nSarah' },
+  { name: 'Follow-up Enquiry', icon: 'ti-message', color: '#fff7ed',
+    subject: 'Following up on your photography enquiry',
+    body: 'Hi [CLIENT NAME],\n\nI wanted to follow up on your recent enquiry for [SHOOT TYPE] on [DATE].\n\nI have your date available and would love to chat about what you\'re looking for!\n\n📅 Are you still looking for a photographer?\n💬 Would a 15-minute call work to discuss the details?\n\nYou can book a call directly: [CALENDLY LINK]\nOr simply reply to this email.\n\nLooking forward to hearing from you!\n\nSarah Kim\nSarah Kim Photography' },
+  { name: 'Review Request', icon: 'ti-star', color: '#f0fdf4',
+    subject: 'Your photos + a small favour 🙏',
+    body: 'Hi [CLIENT NAME],\n\nI hope you\'re loving your photos!\n\nWorking with you was genuinely a highlight — thank you for trusting me with such an important moment.\n\nIf you have 2 minutes, I\'d be so grateful if you could leave a quick review:\n⭐ Google Review: [GOOGLE REVIEW LINK]\n⭐ Facebook: [FACEBOOK LINK]\n\nEven a sentence or two means the world to me and helps other couples/families find my work.\n\nThank you so much!\n\nWith gratitude,\nSarah Kim' },
+  { name: 'Gallery Expiry Warning', icon: 'ti-clock', color: '#fff1f2',
+    subject: '⚠️ Your gallery expires in 7 days — download your photos',
+    body: 'Hi [CLIENT NAME],\n\nThis is a reminder that your online gallery will expire in 7 days on [EXPIRY DATE].\n\n🔗 Gallery: [GALLERY URL]\n\nPlease make sure you\'ve downloaded all your photos before the expiry date. After [EXPIRY DATE], the gallery will no longer be accessible.\n\nIf you need an extension, just reply to this email and I\'ll arrange it for you.\n\nBest,\nSarah Kim\nSarah Kim Photography' },
+  { name: 'Rescheduling Notice', icon: 'ti-calendar-event', color: '#eff6ff',
+    subject: 'Rescheduling your photography session — new date options',
+    body: 'Hi [CLIENT NAME],\n\nUnfortunately I need to reschedule our session originally planned for [ORIGINAL DATE].\n\nI sincerely apologise for any inconvenience this may cause.\n\nI have the following dates available as alternatives:\n• [DATE OPTION 1] at [TIME]\n• [DATE OPTION 2] at [TIME]\n• [DATE OPTION 3] at [TIME]\n\nPlease let me know which works best for you, or if you\'d prefer a full refund of your deposit.\n\nAgain, I\'m so sorry for this disruption.\n\nSarah' }
+];
+
+var selectedTemplate = null;
+
+function openEmailTemplates() {
+  var grid = document.getElementById('template-grid');
+  if (grid) {
+    grid.innerHTML = emailTemplates.map(function(t, i) {
+      return '<div onclick="selectTemplate(' + i + ')" style="background:' + t.color + ';border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .13s;" onmouseover="this.style.boxShadow=\'0 4px 14px rgba(0,0,0,.1)\'" onmouseout="this.style.boxShadow=\'none\'">' +
+        '<i class="ti ' + t.icon + '" style="font-size:20px;color:#2563eb;margin-bottom:8px;display:block;"></i>' +
+        '<div style="font-size:13.5px;font-weight:600;color:#1a1d2e;">' + t.name + '</div>' +
+        '<div style="font-size:11.5px;color:#64748b;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + t.subject.substring(0,45) + '…</div>' +
+      '</div>';
+    }).join('');
+  }
+  document.getElementById('template-preview').style.display = 'none';
+  document.getElementById('email-templates-modal').classList.remove('hidden');
+}
+
+function selectTemplate(index) {
+  selectedTemplate = emailTemplates[index];
+  document.getElementById('tpl-name').textContent    = selectedTemplate.name;
+  document.getElementById('tpl-subject').textContent = selectedTemplate.subject;
+  document.getElementById('tpl-body').textContent    = selectedTemplate.body;
+  document.getElementById('template-preview').style.display = 'block';
+}
+
+function copyTemplate() {
+  if (!selectedTemplate) return;
+  var text = 'SUBJECT: ' + selectedTemplate.subject + '\n\n' + selectedTemplate.body;
+  navigator.clipboard.writeText(text).then(function() {
+    showToast('Template copied to clipboard!');
+  }).catch(function() {
+    var ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    showToast('Template copied!');
+  });
+}
+
+function closeEmailTemplates() {
+  document.getElementById('email-templates-modal').classList.add('hidden');
+}
+
+// ── PERSIST: New Enquiry ──────────────────────────────────────
+function saveNewEnquiry() {
+  var nameEl = document.querySelector('#modal-enquiry input[type="text"]');
+  var name = nameEl ? nameEl.value.trim() : '';
+  if (!name) {
+    var input = document.querySelector('#modal-enquiry input[type="text"]');
+    if (input) { input.style.border = '1.5px solid #ef4444'; input.focus(); setTimeout(function(){ input.style.border=''; }, 2000); }
+    showToast('Please enter the client name to continue.'); return;
+  }
+  // Duplicate detection
+  var existingBookings = LFData.get('bookings');
+  var possibleDup = existingBookings.find(function(b) {
+    return b.client.toLowerCase().replace(/[^a-z]/g,'').indexOf(name.toLowerCase().replace(/[^a-z]/g,'').substring(0,6)) > -1;
+  });
+  if (possibleDup && !confirm('A similar name was found: "' + possibleDup.client + '". Are these the same client? Click OK to still create, Cancel to edit.')) {
+    return;
+  }
+  var newId = 'BK-' + (LFData.get('bookings').length + 100);
+  var newBooking = {
+    id: newId, client: name, email: '', source: 'Manual Entry',
+    type: 'Wedding', date: 'TBD', budget: '$—', status: 'enquiry',
+    followup: 'Call within 24h', action: 'convert'
+  };
+  LFData.add('bookings', newBooking);
+  // Auto-create client record if doesn't exist
+  var clients = LFData.get('clients');
+  var exists = clients.some(function(c) { return c.name.toLowerCase() === name.toLowerCase(); });
+  if (!exists) {
+    LFData.add('clients', {
+      name: name, email: '', phone: '', types: 'TBD',
+      sessions: 1, spent: '$—', lastSession: 'TBD', status: 'active'
+    });
+  }
+  // Auto-create a draft contract record
+  var contracts = LFData.get('contracts');
+  LFData.add('contracts', {
+    num: 'CON-' + (2860 + contracts.length),
+    client: name, type: 'Photography Agreement',
+    sent: '', signed: '', value: '$—', status: 'draft', zoho: 'Not sent'
+  });
+  closeEnquiryModal();
+  renderBookingsTable();
+  showToast('Enquiry saved — ' + name + ' added to Bookings!');
+  fireConfirmationSequence(name, 'Portrait');
+}
+
+// ── PERSIST: Create Invoice ───────────────────────────────────
+function saveNewInvoice() {
+  var clientEl = document.querySelector('#modal-create-invoice select');
+  var amountEl = document.querySelector('#modal-create-invoice input[type="number"]');
+  var client = clientEl ? clientEl.value : '';
+  var amount = amountEl ? amountEl.value.trim() : '';
+  if (!client || client.indexOf('Select') > -1) { alert('Please select a client.'); return; }
+  if (!amount) { alert('Please enter an amount.'); return; }
+  var invoices = LFData.get('invoices');
+  var nextNum = 'INV-' + (2848 + invoices.length);
+  var newInv = {
+    num: nextNum, client: client, type: 'Deposit (50%)',
+    issued: 'Jun 17', due: 'Jun 24', amount: '$' + parseFloat(amount).toFixed(2),
+    status: 'sent', zoho: 'Pending', zohoPending: true
+  };
+  LFData.add('invoices', newInv);
+  closeCreateInvoiceModal();
+  renderInvoicesTable();
+  showToast('Invoice ' + nextNum + ' created and sent to Zoho Books!');
+}
+
+// ── PERSIST: New Contract ─────────────────────────────────────
+function saveNewContract() {
+  var clientEl = document.querySelector('#modal-new-contract select');
+  var client = clientEl ? clientEl.value : '';
+  if (!client || client.indexOf('Select') > -1) { alert('Please select a client.'); return; }
+  var contracts = LFData.get('contracts');
+  var nextNum = 'CON-' + (2848 + contracts.length);
+  var newCon = {
+    num: nextNum, client: client, type: 'Photography Agreement',
+    sent: 'Jun 17', signed: '', value: '$—', status: 'sent', zoho: 'Awaiting'
+  };
+  LFData.add('contracts', newCon);
+  closeNewContractModal();
+  renderContractsTable();
+  showToast('Contract ' + nextNum + ' sent via Zoho Sign! Client will receive an e-signature link.');
+}
+
+// ── RENDER: Bookings table from LFData ────────────────────────
+function renderBookingsTable() {
+  var tbody = document.getElementById('bk-tbody');
+  if (!tbody) return;
+  var bookings = LFData.get('bookings');
+  var statusColors = { confirmed:'badge-confirmed', enquiry:'badge-enquiry', qualified:'badge-qualified', completed:'badge-completed', lost:'badge-lost' };
+  tbody.innerHTML = bookings.map(function(b) {
+    var sc = statusColors[b.status] || 'badge-neutral';
+    return '<tr data-status="' + b.status + '">' +
+      '<td>' + b.id + '</td>' +
+      '<td><div style="font-weight:600;">' + b.client + '</div></td>' +
+      '<td>' + b.source + '</td>' +
+      '<td><span class="type-tag type-' + (b.type||'').toLowerCase() + '">' + (b.type||'') + '</span></td>' +
+      '<td>' + b.date + '</td>' +
+      '<td>' + b.budget + '</td>' +
+      '<td><span class="status-badge ' + sc + '">' + b.status.charAt(0).toUpperCase() + b.status.slice(1) + '</span></td>' +
+      '<td>' + b.followup + '</td>' +
+      '<td>' + (b.action === 'convert' ?
+        '<button class="btn-blue btn-sm" onclick="openEnquiryModal()" style="font-size:12px;padding:5px 10px;">Convert</button>' :
+        '<button class="btn-outline btn-sm" style="font-size:12px;padding:5px 10px;">View</button>') +
+      '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+// ── RENDER: Invoices table from LFData ────────────────────────
+function renderInvoicesTable() {
+  var tbody = document.getElementById('inv-tbody');
+  if (!tbody) return;
+  var invoices = LFData.get('invoices');
+  var statusMap = { paid:'badge-paid', sent:'badge-sent-inv', draft:'badge-draft-inv', overdue:'badge-overdue' };
+  tbody.innerHTML = invoices.map(function(inv) {
+    var sc = statusMap[inv.status] || 'badge-neutral';
+    return '<tr data-status="' + inv.status + '">' +
+      '<td style="font-family:monospace;font-size:12px;">' + inv.num + '</td>' +
+      '<td><strong>' + inv.client + '</strong></td>' +
+      '<td>' + inv.type + '</td>' +
+      '<td>' + inv.issued + '</td>' +
+      '<td>' + inv.due + '</td>' +
+      '<td style="font-weight:600;">' + inv.amount + '</td>' +
+      '<td><span class="status-badge ' + sc + '">' + inv.status.charAt(0).toUpperCase() + inv.status.slice(1) + '</span></td>' +
+      '<td><span style="color:' + (inv.zohoPending ? '#a16207' : '#15803d') + ';font-size:12.5px;">' + inv.zoho + '</span></td>' +
+      '<td><button class="eq-action-btn" onclick="printInvoice(\'' + inv.num + '\',\'' + inv.client + '\',\'' + inv.amount + '\',\'' + inv.due + '\',\'' + inv.type + '\',\'' + inv.status + '\')" title="Print/PDF"><i class="ti ti-printer"></i></button></td>' +
+    '</tr>';
+  }).join('');
+}
+
+// ── RENDER: Contracts table from LFData ──────────────────────
+function renderContractsTable() {
+  var tbody = document.getElementById('con-tbody');
+  if (!tbody) return;
+  var contracts = LFData.get('contracts');
+  var statusMap = { signed:'badge-signed', sent:'badge-sent-con', draft:'badge-draft-con' };
+  tbody.innerHTML = contracts.map(function(c) {
+    var sc = statusMap[c.status] || 'badge-neutral';
+    return '<tr data-status="' + c.status + '">' +
+      '<td style="font-family:monospace;font-size:12px;">' + c.num + '</td>' +
+      '<td><strong>' + c.client + '</strong></td>' +
+      '<td>' + c.type + '</td>' +
+      '<td>' + (c.sent || '—') + '</td>' +
+      '<td>' + (c.signed || '—') + '</td>' +
+      '<td style="font-weight:600;">' + c.value + '</td>' +
+      '<td><span class="status-badge ' + sc + '">' + c.status.charAt(0).toUpperCase() + c.status.slice(1) + '</span></td>' +
+      '<td><span style="color:' + (c.zoho==='Completed'?'#15803d':c.zoho==='Awaiting'?'#1d4ed8':'#94a3b8') + ';font-size:12.5px;">' + c.zoho + '</span></td>' +
+      '<td>' + (c.status==='sent' ? '<button class="eq-action-btn" onclick="showToast(\'Reminder sent to '+c.client+'!\')"><i class="ti ti-bell"></i></button>' : '') +
+        '<button class="eq-action-btn"><i class="ti ti-eye"></i></button>' +
+      '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+// ── PERSIST: Equipment check-out status ───────────────────────
+function toggleEquipStatus(serial, btn) {
+  var statuses = LFData.get('equipment_status') || {};
+  var current = statuses[serial] || 'available';
+  var next = current === 'available' ? 'checkout' : 'available';
+  statuses[serial] = next;
+  LFData.set('equipment_status', statuses);
+  btn.textContent = next === 'checkout' ? 'Check In' : 'Check Out';
+  showToast(serial + ' marked as ' + (next === 'checkout' ? 'Checked Out' : 'Available'));
+}
+
+// ── PERSIST: Filter state ─────────────────────────────────────
+function filterBookings() {
+  var s  = (document.getElementById('bk-search')  || {value:''}).value;
+  var st = (document.getElementById('bk-status')  || {value:''}).value;
+  LFData.saveFilter('bookings', { search: s, status: st });
+  filterTab('bk-tbody', s, st);
+}
+function filterInvoices() {
+  var s  = (document.getElementById('inv-search') || {value:''}).value;
+  var st = (document.getElementById('inv-status') || {value:''}).value;
+  LFData.saveFilter('invoices', { search: s, status: st });
+  filterTab('inv-tbody', s, st);
+}
+function filterContracts() {
+  var s  = (document.getElementById('con-search') || {value:''}).value;
+  var st = (document.getElementById('con-status') || {value:''}).value;
+  LFData.saveFilter('contracts', { search: s, status: st });
+  filterTab('con-tbody', s, st);
+}
+function filterClients() {
+  var s  = (document.getElementById('cl-search')  || {value:''}).value;
+  var st = (document.getElementById('cl-status')  || {value:''}).value;
+  LFData.saveFilter('clients', { search: s, status: st });
+  filterTab('cl-tbody', s, st);
+}
+
+// Restore filter state when switching tabs
+var _origSwitchTab = switchTab;
+switchTab = function(name, btn) {
+  _origSwitchTab(name, btn);
+  var bcEl = document.getElementById('bc-subtab');
+  if (bcEl) bcEl.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+  setTimeout(function() {
+    var saved = LFData.getFilter(name);
+    var sEl = document.getElementById(name.substring(0,2) + '-search') || document.getElementById(name + '-search');
+    var stEl = document.getElementById(name.substring(0,2) + '-status') || document.getElementById(name + '-status');
+    if (sEl && saved.search !== undefined) { sEl.value = saved.search; }
+    if (stEl && saved.status !== undefined) { stEl.value = saved.status; }
+    // Re-render from LFData
+    if (name === 'bookings')  renderBookingsTable();
+    if (name === 'invoices')  renderInvoicesTable();
+    if (name === 'contracts') renderContractsTable();
+  }, 50);
+};
+
+// Initial render on load
+document.addEventListener('DOMContentLoaded', function() {
+  renderBookingsTable();
+  renderInvoicesTable();
+  renderContractsTable();
+});
+
+// ── CONTRACT TEMPLATE PREVIEWS ────────────────────────────────
+var contractTemplates = {
+  'Standard Photography Agreement': 'This Photography Agreement covers: session details, delivery timeline (2-4 weeks), usage rights (personal use only), cancellation policy (50% deposit non-refundable), liability limitations, and force majeure clauses. Payment: 50% deposit on signing, balance due on delivery day.',
+  'Wedding Photography Contract': 'Wedding-specific terms including: exclusive photographer rights on the day, 8-hour coverage minimum, second shooter option, raw files not included, albums ordered separately, delivery within 6-8 weeks, venue access requirements, meal provision for photographer, social media sharing rights.',
+  'Corporate Headshot Agreement': 'Corporate usage rights included (internal and external marketing). Full day rate or half day rate options. Includes retouching: up to 10 hero images per subject. Delivery within 5 business days. Usage: unlimited within the organisation for 2 years.',
+  'Event Photography Contract': 'Event coverage agreement including: start/end times, overtime rates ($250/hr), minimum 4-hour booking, crowd photography rights, deliverables (online gallery within 1 week), hi-res downloadable images, no exclusivity clause.'
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  var tplSelect = document.getElementById('contract-template-select');
+  if (tplSelect) {
+    tplSelect.addEventListener('change', function() {
+      var preview = document.getElementById('contract-template-preview');
+      var text = contractTemplates[this.value];
+      if (preview && text) {
+        preview.textContent = text;
+        preview.style.display = 'block';
+      }
+    });
+  }
+});
+
+// ── AUTOMATED BOOKING CONFIRMATION SEQUENCE ───────────────────
+function fireConfirmationSequence(clientName, shootType) {
+  var steps = [
+    { delay: 500,  icon: 'ti-mail',         color: '#2563eb', msg: 'Welcome email sent to ' + clientName + ' via Zoho Mail' },
+    { delay: 1500, icon: 'ti-file-text',     color: '#8b5cf6', msg: 'Contract sent to ' + clientName + ' for e-signature (Zoho Sign)' },
+    { delay: 2800, icon: 'ti-file-invoice',  color: '#f59e0b', msg: '50% deposit invoice created in Zoho Books — INV-' + (2850 + Math.floor(Math.random()*10)) },
+    { delay: 4200, icon: 'ti-list-check',    color: '#22c55e', msg: shootType + ' shoot checklist assigned to lead photographer' },
+    { delay: 5500, icon: 'ti-circle-check',  color: '#22c55e', msg: 'Booking confirmed — all automations complete!' }
+  ];
+
+  var seqBox = document.createElement('div');
+  seqBox.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1a1d2e;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:18px 20px;min-width:340px;z-index:9998;font-family:Inter,sans-serif;box-shadow:0 10px 40px rgba(0,0,0,.3);';
+  seqBox.innerHTML = '<div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><i class="ti ti-bolt" style="color:#f59e0b;font-size:16px;"></i> Automation running…</div><div id="seq-steps"></div>';
+  document.body.appendChild(seqBox);
+
+  steps.forEach(function(step) {
+    setTimeout(function() {
+      var stepsEl = seqBox.querySelector('#seq-steps');
+      if (!stepsEl) return;
+      var stepEl = document.createElement('div');
+      stepEl.style.cssText = 'display:flex;align-items:flex-start;gap:10px;padding:6px 0;font-size:12.5px;color:rgba(255,255,255,.75);';
+      stepEl.innerHTML = '<i class="ti ' + step.icon + '" style="color:' + step.color + ';font-size:15px;flex-shrink:0;margin-top:1px;"></i>' + step.msg;
+      stepsEl.appendChild(stepEl);
+    }, step.delay);
+  });
+
+  setTimeout(function() {
+    if (seqBox.parentNode) seqBox.remove();
+  }, 7000);
+}
+
+// ── CLIENT QUESTIONNAIRE ──────────────────────────────────────
+function openQuestionnaire() { openModal('questionnaire-modal'); }
+function closeQuestionnaire() { closeModal('questionnaire-modal'); }
+function saveQuestionnaire() {
+  var client = document.getElementById('q-client').value.trim() || 'Client';
+  var answers = {
+    client: client,
+    venue: document.getElementById('q-venue').value,
+    ceremonyTime: document.getElementById('q-ceremony-time').value,
+    receptionEnd: document.getElementById('q-reception-end').value,
+    mustHave: document.getElementById('q-must-have').value,
+    familyGroups: document.getElementById('q-family-groups').value,
+    style: document.getElementById('q-style').value,
+    special: document.getElementById('q-special').value
+  };
+  localStorage.setItem('questionnaire_' + client.replace(/\s+/g,'-').toLowerCase(), JSON.stringify(answers));
+  closeQuestionnaire();
+  showToast('Questionnaire sent to ' + client + ' via email! Answers will appear here when completed.');
+}
+
+// Auto-populate second shooter fee
+document.addEventListener('DOMContentLoaded', function() {
+  var ss = document.getElementById('af-second-shooter');
+  var sf = document.getElementById('af-second-fee');
+  if (ss && sf) {
+    ss.addEventListener('change', function() {
+      var fees = { 'James Lee': '$350', 'Amy Patel': '$300', 'Marcus Chen': '$400', 'external': 'TBD', '': '' };
+      sf.value = fees[this.value] || '';
+    });
+  }
+});
+
+// ── DATA EXPORT / ARCHIVE ─────────────────────────────────────
+function exportAllData() {
+  var data = {
+    exportDate: new Date().toISOString(),
+    studio: 'Sarah Kim Photography',
+    bookings:  typeof LFData !== 'undefined' ? LFData.get('bookings')  : [],
+    clients:   typeof LFData !== 'undefined' ? LFData.get('clients')   : [],
+    invoices:  typeof LFData !== 'undefined' ? LFData.get('invoices')  : [],
+    contracts: typeof LFData !== 'undefined' ? LFData.get('contracts') : []
+  };
+  var json = JSON.stringify(data, null, 2);
+  var blob = new Blob([json], { type: 'application/json' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href = url;
+  a.download = 'lensflow-export-' + new Date().toISOString().split('T')[0] + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Data exported — ' + data.bookings.length + ' bookings, ' + data.invoices.length + ' invoices, ' + data.contracts.length + ' contracts saved.');
+}
+
+// ── CANCELLATION WORKFLOW ─────────────────────────────────────
+function openCancellationModal() { openModal('modal-cancellation'); }
+function closeCancellationModal() { closeModal('modal-cancellation'); }
+function calcRefund() {
+  var days = parseInt(document.getElementById('cancel-days').value) || 0;
+  var depositStr = (document.getElementById('cancel-deposit').value || '0').replace(/[^0-9.]/g,'');
+  var deposit = parseFloat(depositStr) || 0;
+  var policyEl = document.getElementById('calc-policy');
+  var refundEl = document.getElementById('calc-refund');
+  var refund, policy;
+  if (days > 60)      { policy = 'Full refund'; refund = deposit; }
+  else if (days > 30) { policy = '50% refundable'; refund = deposit * 0.5; }
+  else if (days > 14) { policy = '25% refundable'; refund = deposit * 0.25; }
+  else                { policy = 'No refund (<14 days)'; refund = 0; }
+  if (policyEl) policyEl.textContent = policy;
+  if (refundEl) refundEl.textContent = '$' + refund.toFixed(2);
+}
+function confirmCancellation() {
+  var sel = document.getElementById('cancel-booking-select').value;
+  if (sel.indexOf('Select') > -1) { alert('Please select a booking to cancel.'); return; }
+  var clientName = sel.split(' — ')[0];
+  // Mark booking as cancelled in LFData
+  LFData.update('bookings', function(b){ return b.client === clientName; }, function(b){ b.status = 'cancelled'; return b; });
+  closeCancellationModal();
+  showToast('Booking cancelled — refund processed and client notified via email.');
+  renderBookingsTable();
+}
+
+// ── PACKAGE BUILDER ───────────────────────────────────────────
+var packages = [
+  { name:'Wedding Essential', type:'Wedding', price:'$2,400', hours:6, shooters:1, photos:300, gallery:true, album:false,
+    items:['6 hours coverage','1 photographer','300 edited photos','Online gallery (90 days)','Full-res downloads'] },
+  { name:'Wedding Premium', type:'Wedding', price:'$3,800', hours:8, shooters:2, photos:500, gallery:true, album:true,
+    items:['8 hours coverage','2 photographers','500 edited photos','Online gallery (180 days)','Full-res downloads','1 premium album (30 pages)'] },
+  { name:'Portrait Basic', type:'Portrait', price:'$450', hours:1, shooters:1, photos:50, gallery:true, album:false,
+    items:['1 hour session','1 photographer','50 edited photos','Online gallery (60 days)','Web-res downloads'] },
+  { name:'Portrait Family', type:'Portrait', price:'$650', hours:2, shooters:1, photos:120, gallery:true, album:false,
+    items:['2 hour session','1 photographer','120 edited photos','Online gallery (90 days)','Full-res downloads'] },
+  { name:'Corporate Half Day', type:'Corporate', price:'$850', hours:4, shooters:1, photos:80, gallery:true, album:false,
+    items:['Half day (4hrs)','1 photographer','80 headshots','5 business day delivery','Commercial usage rights'] },
+  { name:'Event Full Day', type:'Event', price:'$2,200', hours:8, shooters:2, photos:400, gallery:true, album:false,
+    items:['Full day coverage','2 photographers','400 edited photos','Online gallery (60 days)','Social media delivery within 48hrs'] }
+];
+var selectedPkg = null;
+
+function openPackageBuilder() {
+  var grid = document.getElementById('pkg-grid');
+  if (grid) {
+    grid.innerHTML = packages.map(function(p, i) {
+      return '<div onclick="selectPackage('+i+')" style="border:1px solid #e2e8f0;border-radius:10px;padding:14px;cursor:pointer;transition:all .13s;" onmouseover="this.style.borderColor=\'#2563eb\'" onmouseout="this.style.borderColor=\'#e2e8f0\'">' +
+        '<div style="font-size:11px;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">' + p.type + '</div>' +
+        '<div style="font-size:14px;font-weight:700;color:#1a1d2e;margin-bottom:2px;">' + p.name + '</div>' +
+        '<div style="font-size:18px;font-weight:800;color:#1a1d2e;">' + p.price + '</div>' +
+        '<div style="font-size:12px;color:#64748b;margin-top:4px;">' + p.hours + 'hrs · ' + p.photos + ' photos</div>' +
+      '</div>';
+    }).join('');
+  }
+  document.getElementById('pkg-detail').style.display = 'none';
+  openModal('modal-package-builder');
+}
+
+function selectPackage(i) {
+  selectedPkg = packages[i];
+  document.getElementById('pkg-name').textContent = selectedPkg.name;
+  document.getElementById('pkg-price').textContent = selectedPkg.price;
+  document.getElementById('pkg-items').innerHTML = selectedPkg.items.map(function(item) {
+    return '<div style="display:flex;align-items:center;gap:6px;"><i class="ti ti-check" style="color:#22c55e;font-size:13px;"></i>' + item + '</div>';
+  }).join('');
+  document.getElementById('pkg-detail').style.display = 'block';
+}
+
+function applyPackage() {
+  if (!selectedPkg) return;
+  closeModal('modal-package-builder');
+  openEnquiryModal();
+  setTimeout(function() {
+    var typeEl = document.querySelector('#modal-enquiry select');
+    if (typeEl) typeEl.value = selectedPkg.type;
+    var budgetEl = document.querySelector('#modal-enquiry input[placeholder*="$"]');
+    if (budgetEl) budgetEl.value = selectedPkg.price;
+    showToast(selectedPkg.name + ' package applied! Fill in client details to complete.');
+  }, 300);
+}
+
+// ── TAX CALCULATION ON INVOICES ───────────────────────────────
+function calcInvoiceTax() {
+  var amtEl = document.querySelector('#modal-create-invoice input[type="number"]');
+  var rateEl = document.getElementById('inv-tax-rate');
+  var taxEl = document.getElementById('inv-tax-amount');
+  var totalEl = document.getElementById('inv-total-with-tax');
+  if (!amtEl || !rateEl) return;
+  var amount = parseFloat(amtEl.value) || 0;
+  var rate = parseFloat(rateEl.value) || 0;
+  var tax = amount * (rate/100);
+  var total = amount + tax;
+  if (taxEl) taxEl.value = '$' + tax.toFixed(2);
+  if (totalEl) totalEl.value = '$' + total.toFixed(2);
+}
+// Wire tax calc to amount input
+document.addEventListener('DOMContentLoaded', function() {
+  var amtEl = document.querySelector('#modal-create-invoice input[type="number"]');
+  if (amtEl) amtEl.addEventListener('input', calcInvoiceTax);
+});
+
+// ── OVERDUE ESCALATION + PAYMENT REMINDERS ────────────────────
+(function checkOverdueInvoices() {
+  var invoices = typeof LFData !== 'undefined' ? LFData.get('invoices') : [];
+  var today = new Date('2026-06-17');
+  var overdue = invoices.filter(function(inv) { return inv.status === 'overdue'; });
+  var dueSoon = invoices.filter(function(inv) {
+    if (inv.status !== 'sent') return false;
+    // Check if due within 7 days (simplified - check month/day text)
+    return inv.due && (inv.due.indexOf('Jun') > -1 || inv.due.indexOf('Jul') > -1);
+  });
+
+  if (overdue.length > 0) {
+    // Escalate overdue: show badge count in Invoices tab
+    var invTab = document.querySelector('[onclick*="invoices"]');
+    if (invTab && !invTab.querySelector('.esc-badge')) {
+      var badge = document.createElement('span');
+      badge.className = 'esc-badge';
+      badge.style.cssText = 'margin-left:6px;background:#ef4444;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;';
+      badge.textContent = overdue.length + ' overdue';
+      invTab.appendChild(badge);
+    }
+  }
+})();
+
+// ── SHOOT PROFITABILITY CALCULATOR ────────────────────────────
+function calcProfit() {
+  var rev  = parseFloat(document.getElementById('profit-revenue').value) || 0;
+  var eq   = parseFloat(document.getElementById('profit-equip').value)  || 0;
+  var sh   = parseFloat(document.getElementById('profit-shooter').value)|| 0;
+  var tr   = parseFloat(document.getElementById('profit-travel').value) || 0;
+  var expenses = eq + sh + tr;
+  var profit = rev - expenses;
+  var margin = rev > 0 ? Math.round((profit/rev)*100) : 0;
+  document.getElementById('res-expenses').textContent = '$' + expenses.toFixed(2);
+  document.getElementById('res-profit').textContent   = '$' + profit.toFixed(2);
+  document.getElementById('res-margin').textContent   = margin + '%';
+  document.getElementById('profit-result').style.display = 'flex';
+}
+
+// ── LOADING STATES ────────────────────────────────────────────
+function withLoading(btnSelector, fn) {
+  var btn = document.querySelector(btnSelector);
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader" style="animation:spin .7s linear infinite;"></i> Saving…'; }
+  setTimeout(function() {
+    fn();
+    if (btn) { btn.disabled = false; btn.innerHTML = btn.getAttribute('data-orig') || 'Save'; }
+  }, 600);
+}
+// Add spin animation
+var spinStyle = document.createElement('style');
+spinStyle.textContent = '@keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }';
+document.head.appendChild(spinStyle);
+
+// ── UNSAVED CHANGES WARNING ────────────────────────────────────
+function checkUnsaved(formSelector, closeFn) {
+  var inputs = document.querySelectorAll(formSelector + ' input, ' + formSelector + ' textarea, ' + formSelector + ' select');
+  var hasData = false;
+  inputs.forEach(function(el) {
+    if ((el.type !== 'hidden') && el.value && el.value !== el.defaultValue && el.value.trim()) hasData = true;
+  });
+  if (hasData) {
+    if (confirm('You have unsaved changes. Are you sure you want to close?')) closeFn();
+  } else { closeFn(); }
+}
 </script>
 
 <!-- ══ VENDOR DETAILS MODAL ══ -->
@@ -2683,6 +3692,20 @@
           <label class="add-form-label">Budget (approx)</label>
           <input class="add-form-input" type="text" placeholder="e.g. $1,200">
         </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Second Shooter</label>
+          <select class="add-form-input" id="af-second-shooter">
+            <option value="">None — solo shoot</option>
+            <option value="James Lee">James Lee ($350/day)</option>
+            <option value="Amy Patel">Amy Patel ($300/day)</option>
+            <option value="Marcus Chen">Marcus Chen ($400/day)</option>
+            <option value="external">Hire external (TBD)</option>
+          </select>
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Second Shooter Fee</label>
+          <input class="add-form-input" type="text" id="af-second-fee" placeholder="e.g. $350" readonly>
+        </div>
         <div class="add-form-field add-form-full">
           <label class="add-form-label">Notes / Message</label>
           <textarea class="add-form-input" rows="3" placeholder="Any details from the enquiry…" style="resize:vertical;"></textarea>
@@ -2690,8 +3713,8 @@
       </div>
     </div>
     <div class="vm-footer">
-      <button class="vm-btn-outline" onclick="closeEnquiryModal()">Cancel</button>
-      <button class="vm-btn-primary" onclick="saveForm(closeEnquiryModal)"><i class="ti ti-device-floppy"></i> Save Enquiry</button>
+      <button class="vm-btn-outline" onclick="checkUnsaved('#modal-enquiry', closeEnquiryModal)">Cancel</button>
+      <button class="vm-btn-primary" onclick="saveNewEnquiry()"><i class="ti ti-device-floppy"></i> Save Enquiry</button>
     </div>
   </div>
 </div>
@@ -2779,12 +3802,35 @@
           <input class="add-form-input" type="number" placeholder="0.00" step="0.01">
         </div>
         <div class="add-form-field">
+          <label class="add-form-label">Tax Rate (%)</label>
+          <input class="add-form-input" type="number" id="inv-tax-rate" value="8" step="0.5" oninput="calcInvoiceTax()">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Tax Amount</label>
+          <input class="add-form-input" type="text" id="inv-tax-amount" readonly placeholder="Auto-calculated">
+        </div>
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Total (incl. tax)</label>
+          <input class="add-form-input" type="text" id="inv-total-with-tax" readonly style="font-weight:700;background:#f0fdf4;border-color:#bbf7d0;">
+        </div>
+        <div class="add-form-field">
           <label class="add-form-label">Issue Date</label>
           <input class="add-form-input" type="date" value="2026-06-15">
         </div>
         <div class="add-form-field">
           <label class="add-form-label">Due Date</label>
           <input class="add-form-input" type="date">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Payment Method</label>
+          <select class="add-form-input" id="inv-payment-method">
+            <option>Bank Transfer</option>
+            <option>Zelle</option>
+            <option>Credit Card (Stripe)</option>
+            <option>Cash</option>
+            <option>PayPal</option>
+            <option>Cheque</option>
+          </select>
         </div>
         <div class="add-form-field add-form-full">
           <label class="add-form-label">Notes / Payment Terms</label>
@@ -2796,8 +3842,8 @@
       </div>
     </div>
     <div class="vm-footer">
-      <button class="vm-btn-outline" onclick="closeCreateInvoiceModal()">Cancel</button>
-      <button class="vm-btn-primary" onclick="saveForm(closeCreateInvoiceModal)"><i class="ti ti-device-floppy"></i> Create Invoice</button>
+      <button class="vm-btn-outline" onclick="checkUnsaved('#modal-create-invoice', closeCreateInvoiceModal)">Cancel</button>
+      <button class="vm-btn-primary" onclick="saveNewInvoice()"><i class="ti ti-device-floppy"></i> Create Invoice</button>
     </div>
   </div>
 </div>
@@ -2838,12 +3884,13 @@
         </div>
         <div class="add-form-field">
           <label class="add-form-label">Contract Template</label>
-          <select class="add-form-input">
+          <select class="add-form-input" id="contract-template-select">
             <option>Standard Photography Agreement</option>
             <option>Wedding Photography Contract</option>
             <option>Corporate Headshot Agreement</option>
             <option>Event Photography Contract</option>
           </select>
+          <div id="contract-template-preview" style="margin-top:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;font-size:12.5px;color:#475569;line-height:1.7;max-height:120px;overflow-y:auto;display:none;"></div>
         </div>
         <div class="add-form-field">
           <label class="add-form-label">Send Method</label>
@@ -2860,7 +3907,312 @@
     </div>
     <div class="vm-footer">
       <button class="vm-btn-outline" onclick="closeNewContractModal()">Cancel</button>
-      <button class="vm-btn-primary" onclick="saveForm(closeNewContractModal)"><i class="ti ti-send"></i> Send Contract</button>
+      <button class="vm-btn-primary" onclick="saveNewContract()"><i class="ti ti-send"></i> Send Contract</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CALENDAR ADD/EDIT BOOKING MODAL ══ -->
+<div id="cal-day-modal" class="vendor-modal-overlay hidden">
+  <div class="vendor-modal" style="max-width:480px;">
+    <div class="vm-header">
+      <div>
+        <div class="vm-title" id="cal-modal-title">Add Booking</div>
+        <div class="vm-subtitle">Click Save to add to calendar · stored locally</div>
+      </div>
+      <button class="vm-close" onclick="closeCalendarModal()">&#x2715;</button>
+    </div>
+    <div class="vm-body">
+      <input type="hidden" id="cal-day-key">
+      <div class="add-form-grid">
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Client Name *</label>
+          <input class="add-form-input" type="text" id="cal-client" placeholder="e.g. Emma &amp; Jake Wilson">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Shoot Type</label>
+          <select class="add-form-input" id="cal-type">
+            <option>Wedding</option><option>Portrait</option><option>Engagement</option>
+            <option>Corporate</option><option>Event</option><option>Commercial</option>
+          </select>
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Start Time</label>
+          <input class="add-form-input" type="time" id="cal-time" value="10:00">
+        </div>
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Location</label>
+          <input class="add-form-input" type="text" id="cal-location" placeholder="e.g. Central Park, NYC">
+        </div>
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Notes</label>
+          <textarea class="add-form-input" id="cal-notes" rows="2" style="resize:vertical;" placeholder="Any shoot details…"></textarea>
+        </div>
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+            <input type="checkbox" id="cal-unavailable" style="width:16px;height:16px;cursor:pointer;accent-color:#ef4444;">
+            <span>Mark this day as UNAVAILABLE (no bookings can be made)</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="vm-footer" style="justify-content:space-between;">
+      <button class="vm-btn-outline" style="color:#dc2626;border-color:#fecaca;" onclick="deleteCalendarEvent()">Remove Event</button>
+      <div style="display:flex;gap:8px;">
+        <button class="vm-btn-outline" onclick="closeCalendarModal()">Cancel</button>
+        <button class="vm-btn-primary" onclick="saveCalendarEvent()">Save to Calendar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CLIENT 360 SLIDE-OVER ══ -->
+<div id="client360-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9998;display:none;" onclick="closeClient360()"></div>
+<div id="client360-panel" style="position:fixed;top:0;right:-520px;width:520px;height:100vh;background:#fff;z-index:9999;box-shadow:-8px 0 40px rgba(0,0,0,.15);display:flex;flex-direction:column;transition:right .3s ease;font-family:Inter,sans-serif;overflow:hidden;">
+  <div style="padding:20px 24px 16px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+    <div>
+      <div id="c360-name" style="font-size:18px;font-weight:700;color:#1a1d2e;"></div>
+      <div id="c360-sub" style="font-size:12.5px;color:#64748b;margin-top:3px;"></div>
+    </div>
+    <button onclick="closeClient360()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;line-height:1;">&#x2715;</button>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:20px 24px;">
+
+    <!-- Contact info -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;">
+      <div style="background:#f8fafc;border-radius:10px;padding:14px;">
+        <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;">Email</div>
+        <div id="c360-email" style="font-size:13.5px;color:#2563eb;"></div>
+      </div>
+      <div style="background:#f8fafc;border-radius:10px;padding:14px;">
+        <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;">Phone</div>
+        <div id="c360-phone" style="font-size:13.5px;color:#1a1d2e;"></div>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;">
+      <div style="background:#eff6ff;border-radius:10px;padding:14px;text-align:center;">
+        <div id="c360-sessions" style="font-size:24px;font-weight:800;color:#2563eb;">—</div>
+        <div style="font-size:11.5px;color:#1d4ed8;margin-top:4px;">Sessions</div>
+      </div>
+      <div style="background:#f0fdf4;border-radius:10px;padding:14px;text-align:center;">
+        <div id="c360-value" style="font-size:24px;font-weight:800;color:#16a34a;">—</div>
+        <div style="font-size:11.5px;color:#15803d;margin-top:4px;">Total Value</div>
+      </div>
+      <div style="background:#fdf4ff;border-radius:10px;padding:14px;text-align:center;">
+        <div id="c360-galleries" style="font-size:24px;font-weight:800;color:#9333ea;">—</div>
+        <div style="font-size:11.5px;color:#7e22ce;margin-top:4px;">Galleries</div>
+      </div>
+    </div>
+
+    <!-- Shoot history -->
+    <div style="margin-bottom:20px;">
+      <div style="font-size:13px;font-weight:700;color:#1a1d2e;margin-bottom:12px;display:flex;align-items:center;gap:7px;"><i class="ti ti-camera" style="color:#2563eb;"></i> Shoot History</div>
+      <div id="c360-history" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+
+    <!-- Invoices -->
+    <div style="margin-bottom:20px;">
+      <div style="font-size:13px;font-weight:700;color:#1a1d2e;margin-bottom:12px;display:flex;align-items:center;gap:7px;"><i class="ti ti-file-invoice" style="color:#f59e0b;"></i> Invoices</div>
+      <div id="c360-invoices" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+
+    <!-- Galleries -->
+    <div style="margin-bottom:20px;">
+      <div style="font-size:13px;font-weight:700;color:#1a1d2e;margin-bottom:12px;display:flex;align-items:center;gap:7px;"><i class="ti ti-photo" style="color:#8b5cf6;"></i> Galleries</div>
+      <div id="c360-gallery-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+
+    <!-- Notes -->
+    <div style="margin-bottom:20px;">
+      <div style="font-size:13px;font-weight:700;color:#1a1d2e;margin-bottom:10px;">Notes</div>
+      <textarea id="c360-notes" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;font-size:13.5px;font-family:inherit;color:#1a1d2e;resize:vertical;outline:none;" rows="3" placeholder="Add notes about this client…"></textarea>
+    </div>
+  </div>
+  <div style="padding:14px 24px;border-top:1px solid #f1f5f9;display:flex;gap:10px;flex-shrink:0;background:#fafbfc;">
+    <button onclick="showToast('Note saved!')" style="flex:1;background:#2563eb;color:#fff;border:none;border-radius:8px;padding:10px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;">Save Notes</button>
+    <button onclick="closeClient360()" style="padding:10px 20px;background:transparent;color:#64748b;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;">Close</button>
+  </div>
+</div>
+
+<!-- ══ EMAIL TEMPLATE LIBRARY ══ -->
+<div id="email-templates-modal" class="vendor-modal-overlay hidden">
+  <div class="vendor-modal" style="max-width:620px;">
+    <div class="vm-header">
+      <div>
+        <div class="vm-title"><i class="ti ti-mail"></i> Email Template Library</div>
+        <div class="vm-subtitle">Click any template to copy — then paste into your email client</div>
+      </div>
+      <button class="vm-close" onclick="closeEmailTemplates()">&#x2715;</button>
+    </div>
+    <div class="vm-body" style="max-height:70vh;overflow-y:auto;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" id="template-grid"></div>
+      <div id="template-preview" style="display:none;margin-top:16px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;padding:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div id="tpl-name" style="font-size:13.5px;font-weight:700;color:#1a1d2e;"></div>
+          <button onclick="copyTemplate()" style="background:#2563eb;color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;"><i class="ti ti-copy"></i> Copy</button>
+        </div>
+        <div style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:4px;">SUBJECT:</div>
+        <div id="tpl-subject" style="font-size:13.5px;color:#1a1d2e;font-weight:500;margin-bottom:10px;padding:8px 12px;background:#fff;border-radius:6px;border:1px solid #e2e8f0;"></div>
+        <div style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:4px;">BODY:</div>
+        <div id="tpl-body" style="font-size:13px;color:#1a1d2e;white-space:pre-wrap;line-height:1.7;padding:12px;background:#fff;border-radius:6px;border:1px solid #e2e8f0;max-height:240px;overflow-y:auto;"></div>
+      </div>
+    </div>
+    <div class="vm-footer">
+      <button class="vm-btn-outline" onclick="closeEmailTemplates()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CLIENT QUESTIONNAIRE MODAL ══ -->
+<div id="questionnaire-modal" class="vendor-modal-overlay hidden">
+  <div class="vendor-modal" style="max-width:580px;">
+    <div class="vm-header">
+      <div>
+        <div class="vm-title"><i class="ti ti-clipboard-list"></i> Wedding Client Questionnaire</div>
+        <div class="vm-subtitle">Sent to client — answers saved to their profile</div>
+      </div>
+      <button class="vm-close" onclick="closeQuestionnaire()">&#x2715;</button>
+    </div>
+    <div class="vm-body" style="max-height:70vh;overflow-y:auto;">
+      <div class="add-form-grid">
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Client / Couple Name</label>
+          <input class="add-form-input" type="text" placeholder="Emma & Jake Wilson" id="q-client">
+        </div>
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Wedding Venue Name & Address</label>
+          <input class="add-form-input" type="text" placeholder="The Plaza Hotel, 5th Ave, New York" id="q-venue">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Ceremony Start Time</label>
+          <input class="add-form-input" type="time" id="q-ceremony-time">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Reception End Time</label>
+          <input class="add-form-input" type="time" id="q-reception-end">
+        </div>
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Must-Have Shots (list your priorities)</label>
+          <textarea class="add-form-input" rows="3" style="resize:vertical;" id="q-must-have" placeholder="First kiss, cake cutting, father-daughter dance, ring close-ups…"></textarea>
+        </div>
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Family Group Photos (list each group)</label>
+          <textarea class="add-form-input" rows="3" style="resize:vertical;" id="q-family-groups" placeholder="Bride + Parents, Groom + Parents, Siblings, Grandparents…"></textarea>
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Bridal party size</label>
+          <input class="add-form-input" type="number" placeholder="6" id="q-bridal-party">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Guest count</label>
+          <input class="add-form-input" type="number" placeholder="150" id="q-guests">
+        </div>
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Photography style preference</label>
+          <select class="add-form-input" id="q-style">
+            <option>Candid / Documentary</option>
+            <option>Traditional / Posed</option>
+            <option>Fine Art / Editorial</option>
+            <option>Mix of candid and posed</option>
+          </select>
+        </div>
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Special requests or anything we should know</label>
+          <textarea class="add-form-input" rows="3" style="resize:vertical;" id="q-special" placeholder="Divorced parents (seat separately), elderly grandparents (priority photos early), surprise first look…"></textarea>
+        </div>
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Pinterest / Inspiration board link</label>
+          <input class="add-form-input" type="url" placeholder="https://pinterest.com/..." id="q-pinterest">
+        </div>
+      </div>
+    </div>
+    <div class="vm-footer">
+      <button class="vm-btn-outline" onclick="closeQuestionnaire()">Cancel</button>
+      <button class="vm-btn-primary" onclick="saveQuestionnaire()"><i class="ti ti-send"></i> Send to Client</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CANCELLATION MODAL ══ -->
+<div id="modal-cancellation" class="vendor-modal-overlay hidden">
+  <div class="vendor-modal" style="max-width:480px;">
+    <div class="vm-header">
+      <div>
+        <div class="vm-title" style="color:#dc2626;"><i class="ti ti-ban"></i> Cancel Booking</div>
+        <div class="vm-subtitle">Calculate refund and notify client automatically</div>
+      </div>
+      <button class="vm-close" onclick="closeCancellationModal()">&#x2715;</button>
+    </div>
+    <div class="vm-body">
+      <div class="add-form-grid">
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Booking to Cancel</label>
+          <select class="add-form-input" id="cancel-booking-select" onchange="calcRefund()">
+            <option>— Select booking —</option>
+            <option>Emma & Jake Wilson — Wedding — $3,800</option>
+            <option>Nexus Corp — Headshots — $1,200</option>
+            <option>Liu Family — Portrait — $650</option>
+          </select>
+        </div>
+        <div class="add-form-field add-form-full">
+          <label class="add-form-label">Cancellation Reason</label>
+          <select class="add-form-input" id="cancel-reason" onchange="calcRefund()">
+            <option value="client">Client requested cancellation</option>
+            <option value="photographer">Photographer unavailable</option>
+            <option value="weather">Weather/force majeure</option>
+            <option value="rebook">Client wants to reschedule</option>
+          </select>
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Days Until Shoot</label>
+          <input class="add-form-input" type="number" id="cancel-days" value="30" oninput="calcRefund()" min="0">
+        </div>
+        <div class="add-form-field">
+          <label class="add-form-label">Deposit Paid</label>
+          <input class="add-form-input" type="text" id="cancel-deposit" value="$1,900" oninput="calcRefund()">
+        </div>
+      </div>
+      <div id="refund-calc" style="margin-top:16px;background:#f8fafc;border-radius:10px;padding:16px;border:1px solid #e2e8f0;">
+        <div style="font-size:13px;font-weight:700;color:#1a1d2e;margin-bottom:10px;"><i class="ti ti-calculator" style="color:#2563eb;"></i> Refund Calculation</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
+          <div style="display:flex;justify-content:space-between;"><span style="color:#64748b;">Policy applies:</span><span id="calc-policy" style="font-weight:600;">50% non-refundable</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:#64748b;">Deposit paid:</span><span id="calc-deposit">$1,900</span></div>
+          <div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid #e2e8f0;"><span style="color:#1a1d2e;font-weight:700;">Refund amount:</span><span id="calc-refund" style="font-weight:800;color:#16a34a;font-size:15px;">$950</span></div>
+        </div>
+      </div>
+      <div style="margin-top:12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;font-size:12.5px;color:#1d4ed8;">
+        <i class="ti ti-mail"></i> Cancellation confirmation email will be sent to client via Zoho Mail automatically.
+      </div>
+    </div>
+    <div class="vm-footer">
+      <button class="vm-btn-outline" onclick="closeCancellationModal()">Keep Booking</button>
+      <button class="vm-btn-primary" style="background:#ef4444;" onclick="confirmCancellation()"><i class="ti ti-ban"></i> Confirm Cancellation</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PACKAGE BUILDER ══ -->
+<div id="modal-package-builder" class="vendor-modal-overlay hidden">
+  <div class="vendor-modal" style="max-width:560px;">
+    <div class="vm-header">
+      <div>
+        <div class="vm-title"><i class="ti ti-package"></i> Package Builder</div>
+        <div class="vm-subtitle">Apply a pre-configured package to auto-fill booking details</div>
+      </div>
+      <button class="vm-close" onclick="closeModal('modal-package-builder')">&#x2715;</button>
+    </div>
+    <div class="vm-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;" id="pkg-grid"></div>
+      <div id="pkg-detail" style="display:none;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;padding:16px;">
+        <div style="font-size:14px;font-weight:700;color:#1a1d2e;margin-bottom:10px;" id="pkg-name"></div>
+        <div id="pkg-items" style="font-size:13px;color:#475569;line-height:1.8;"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e2e8f0;padding-top:12px;margin-top:12px;">
+          <div style="font-size:18px;font-weight:800;color:#2563eb;" id="pkg-price"></div>
+          <button class="vm-btn-primary" onclick="applyPackage()">Apply to New Booking</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

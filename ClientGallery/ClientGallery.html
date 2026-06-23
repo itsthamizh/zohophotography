@@ -166,6 +166,7 @@
   <!-- Shared sidebar + layout (explicit link ensures consistent styling) -->
   <link rel="stylesheet" href="../shared/sidebar.css">
   <link rel="stylesheet" href="../shared/layout.css">
+<script src="../shared/dataStore.js"></script>
 </head>
 <body>
 
@@ -206,7 +207,7 @@
 
       <!-- SUB-NAVIGATION TABS -->
       <div class="sub-tabs">
-        <button class="sub-tab active" onclick="filterGalleries('all', this)">All Galleries</button>
+        <button class="sub-tab active" onclick="filterGalleries('all', this)">All Galleries <span id="all-galleries-count" style="margin-left:4px;background:rgba(37,99,235,.12);color:#2563eb;font-size:11px;font-weight:700;padding:1px 7px;border-radius:10px;">8</span></button>
         <button class="sub-tab" onclick="filterGalleries('active', this)">Active</button>
         <button class="sub-tab" onclick="filterGalleries('pending', this)">Pending Review</button>
         <button class="sub-tab" onclick="filterGalleries('delivered', this)">Delivered</button>
@@ -219,15 +220,15 @@
           <div class="stat-icon blue"><i class="ti ti-photo-album"></i></div>
           <div class="stat-body">
             <div class="stat-label">Total Galleries</div>
-            <div class="stat-value">8</div>
-            <div class="stat-delta positive"><i class="ti ti-trending-up"></i> +2 this month</div>
+            <div class="stat-value">20</div>
+            <div class="stat-delta positive"><i class="ti ti-trending-up"></i> +6 this month</div>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon yellow"><i class="ti ti-clock-hour-3"></i></div>
           <div class="stat-body">
             <div class="stat-label">Pending Review</div>
-            <div class="stat-value">2</div>
+            <div class="stat-value">4</div>
             <div class="stat-delta warning"><i class="ti ti-alert-circle"></i> Awaiting client</div>
           </div>
         </div>
@@ -235,7 +236,7 @@
           <div class="stat-icon green"><i class="ti ti-download"></i></div>
           <div class="stat-body">
             <div class="stat-label">Total Downloads</div>
-            <div class="stat-value">1,227</div>
+            <div class="stat-value">12,480</div>
             <div class="stat-delta positive"><i class="ti ti-trending-up"></i> +318 this week</div>
           </div>
         </div>
@@ -243,7 +244,7 @@
           <div class="stat-icon purple"><i class="ti ti-eye"></i></div>
           <div class="stat-body">
             <div class="stat-label">Total Views</div>
-            <div class="stat-value">14,260</div>
+            <div class="stat-value">38,940</div>
             <div class="stat-delta positive"><i class="ti ti-trending-up"></i> +1,240 this week</div>
           </div>
         </div>
@@ -255,28 +256,28 @@
         <div class="pipeline-bar">
           <div class="pipeline-stage pipeline-stage-pending">
             <div>
-              <div class="stage-count">2</div>
+              <div class="stage-count">4</div>
               <div class="stage-name">Pending Review</div>
             </div>
           </div>
           <div class="pipeline-arrow"><i class="ph ph-arrow-right"></i></div>
           <div class="pipeline-stage pipeline-stage-active">
             <div>
-              <div class="stage-count">2</div>
+              <div class="stage-count">4</div>
               <div class="stage-name">Active</div>
             </div>
           </div>
           <div class="pipeline-arrow"><i class="ph ph-arrow-right"></i></div>
           <div class="pipeline-stage pipeline-stage-delivered">
             <div>
-              <div class="stage-count">2</div>
+              <div class="stage-count">9</div>
               <div class="stage-name">Delivered</div>
             </div>
           </div>
           <div class="pipeline-arrow"><i class="ph ph-arrow-right"></i></div>
           <div class="pipeline-stage pipeline-stage-archived">
             <div>
-              <div class="stage-count">2</div>
+              <div class="stage-count">3</div>
               <div class="stage-name">Archived</div>
             </div>
           </div>
@@ -285,7 +286,7 @@
 
       <!-- GALLERY GRID HEADER -->
       <div class="section-header">
-        <h2 class="section-title">Recent Galleries &nbsp;<span id="gallery-count">8 galleries</span></h2>
+        <h2 class="section-title">Recent Galleries &nbsp;<span id="gallery-count">20 galleries</span></h2>
         <div class="section-actions">
           <button class="btn-outline"><i class="ti ti-layout-grid"></i> Grid</button>
           <button class="btn-outline"><i class="ti ti-list"></i> List</button>
@@ -295,11 +296,10 @@
       <!-- GALLERY GRID -->
       <div class="gallery-grid">
 
-        <!-- ── ACTIVE ── -->
+        <!-- ── GALLERY GRID: 20 galleries across all photography types ── -->
         <div class="gallery-card" data-status="active">
-          <div class="gallery-thumb has-image">
-            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=500&h=260&fit=crop&auto=format&q=80"
-                 alt="Emma & Jake Wedding"
+          <div class="gallery-thumb has-image th-wedding">
+            <img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=500&h=260&fit=crop&auto=format&q=80" alt="Wedding ceremony" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-heart thumb-ph-icon"></i><span class="thumb-type-label">Wedding</span></div>
             <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
@@ -307,26 +307,22 @@
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 347</span>
           </div>
           <div class="gallery-info">
-            <div class="gallery-name">Emma &amp; Jake — Wedding</div>
+            <div class="gallery-name">Emma & Jake — Wedding</div>
             <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Emma Wilson &nbsp;·&nbsp; Jun 10, 2026</div>
-            <div class="gallery-stats-row">
-              <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>2,840</strong></div>
-              <div class="gallery-stat"><i class="ti ti-download"></i> <strong>127</strong></div>
-              <div class="gallery-stat"><i class="ti ti-heart"></i> <strong>48</strong></div>
-            </div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>2,840</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>127</strong></div>
+                <div class="gallery-stat"><i class="ti ti-heart"></i> <strong>44</strong></div>
+                
+              </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Sep 10, 2026 &nbsp;·&nbsp; Password protected</div>
-            <div class="gallery-actions">
-              <button class="btn-action"><i class="ti ti-link"></i> Link</button>
-              <button class="btn-action"><i class="ti ti-bell"></i> Notify</button>
-              <button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button>
-            </div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action"><i class="ti ti-bell"></i> Notify</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
-
         <div class="gallery-card" data-status="active">
           <div class="gallery-thumb has-image th-engagement">
-            <img src="https://images.unsplash.com/photo-1529636444744-adffc9135a5e?w=500&h=260&fit=crop&auto=format&q=80"
-                 alt="Sarah & Tom Engagement"
+            <img src="https://images.unsplash.com/photo-1606800052052-a08af7148866?w=500&h=260&fit=crop&auto=format&q=80" alt="Engagement couple" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-sparkle thumb-ph-icon"></i><span class="thumb-type-label">Engagement</span></div>
             <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
@@ -334,82 +330,158 @@
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 189</span>
           </div>
           <div class="gallery-info">
-            <div class="gallery-name">Sarah &amp; Tom — Engagement</div>
+            <div class="gallery-name">Sarah & Tom — Engagement</div>
             <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Sarah Reed &nbsp;·&nbsp; May 28, 2026</div>
-            <div class="gallery-stats-row">
-              <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>1,240</strong></div>
-              <div class="gallery-stat"><i class="ti ti-download"></i> <strong>89</strong></div>
-              <div class="gallery-stat"><i class="ti ti-heart"></i> <strong>32</strong></div>
-            </div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>1,240</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>89</strong></div>
+                <div class="gallery-stat"><i class="ti ti-heart"></i> <strong>31</strong></div>
+                
+              </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Aug 28, 2026 &nbsp;·&nbsp; Open access</div>
-            <div class="gallery-actions">
-              <button class="btn-action"><i class="ti ti-link"></i> Link</button>
-              <button class="btn-action"><i class="ti ti-bell"></i> Notify</button>
-              <button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button>
-            </div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action"><i class="ti ti-bell"></i> Notify</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
-
-        <!-- ── PENDING REVIEW ── -->
+        <div class="gallery-card" data-status="active">
+          <div class="gallery-thumb has-image th-portrait">
+            <img src="https://images.unsplash.com/photo-1612638004131-513c87baf22d?w=500&h=260&fit=crop&auto=format&q=80"
+                 alt="Maternity photography session"
+                 loading="lazy"
+                 onerror="this.parentElement.classList.remove('has-image');this.remove();">
+            <div class="gallery-thumb-inner"><i class="ph-fill ph-baby thumb-ph-icon"></i><span class="thumb-type-label">Maternity</span></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <span class="gallery-status-badge badge-active"><i class="ph-fill ph-circle" style="font-size:7px;"></i> Active</span>
+            <span class="gallery-photo-count"><i class="ti ti-photo"></i> 112</span>
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-name">Rachel Thompson — Maternity</div>
+            <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Rachel Thompson &nbsp;·&nbsp; Jun 2, 2026</div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>680</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>41</strong></div>
+                <div class="gallery-stat"><i class="ti ti-heart"></i> <strong>14</strong></div>
+                
+              </div>
+            <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Sep 2, 2026 &nbsp;·&nbsp; Open access</div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action"><i class="ti ti-bell"></i> Notify</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+          </div>
+        </div>
+        <div class="gallery-card" data-status="active">
+          <div class="gallery-thumb has-image th-wedding">
+            <img src="https://images.unsplash.com/photo-1530023367847-a683933f4172?w=500&h=260&fit=crop&auto=format&q=80" alt="Destination wedding" loading="lazy"
+                 onerror="this.parentElement.classList.remove('has-image');this.remove();">
+            <div class="gallery-thumb-inner"><i class="ph-fill ph-heart thumb-ph-icon"></i><span class="thumb-type-label">Wedding</span></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <span class="gallery-status-badge badge-active"><i class="ph-fill ph-circle" style="font-size:7px;"></i> Active</span>
+            <span class="gallery-photo-count"><i class="ti ti-photo"></i> 520</span>
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-name">Sofia & James — Destination</div>
+            <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Sofia Reyes &nbsp;·&nbsp; May 15, 2026</div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>4,120</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>298</strong></div>
+                <div class="gallery-stat"><i class="ti ti-heart"></i> <strong>104</strong></div>
+                
+              </div>
+            <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Aug 15, 2026 &nbsp;·&nbsp; Password protected</div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action"><i class="ti ti-bell"></i> Notify</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+          </div>
+        </div>
         <div class="gallery-card" data-status="pending">
           <div class="gallery-thumb has-image th-family">
-            <img src="https://images.unsplash.com/photo-1511895426328-dc8714191011?w=500&h=260&fit=crop&auto=format&q=80"
-                 alt="Liu Family Portrait"
+            <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=500&h=260&fit=crop&auto=format&q=80" alt="Family portrait" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
-            <div class="gallery-thumb-inner"><i class="ph-fill ph-users thumb-ph-icon"></i><span class="thumb-type-label">Family Portrait</span></div>
+            <div class="gallery-thumb-inner"><i class="ph-fill ph-users thumb-ph-icon"></i><span class="thumb-type-label">Portrait</span></div>
             <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
-            <span class="gallery-status-badge badge-pending"><i class="ph ph-clock" style="font-size:11px;"></i> Pending</span>
+            <span class="gallery-status-badge badge-pending"><i class="ph ph-clock" style="font-size:11px;"></i> Pending Review</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 124</span>
           </div>
           <div class="gallery-info">
             <div class="gallery-name">Liu Family — Portrait Session</div>
             <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Liu Family &nbsp;·&nbsp; Jun 8, 2026</div>
-            <div class="gallery-stats-row">
-              <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>0</strong></div>
-              <div class="gallery-stat"><i class="ti ti-download"></i> <strong>0</strong></div>
-              <div class="gallery-stat" style="color:#a16207;"><i class="ph ph-clock" style="font-size:12px;"></i> Awaiting client</div>
-            </div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>0</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>0</strong></div>
+                <div class="gallery-stat" style="color:#a16207;font-weight:500;"><i class="ph ph-clock" style="font-size:12px;"></i> Awaiting client</div>
+              </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Sep 8, 2026 &nbsp;·&nbsp; Invite sent Jun 8</div>
-            <div class="gallery-actions">
-              <button class="btn-action"><i class="ti ti-link"></i> Link</button>
-              <button class="btn-action" style="color:#a16207;border-color:#fde68a;background:#fefce8;"><i class="ti ti-bell"></i> Remind</button>
-              <button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button>
-            </div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" style="color:#a16207;border-color:#fde68a;background:#fefce8;"><i class="ti ti-bell"></i> Remind</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
-
         <div class="gallery-card" data-status="pending">
           <div class="gallery-thumb has-image th-family">
-            <img src="https://images.unsplash.com/photo-1559000357-f6b52ddfbe37?w=500&h=260&fit=crop&auto=format&q=80"
-                 alt="Martinez Family"
+            <img src="https://images.unsplash.com/photo-1536640712-4d4c36ff0e4e?w=500&h=260&fit=crop&auto=format&q=80" alt="Family spring" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
-            <div class="gallery-thumb-inner"><i class="ph-fill ph-users thumb-ph-icon"></i><span class="thumb-type-label">Family Portrait</span></div>
+            <div class="gallery-thumb-inner"><i class="ph-fill ph-flower thumb-ph-icon"></i><span class="thumb-type-label">Portrait</span></div>
             <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
-            <span class="gallery-status-badge badge-pending"><i class="ph ph-clock" style="font-size:11px;"></i> Pending</span>
+            <span class="gallery-status-badge badge-pending"><i class="ph ph-clock" style="font-size:11px;"></i> Pending Review</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 98</span>
           </div>
           <div class="gallery-info">
             <div class="gallery-name">Martinez Family — Spring</div>
             <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Martinez Family &nbsp;·&nbsp; Jun 14, 2026</div>
-            <div class="gallery-stats-row">
-              <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>0</strong></div>
-              <div class="gallery-stat"><i class="ti ti-download"></i> <strong>0</strong></div>
-              <div class="gallery-stat" style="color:#a16207;"><i class="ph ph-clock" style="font-size:12px;"></i> Not opened</div>
-            </div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>0</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>0</strong></div>
+                <div class="gallery-stat" style="color:#a16207;font-weight:500;"><i class="ph ph-clock" style="font-size:12px;"></i> Not opened yet</div>
+              </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Sep 14, 2026 &nbsp;·&nbsp; Invite sent Jun 14</div>
-            <div class="gallery-actions">
-              <button class="btn-action"><i class="ti ti-link"></i> Link</button>
-              <button class="btn-action" style="color:#a16207;border-color:#fde68a;background:#fefce8;"><i class="ti ti-bell"></i> Remind</button>
-              <button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button>
-            </div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" style="color:#a16207;border-color:#fde68a;background:#fefce8;"><i class="ti ti-bell"></i> Remind</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
-
-        <!-- ── DELIVERED ── -->
+        <div class="gallery-card" data-status="pending">
+          <div class="gallery-thumb has-image th-portrait">
+            <img src="https://images.unsplash.com/photo-1566004100631-35d015d6a491?w=500&h=260&fit=crop&auto=format&q=80" alt="Newborn session" loading="lazy"
+                 onerror="this.parentElement.classList.remove('has-image');this.remove();">
+            <div class="gallery-thumb-inner"><i class="ph-fill ph-baby thumb-ph-icon"></i><span class="thumb-type-label">Newborn</span></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <span class="gallery-status-badge badge-pending"><i class="ph ph-clock" style="font-size:11px;"></i> Pending Review</span>
+            <span class="gallery-photo-count"><i class="ti ti-photo"></i> 84</span>
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-name">Morrison Family — Newborn</div>
+            <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Morrison Family &nbsp;·&nbsp; Jun 12, 2026</div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>0</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>0</strong></div>
+                <div class="gallery-stat" style="color:#a16207;font-weight:500;"><i class="ph ph-clock" style="font-size:12px;"></i> Not opened yet</div>
+              </div>
+            <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Sep 12, 2026 &nbsp;·&nbsp; Invite sent Jun 12</div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" style="color:#a16207;border-color:#fde68a;background:#fefce8;"><i class="ti ti-bell"></i> Remind</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+          </div>
+        </div>
+        <div class="gallery-card" data-status="pending">
+          <div class="gallery-thumb has-image th-portrait">
+            <img src="https://images.unsplash.com/photo-1562774053-701939374585?w=500&h=260&fit=crop&auto=format&q=80" alt="Senior portraits" loading="lazy"
+                 onerror="this.parentElement.classList.remove('has-image');this.remove();">
+            <div class="gallery-thumb-inner"><i class="ph-fill ph-graduation-cap thumb-ph-icon"></i><span class="thumb-type-label">Portraits</span></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <span class="gallery-status-badge badge-pending"><i class="ph ph-clock" style="font-size:11px;"></i> Pending Review</span>
+            <span class="gallery-photo-count"><i class="ti ti-photo"></i> 156</span>
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-name">Harrison High — Seniors 2026</div>
+            <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Harrison High School &nbsp;·&nbsp; Jun 6, 2026</div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>0</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>0</strong></div>
+                <div class="gallery-stat" style="color:#a16207;font-weight:500;"><i class="ph ph-clock" style="font-size:12px;"></i> Awaiting client</div>
+              </div>
+            <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Sep 6, 2026 &nbsp;·&nbsp; Invite sent Jun 6</div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" style="color:#a16207;border-color:#fde68a;background:#fefce8;"><i class="ti ti-bell"></i> Remind</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+          </div>
+        </div>
         <div class="gallery-card" data-status="delivered">
           <div class="gallery-thumb has-image th-corporate">
-            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&h=260&fit=crop&auto=format&q=80"
-                 alt="Nexus Corp Headshots"
+            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&h=260&fit=crop&auto=format&q=80" alt="Professional headshots" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-identification-card thumb-ph-icon"></i><span class="thumb-type-label">Headshots</span></div>
             <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
@@ -417,25 +489,22 @@
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 45</span>
           </div>
           <div class="gallery-info">
-            <div class="gallery-name">Nexus Corp — Headshots</div>
+            <div class="gallery-name">Nexus Corp — Executive Headshots</div>
             <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Nexus Corp &nbsp;·&nbsp; Jun 5, 2026</div>
-            <div class="gallery-stats-row">
-              <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>480</strong></div>
-              <div class="gallery-stat"><i class="ti ti-download"></i> <strong>45</strong></div>
-              <div class="gallery-stat" style="color:#15803d;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
-            </div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>480</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>45</strong></div>
+                
+                <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
+              </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Sep 5, 2026 &nbsp;·&nbsp; Balance paid</div>
-            <div class="gallery-actions">
-              <button class="btn-action"><i class="ti ti-link"></i> Link</button>
-              <button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button>
-            </div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
-
         <div class="gallery-card" data-status="delivered">
           <div class="gallery-thumb has-image th-event">
-            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=500&h=260&fit=crop&auto=format&q=80"
-                 alt="Horizon Events Gala"
+            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=500&h=260&fit=crop&auto=format&q=80" alt="Corporate gala" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-confetti thumb-ph-icon"></i><span class="thumb-type-label">Event</span></div>
             <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
@@ -443,26 +512,183 @@
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 512</span>
           </div>
           <div class="gallery-info">
-            <div class="gallery-name">Horizon Events — Gala</div>
+            <div class="gallery-name">Horizon Events — Annual Gala</div>
             <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Horizon Events &nbsp;·&nbsp; May 20, 2026</div>
-            <div class="gallery-stats-row">
-              <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>3,240</strong></div>
-              <div class="gallery-stat"><i class="ti ti-download"></i> <strong>512</strong></div>
-              <div class="gallery-stat"><i class="ti ti-heart"></i> <strong>94</strong></div>
-            </div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>3,240</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>512</strong></div>
+                
+                <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
+              </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Aug 20, 2026 &nbsp;·&nbsp; Print store active</div>
-            <div class="gallery-actions">
-              <button class="btn-action"><i class="ti ti-link"></i> Link</button>
-              <button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button>
-            </div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
-
-        <!-- ── ARCHIVED ── -->
-        <div class="gallery-card" data-status="archived" style="opacity:.8;">
+        <div class="gallery-card" data-status="delivered">
+          <div class="gallery-thumb has-image th-corporate">
+            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=500&h=260&fit=crop&auto=format&q=80" alt="Team headshots" loading="lazy"
+                 onerror="this.parentElement.classList.remove('has-image');this.remove();">
+            <div class="gallery-thumb-inner"><i class="ph-fill ph-identification-card thumb-ph-icon"></i><span class="thumb-type-label">Headshots</span></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
+            <span class="gallery-photo-count"><i class="ti ti-photo"></i> 68</span>
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-name">Dr. Patel Medical — Team</div>
+            <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Dr. Patel Medical &nbsp;·&nbsp; May 30, 2026</div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>720</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>68</strong></div>
+                
+                <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
+              </div>
+            <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Aug 30, 2026 &nbsp;·&nbsp; Balance paid</div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+          </div>
+        </div>
+        <div class="gallery-card" data-status="delivered">
+          <div class="gallery-thumb has-image th-event">
+            <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&h=260&fit=crop&auto=format&q=80" alt="Bridal fashion" loading="lazy"
+                 onerror="this.parentElement.classList.remove('has-image');this.remove();">
+            <div class="gallery-thumb-inner"><i class="ph-fill ph-sparkle thumb-ph-icon"></i><span class="thumb-type-label">Fashion</span></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
+            <span class="gallery-photo-count"><i class="ti ti-photo"></i> 230</span>
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-name">Bloom Bridal — Fashion</div>
+            <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Bloom Bridal Studio &nbsp;·&nbsp; May 25, 2026</div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>1,840</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>180</strong></div>
+                
+                <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
+              </div>
+            <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Aug 25, 2026 &nbsp;·&nbsp; Commercial rights</div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+          </div>
+        </div>
+        <div class="gallery-card" data-status="delivered">
+          <div class="gallery-thumb has-image th-corporate">
+            <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=500&h=260&fit=crop&auto=format&q=80" alt="Winery commercial" loading="lazy"
+                 onerror="this.parentElement.classList.remove('has-image');this.remove();">
+            <div class="gallery-thumb-inner"><i class="ph-fill ph-image thumb-ph-icon"></i><span class="thumb-type-label">Commercial</span></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
+            <span class="gallery-photo-count"><i class="ti ti-photo"></i> 145</span>
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-name">Sunset Ridge — Winery Shoot</div>
+            <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Sunset Ridge Winery &nbsp;·&nbsp; May 12, 2026</div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>890</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>120</strong></div>
+                
+                <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
+              </div>
+            <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Aug 12, 2026 &nbsp;·&nbsp; Commercial rights</div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+          </div>
+        </div>
+        <div class="gallery-card" data-status="delivered">
+          <div class="gallery-thumb has-image th-event">
+            <img src="https://images.unsplash.com/photo-1518834107812-67b0b7c58434?w=500&h=260&fit=crop&auto=format&q=80" alt="Ballet performance" loading="lazy"
+                 onerror="this.parentElement.classList.remove('has-image');this.remove();">
+            <div class="gallery-thumb-inner"><i class="ph-fill ph-music-notes thumb-ph-icon"></i><span class="thumb-type-label">Performance</span></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
+            <span class="gallery-photo-count"><i class="ti ti-photo"></i> 380</span>
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-name">City Ballet — Spring Show</div>
+            <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> City Ballet Company &nbsp;·&nbsp; May 8, 2026</div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>2,100</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>310</strong></div>
+                
+                <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
+              </div>
+            <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Aug 8, 2026 &nbsp;·&nbsp; Social media use</div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+          </div>
+        </div>
+        <div class="gallery-card" data-status="delivered">
+          <div class="gallery-thumb has-image th-event">
+            <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=500&h=260&fit=crop&auto=format&q=80" alt="Quinceañera celebration" loading="lazy"
+                 onerror="this.parentElement.classList.remove('has-image');this.remove();">
+            <div class="gallery-thumb-inner"><i class="ph-fill ph-star thumb-ph-icon"></i><span class="thumb-type-label">Event</span></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
+            <span class="gallery-photo-count"><i class="ti ti-photo"></i> 295</span>
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-name">Rodriguez — Quinceañera</div>
+            <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Rodriguez Family &nbsp;·&nbsp; Apr 28, 2026</div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>1,560</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>240</strong></div>
+                
+                <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
+              </div>
+            <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Jul 28, 2026 &nbsp;·&nbsp; Balance paid</div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+          </div>
+        </div>
+        <div class="gallery-card" data-status="delivered">
+          <div class="gallery-thumb has-image th-wedding">
+            <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=500&h=260&fit=crop&auto=format&q=80" alt="Wedding ceremony" loading="lazy"
+                 onerror="this.parentElement.classList.remove('has-image');this.remove();">
+            <div class="gallery-thumb-inner"><i class="ph-fill ph-heart thumb-ph-icon"></i><span class="thumb-type-label">Wedding</span></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
+            <span class="gallery-photo-count"><i class="ti ti-photo"></i> 410</span>
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-name">Wu & Chen — Wedding Ceremony</div>
+            <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Wu & Chen Families &nbsp;·&nbsp; Apr 20, 2026</div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>3,800</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>320</strong></div>
+                
+                <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
+              </div>
+            <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Jul 20, 2026 &nbsp;·&nbsp; Balance paid</div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+          </div>
+        </div>
+        <div class="gallery-card" data-status="delivered">
+          <div class="gallery-thumb has-image th-corporate">
+            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&h=260&fit=crop&auto=format&q=80" alt="Brand shoot" loading="lazy"
+                 onerror="this.parentElement.classList.remove('has-image');this.remove();">
+            <div class="gallery-thumb-inner"><i class="ph-fill ph-image thumb-ph-icon"></i><span class="thumb-type-label">Commercial</span></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
+            <span class="gallery-photo-count"><i class="ti ti-photo"></i> 180</span>
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-name">Brooklyn Bloom — Brand Shoot</div>
+            <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Brooklyn Bloom Co. &nbsp;·&nbsp; Apr 15, 2026</div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>640</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>120</strong></div>
+                
+                <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
+              </div>
+            <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Jul 15, 2026 &nbsp;·&nbsp; Commercial rights</div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+          </div>
+        </div>
+        <div class="gallery-card" data-status="archived" style="opacity:.78;">
           <div class="gallery-thumb has-image th-archived">
-            <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=500&h=260&fit=crop&auto=format&q=80"
-                 alt="Chen Wedding 2024" style="filter:grayscale(55%);"
+            <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=500&h=260&fit=crop&auto=format&q=80" alt="Wedding 2024" loading="lazy" style="filter:grayscale(55%);"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-heart thumb-ph-icon"></i><span class="thumb-type-label">Wedding</span></div>
             <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
@@ -470,47 +696,67 @@
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 298</span>
           </div>
           <div class="gallery-info">
-            <div class="gallery-name">Chen Wedding 2024</div>
+            <div class="gallery-name">Chen Wedding — 2024</div>
             <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Chen Family &nbsp;·&nbsp; Nov 12, 2024</div>
-            <div class="gallery-stats-row">
-              <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>4,120</strong></div>
-              <div class="gallery-stat"><i class="ti ti-download"></i> <strong>298</strong></div>
-            </div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>4,120</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>298</strong></div>
+                
+                
+              </div>
             <div class="gallery-expiry" style="color:#ef4444;"><i class="ph ph-calendar-x" style="font-size:13px;"></i> Expired Nov 2024</div>
-            <div class="gallery-actions">
-              <button class="btn-action"><i class="ti ti-refresh"></i> Restore</button>
-              <button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button>
-            </div>
+            <div class="gallery-actions"><button class="btn-action"><i class="ti ti-refresh"></i> Restore</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
-
-        <div class="gallery-card" data-status="archived" style="opacity:.8;">
+        <div class="gallery-card" data-status="archived" style="opacity:.78;">
           <div class="gallery-thumb has-image th-archived">
-            <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&h=260&fit=crop&auto=format&q=80"
-                 alt="Park Family Holiday" style="filter:grayscale(55%);"
+            <img src="https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=500&h=260&fit=crop&auto=format&q=80" alt="Holiday family" loading="lazy" style="filter:grayscale(55%);"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
-            <div class="gallery-thumb-inner"><i class="ph-fill ph-users thumb-ph-icon"></i><span class="thumb-type-label">Portrait</span></div>
+            <div class="gallery-thumb-inner"><i class="ph-fill ph-users thumb-ph-icon"></i><span class="thumb-type-label">Family</span></div>
             <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-archived"><i class="ph ph-archive-box" style="font-size:11px;"></i> Archived</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 156</span>
           </div>
           <div class="gallery-info">
-            <div class="gallery-name">Park Family — Holiday 2024</div>
+            <div class="gallery-name">Park Family — Christmas 2024</div>
             <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Park Family &nbsp;·&nbsp; Dec 8, 2024</div>
-            <div class="gallery-stats-row">
-              <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>2,340</strong></div>
-              <div class="gallery-stat"><i class="ti ti-download"></i> <strong>156</strong></div>
-            </div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>2,340</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>156</strong></div>
+                
+                
+              </div>
             <div class="gallery-expiry" style="color:#ef4444;"><i class="ph ph-calendar-x" style="font-size:13px;"></i> Expired Dec 2024</div>
-            <div class="gallery-actions">
-              <button class="btn-action"><i class="ti ti-refresh"></i> Restore</button>
-              <button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button>
-            </div>
+            <div class="gallery-actions"><button class="btn-action"><i class="ti ti-refresh"></i> Restore</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+          </div>
+        </div>
+        <div class="gallery-card" data-status="archived" style="opacity:.78;">
+          <div class="gallery-thumb has-image th-archived">
+            <img src="https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=500&h=260&fit=crop&auto=format&q=80" alt="Kids portraits" loading="lazy" style="filter:grayscale(55%);"
+                 onerror="this.parentElement.classList.remove('has-image');this.remove();">
+            <div class="gallery-thumb-inner"><i class="ph-fill ph-student thumb-ph-icon"></i><span class="thumb-type-label">Children</span></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <span class="gallery-status-badge badge-archived"><i class="ph ph-archive-box" style="font-size:11px;"></i> Archived</span>
+            <span class="gallery-photo-count"><i class="ti ti-photo"></i> 92</span>
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-name">Thompson — Back to School</div>
+            <div class="gallery-client"><i class="ti ti-user" style="font-size:12px;"></i> Thompson Family &nbsp;·&nbsp; Sep 5, 2024</div>
+            
+              <div class="gallery-stats-row">
+                <div class="gallery-stat"><i class="ti ti-eye"></i> <strong>780</strong></div>
+                <div class="gallery-stat"><i class="ti ti-download"></i> <strong>88</strong></div>
+                
+                
+              </div>
+            <div class="gallery-expiry" style="color:#ef4444;"><i class="ph ph-calendar-x" style="font-size:13px;"></i> Expired Dec 2024</div>
+            <div class="gallery-actions"><button class="btn-action"><i class="ti ti-refresh"></i> Restore</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
 
-
-      </div><!-- /gallery-grid -->
+        </div><!-- /gallery-grid -->
 
       <!-- LOWER SECTION: Table + Settings Panel -->
       <div class="lower-section">
@@ -518,7 +764,7 @@
         <!-- ALL GALLERIES TABLE -->
         <div class="table-card">
           <div class="table-header">
-            <h2 class="section-title">All Galleries &nbsp;<span id="gallery-count">8 galleries</span></h2>
+            <h2 class="section-title">All Galleries &nbsp;<span id="gallery-count">20 galleries</span></h2>
             <div class="table-tools">
               <div class="search-box search-sm">
                 <i class="ti ti-search"></i>
@@ -676,7 +922,7 @@
             </table>
           </div>
           <div class="table-pagination">
-            <span class="pagination-info">Showing 8 of 8 galleries</span>
+            <span class="pagination-info">Showing 8 of 20 galleries</span>
             <div class="pagination-controls">
               <button class="page-btn" disabled><i class="ti ti-chevron-left"></i></button>
               <button class="page-btn active">1</button>
@@ -711,7 +957,7 @@
               <div class="setting-label">Watermark</div>
               <div class="setting-sub">Applied to all preview images</div>
             </div>
-            <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            <label class="toggle"><input type="checkbox" id="wm-toggle" checked onchange="toggleWatermark(this.checked)"><span class="toggle-slider"></span></label>
           </div>
 
           <div class="setting-row">
@@ -792,5 +1038,99 @@
   </script>
 
 <script src="../shared/sidebar.js"></script>
+<script>
+function copyGalleryLink(btn) {
+  var card = btn.closest('.gallery-card');
+  var name = card ? (card.querySelector('.gallery-name') || {textContent:''}).textContent.trim() : '';
+  var fakeUrl = 'https://gallery.lensflow.io/' + name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-+$/,'');
+  navigator.clipboard.writeText(fakeUrl).then(function() {
+    var orig = btn.innerHTML;
+    btn.innerHTML = '<i class="ti ti-check"></i> Copied!';
+    btn.style.color = '#15803d';
+    btn.style.borderColor = '#bbf7d0';
+    btn.style.background = '#f0fdf4';
+    setTimeout(function() {
+      btn.innerHTML = orig;
+      btn.style.color = '';
+      btn.style.borderColor = '';
+      btn.style.background = '';
+    }, 2000);
+  }).catch(function() {
+    // Fallback
+    var ta = document.createElement('textarea');
+    ta.value = fakeUrl;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.innerHTML = '<i class="ti ti-check"></i> Copied!';
+    setTimeout(function() { btn.innerHTML = '<i class="ti ti-link"></i> Link'; }, 2000);
+  });
+}
+</script>
+
+<script>
+// ── WATERMARK SETTING ─────────────────────────────────────────
+function toggleWatermark(enabled) {
+  localStorage.setItem('lf_watermark', enabled ? 'true' : 'false');
+  // Show visual feedback
+  var msg = enabled ? 'Watermark enabled — applied to all client preview images' : 'Watermark disabled — clients see clean images';
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:28px;right:28px;background:#1a1d2e;color:#fff;padding:13px 20px;border-radius:10px;font-size:13.5px;font-family:Inter,sans-serif;z-index:99999;display:flex;align-items:center;gap:10px;';
+  toast.innerHTML = '<i class="ti ti-droplet" style="font-size:16px;color:#60a5fa;"></i>' + msg;
+  document.body.appendChild(toast);
+  setTimeout(function() { toast.remove(); }, 3500);
+}
+
+// ── GALLERY EXPIRY CHECK ──────────────────────────────────────
+function checkGalleryExpiry() {
+  var today = new Date();
+  var galleries = [
+    { name: 'Emma & Jake Wedding',     expiry: '2026-09-10', status: 'active' },
+    { name: 'Sarah & Tom Engagement',  expiry: '2026-08-28', status: 'active' },
+    { name: 'Liu Family Portrait',      expiry: '2026-09-08', status: 'active' },
+    { name: 'Martinez Family Spring',   expiry: '2026-09-14', status: 'active' },
+    { name: 'Nexus Corp Headshots',     expiry: '2026-09-05', status: 'delivered' },
+    { name: 'Horizon Events Gala',      expiry: '2026-08-20', status: 'delivered' },
+    { name: 'Chen Wedding 2024',        expiry: '2024-11-12', status: 'archived' },
+    { name: 'Park Family Holiday 2024', expiry: '2024-12-08', status: 'archived' }
+  ];
+
+  var expirySoon = galleries.filter(function(g) {
+    var exp = new Date(g.expiry);
+    var diff = Math.ceil((exp - today) / (1000*60*60*24));
+    return diff >= 0 && diff <= 7 && g.status !== 'archived';
+  });
+
+  var expired = galleries.filter(function(g) {
+    return new Date(g.expiry) < today && g.status !== 'archived';
+  });
+
+  if (expirySoon.length > 0 || expired.length > 0) {
+    var banner = document.createElement('div');
+    banner.style.cssText = 'background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:flex-start;gap:12px;';
+    var msgs = [];
+    expirySoon.forEach(function(g) { msgs.push('<strong>' + g.name + '</strong> expires in ≤7 days'); });
+    expired.forEach(function(g) { msgs.push('<strong>' + g.name + '</strong> has expired — client access blocked'); });
+    banner.innerHTML = '<i class="ti ti-clock" style="color:#c2410c;font-size:20px;flex-shrink:0;"></i>' +
+      '<div><div style="font-size:13.5px;font-weight:600;color:#9a3412;margin-bottom:4px;">Gallery Expiry Alerts</div>' +
+      '<div style="font-size:13px;color:#c2410c;">' + msgs.join('<br>') + '</div></div>';
+
+    var content = document.querySelector('.content');
+    if (content) content.insertBefore(banner, content.firstChild);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', checkGalleryExpiry);
+</script>
+
+<script>
+// Update All Galleries count dynamically
+(function() {
+  var count = document.querySelectorAll('.gallery-card').length;
+  var el = document.getElementById('all-galleries-count');
+  if (el) el.textContent = count;
+})();
+</script>
 </body>
 </html>

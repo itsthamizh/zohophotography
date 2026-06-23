@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+// Auth guard — redirect to login if no session
+(function() {
+  var s = localStorage.getItem('lf_session');
+  if (!s) { window.location.replace('login.html'); return; }
+  try {
+    var sess = JSON.parse(s);
+    // Show user name in topbar once DOM loads
+    document.addEventListener('DOMContentLoaded', function() {
+      var nameEl = document.querySelector('.t-name');
+      if (nameEl && sess.name) nameEl.textContent = sess.name;
+      var avatarEl = document.querySelector('.t-avatar');
+      if (avatarEl && sess.name) avatarEl.textContent = sess.name.split(' ').map(function(n){return n[0];}).join('').substring(0,2);
+    });
+  } catch(e) { localStorage.removeItem('lf_session'); window.location.replace('login.html'); }
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LensFlow — Photography Studio Platform</title>
@@ -301,6 +318,7 @@ a { text-decoration: none; }
   <!-- Shared sidebar + layout (explicit link ensures consistent styling) -->
   <link rel="stylesheet" href="shared/sidebar.css">
   <link rel="stylesheet" href="shared/layout.css">
+<script src="shared/dataStore.js"></script>
 </head>
 <body>
 <div class="app">
@@ -318,7 +336,7 @@ a { text-decoration: none; }
     <div class="topbar-date">Monday, June 15, 2026</div>
     <div class="search-box">
       <i class="ti ti-search"></i>
-      <input type="text" placeholder="Search clients, bookings…">
+      <input type="text" id="dash-search" placeholder="Search clients, bookings…" oninput="dashSearch(this.value)">
     </div>
     <div class="icon-btn" title="Notifications">
       <i class="ti ti-bell"></i>
@@ -326,7 +344,7 @@ a { text-decoration: none; }
     </div>
     <div class="icon-btn" title="Messages"><i class="ti ti-message"></i></div>
     <div class="icon-btn" title="Calendar"><i class="ti ti-calendar"></i></div>
-    <div class="topbar-user">
+    <div class="topbar-user" onclick="logout()" title="Sign out">
       <div class="t-avatar">SK</div>
       <div class="t-name">Sarah Kim</div>
       <i class="ti ti-chevron-down" style="font-size:13px;color:#94a3b8;"></i>
@@ -371,6 +389,34 @@ a { text-decoration: none; }
         <div class="stat-lbl">Store Orders</div>
         <div class="stat-val">127</div>
         <div class="stat-delta up"><i class="ti ti-trending-up"></i> $8,340 revenue</div>
+      </div>
+    </div>
+
+    <!-- ── Conversion & Referral Analytics ── -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+      <!-- Conversion Rate -->
+      <div class="stat-card" style="display:flex;flex-direction:column;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div class="stat-lbl">Booking Conversion Rate</div>
+          <div style="font-size:11px;color:#64748b;background:#f1f5f9;padding:3px 8px;border-radius:12px;" id="conv-period">June 2026</div>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;">
+          <div class="stat-val" id="conv-rate">67%</div>
+          <div class="stat-delta up"><i class="ti ti-trending-up"></i> +8% vs last month</div>
+        </div>
+        <div style="font-size:12px;color:#64748b;margin-bottom:12px;" id="conv-detail">8 confirmed of 12 total enquiries</div>
+        <div style="background:#f1f5f9;border-radius:6px;height:6px;overflow:hidden;">
+          <div id="conv-bar" style="background:#2563eb;height:100%;border-radius:6px;width:67%;transition:width .5s ease;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#94a3b8;margin-top:6px;">
+          <span>Enquiry → Qualified → Confirmed</span><span>Industry avg: 45%</span>
+        </div>
+      </div>
+
+      <!-- Referral Sources -->
+      <div class="stat-card">
+        <div class="stat-lbl" style="margin-bottom:14px;">Lead Sources — June 2026</div>
+        <div id="referral-chart"></div>
       </div>
     </div>
 
@@ -428,9 +474,17 @@ a { text-decoration: none; }
               <div class="cl-item"><div class="cl-box" style="background:#2563eb;"></div> Sessions</div>
               <div class="cl-item"><div class="cl-box" style="background:#3b82f6;"></div> Store</div>
             </div>
-            <select style="border:1px solid #e2e8f0;border-radius:7px;padding:5px 10px;font-size:12.5px;color:#64748b;background:#fff;outline:none;font-family:'Inter',sans-serif;">
-              <option>Last 6 months</option>
-              <option>Last 12 months</option>
+            <select id="chart-period" onchange="updateDashChart()" style="border:1px solid #e2e8f0;border-radius:7px;padding:5px 10px;font-size:12.5px;color:#64748b;background:#fff;outline:none;font-family:'Inter',sans-serif;">
+              <option value="6">Last 6 months</option>
+              <option value="12">Last 12 months</option>
+              <option value="3">Last 3 months</option>
+            </select>
+            <select id="chart-type" onchange="updateDashChart()" style="border:1px solid #e2e8f0;border-radius:7px;padding:5px 10px;font-size:12.5px;color:#64748b;background:#fff;outline:none;font-family:'Inter',sans-serif;">
+              <option value="all">All Shoot Types</option>
+              <option value="wedding">Weddings Only</option>
+              <option value="portrait">Portraits Only</option>
+              <option value="commercial">Commercial Only</option>
+              <option value="event">Events Only</option>
             </select>
           </div>
         </div>
@@ -662,63 +716,125 @@ a { text-decoration: none; }
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-const ctx = document.getElementById('revenueChart').getContext('2d');
-new Chart(ctx, {
-  type: 'bar',
-  data: {
+var allData = {
+  '6': {
     labels: ['January','February','March','April','May','June'],
-    datasets: [
-      {
-        label: 'Session Revenue',
-        data: [18200, 22400, 19800, 26500, 21000, 24850],
-        backgroundColor: 'rgba(201,168,76,0.88)',
-        borderRadius: 5,
-        borderSkipped: false,
-        barPercentage: 0.6,
-        categoryPercentage: 0.72
-      },
-      {
-        label: 'Store Revenue',
-        data: [3200, 4100, 3800, 5200, 4800, 8340],
-        backgroundColor: 'rgba(59,130,246,0.78)',
-        borderRadius: 5,
-        borderSkipped: false,
-        barPercentage: 0.6,
-        categoryPercentage: 0.72
-      }
-    ]
+    sessions: { all:[18200,22400,19800,26500,21000,24850], wedding:[8000,12000,9000,15000,10000,13000], portrait:[4200,5400,4800,5500,5000,5850], commercial:[3000,3000,3000,3000,3000,3000], event:[3000,2000,3000,3000,3000,3000] },
+    store:     { all:[3200,4100,3800,5200,4800,8340], wedding:[1500,2000,1800,2500,2200,4000], portrait:[800,1000,900,1200,1100,2000], commercial:[500,600,600,800,800,1200], event:[400,500,500,700,700,1140] }
   },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        callbacks: { label: c => ' $' + c.parsed.y.toLocaleString() }
-      }
+  '3': {
+    labels: ['April','May','June'],
+    sessions: { all:[26500,21000,24850], wedding:[15000,10000,13000], portrait:[5500,5000,5850], commercial:[3000,3000,3000], event:[3000,3000,3000] },
+    store:     { all:[5200,4800,8340], wedding:[2500,2200,4000], portrait:[1200,1100,2000], commercial:[800,800,1200], event:[700,700,1140] }
+  },
+  '12': {
+    labels: ['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun'],
+    sessions: { all:[15000,17000,16000,14000,12000,18000,18200,22400,19800,26500,21000,24850], wedding:[7000,8000,7000,6000,5000,8000,8000,12000,9000,15000,10000,13000], portrait:[4000,4500,4500,4000,3500,5000,4200,5400,4800,5500,5000,5850], commercial:[2000,2500,2500,2000,2000,3000,3000,3000,3000,3000,3000,3000], event:[2000,2000,2000,2000,1500,2000,3000,2000,3000,3000,3000,3000] },
+    store:     { all:[2000,2500,2200,2000,1800,3000,3200,4100,3800,5200,4800,8340], wedding:[1000,1200,1000,900,800,1400,1500,2000,1800,2500,2200,4000], portrait:[500,700,600,600,500,800,800,1000,900,1200,1100,2000], commercial:[300,400,400,300,300,500,500,600,600,800,800,1200], event:[200,200,200,200,200,300,400,500,500,700,700,1140] }
+  }
+};
+
+var dashChart;
+function updateDashChart() {
+  var period = (document.getElementById('chart-period') || {value:'6'}).value || '6';
+  var type   = (document.getElementById('chart-type')   || {value:'all'}).value || 'all';
+  var d = allData[period];
+  if (!d) return;
+
+  if (dashChart) dashChart.destroy();
+  var ctx = document.getElementById('revenueChart');
+  if (!ctx) return;
+  dashChart = new Chart(ctx.getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: d.labels,
+      datasets: [
+        { label: 'Session Revenue', data: d.sessions[type], backgroundColor: 'rgba(37,99,235,0.82)', borderRadius: 5, borderSkipped: false, barPercentage: 0.6, categoryPercentage: 0.72 },
+        { label: 'Store Revenue',   data: d.store[type],    backgroundColor: 'rgba(59,130,246,0.6)',  borderRadius: 5, borderSkipped: false, barPercentage: 0.6, categoryPercentage: 0.72 }
+      ]
     },
-    scales: {
-      x: {
-        grid: { display: false },
-        ticks: { font: { size: 12, family: 'Inter' }, color: '#94a3b8' }
-      },
-      y: {
-        grid: { color: '#f1f5f9', lineWidth: 1 },
-        border: { dash: [4,4] },
-        ticks: {
-          font: { size: 12, family: 'Inter' },
-          color: '#94a3b8',
-          callback: v => '$' + (v/1000).toFixed(0) + 'k'
-        }
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return ' $' + c.parsed.y.toLocaleString(); } } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 12, family: 'Inter' }, color: '#94a3b8' } },
+        y: { grid: { color: '#f1f5f9' }, border: { dash: [4,4] }, ticks: { font: { size: 12, family: 'Inter' }, color: '#94a3b8', callback: function(v) { return '$' + (v/1000).toFixed(0) + 'k'; } } }
       }
     }
-  }
-});
+  });
+}
+updateDashChart();
 </script>
 
   </div><!-- /content -->
 </div><!-- /main -->
 </div><!-- /app -->
 <script src="shared/sidebar.js"></script>
+<script>
+function dashSearch(q) {
+  q = q.toLowerCase().trim();
+  // Search the recent bookings table rows
+  document.querySelectorAll('.tbl tbody tr, table tbody tr').forEach(function(row) {
+    if (!q) { row.style.display = ''; return; }
+    row.style.display = row.textContent.toLowerCase().indexOf(q) > -1 ? '' : 'none';
+  });
+  // Highlight module cards if query matches their name
+  document.querySelectorAll('.mod-card').forEach(function(card) {
+    if (!q) { card.style.opacity = '1'; return; }
+    card.style.opacity = card.textContent.toLowerCase().indexOf(q) > -1 ? '1' : '0.35';
+  });
+}
+</script>
+
+<script>
+function logout() {
+  if (confirm('Sign out of LensFlow?')) {
+    localStorage.removeItem('lf_session');
+    window.location.href = 'login.html';
+  }
+}
+</script>
+
+<script>
+// ── CONVERSION RATE ───────────────────────────────────────────
+(function() {
+  var bookings = typeof LFData !== 'undefined' ? LFData.get('bookings') : [];
+  if (bookings.length === 0) return;
+  var total = bookings.length;
+  var confirmed = bookings.filter(function(b) { return b.status === 'confirmed' || b.status === 'completed'; }).length;
+  var rate = Math.round((confirmed / total) * 100);
+  var el = document.getElementById('conv-rate');
+  var barEl = document.getElementById('conv-bar');
+  var detailEl = document.getElementById('conv-detail');
+  if (el) el.textContent = rate + '%';
+  if (barEl) barEl.style.width = rate + '%';
+  if (detailEl) detailEl.textContent = confirmed + ' confirmed of ' + total + ' total enquiries';
+
+  // ── REFERRAL SOURCES ─────────────────────────────────────────
+  var sources = {};
+  bookings.forEach(function(b) {
+    var src = b.source || 'Unknown';
+    sources[src] = (sources[src] || 0) + 1;
+  });
+  var colors = { 'Website Form':'#2563eb','Instagram':'#e11d48','Referral':'#22c55e','Social/Referral':'#f59e0b','Walk-in':'#8b5cf6','Unknown':'#94a3b8' };
+  var sorted = Object.keys(sources).sort(function(a,b) { return sources[b]-sources[a]; });
+  var chartEl = document.getElementById('referral-chart');
+  if (!chartEl) return;
+  var maxVal = Math.max.apply(null, sorted.map(function(k){return sources[k];}));
+  chartEl.innerHTML = sorted.map(function(src) {
+    var count = sources[src];
+    var pct = Math.round((count/total)*100);
+    var barW = Math.round((count/maxVal)*100);
+    var color = colors[src] || '#94a3b8';
+    return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;">' +
+      '<div style="font-size:12px;color:#64748b;min-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + src + '</div>' +
+      '<div style="flex:1;background:#f1f5f9;border-radius:4px;height:7px;overflow:hidden;">' +
+        '<div style="background:' + color + ';width:' + barW + '%;height:100%;border-radius:4px;transition:width .5s ease;"></div>' +
+      '</div>' +
+      '<div style="font-size:12px;font-weight:600;color:#1a1d2e;min-width:32px;text-align:right;">' + pct + '%</div>' +
+    '</div>';
+  }).join('');
+})();
+</script>
 </body>
 </html>
