@@ -1,23 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>
-// Auth guard — redirect to login if no session
-(function() {
-  var s = localStorage.getItem('lf_session');
-  if (!s) { window.location.replace('login.html'); return; }
-  try {
-    var sess = JSON.parse(s);
-    // Show user name in topbar once DOM loads
-    document.addEventListener('DOMContentLoaded', function() {
-      var nameEl = document.querySelector('.t-name');
-      if (nameEl && sess.name) nameEl.textContent = sess.name;
-      var avatarEl = document.querySelector('.t-avatar');
-      if (avatarEl && sess.name) avatarEl.textContent = sess.name.split(' ').map(function(n){return n[0];}).join('').substring(0,2);
-    });
-  } catch(e) { localStorage.removeItem('lf_session'); window.location.replace('login.html'); }
-})();
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LensFlow — Photography Studio Platform</title>
@@ -344,7 +327,7 @@ a { text-decoration: none; }
     </div>
     <div class="icon-btn" title="Messages"><i class="ti ti-message"></i></div>
     <div class="icon-btn" title="Calendar"><i class="ti ti-calendar"></i></div>
-    <div class="topbar-user" onclick="logout()" title="Sign out">
+    <div class="topbar-user" title="Sign out">
       <div class="t-avatar">SK</div>
       <div class="t-name">Sarah Kim</div>
       <i class="ti ti-chevron-down" style="font-size:13px;color:#94a3b8;"></i>
@@ -783,15 +766,6 @@ function dashSearch(q) {
     if (!q) { card.style.opacity = '1'; return; }
     card.style.opacity = card.textContent.toLowerCase().indexOf(q) > -1 ? '1' : '0.35';
   });
-}
-</script>
-
-<script>
-function logout() {
-  if (confirm('Sign out of LensFlow?')) {
-    localStorage.removeItem('lf_session');
-    window.location.href = 'login.html';
-  }
 }
 </script>
 
