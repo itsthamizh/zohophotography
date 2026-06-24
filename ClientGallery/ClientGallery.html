@@ -192,8 +192,8 @@
           <i class="ti ti-search"></i>
           <input type="text" placeholder="Search galleries…" />
         </div>
-        <button class="btn-icon" title="Filter"><i class="ti ti-filter"></i></button>
-        <button class="btn-gold"><i class="ti ti-upload"></i> Upload Gallery</button>
+        <button class="btn-icon" title="Filter" onclick="openGalleryFilter(this)"><i class="ti ti-filter"></i></button>
+        <button class="btn-gold" onclick="openUploadModal()"><i class="ti ti-upload"></i> Upload Gallery</button>
         <div class="bell-wrap">
           <button class="btn-icon"><i class="ti ti-bell"></i></button>
           <span class="bell-dot"></span>
@@ -212,6 +212,7 @@
         <button class="sub-tab" onclick="filterGalleries('pending', this)">Pending Review</button>
         <button class="sub-tab" onclick="filterGalleries('delivered', this)">Delivered</button>
         <button class="sub-tab" onclick="filterGalleries('archived', this)">Archived</button>
+        <button class="sub-tab" onclick="showEditingQueue(this)" id="editing-queue-tab">Editing Queue <span style="margin-left:4px;background:rgba(234,88,12,.15);color:#ea580c;font-size:11px;font-weight:700;padding:1px 7px;border-radius:10px;">12</span></button>
       </div>
 
       <!-- KPI STATS ROW -->
@@ -288,8 +289,8 @@
       <div class="section-header">
         <h2 class="section-title">Recent Galleries &nbsp;<span id="gallery-count">20 galleries</span></h2>
         <div class="section-actions">
-          <button class="btn-outline"><i class="ti ti-layout-grid"></i> Grid</button>
-          <button class="btn-outline"><i class="ti ti-list"></i> List</button>
+          <button class="btn-outline" id="btn-grid-view" onclick="setGalleryView('grid',this)"><i class="ti ti-layout-grid"></i> Grid</button>
+          <button class="btn-outline" id="btn-list-view" onclick="setGalleryView('list',this)"><i class="ti ti-list"></i> List</button>
         </div>
       </div>
 
@@ -302,7 +303,7 @@
             <img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=500&h=260&fit=crop&auto=format&q=80" alt="Wedding ceremony" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-heart thumb-ph-icon"></i><span class="thumb-type-label">Wedding</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-active"><i class="ph-fill ph-circle" style="font-size:7px;"></i> Active</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 347</span>
           </div>
@@ -317,7 +318,7 @@
                 
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Sep 10, 2026 &nbsp;·&nbsp; Password protected</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action"><i class="ti ti-bell"></i> Notify</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" onclick="openNotifyClient(this)"><i class="ti ti-bell"></i> Notify</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="active">
@@ -325,7 +326,7 @@
             <img src="https://images.unsplash.com/photo-1606800052052-a08af7148866?w=500&h=260&fit=crop&auto=format&q=80" alt="Engagement couple" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-sparkle thumb-ph-icon"></i><span class="thumb-type-label">Engagement</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-active"><i class="ph-fill ph-circle" style="font-size:7px;"></i> Active</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 189</span>
           </div>
@@ -340,7 +341,7 @@
                 
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Aug 28, 2026 &nbsp;·&nbsp; Open access</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action"><i class="ti ti-bell"></i> Notify</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" onclick="openNotifyClient(this)"><i class="ti ti-bell"></i> Notify</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="active">
@@ -350,7 +351,7 @@
                  loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-baby thumb-ph-icon"></i><span class="thumb-type-label">Maternity</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-active"><i class="ph-fill ph-circle" style="font-size:7px;"></i> Active</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 112</span>
           </div>
@@ -365,7 +366,7 @@
                 
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Sep 2, 2026 &nbsp;·&nbsp; Open access</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action"><i class="ti ti-bell"></i> Notify</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" onclick="openNotifyClient(this)"><i class="ti ti-bell"></i> Notify</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="active">
@@ -373,7 +374,7 @@
             <img src="https://images.unsplash.com/photo-1530023367847-a683933f4172?w=500&h=260&fit=crop&auto=format&q=80" alt="Destination wedding" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-heart thumb-ph-icon"></i><span class="thumb-type-label">Wedding</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-active"><i class="ph-fill ph-circle" style="font-size:7px;"></i> Active</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 520</span>
           </div>
@@ -388,7 +389,7 @@
                 
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Aug 15, 2026 &nbsp;·&nbsp; Password protected</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action"><i class="ti ti-bell"></i> Notify</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" onclick="openNotifyClient(this)"><i class="ti ti-bell"></i> Notify</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="pending">
@@ -396,7 +397,7 @@
             <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=500&h=260&fit=crop&auto=format&q=80" alt="Family portrait" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-users thumb-ph-icon"></i><span class="thumb-type-label">Portrait</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-pending"><i class="ph ph-clock" style="font-size:11px;"></i> Pending Review</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 124</span>
           </div>
@@ -410,7 +411,7 @@
                 <div class="gallery-stat" style="color:#a16207;font-weight:500;"><i class="ph ph-clock" style="font-size:12px;"></i> Awaiting client</div>
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Sep 8, 2026 &nbsp;·&nbsp; Invite sent Jun 8</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" style="color:#a16207;border-color:#fde68a;background:#fefce8;"><i class="ti ti-bell"></i> Remind</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" style="color:#a16207;border-color:#fde68a;background:#fefce8;" onclick="openNotifyClient(this)"><i class="ti ti-bell"></i> Remind</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="pending">
@@ -418,7 +419,7 @@
             <img src="https://images.unsplash.com/photo-1536640712-4d4c36ff0e4e?w=500&h=260&fit=crop&auto=format&q=80" alt="Family spring" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-flower thumb-ph-icon"></i><span class="thumb-type-label">Portrait</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-pending"><i class="ph ph-clock" style="font-size:11px;"></i> Pending Review</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 98</span>
           </div>
@@ -432,7 +433,7 @@
                 <div class="gallery-stat" style="color:#a16207;font-weight:500;"><i class="ph ph-clock" style="font-size:12px;"></i> Not opened yet</div>
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Sep 14, 2026 &nbsp;·&nbsp; Invite sent Jun 14</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" style="color:#a16207;border-color:#fde68a;background:#fefce8;"><i class="ti ti-bell"></i> Remind</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" style="color:#a16207;border-color:#fde68a;background:#fefce8;" onclick="openNotifyClient(this)"><i class="ti ti-bell"></i> Remind</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="pending">
@@ -440,7 +441,7 @@
             <img src="https://images.unsplash.com/photo-1566004100631-35d015d6a491?w=500&h=260&fit=crop&auto=format&q=80" alt="Newborn session" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-baby thumb-ph-icon"></i><span class="thumb-type-label">Newborn</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-pending"><i class="ph ph-clock" style="font-size:11px;"></i> Pending Review</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 84</span>
           </div>
@@ -454,7 +455,7 @@
                 <div class="gallery-stat" style="color:#a16207;font-weight:500;"><i class="ph ph-clock" style="font-size:12px;"></i> Not opened yet</div>
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Sep 12, 2026 &nbsp;·&nbsp; Invite sent Jun 12</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" style="color:#a16207;border-color:#fde68a;background:#fefce8;"><i class="ti ti-bell"></i> Remind</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" style="color:#a16207;border-color:#fde68a;background:#fefce8;" onclick="openNotifyClient(this)"><i class="ti ti-bell"></i> Remind</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="pending">
@@ -462,7 +463,7 @@
             <img src="https://images.unsplash.com/photo-1562774053-701939374585?w=500&h=260&fit=crop&auto=format&q=80" alt="Senior portraits" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-graduation-cap thumb-ph-icon"></i><span class="thumb-type-label">Portraits</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-pending"><i class="ph ph-clock" style="font-size:11px;"></i> Pending Review</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 156</span>
           </div>
@@ -476,7 +477,7 @@
                 <div class="gallery-stat" style="color:#a16207;font-weight:500;"><i class="ph ph-clock" style="font-size:12px;"></i> Awaiting client</div>
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Sep 6, 2026 &nbsp;·&nbsp; Invite sent Jun 6</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" style="color:#a16207;border-color:#fde68a;background:#fefce8;"><i class="ti ti-bell"></i> Remind</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action" style="color:#a16207;border-color:#fde68a;background:#fefce8;" onclick="openNotifyClient(this)"><i class="ti ti-bell"></i> Remind</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="delivered">
@@ -484,7 +485,7 @@
             <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&h=260&fit=crop&auto=format&q=80" alt="Professional headshots" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-identification-card thumb-ph-icon"></i><span class="thumb-type-label">Headshots</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 45</span>
           </div>
@@ -499,7 +500,7 @@
                 <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Sep 5, 2026 &nbsp;·&nbsp; Balance paid</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="delivered">
@@ -507,7 +508,7 @@
             <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=500&h=260&fit=crop&auto=format&q=80" alt="Corporate gala" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-confetti thumb-ph-icon"></i><span class="thumb-type-label">Event</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 512</span>
           </div>
@@ -522,7 +523,7 @@
                 <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Aug 20, 2026 &nbsp;·&nbsp; Print store active</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="delivered">
@@ -530,7 +531,7 @@
             <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=500&h=260&fit=crop&auto=format&q=80" alt="Team headshots" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-identification-card thumb-ph-icon"></i><span class="thumb-type-label">Headshots</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 68</span>
           </div>
@@ -545,7 +546,7 @@
                 <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Aug 30, 2026 &nbsp;·&nbsp; Balance paid</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="delivered">
@@ -553,7 +554,7 @@
             <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&h=260&fit=crop&auto=format&q=80" alt="Bridal fashion" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-sparkle thumb-ph-icon"></i><span class="thumb-type-label">Fashion</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 230</span>
           </div>
@@ -568,7 +569,7 @@
                 <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Aug 25, 2026 &nbsp;·&nbsp; Commercial rights</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="delivered">
@@ -576,7 +577,7 @@
             <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=500&h=260&fit=crop&auto=format&q=80" alt="Winery commercial" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-image thumb-ph-icon"></i><span class="thumb-type-label">Commercial</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 145</span>
           </div>
@@ -591,7 +592,7 @@
                 <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Aug 12, 2026 &nbsp;·&nbsp; Commercial rights</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="delivered">
@@ -599,7 +600,7 @@
             <img src="https://images.unsplash.com/photo-1518834107812-67b0b7c58434?w=500&h=260&fit=crop&auto=format&q=80" alt="Ballet performance" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-music-notes thumb-ph-icon"></i><span class="thumb-type-label">Performance</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 380</span>
           </div>
@@ -614,7 +615,7 @@
                 <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Aug 8, 2026 &nbsp;·&nbsp; Social media use</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="delivered">
@@ -622,7 +623,7 @@
             <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=500&h=260&fit=crop&auto=format&q=80" alt="Quinceañera celebration" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-star thumb-ph-icon"></i><span class="thumb-type-label">Event</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 295</span>
           </div>
@@ -637,7 +638,7 @@
                 <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Jul 28, 2026 &nbsp;·&nbsp; Balance paid</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="delivered">
@@ -645,7 +646,7 @@
             <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=500&h=260&fit=crop&auto=format&q=80" alt="Wedding ceremony" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-heart thumb-ph-icon"></i><span class="thumb-type-label">Wedding</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 410</span>
           </div>
@@ -660,7 +661,7 @@
                 <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Jul 20, 2026 &nbsp;·&nbsp; Balance paid</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="delivered">
@@ -668,7 +669,7 @@
             <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&h=260&fit=crop&auto=format&q=80" alt="Brand shoot" loading="lazy"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-image thumb-ph-icon"></i><span class="thumb-type-label">Commercial</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-delivered"><i class="ph-fill ph-check-circle" style="font-size:11px;"></i> Delivered</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 180</span>
           </div>
@@ -683,7 +684,7 @@
                 <div class="gallery-stat" style="color:#15803d;font-weight:500;"><i class="ph-fill ph-check-circle" style="font-size:12px;"></i> Complete</div>
               </div>
             <div class="gallery-expiry"><i class="ti ti-clock"></i> Exp. Jul 15, 2026 &nbsp;·&nbsp; Commercial rights</div>
-            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="archived" style="opacity:.78;">
@@ -691,7 +692,7 @@
             <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=500&h=260&fit=crop&auto=format&q=80" alt="Wedding 2024" loading="lazy" style="filter:grayscale(55%);"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-heart thumb-ph-icon"></i><span class="thumb-type-label">Wedding</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-archived"><i class="ph ph-archive-box" style="font-size:11px;"></i> Archived</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 298</span>
           </div>
@@ -706,7 +707,7 @@
                 
               </div>
             <div class="gallery-expiry" style="color:#ef4444;"><i class="ph ph-calendar-x" style="font-size:13px;"></i> Expired Nov 2024</div>
-            <div class="gallery-actions"><button class="btn-action"><i class="ti ti-refresh"></i> Restore</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="restoreGallery(this)"><i class="ti ti-refresh"></i> Restore</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="archived" style="opacity:.78;">
@@ -714,7 +715,7 @@
             <img src="https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=500&h=260&fit=crop&auto=format&q=80" alt="Holiday family" loading="lazy" style="filter:grayscale(55%);"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-users thumb-ph-icon"></i><span class="thumb-type-label">Family</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-archived"><i class="ph ph-archive-box" style="font-size:11px;"></i> Archived</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 156</span>
           </div>
@@ -729,7 +730,7 @@
                 
               </div>
             <div class="gallery-expiry" style="color:#ef4444;"><i class="ph ph-calendar-x" style="font-size:13px;"></i> Expired Dec 2024</div>
-            <div class="gallery-actions"><button class="btn-action"><i class="ti ti-refresh"></i> Restore</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="restoreGallery(this)"><i class="ti ti-refresh"></i> Restore</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
         <div class="gallery-card" data-status="archived" style="opacity:.78;">
@@ -737,7 +738,7 @@
             <img src="https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=500&h=260&fit=crop&auto=format&q=80" alt="Kids portraits" loading="lazy" style="filter:grayscale(55%);"
                  onerror="this.parentElement.classList.remove('has-image');this.remove();">
             <div class="gallery-thumb-inner"><i class="ph-fill ph-student thumb-ph-icon"></i><span class="thumb-type-label">Children</span></div>
-            <div class="gallery-thumb-overlay"><button class="btn-view-gallery"><i class="ti ti-eye"></i> View Gallery</button></div>
+            <div class="gallery-thumb-overlay"><button class="btn-view-gallery" onclick="openGalleryViewer(this)"><i class="ti ti-eye"></i> View Gallery</button></div>
             <span class="gallery-status-badge badge-archived"><i class="ph ph-archive-box" style="font-size:11px;"></i> Archived</span>
             <span class="gallery-photo-count"><i class="ti ti-photo"></i> 92</span>
           </div>
@@ -752,11 +753,86 @@
                 
               </div>
             <div class="gallery-expiry" style="color:#ef4444;"><i class="ph ph-calendar-x" style="font-size:13px;"></i> Expired Dec 2024</div>
-            <div class="gallery-actions"><button class="btn-action"><i class="ti ti-refresh"></i> Restore</button><button class="btn-action btn-action-primary"><i class="ti ti-settings"></i> Manage</button></div>
+            <div class="gallery-actions"><button class="btn-action" onclick="restoreGallery(this)"><i class="ti ti-refresh"></i> Restore</button><button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button></div>
           </div>
         </div>
 
         </div><!-- /gallery-grid -->
+
+
+      <!-- ══ EDITING QUEUE PANEL (hidden by default) ══ -->
+      <div id="editing-queue-panel" style="display:none;">
+
+        <!-- Pipeline summary KPIs -->
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px;">
+          <div style="background:#fff;border:1px solid #e8edf3;border-radius:12px;padding:14px 16px;text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:#64748b;">3</div>
+            <div style="font-size:11.5px;color:#94a3b8;margin-top:3px;font-weight:600;">RAW Import</div>
+            <div style="height:3px;background:#e2e8f0;border-radius:2px;margin-top:8px;"><div style="height:100%;width:100%;background:#94a3b8;border-radius:2px;"></div></div>
+          </div>
+          <div style="background:#fff;border:1px solid #e8edf3;border-radius:12px;padding:14px 16px;text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:#f59e0b;">2</div>
+            <div style="font-size:11.5px;color:#94a3b8;margin-top:3px;font-weight:600;">Culling</div>
+            <div style="height:3px;background:#e2e8f0;border-radius:2px;margin-top:8px;"><div style="height:100%;width:60%;background:#f59e0b;border-radius:2px;"></div></div>
+          </div>
+          <div style="background:#fff;border:1px solid #e8edf3;border-radius:12px;padding:14px 16px;text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:#2563eb;">4</div>
+            <div style="font-size:11.5px;color:#94a3b8;margin-top:3px;font-weight:600;">Editing</div>
+            <div style="height:3px;background:#e2e8f0;border-radius:2px;margin-top:8px;"><div style="height:100%;width:80%;background:#2563eb;border-radius:2px;"></div></div>
+          </div>
+          <div style="background:#fff;border:1px solid #e8edf3;border-radius:12px;padding:14px 16px;text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:#8b5cf6;">2</div>
+            <div style="font-size:11.5px;color:#94a3b8;margin-top:3px;font-weight:600;">Export</div>
+            <div style="height:3px;background:#e2e8f0;border-radius:2px;margin-top:8px;"><div style="height:100%;width:90%;background:#8b5cf6;border-radius:2px;"></div></div>
+          </div>
+          <div style="background:#fff;border:1px solid #e8edf3;border-radius:12px;padding:14px 16px;text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:#22c55e;">1</div>
+            <div style="font-size:11.5px;color:#94a3b8;margin-top:3px;font-weight:600;">Delivered</div>
+            <div style="height:3px;background:#e2e8f0;border-radius:2px;margin-top:8px;"><div style="height:100%;width:100%;background:#22c55e;border-radius:2px;"></div></div>
+          </div>
+        </div>
+
+        <!-- Queue table -->
+        <div style="background:#fff;border:1px solid #e8edf3;border-radius:14px;overflow:hidden;">
+          <div style="padding:16px 20px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
+            <div style="font-size:14.5px;font-weight:700;color:#1a1d2e;"><i class="ti ti-adjustments-horizontal" style="color:#2563eb;margin-right:6px;"></i>Editing Queue — 12 albums</div>
+            <div style="display:flex;gap:8px;">
+              <select id="eq-filter-stage" onchange="filterEditingQueue()" style="border:1px solid #e2e8f0;border-radius:8px;padding:6px 10px;font-size:13px;font-family:Inter,sans-serif;outline:none;color:#475569;background:#fff;">
+                <option value="all">All Stages</option>
+                <option value="raw">RAW Import</option>
+                <option value="culling">Culling</option>
+                <option value="editing">Editing</option>
+                <option value="export">Export</option>
+                <option value="delivered">Delivered</option>
+              </select>
+              <select id="eq-filter-editor" onchange="filterEditingQueue()" style="border:1px solid #e2e8f0;border-radius:8px;padding:6px 10px;font-size:13px;font-family:Inter,sans-serif;outline:none;color:#475569;background:#fff;">
+                <option value="all">All Editors</option>
+                <option value="sarah">Sarah Kim</option>
+                <option value="mike">Mike R.</option>
+                <option value="unassigned">Unassigned</option>
+              </select>
+            </div>
+          </div>
+          <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;" id="editing-queue-table">
+              <thead>
+                <tr style="background:#f8fafc;">
+                  <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">Gallery / Client</th>
+                  <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">Shoot Type</th>
+                  <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">Stage</th>
+                  <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">Progress</th>
+                  <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">Photos</th>
+                  <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">Editor</th>
+                  <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">Due Date</th>
+                  <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="eq-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- ══ END EDITING QUEUE ══ -->
 
       <!-- LOWER SECTION: Table + Settings Panel -->
       <div class="lower-section">
@@ -770,8 +846,8 @@
                 <i class="ti ti-search"></i>
                 <input type="text" placeholder="Search…" />
               </div>
-              <button class="btn-outline"><i class="ti ti-filter"></i> Filter</button>
-              <button class="btn-outline"><i class="ti ti-download"></i> Export</button>
+              <button class="btn-outline" onclick="openTableFilter(this)"><i class="ti ti-filter"></i> Filter</button>
+              <button class="btn-outline" onclick="exportGalleryCSV()"><i class="ti ti-download"></i> Export CSV</button>
             </div>
           </div>
           <div class="table-scroll">
@@ -801,9 +877,9 @@
                   <td>Sep 10, 2026</td>
                   <td><span class="badge badge-active">Active</span></td>
                   <td class="tbl-actions">
-                    <button class="tbl-action-btn" title="Copy Link"><i class="ti ti-link"></i></button>
-                    <button class="tbl-action-btn" title="Edit"><i class="ti ti-pencil"></i></button>
-                    <button class="tbl-action-btn danger" title="Delete"><i class="ti ti-trash"></i></button>
+                    <button class="tbl-action-btn" title="Copy Link" onclick="tblCopyLink(this)"><i class="ti ti-link"></i></button>
+                    <button class="tbl-action-btn" title="Edit" onclick="tblEditGallery(this)"><i class="ti ti-pencil"></i></button>
+                    <button class="tbl-action-btn danger" title="Delete" onclick="tblDeleteGallery(this)"><i class="ti ti-trash"></i></button>
                   </td>
                 </tr>
                 <!-- Row 2: active -->
@@ -817,9 +893,9 @@
                   <td>Aug 28, 2026</td>
                   <td><span class="badge badge-active">Active</span></td>
                   <td class="tbl-actions">
-                    <button class="tbl-action-btn" title="Copy Link"><i class="ti ti-link"></i></button>
-                    <button class="tbl-action-btn" title="Edit"><i class="ti ti-pencil"></i></button>
-                    <button class="tbl-action-btn danger" title="Delete"><i class="ti ti-trash"></i></button>
+                    <button class="tbl-action-btn" title="Copy Link" onclick="tblCopyLink(this)"><i class="ti ti-link"></i></button>
+                    <button class="tbl-action-btn" title="Edit" onclick="tblEditGallery(this)"><i class="ti ti-pencil"></i></button>
+                    <button class="tbl-action-btn danger" title="Delete" onclick="tblDeleteGallery(this)"><i class="ti ti-trash"></i></button>
                   </td>
                 </tr>
                 <!-- Row 3: pending -->
@@ -833,9 +909,9 @@
                   <td>Sep 8, 2026</td>
                   <td><span class="badge badge-pending">Pending</span></td>
                   <td class="tbl-actions">
-                    <button class="tbl-action-btn" title="Copy Link"><i class="ti ti-link"></i></button>
-                    <button class="tbl-action-btn" title="Edit"><i class="ti ti-pencil"></i></button>
-                    <button class="tbl-action-btn danger" title="Delete"><i class="ti ti-trash"></i></button>
+                    <button class="tbl-action-btn" title="Copy Link" onclick="tblCopyLink(this)"><i class="ti ti-link"></i></button>
+                    <button class="tbl-action-btn" title="Edit" onclick="tblEditGallery(this)"><i class="ti ti-pencil"></i></button>
+                    <button class="tbl-action-btn danger" title="Delete" onclick="tblDeleteGallery(this)"><i class="ti ti-trash"></i></button>
                   </td>
                 </tr>
                 <!-- Row 4: pending -->
@@ -849,9 +925,9 @@
                   <td>Sep 14, 2026</td>
                   <td><span class="badge badge-pending">Pending</span></td>
                   <td class="tbl-actions">
-                    <button class="tbl-action-btn" title="Copy Link"><i class="ti ti-link"></i></button>
-                    <button class="tbl-action-btn" title="Edit"><i class="ti ti-pencil"></i></button>
-                    <button class="tbl-action-btn danger" title="Delete"><i class="ti ti-trash"></i></button>
+                    <button class="tbl-action-btn" title="Copy Link" onclick="tblCopyLink(this)"><i class="ti ti-link"></i></button>
+                    <button class="tbl-action-btn" title="Edit" onclick="tblEditGallery(this)"><i class="ti ti-pencil"></i></button>
+                    <button class="tbl-action-btn danger" title="Delete" onclick="tblDeleteGallery(this)"><i class="ti ti-trash"></i></button>
                   </td>
                 </tr>
                 <!-- Row 5: delivered -->
@@ -865,9 +941,9 @@
                   <td>Sep 5, 2026</td>
                   <td><span class="badge badge-delivered">Delivered</span></td>
                   <td class="tbl-actions">
-                    <button class="tbl-action-btn" title="Copy Link"><i class="ti ti-link"></i></button>
-                    <button class="tbl-action-btn" title="Edit"><i class="ti ti-pencil"></i></button>
-                    <button class="tbl-action-btn danger" title="Delete"><i class="ti ti-trash"></i></button>
+                    <button class="tbl-action-btn" title="Copy Link" onclick="tblCopyLink(this)"><i class="ti ti-link"></i></button>
+                    <button class="tbl-action-btn" title="Edit" onclick="tblEditGallery(this)"><i class="ti ti-pencil"></i></button>
+                    <button class="tbl-action-btn danger" title="Delete" onclick="tblDeleteGallery(this)"><i class="ti ti-trash"></i></button>
                   </td>
                 </tr>
                 <!-- Row 6: delivered -->
@@ -881,9 +957,9 @@
                   <td>Aug 20, 2026</td>
                   <td><span class="badge badge-delivered">Delivered</span></td>
                   <td class="tbl-actions">
-                    <button class="tbl-action-btn" title="Copy Link"><i class="ti ti-link"></i></button>
-                    <button class="tbl-action-btn" title="Edit"><i class="ti ti-pencil"></i></button>
-                    <button class="tbl-action-btn danger" title="Delete"><i class="ti ti-trash"></i></button>
+                    <button class="tbl-action-btn" title="Copy Link" onclick="tblCopyLink(this)"><i class="ti ti-link"></i></button>
+                    <button class="tbl-action-btn" title="Edit" onclick="tblEditGallery(this)"><i class="ti ti-pencil"></i></button>
+                    <button class="tbl-action-btn danger" title="Delete" onclick="tblDeleteGallery(this)"><i class="ti ti-trash"></i></button>
                   </td>
                 </tr>
                 <!-- Row 7: archived -->
@@ -897,9 +973,9 @@
                   <td>Expired</td>
                   <td><span class="badge badge-archived">Archived</span></td>
                   <td class="tbl-actions">
-                    <button class="tbl-action-btn" title="Copy Link"><i class="ti ti-link"></i></button>
-                    <button class="tbl-action-btn" title="Edit"><i class="ti ti-pencil"></i></button>
-                    <button class="tbl-action-btn danger" title="Delete"><i class="ti ti-trash"></i></button>
+                    <button class="tbl-action-btn" title="Copy Link" onclick="tblCopyLink(this)"><i class="ti ti-link"></i></button>
+                    <button class="tbl-action-btn" title="Edit" onclick="tblEditGallery(this)"><i class="ti ti-pencil"></i></button>
+                    <button class="tbl-action-btn danger" title="Delete" onclick="tblDeleteGallery(this)"><i class="ti ti-trash"></i></button>
                   </td>
                 </tr>
                 <!-- Row 8: archived -->
@@ -913,9 +989,9 @@
                   <td>Expired</td>
                   <td><span class="badge badge-archived">Archived</span></td>
                   <td class="tbl-actions">
-                    <button class="tbl-action-btn" title="Copy Link"><i class="ti ti-link"></i></button>
-                    <button class="tbl-action-btn" title="Edit"><i class="ti ti-pencil"></i></button>
-                    <button class="tbl-action-btn danger" title="Delete"><i class="ti ti-trash"></i></button>
+                    <button class="tbl-action-btn" title="Copy Link" onclick="tblCopyLink(this)"><i class="ti ti-link"></i></button>
+                    <button class="tbl-action-btn" title="Edit" onclick="tblEditGallery(this)"><i class="ti ti-pencil"></i></button>
+                    <button class="tbl-action-btn danger" title="Delete" onclick="tblDeleteGallery(this)"><i class="ti ti-trash"></i></button>
                   </td>
                 </tr>
               </tbody>
@@ -924,9 +1000,7 @@
           <div class="table-pagination">
             <span class="pagination-info">Showing 8 of 20 galleries</span>
             <div class="pagination-controls">
-              <button class="page-btn" disabled><i class="ti ti-chevron-left"></i></button>
-              <button class="page-btn active">1</button>
-              <button class="page-btn"><i class="ti ti-chevron-right"></i></button>
+              <button class="page-btn" id="pg-prev" disabled onclick="changePage(-1)"><i class="ti ti-chevron-left"></i></button><button class="page-btn active" id="pg-num">1</button><button class="page-btn" id="pg-next" onclick="changePage(1)"><i class="ti ti-chevron-right"></i></button>
             </div>
           </div>
         </div><!-- /table-card -->
@@ -989,9 +1063,7 @@
           </div>
 
           <div style="padding:14px 20px;border-top:1px solid #f1f5f9;">
-            <button class="btn-settings-save">
-              <i class="ph-fill ph-floppy-disk" style="font-size:15px;"></i> Save Settings
-            </button>
+            <button class="btn-settings-save" onclick="saveGallerySettings(this)"><i class="ph-fill ph-floppy-disk" style="font-size:15px;"></i> Save Settings</button>
           </div>
         </div><!-- /settings-panel -->
 
@@ -1132,5 +1204,1142 @@ document.addEventListener('DOMContentLoaded', checkGalleryExpiry);
   if (el) el.textContent = count;
 })();
 </script>
+
+<!-- ══ GALLERY VIEWER MODAL ══ -->
+<div id="gallery-viewer-overlay" style="position:fixed;inset:0;background:rgba(5,5,15,.95);z-index:9999;display:none;flex-direction:column;overflow:hidden;">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 28px;border-bottom:1px solid rgba(255,255,255,.1);flex-shrink:0;">
+    <div>
+      <div id="gv-title" style="font-size:18px;font-weight:700;color:#fff;font-family:Inter,sans-serif;"></div>
+      <div id="gv-meta" style="font-size:13px;color:rgba(255,255,255,.5);margin-top:3px;font-family:Inter,sans-serif;"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button onclick="openClientPortal()" style="background:#2563eb;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:6px;"><i class="ti ti-external-link"></i> Client View</button>
+      <button onclick="closeGalleryViewer()" style="background:rgba(255,255,255,.1);color:#fff;border:none;width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;">&#x2715;</button>
+    </div>
+  </div>
+
+  <!-- Filter bar -->
+  <div style="padding:12px 28px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;flex-shrink:0;flex-wrap:wrap;">
+    <button class="gv-filter active" onclick="filterGV('all',this)" style="background:rgba(255,255,255,.15);color:#fff;border:none;padding:6px 14px;border-radius:20px;font-size:12.5px;cursor:pointer;font-family:Inter,sans-serif;font-weight:500;">All Photos</button>
+    <button class="gv-filter" onclick="filterGV('fav',this)" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.55);border:none;padding:6px 14px;border-radius:20px;font-size:12.5px;cursor:pointer;font-family:Inter,sans-serif;">Favourites <span id="gv-fav-count">0</span></button>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
+      <span id="gv-selected" style="font-size:12.5px;color:rgba(255,255,255,.4);font-family:Inter,sans-serif;"></span>
+      <button onclick="downloadAll()" style="background:rgba(255,255,255,.1);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:12.5px;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:5px;"><i class="ti ti-download"></i> Download All</button>
+    </div>
+  </div>
+
+  <!-- Photo grid -->
+  <div id="gv-grid" style="flex:1;overflow-y:auto;padding:20px 28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;align-content:start;">
+  </div>
+
+  <!-- Bottom bar (shows when favourites selected) -->
+  <div id="gv-bottom-bar" style="display:none;padding:14px 28px;border-top:1px solid rgba(255,255,255,.1);background:rgba(10,10,30,.95);flex-shrink:0;align-items:center;justify-content:space-between;">
+    <span style="font-size:13.5px;color:#fff;font-family:Inter,sans-serif;"><strong id="gv-fav-total">0</strong> photos favourited</span>
+    <button onclick="submitFavourites()" style="background:#22c55e;color:#fff;border:none;padding:9px 20px;border-radius:8px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">Send favourites to photographer</button>
+  </div>
+</div>
+
+<style>
+  .gv-filter.active { background:rgba(255,255,255,.15)!important;color:#fff!important; }
+  .gv-photo { position:relative;border-radius:6px;overflow:hidden;cursor:pointer;aspect-ratio:3/2;background:#1a1d2e; }
+  .gv-photo img { width:100%;height:100%;object-fit:cover;display:block;transition:transform .2s; }
+  .gv-photo:hover img { transform:scale(1.03); }
+  .gv-photo-actions { position:absolute;top:8px;right:8px;display:flex;gap:6px;opacity:0;transition:opacity .15s; }
+  .gv-photo:hover .gv-photo-actions { opacity:1; }
+  .gv-photo-btn { width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;background:rgba(0,0,0,.6);color:rgba(255,255,255,.8);transition:all .13s; }
+  .gv-photo-btn:hover { background:#2563eb;color:#fff; }
+  .gv-photo-btn.fav-active { background:#e11d48;color:#fff; }
+  .gv-photo-num { position:absolute;bottom:7px;left:8px;background:rgba(0,0,0,.5);color:rgba(255,255,255,.65);font-size:10px;padding:2px 6px;border-radius:10px;font-family:Inter,sans-serif; }
+</style>
+
+<script>
+var gvGallery = { name:'', photos:32, seed:'gallery', favs:[] };
+var gvShowFavs = false;
+
+function openGalleryViewer(btn) {
+  var card = btn.closest('.gallery-card');
+  var name = card ? (card.querySelector('.gallery-name')||{textContent:''}).textContent.trim() : 'Gallery';
+  var client = card ? (card.querySelector('.gallery-client')||{textContent:''}).textContent.trim() : '';
+  var photosEl = card ? card.querySelector('.gallery-photo-count') : null;
+  var photos = photosEl ? parseInt(photosEl.textContent.replace(/[^0-9]/g,'')) || 32 : 32;
+  var seed = name.toLowerCase().replace(/[^a-z0-9]/g,'').substring(0,12) || 'gallery';
+
+  gvGallery = { name: name, photos: photos, seed: seed, favs: JSON.parse(localStorage.getItem('gv_favs_' + seed) || '[]') };
+  gvShowFavs = false;
+
+  document.getElementById('gv-title').textContent = name;
+  document.getElementById('gv-meta').textContent = photos + ' photos  ·  Click to favourite  ·  Hover to download';
+
+  var overlay = document.getElementById('gallery-viewer-overlay');
+  overlay.style.display = 'flex';
+  renderGVGrid();
+}
+
+function renderGVGrid() {
+  var grid = document.getElementById('gv-grid');
+  var count = Math.min(gvGallery.photos, 48);
+  var items = [];
+  for (var i = 1; i <= count; i++) {
+    if (gvShowFavs && gvGallery.favs.indexOf(i) === -1) continue;
+    var isFav = gvGallery.favs.indexOf(i) > -1;
+    items.push(
+      '<div class="gv-photo" id="gvp-'+i+'">' +
+        '<img src="https://picsum.photos/seed/' + gvGallery.seed + i + '/600/400" loading="lazy" alt="Photo '+i+'">' +
+        '<div class="gv-photo-actions">' +
+          '<button class="gv-photo-btn' + (isFav?' fav-active':'') + '" onclick="toggleGVFav('+i+',this)" title="Favourite"><i class="ti ti-heart'+(isFav?'-filled':'')+'"></i></button>' +
+          '<button class="gv-photo-btn" onclick="dlGVPhoto('+i+')" title="Download"><i class="ti ti-download"></i></button>' +
+        '</div>' +
+        '<div class="gv-photo-num">#'+i+'</div>' +
+      '</div>'
+    );
+  }
+  grid.innerHTML = items.join('') || '<div style="color:rgba(255,255,255,.4);text-align:center;padding:60px;font-family:Inter,sans-serif;grid-column:1/-1;">No photos in this filter.</div>';
+  updateGVCounts();
+}
+
+function toggleGVFav(num, btn) {
+  var idx = gvGallery.favs.indexOf(num);
+  if (idx > -1) gvGallery.favs.splice(idx,1);
+  else gvGallery.favs.push(num);
+  localStorage.setItem('gv_favs_' + gvGallery.seed, JSON.stringify(gvGallery.favs));
+  var isFav = gvGallery.favs.indexOf(num) > -1;
+  btn.className = 'gv-photo-btn' + (isFav ? ' fav-active' : '');
+  btn.innerHTML = '<i class="ti ti-heart' + (isFav?'-filled':'') + '"></i>';
+  updateGVCounts();
+}
+
+function updateGVCounts() {
+  var fc = gvGallery.favs.length;
+  document.getElementById('gv-fav-count').textContent = fc;
+  document.getElementById('gv-fav-total').textContent = fc;
+  document.getElementById('gv-selected').textContent = fc > 0 ? fc + ' favourited' : '';
+  var bar = document.getElementById('gv-bottom-bar');
+  bar.style.display = fc > 0 ? 'flex' : 'none';
+}
+
+function filterGV(type, btn) {
+  gvShowFavs = (type === 'fav');
+  document.querySelectorAll('.gv-filter').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderGVGrid();
+}
+
+function closeGalleryViewer() {
+  document.getElementById('gallery-viewer-overlay').style.display = 'none';
+  gvGallery.favs = [];
+  gvShowFavs = false;
+}
+
+function openClientPortal() {
+  window.open('../ClientPortal/ClientPortal.html', '_blank');
+}
+
+function dlGVPhoto(num) {
+  var link = document.createElement('a');
+  link.href = 'https://picsum.photos/seed/' + gvGallery.seed + num + '/2400/1600';
+  link.download = gvGallery.seed + '-photo-' + num + '.jpg';
+  link.target = '_blank'; link.click();
+}
+
+function downloadAll() {
+  var t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1a1d2e;color:#fff;padding:13px 20px;border-radius:10px;font-size:13.5px;font-family:Inter,sans-serif;z-index:99999;display:flex;align-items:center;gap:10px;box-shadow:0 6px 24px rgba(0,0,0,.4);';
+  t.innerHTML = '<i class="ti ti-download" style="font-size:18px;color:#4ade80;"></i> Preparing ' + gvGallery.photos + ' photos for download…';
+  document.body.appendChild(t); setTimeout(function(){t.remove();},4000);
+}
+
+function submitFavourites() {
+  var fc = gvGallery.favs.length;
+  closeGalleryViewer();
+  var t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:28px;right:28px;background:#1a1d2e;color:#fff;padding:14px 20px;border-radius:10px;font-size:13.5px;font-family:Inter,sans-serif;z-index:99999;display:flex;align-items:center;gap:10px;box-shadow:0 6px 24px rgba(0,0,0,.3);';
+  t.innerHTML = '<i class="ti ti-circle-check" style="font-size:18px;color:#4ade80;"></i> ' + fc + ' favourites sent to photographer!';
+  document.body.appendChild(t); setTimeout(function(){t.remove();},4000);
+}
+
+// Close on Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeGalleryViewer();
+});
+</script>
+
+
+<!-- ══ UPLOAD GALLERY MODAL ══ -->
+<div id="upload-modal-overlay" onclick="if(event.target===this)closeUploadModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9990;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;width:600px;max-width:95vw;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 16px 48px rgba(0,0,0,.18);font-family:Inter,sans-serif;">
+
+    <!-- Header -->
+    <div style="padding:20px 24px 16px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:16px;font-weight:700;color:#1a1d2e;"><i class="ti ti-upload" style="color:#2563eb;margin-right:8px;"></i>Upload New Gallery</div>
+        <div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">Create a client gallery and upload photos</div>
+      </div>
+      <button onclick="closeUploadModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;line-height:1;">&#x2715;</button>
+    </div>
+
+    <!-- Body -->
+    <div style="padding:22px 24px;overflow-y:auto;flex:1;">
+
+      <!-- Photo drop zone -->
+      <div id="upload-dropzone" onclick="document.getElementById('upload-file-input').click()"
+        style="border:2px dashed #bfdbfe;border-radius:12px;padding:36px 20px;text-align:center;cursor:pointer;background:#f8fbff;margin-bottom:20px;transition:border-color .15s;"
+        ondragover="event.preventDefault();this.style.borderColor='#2563eb'" ondragleave="this.style.borderColor='#bfdbfe'"
+        ondrop="handleUploadDrop(event)">
+        <div style="font-size:36px;margin-bottom:10px;">📷</div>
+        <div style="font-size:14px;font-weight:600;color:#1e40af;margin-bottom:4px;">Click to select photos or drag &amp; drop</div>
+        <div style="font-size:12.5px;color:#94a3b8;">JPG, PNG, HEIC · up to 500 photos</div>
+        <input type="file" id="upload-file-input" multiple accept="image/*" style="display:none" onchange="handleUploadSelect(this)">
+      </div>
+
+      <!-- Preview strip -->
+      <div id="upload-preview-strip" style="display:none;margin-bottom:20px;">
+        <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Selected Photos <span id="upload-count" style="color:#2563eb;"></span></div>
+        <div id="upload-thumbs" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+        <div id="upload-progress-wrap" style="display:none;margin-top:12px;">
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;color:#64748b;margin-bottom:5px;">
+            <span>Uploading…</span><span id="upload-pct">0%</span>
+          </div>
+          <div style="background:#e8edf3;border-radius:4px;height:6px;overflow:hidden;">
+            <div id="upload-bar" style="background:#2563eb;height:100%;width:0%;transition:width .2s;border-radius:4px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form fields -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11.5px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">Client Name *</label>
+          <input id="ug-client" type="text" placeholder="e.g. Emma & Jake Wilson" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;">
+        </div>
+        <div>
+          <label style="font-size:11.5px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">Shoot Type</label>
+          <select id="ug-type" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;background:#fff;">
+            <option>Wedding</option><option>Portrait</option><option>Engagement</option>
+            <option>Corporate</option><option>Event</option><option>Commercial</option><option>Maternity</option><option>Newborn</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11.5px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">Shoot Date</label>
+          <input id="ug-date" type="date" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;">
+        </div>
+        <div>
+          <label style="font-size:11.5px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">Gallery Password</label>
+          <input id="ug-password" type="text" placeholder="Leave blank for no password" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;">
+        </div>
+        <div>
+          <label style="font-size:11.5px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">Expiry Date</label>
+          <input id="ug-expiry" type="date" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;">
+        </div>
+        <div>
+          <label style="font-size:11.5px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">Client Email</label>
+          <input id="ug-email" type="email" placeholder="client@email.com" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;">
+        </div>
+        <div style="grid-column:1/-1;display:flex;gap:20px;padding:4px 0;">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#475569;">
+            <input type="checkbox" id="ug-watermark" checked style="width:15px;height:15px;accent-color:#2563eb;"> Apply watermark
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#475569;">
+            <input type="checkbox" id="ug-download" checked style="width:15px;height:15px;accent-color:#2563eb;"> Allow download
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#475569;">
+            <input type="checkbox" id="ug-notify" checked style="width:15px;height:15px;accent-color:#2563eb;"> Email client when ready
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="padding:14px 24px;border-top:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;background:#fafbfc;">
+      <div id="ug-status" style="font-size:12.5px;color:#94a3b8;"></div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="closeUploadModal()" style="padding:9px 18px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;font-size:13.5px;font-family:Inter,sans-serif;cursor:pointer;color:#475569;">Cancel</button>
+        <button onclick="submitUploadGallery()" style="padding:9px 20px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:13.5px;font-weight:600;font-family:Inter,sans-serif;cursor:pointer;display:flex;align-items:center;gap:7px;"><i class="ti ti-upload"></i> Upload &amp; Create Gallery</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openUploadModal() {
+  var overlay = document.getElementById('upload-modal-overlay');
+  overlay.style.display = 'flex';
+  // Set default expiry = 30 days from today
+  var exp = new Date(); exp.setDate(exp.getDate()+30);
+  document.getElementById('ug-expiry').value = exp.toISOString().split('T')[0];
+  document.getElementById('ug-date').value = new Date().toISOString().split('T')[0];
+}
+
+function closeUploadModal() {
+  document.getElementById('upload-modal-overlay').style.display = 'none';
+  document.getElementById('upload-preview-strip').style.display = 'none';
+  document.getElementById('upload-thumbs').innerHTML = '';
+  document.getElementById('upload-progress-wrap').style.display = 'none';
+  document.getElementById('upload-bar').style.width = '0%';
+  document.getElementById('ug-status').textContent = '';
+  document.getElementById('ug-client').value = '';
+  document.getElementById('ug-email').value = '';
+}
+
+function handleUploadSelect(input) {
+  showUploadPreviews(input.files);
+}
+function handleUploadDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-dropzone').style.borderColor = '#bfdbfe';
+  showUploadPreviews(e.dataTransfer.files);
+}
+
+function showUploadPreviews(files) {
+  if (!files || files.length === 0) return;
+  var strip = document.getElementById('upload-preview-strip');
+  var thumbs = document.getElementById('upload-thumbs');
+  var countEl = document.getElementById('upload-count');
+  strip.style.display = 'block';
+  countEl.textContent = '(' + files.length + ' photos)';
+  thumbs.innerHTML = '';
+  var max = Math.min(files.length, 8);
+  for (var i = 0; i < max; i++) {
+    (function(file) {
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        var img = document.createElement('div');
+        img.style.cssText = 'width:64px;height:64px;border-radius:8px;background:url('+ev.target.result+') center/cover;border:1px solid #e2e8f0;flex-shrink:0;';
+        thumbs.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    })(files[i]);
+  }
+  if (files.length > 8) {
+    var more = document.createElement('div');
+    more.style.cssText = 'width:64px;height:64px;border-radius:8px;background:#f1f5f9;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#64748b;flex-shrink:0;';
+    more.textContent = '+' + (files.length - 8) + ' more';
+    thumbs.appendChild(more);
+  }
+}
+
+function submitUploadGallery() {
+  var client = document.getElementById('ug-client').value.trim();
+  if (!client) { document.getElementById('ug-status').innerHTML = '<span style="color:#dc2626;">Client name is required.</span>'; return; }
+  var files = document.getElementById('upload-file-input').files;
+  var photoCount = files.length || Math.floor(Math.random()*200+50);
+
+  // Show progress simulation
+  document.getElementById('upload-progress-wrap').style.display = 'block';
+  document.getElementById('upload-preview-strip').style.display = 'block';
+  document.getElementById('ug-status').textContent = 'Uploading…';
+  var pct = 0;
+  var bar = document.getElementById('upload-bar');
+  var pctEl = document.getElementById('upload-pct');
+  var interval = setInterval(function() {
+    pct += Math.floor(Math.random()*12)+4;
+    if (pct >= 100) { pct = 100; clearInterval(interval); finishUpload(client, photoCount); }
+    bar.style.width = pct + '%';
+    pctEl.textContent = pct + '%';
+  }, 120);
+}
+
+function finishUpload(client, photoCount) {
+  document.getElementById('ug-status').innerHTML = '<span style="color:#15803d;font-weight:600;">✓ Gallery created successfully!</span>';
+  setTimeout(function() {
+    closeUploadModal();
+    // Show toast
+    var t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:28px;right:28px;background:#1a1d2e;color:#fff;padding:14px 20px;border-radius:10px;font-size:13.5px;font-family:Inter,sans-serif;z-index:99999;display:flex;align-items:center;gap:10px;box-shadow:0 6px 24px rgba(0,0,0,.3);';
+    t.innerHTML = '<i class="ti ti-circle-check" style="font-size:18px;color:#4ade80;"></i> Gallery for <strong style="margin:0 4px;">' + client + '</strong> created · ' + photoCount + ' photos uploaded';
+    document.body.appendChild(t); setTimeout(function(){t.remove();},5000);
+  }, 600);
+}
+</script>
+
+
+<!-- ══ EDITING STAGE UPDATE MODAL ══ -->
+<div id="edit-stage-overlay" onclick="if(event.target===this)closeEditStage()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9991;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;width:560px;max-width:95vw;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 16px 48px rgba(0,0,0,.18);font-family:Inter,sans-serif;">
+    <div style="padding:20px 24px 16px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:15px;font-weight:700;color:#1a1d2e;" id="esm-title">Update Editing Stage</div>
+        <div style="font-size:12.5px;color:#94a3b8;margin-top:3px;" id="esm-sub">Gallery details</div>
+      </div>
+      <button onclick="closeEditStage()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;">&#x2715;</button>
+    </div>
+    <div style="padding:22px 24px;overflow-y:auto;flex:1;">
+
+      <!-- Stage pipeline visual -->
+      <div style="margin-bottom:22px;">
+        <div style="font-size:11.5px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">Pipeline Stage</div>
+        <div style="display:flex;align-items:center;gap:0;" id="esm-pipeline"></div>
+      </div>
+
+      <!-- Fields -->
+      <input type="hidden" id="esm-gallery-id">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11.5px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">Current Stage *</label>
+          <select id="esm-stage" onchange="updateStagePipeline()" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;background:#fff;">
+            <option value="raw">RAW Import</option>
+            <option value="culling">Culling</option>
+            <option value="editing">Editing</option>
+            <option value="export">Export / Watermark</option>
+            <option value="delivered">Delivered to Client</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11.5px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">Photos Imported</label>
+          <input id="esm-total" type="number" placeholder="e.g. 847" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;">
+        </div>
+        <div>
+          <label style="font-size:11.5px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">Culled / Selected</label>
+          <input id="esm-culled" type="number" placeholder="e.g. 347" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;">
+        </div>
+        <div>
+          <label style="font-size:11.5px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">Edited so far</label>
+          <input id="esm-edited" type="number" placeholder="e.g. 200" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;">
+        </div>
+        <div>
+          <label style="font-size:11.5px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">Assign Editor</label>
+          <select id="esm-editor" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;background:#fff;">
+            <option value="sarah">Sarah Kim</option>
+            <option value="mike">Mike R. (2nd Shooter)</option>
+            <option value="extern">External Retoucher</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11.5px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">Delivery Due Date</label>
+          <input id="esm-due" type="date" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11.5px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">Editor Notes</label>
+          <textarea id="esm-notes" rows="2" placeholder="e.g. Skin retouching needed on portraits, consistent warm preset applied…" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;resize:vertical;"></textarea>
+        </div>
+        <div style="grid-column:1/-1;display:flex;gap:16px;padding:2px 0;">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#475569;">
+            <input type="checkbox" id="esm-notify-client" style="width:15px;height:15px;accent-color:#2563eb;"> Notify client when delivered
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#475569;">
+            <input type="checkbox" id="esm-priority" style="width:15px;height:15px;accent-color:#ef4444;"> Mark as Priority
+          </label>
+        </div>
+      </div>
+    </div>
+    <div style="padding:14px 24px;border-top:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;background:#fafbfc;">
+      <div id="esm-status" style="font-size:12.5px;color:#94a3b8;"></div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="closeEditStage()" style="padding:9px 18px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;font-size:13.5px;font-family:Inter,sans-serif;cursor:pointer;color:#475569;">Cancel</button>
+        <button onclick="saveEditStage()" style="padding:9px 20px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:13.5px;font-weight:600;font-family:Inter,sans-serif;cursor:pointer;display:flex;align-items:center;gap:7px;"><i class="ti ti-device-floppy"></i> Save Stage</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── EDITING QUEUE DATA ─────────────────────────────────────────
+var EQ_STAGES = [
+  { id:'raw',       label:'RAW Import',  color:'#64748b', bg:'#f1f5f9', pct:20  },
+  { id:'culling',   label:'Culling',     color:'#f59e0b', bg:'#fefce8', pct:40  },
+  { id:'editing',   label:'Editing',     color:'#2563eb', bg:'#eff6ff', pct:65  },
+  { id:'export',    label:'Export',      color:'#8b5cf6', bg:'#fdf4ff', pct:85  },
+  { id:'delivered', label:'Delivered',   color:'#22c55e', bg:'#f0fdf4', pct:100 },
+];
+
+var editingQueue = [
+  { id:'EQ-001', gallery:'Emma & Jake — Wedding',        type:'Wedding',    stage:'editing',   total:847, culled:347, edited:210, editor:'sarah', due:'2026-07-05', priority:true,  notes:'Warm golden hour preset. Skin retouching on portraits.' },
+  { id:'EQ-002', gallery:'Nexus Corp — Headshots',       type:'Corporate',  stage:'export',    total:220, culled:85,  edited:85,  editor:'sarah', due:'2026-06-25', priority:false, notes:'Clean white BG, consistent colour.' },
+  { id:'EQ-003', gallery:'Liu Family — Portrait',         type:'Portrait',   stage:'culling',   total:310, culled:0,   edited:0,   editor:'mike',  due:'2026-07-02', priority:false, notes:'' },
+  { id:'EQ-004', gallery:'Sarah & Tom — Engagement',     type:'Engagement', stage:'editing',   total:410, culled:180, edited:90,  editor:'sarah', due:'2026-07-08', priority:false, notes:'Airy light and airy preset. Remove distractions from backgrounds.' },
+  { id:'EQ-005', gallery:'Horizon Events — Gala',        type:'Event',      stage:'raw',       total:1240,culled:0,   edited:0,   editor:'',      due:'2026-07-15', priority:false, notes:'' },
+  { id:'EQ-006', gallery:'Martinez Family — Portrait',   type:'Portrait',   stage:'editing',   total:280, culled:120, edited:70,  editor:'extern',due:'2026-06-30', priority:true,  notes:'Outdoor natural light. Consistent warm tones.' },
+  { id:'EQ-007', gallery:'Park Wedding — Ceremony',      type:'Wedding',    stage:'delivered', total:620, culled:280, edited:280, editor:'sarah', due:'2026-06-20', priority:false, notes:'Delivered. Archive after 90 days.' },
+  { id:'EQ-008', gallery:'Thompson Family — Back to School',type:'Portrait', stage:'export',   total:190, culled:75,  edited:75,  editor:'mike',  due:'2026-06-27', priority:false, notes:'School colours consistent. Bright and clean.' },
+  { id:'EQ-009', gallery:'Patel Wedding — Preview',      type:'Wedding',    stage:'culling',   total:980, culled:0,   edited:0,   editor:'sarah', due:'2026-07-20', priority:false, notes:'Start with ceremony highlights.' },
+  { id:'EQ-010', gallery:'Chen Studio — Commercial',     type:'Commercial', stage:'raw',       total:340, culled:0,   edited:0,   editor:'',      due:'2026-07-18', priority:false, notes:'' },
+  { id:'EQ-011', gallery:'Rachel T. — Maternity',        type:'Maternity',  stage:'editing',   total:260, culled:110, edited:55,  editor:'sarah', due:'2026-07-01', priority:true,  notes:'Soft ethereal style. Light and airy. Pastel tones.' },
+  { id:'EQ-012', gallery:'Williams — Corporate',         type:'Corporate',  stage:'raw',       total:150, culled:0,   edited:0,   editor:'',      due:'2026-07-10', priority:false, notes:'' },
+];
+
+function getStage(id) { return EQ_STAGES.find(function(s){ return s.id === id; }) || EQ_STAGES[0]; }
+
+function stageTag(stageId) {
+  var s = getStage(stageId);
+  return '<span style="font-size:11.5px;font-weight:700;background:'+s.bg+';color:'+s.color+';padding:3px 9px;border-radius:5px;border:1px solid '+s.color+'30;white-space:nowrap;">'+s.label+'</span>';
+}
+
+function progressBar(item) {
+  var s = getStage(item.stage);
+  var pct = s.pct;
+  // Refine pct from actual numbers
+  if (item.total > 0 && item.stage === 'editing') {
+    pct = Math.round(40 + (item.edited / item.culled) * 25) || 40;
+  }
+  return '<div style="display:flex;align-items:center;gap:8px;min-width:100px;">' +
+    '<div style="flex:1;background:#e8edf3;border-radius:4px;height:6px;overflow:hidden;">' +
+      '<div style="height:100%;width:'+pct+'%;background:'+s.color+';border-radius:4px;transition:width .3s;"></div>' +
+    '</div>' +
+    '<span style="font-size:11.5px;color:#64748b;font-weight:600;min-width:28px;">'+pct+'%</span>' +
+  '</div>';
+}
+
+function editorLabel(ed) {
+  if (!ed) return '<span style="color:#94a3b8;font-size:12.5px;">—</span>';
+  var m = { sarah:'SK', mike:'MR', extern:'EX' };
+  var n = { sarah:'Sarah Kim', mike:'Mike R.', extern:'Ext. Retoucher' };
+  return '<div style="display:flex;align-items:center;gap:6px;">' +
+    '<div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;">'+(m[ed]||'?')+'</div>' +
+    '<span style="font-size:12.5px;color:#475569;">'+(n[ed]||ed)+'</span>' +
+  '</div>';
+}
+
+function renderEditingQueueTable(data) {
+  var tbody = document.getElementById('eq-tbody');
+  if (!tbody) return;
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="padding:32px;text-align:center;color:#94a3b8;font-size:13px;">No galleries match this filter.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(function(item) {
+    var due = item.due ? new Date(item.due) : null;
+    var today = new Date();
+    var daysLeft = due ? Math.ceil((due - today) / (1000*60*60*24)) : null;
+    var dueColor = daysLeft !== null ? (daysLeft < 0 ? '#dc2626' : daysLeft <= 3 ? '#d97706' : '#475569') : '#94a3b8';
+    var dueLabel = due ? due.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '—';
+    if (daysLeft !== null && daysLeft < 0) dueLabel += ' <span style="color:#dc2626;font-size:11px;font-weight:700;">OVERDUE</span>';
+    else if (daysLeft !== null && daysLeft <= 3) dueLabel += ' <span style="color:#d97706;font-size:11px;font-weight:700;">('+daysLeft+'d)</span>';
+
+    return '<tr data-stage="'+item.stage+'" data-editor="'+(item.editor||'unassigned')+'" style="border-bottom:1px solid #f1f5f9;transition:background .13s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">' +
+      '<td style="padding:12px 16px;">' +
+        '<div style="display:flex;align-items:center;gap:8px;">' +
+          (item.priority ? '<i class="ti ti-flame" style="color:#ef4444;font-size:14px;flex-shrink:0;" title="Priority"></i>' : '<span style="width:14px;flex-shrink:0;"></span>') +
+          '<div>' +
+            '<div style="font-size:13.5px;font-weight:600;color:#1a1d2e;">'+item.gallery+'</div>' +
+            '<div style="font-size:11.5px;color:#94a3b8;">'+item.id+'</div>' +
+          '</div>' +
+        '</div>' +
+      '</td>' +
+      '<td style="padding:12px 16px;font-size:13px;color:#64748b;">'+item.type+'</td>' +
+      '<td style="padding:12px 16px;">'+stageTag(item.stage)+'</td>' +
+      '<td style="padding:12px 16px;">'+progressBar(item)+'</td>' +
+      '<td style="padding:12px 16px;">' +
+        '<div style="font-size:12.5px;color:#1a1d2e;">' +
+          '<span title="RAW imported" style="color:#64748b;">'+item.total+'</span>' +
+          ' <span style="color:#e2e8f0;">·</span> ' +
+          '<span title="Culled/selected" style="color:#f59e0b;">'+item.culled+'</span>' +
+          ' <span style="color:#e2e8f0;">·</span> ' +
+          '<span title="Edited" style="color:#2563eb;">'+item.edited+'</span>' +
+        '</div>' +
+        '<div style="font-size:10.5px;color:#94a3b8;margin-top:2px;">RAW · Culled · Edited</div>' +
+      '</td>' +
+      '<td style="padding:12px 16px;">'+editorLabel(item.editor)+'</td>' +
+      '<td style="padding:12px 16px;font-size:13px;" style="color:'+dueColor+';">'+dueLabel+'</td>' +
+      '<td style="padding:12px 16px;">' +
+        '<div style="display:flex;gap:6px;">' +
+          '<button onclick="openEditStage(''+item.id+'')" style="padding:5px 12px;background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;"><i class="ti ti-edit"></i> Update</button>' +
+          (item.stage === 'export' ? '<button onclick="markDelivered(''+item.id+'')" style="padding:5px 12px;background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;"><i class="ti ti-send"></i> Deliver</button>' : '') +
+        '</div>' +
+      '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function filterEditingQueue() {
+  var stage  = (document.getElementById('eq-filter-stage')  || {}).value || 'all';
+  var editor = (document.getElementById('eq-filter-editor') || {}).value || 'all';
+  var filtered = editingQueue.filter(function(item) {
+    var stageOk  = stage  === 'all' || item.stage === stage;
+    var editorOk = editor === 'all' || (editor === 'unassigned' ? !item.editor : item.editor === editor);
+    return stageOk && editorOk;
+  });
+  renderEditingQueueTable(filtered);
+}
+
+function showEditingQueue(btn) {
+  // Switch sub-tab active state
+  document.querySelectorAll('.sub-tab').forEach(function(t){ t.classList.remove('active'); });
+  btn.classList.add('active');
+  // Hide gallery grid + lower section, show editing queue
+  var grid = document.querySelector('.gallery-grid');
+  var lower = document.querySelector('.lower-section');
+  var stats = document.querySelector('.gallery-stats-row');
+  var panel = document.getElementById('editing-queue-panel');
+  if (grid)  grid.style.display  = 'none';
+  if (lower) lower.style.display = 'none';
+  if (stats) stats.style.display = 'none';
+  if (panel) panel.style.display = 'block';
+  renderEditingQueueTable(editingQueue);
+}
+
+function filterGalleries(status, btn) {
+  // Original filter — also ensure editing queue is hidden and gallery is visible
+  document.querySelectorAll('.sub-tab').forEach(function(t){ t.classList.remove('active'); });
+  btn.classList.add('active');
+  var grid  = document.querySelector('.gallery-grid');
+  var lower = document.querySelector('.lower-section');
+  var stats = document.querySelector('.gallery-stats-row');
+  var panel = document.getElementById('editing-queue-panel');
+  if (grid)  grid.style.display  = '';
+  if (lower) lower.style.display = '';
+  if (stats) stats.style.display = '';
+  if (panel) panel.style.display = 'none';
+  // Filter cards
+  document.querySelectorAll('.gallery-card').forEach(function(card) {
+    if (status === 'all') { card.style.display = ''; return; }
+    var ds = card.dataset.status || '';
+    card.style.display = (ds === status) ? '' : 'none';
+  });
+}
+
+// ── Stage update modal ─────────────────────────────────────
+function openEditStage(id) {
+  var item = editingQueue.find(function(e){ return e.id === id; });
+  if (!item) return;
+  document.getElementById('esm-title').textContent = item.gallery;
+  document.getElementById('esm-sub').textContent   = item.type + ' · ' + item.id;
+  document.getElementById('esm-gallery-id').value  = id;
+  document.getElementById('esm-stage').value        = item.stage;
+  document.getElementById('esm-total').value        = item.total  || '';
+  document.getElementById('esm-culled').value       = item.culled || '';
+  document.getElementById('esm-edited').value       = item.edited || '';
+  document.getElementById('esm-editor').value       = item.editor || 'sarah';
+  document.getElementById('esm-due').value          = item.due    || '';
+  document.getElementById('esm-notes').value        = item.notes  || '';
+  document.getElementById('esm-priority').checked   = item.priority || false;
+  document.getElementById('esm-notify-client').checked = true;
+  updateStagePipeline();
+  document.getElementById('edit-stage-overlay').style.display = 'flex';
+}
+
+function updateStagePipeline() {
+  var current = document.getElementById('esm-stage').value;
+  var pipe = document.getElementById('esm-pipeline');
+  if (!pipe) return;
+  var stageOrder = ['raw','culling','editing','export','delivered'];
+  var currentIdx = stageOrder.indexOf(current);
+  pipe.innerHTML = EQ_STAGES.map(function(s, i) {
+    var done    = i < currentIdx;
+    var active  = i === currentIdx;
+    var future  = i > currentIdx;
+    var bg    = active ? s.color : done ? '#22c55e' : '#e8edf3';
+    var color = (active || done) ? '#fff' : '#94a3b8';
+    var arrow = i < EQ_STAGES.length - 1 ?
+      '<div style="flex:1;height:2px;background:'+(done?'#22c55e':'#e8edf3')+';margin:0 2px;min-width:8px;"></div>' : '';
+    return '<div style="display:flex;align-items:center;flex:1;">' +
+      '<div style="display:flex;flex-direction:column;align-items:center;gap:4px;">' +
+        '<div style="width:32px;height:32px;border-radius:50%;background:'+bg+';display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:'+color+';border:2px solid '+(active?s.color:done?'#22c55e':'#e8edf3')+';">' +
+          (done ? '✓' : (i+1)) +
+        '</div>' +
+        '<div style="font-size:10px;color:'+(active?s.color:done?'#22c55e':'#94a3b8')+';font-weight:'+(active?'700':'500')+';white-space:nowrap;">'+s.label+'</div>' +
+      '</div>' +
+      arrow +
+    '</div>';
+  }).join('');
+}
+
+function closeEditStage() {
+  document.getElementById('edit-stage-overlay').style.display = 'none';
+}
+
+function saveEditStage() {
+  var id      = document.getElementById('esm-gallery-id').value;
+  var item    = editingQueue.find(function(e){ return e.id === id; });
+  if (!item) return;
+  item.stage    = document.getElementById('esm-stage').value;
+  item.total    = parseInt(document.getElementById('esm-total').value)  || item.total;
+  item.culled   = parseInt(document.getElementById('esm-culled').value) || item.culled;
+  item.edited   = parseInt(document.getElementById('esm-edited').value) || item.edited;
+  item.editor   = document.getElementById('esm-editor').value;
+  item.due      = document.getElementById('esm-due').value;
+  item.notes    = document.getElementById('esm-notes').value;
+  item.priority = document.getElementById('esm-priority').checked;
+  closeEditStage();
+  filterEditingQueue();
+  // Toast
+  var s = getStage(item.stage);
+  var t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:28px;right:28px;background:#1a1d2e;color:#fff;padding:14px 20px;border-radius:10px;font-size:13.5px;font-family:Inter,sans-serif;z-index:99999;display:flex;align-items:center;gap:10px;box-shadow:0 6px 24px rgba(0,0,0,.3);';
+  t.innerHTML = '<i class="ti ti-circle-check" style="font-size:18px;color:#4ade80;"></i> <strong style="margin-right:4px;">'+item.gallery+'</strong> moved to <span style="color:'+s.color+';margin-left:4px;font-weight:700;">'+s.label+'</span>';
+  document.body.appendChild(t); setTimeout(function(){ t.remove(); }, 4000);
+}
+
+function markDelivered(id) {
+  var item = editingQueue.find(function(e){ return e.id === id; });
+  if (!item) return;
+  item.stage = 'delivered';
+  filterEditingQueue();
+  var t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:28px;right:28px;background:#1a1d2e;color:#fff;padding:14px 20px;border-radius:10px;font-size:13.5px;font-family:Inter,sans-serif;z-index:99999;display:flex;align-items:center;gap:10px;box-shadow:0 6px 24px rgba(0,0,0,.3);';
+  t.innerHTML = '<i class="ti ti-send" style="font-size:18px;color:#4ade80;"></i> <strong>'+item.gallery+'</strong> marked as Delivered · Client notification sent';
+  document.body.appendChild(t); setTimeout(function(){ t.remove(); }, 4500);
+}
+</script>
+
+
+<!-- ══ MANAGE GALLERY SLIDE-OVER ══ -->
+<div id="manage-overlay" onclick="if(event.target===this)closeManage()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9992;"></div>
+<div id="manage-panel" style="position:fixed;top:0;right:-540px;width:540px;height:100vh;background:#fff;z-index:9993;box-shadow:-8px 0 40px rgba(0,0,0,.15);display:flex;flex-direction:column;transition:right .3s ease;font-family:Inter,sans-serif;overflow:hidden;">
+
+  <!-- Header -->
+  <div style="padding:20px 24px 16px;border-bottom:1px solid #f1f5f9;display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;background:#f8fafc;">
+    <div>
+      <div style="font-size:16px;font-weight:700;color:#1a1d2e;" id="mgmt-title">Manage Gallery</div>
+      <div style="font-size:12.5px;color:#64748b;margin-top:3px;" id="mgmt-sub">Gallery settings &amp; controls</div>
+    </div>
+    <button onclick="closeManage()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;line-height:1;margin-top:2px;">&#x2715;</button>
+  </div>
+
+  <div style="flex:1;overflow-y:auto;padding:22px 24px;">
+
+    <!-- Gallery Status -->
+    <div style="margin-bottom:22px;">
+      <div style="font-size:11.5px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Gallery Status</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="mgmt-status-btns">
+        <button onclick="setGalleryStatus('active',this)"    class="mgmt-status-btn" data-val="active"    style="padding:10px 12px;border:2px solid #e2e8f0;border-radius:9px;background:#fff;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:8px;">
+          <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;"></span>
+          <div style="text-align:left;"><div style="font-size:13px;font-weight:600;color:#1a1d2e;">Active</div><div style="font-size:11px;color:#94a3b8;">Client can view & download</div></div>
+        </button>
+        <button onclick="setGalleryStatus('pending',this)"   class="mgmt-status-btn" data-val="pending"   style="padding:10px 12px;border:2px solid #e2e8f0;border-radius:9px;background:#fff;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:8px;">
+          <span style="width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0;"></span>
+          <div style="text-align:left;"><div style="font-size:13px;font-weight:600;color:#1a1d2e;">Pending Review</div><div style="font-size:11px;color:#94a3b8;">Awaiting client selection</div></div>
+        </button>
+        <button onclick="setGalleryStatus('delivered',this)" class="mgmt-status-btn" data-val="delivered" style="padding:10px 12px;border:2px solid #e2e8f0;border-radius:9px;background:#fff;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:8px;">
+          <span style="width:8px;height:8px;border-radius:50%;background:#2563eb;flex-shrink:0;"></span>
+          <div style="text-align:left;"><div style="font-size:13px;font-weight:600;color:#1a1d2e;">Delivered</div><div style="font-size:11px;color:#94a3b8;">Final gallery sent to client</div></div>
+        </button>
+        <button onclick="setGalleryStatus('archived',this)"  class="mgmt-status-btn" data-val="archived"  style="padding:10px 12px;border:2px solid #e2e8f0;border-radius:9px;background:#fff;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;gap:8px;">
+          <span style="width:8px;height:8px;border-radius:50%;background:#94a3b8;flex-shrink:0;"></span>
+          <div style="text-align:left;"><div style="font-size:13px;font-weight:600;color:#1a1d2e;">Archived</div><div style="font-size:11px;color:#94a3b8;">Hidden from client, kept in records</div></div>
+        </button>
+      </div>
+    </div>
+
+    <div style="height:1px;background:#f1f5f9;margin-bottom:20px;"></div>
+
+    <!-- Access settings -->
+    <div style="margin-bottom:22px;">
+      <div style="font-size:11.5px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">Access Settings</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label style="font-size:12px;font-weight:600;color:#475569;display:block;margin-bottom:5px;">Gallery Password</label>
+          <input id="mgmt-password" type="text" placeholder="Leave blank to remove" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 11px;font-size:13px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;">
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:#475569;display:block;margin-bottom:5px;">Expiry Date</label>
+          <input id="mgmt-expiry" type="date" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 11px;font-size:13px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;">
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:#475569;display:block;margin-bottom:5px;">Max Downloads</label>
+          <input id="mgmt-maxdl" type="number" placeholder="Unlimited" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 11px;font-size:13px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;">
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:#475569;display:block;margin-bottom:5px;">Client Email</label>
+          <input id="mgmt-email" type="email" placeholder="client@email.com" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 11px;font-size:13px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Toggles -->
+    <div style="margin-bottom:22px;">
+      <div style="font-size:11.5px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">Gallery Options</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:#f8fafc;border:1px solid #e8edf3;border-radius:9px;">
+          <div><div style="font-size:13px;font-weight:600;color:#1a1d2e;">Watermark on photos</div><div style="font-size:11.5px;color:#94a3b8;">Studio logo overlay on all images</div></div>
+          <label style="position:relative;display:inline-block;width:40px;height:22px;cursor:pointer;">
+            <input type="checkbox" id="mgmt-watermark" checked style="opacity:0;width:0;height:0;">
+            <span onclick="this.previousElementSibling.click()" style="position:absolute;inset:0;background:#e2e8f0;border-radius:11px;transition:.2s;" id="mgmt-wm-track"></span>
+            <span id="mgmt-wm-thumb" style="position:absolute;left:2px;top:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2);"></span>
+          </label>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:#f8fafc;border:1px solid #e8edf3;border-radius:9px;">
+          <div><div style="font-size:13px;font-weight:600;color:#1a1d2e;">Allow photo download</div><div style="font-size:11.5px;color:#94a3b8;">Client can download full-res files</div></div>
+          <label style="position:relative;display:inline-block;width:40px;height:22px;cursor:pointer;">
+            <input type="checkbox" id="mgmt-download" checked style="opacity:0;width:0;height:0;">
+            <span onclick="this.previousElementSibling.click()" style="position:absolute;inset:0;background:#e2e8f0;border-radius:11px;transition:.2s;" id="mgmt-dl-track"></span>
+            <span id="mgmt-dl-thumb" style="position:absolute;left:2px;top:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2);"></span>
+          </label>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:#f8fafc;border:1px solid #e8edf3;border-radius:9px;">
+          <div><div style="font-size:13px;font-weight:600;color:#1a1d2e;">Allow favouriting</div><div style="font-size:11.5px;color:#94a3b8;">Client can heart photos for selection</div></div>
+          <label style="position:relative;display:inline-block;width:40px;height:22px;cursor:pointer;">
+            <input type="checkbox" id="mgmt-favs" checked style="opacity:0;width:0;height:0;">
+            <span onclick="this.previousElementSibling.click()" style="position:absolute;inset:0;background:#e2e8f0;border-radius:11px;transition:.2s;" id="mgmt-fav-track"></span>
+            <span id="mgmt-fav-thumb" style="position:absolute;left:2px;top:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2);"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:1px;background:#f1f5f9;margin-bottom:20px;"></div>
+
+    <!-- Danger zone -->
+    <div>
+      <div style="font-size:11.5px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Danger Zone</div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="archiveFromManage()" style="flex:1;padding:9px;border:1px solid #fde68a;background:#fefce8;color:#a16207;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;"><i class="ti ti-archive"></i> Archive Gallery</button>
+        <button onclick="deleteFromManage()" style="flex:1;padding:9px;border:1px solid #fecdd3;background:#fff1f2;color:#dc2626;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;"><i class="ti ti-trash"></i> Delete Gallery</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="padding:14px 24px;border-top:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;background:#fafbfc;flex-shrink:0;">
+    <button onclick="closeManage()" style="padding:9px 18px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;font-size:13.5px;font-family:Inter,sans-serif;cursor:pointer;color:#475569;">Cancel</button>
+    <button onclick="saveManage()" style="padding:9px 22px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:13.5px;font-weight:600;font-family:Inter,sans-serif;cursor:pointer;display:flex;align-items:center;gap:7px;"><i class="ti ti-device-floppy"></i> Save Changes</button>
+  </div>
+</div>
+
+<!-- ══ NOTIFY CLIENT MODAL ══ -->
+<div id="notify-overlay" onclick="if(event.target===this)closeNotify()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9994;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;width:520px;max-width:95vw;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.18);font-family:Inter,sans-serif;">
+    <div style="padding:18px 22px 14px;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:15px;font-weight:700;color:#1a1d2e;" id="notify-title"><i class="ti ti-send" style="color:#2563eb;margin-right:6px;"></i>Notify Client</div>
+      <button onclick="closeNotify()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#94a3b8;">&#x2715;</button>
+    </div>
+    <div style="padding:20px 22px;">
+      <div style="margin-bottom:14px;">
+        <label style="font-size:12px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">To</label>
+        <input id="notify-to" type="email" placeholder="client@email.com" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 11px;font-size:13px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;">
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="font-size:12px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">Subject</label>
+        <input id="notify-subject" type="text" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 11px;font-size:13px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;">
+      </div>
+      <div style="margin-bottom:6px;">
+        <label style="font-size:12px;font-weight:700;color:#64748b;display:block;margin-bottom:5px;">Message</label>
+        <textarea id="notify-body" rows="5" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:8px 11px;font-size:13px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;resize:vertical;"></textarea>
+      </div>
+    </div>
+    <div style="padding:12px 22px;border-top:1px solid #f1f5f9;display:flex;justify-content:flex-end;gap:10px;background:#fafbfc;">
+      <button onclick="closeNotify()" style="padding:8px 16px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;font-size:13px;font-family:Inter,sans-serif;cursor:pointer;color:#475569;">Cancel</button>
+      <button onclick="sendNotify()" style="padding:8px 18px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;font-family:Inter,sans-serif;cursor:pointer;"><i class="ti ti-send"></i> Send Notification</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── MANAGE GALLERY ────────────────────────────────────────────
+var _manageCard = null;
+var _manageStatus = 'active';
+
+function openManageGallery(btn) {
+  _manageCard = btn.closest('.gallery-card');
+  var name   = (_manageCard.querySelector('.gallery-name')   || {}).textContent || 'Gallery';
+  var client = (_manageCard.querySelector('.gallery-client') || {}).textContent || '';
+  _manageStatus = _manageCard.dataset.status || 'active';
+
+  document.getElementById('mgmt-title').textContent = name;
+  document.getElementById('mgmt-sub').textContent   = client.trim();
+
+  // Set expiry default (+30 days)
+  var exp = new Date(); exp.setDate(exp.getDate()+30);
+  document.getElementById('mgmt-expiry').value = exp.toISOString().split('T')[0];
+  document.getElementById('mgmt-password').value = '';
+  document.getElementById('mgmt-email').value = '';
+  document.getElementById('mgmt-maxdl').value = '';
+
+  highlightStatus(_manageStatus);
+  syncToggles();
+
+  document.getElementById('manage-overlay').style.display = 'block';
+  document.getElementById('manage-panel').style.right = '0';
+}
+
+function closeManage() {
+  document.getElementById('manage-overlay').style.display = 'none';
+  document.getElementById('manage-panel').style.right = '-540px';
+}
+
+function setGalleryStatus(val, btn) {
+  _manageStatus = val;
+  highlightStatus(val);
+}
+
+function highlightStatus(val) {
+  document.querySelectorAll('.mgmt-status-btn').forEach(function(b) {
+    var active = b.dataset.val === val;
+    b.style.borderColor = active ? '#2563eb' : '#e2e8f0';
+    b.style.background  = active ? '#eff6ff' : '#fff';
+  });
+}
+
+function syncToggles() {
+  ['wm','dl','fav'].forEach(function(key) {
+    var cb    = document.getElementById('mgmt-' + {wm:'watermark',dl:'download',fav:'favs'}[key]);
+    var track = document.getElementById('mgmt-'+key+'-track');
+    var thumb = document.getElementById('mgmt-'+key+'-thumb');
+    if (!cb || !track || !thumb) return;
+    cb.addEventListener('change', function() {
+      track.style.background = cb.checked ? '#2563eb' : '#e2e8f0';
+      thumb.style.left = cb.checked ? '20px' : '2px';
+    });
+    track.style.background = cb.checked ? '#2563eb' : '#e2e8f0';
+    thumb.style.left = cb.checked ? '20px' : '2px';
+  });
+}
+
+function saveManage() {
+  if (_manageCard) {
+    _manageCard.dataset.status = _manageStatus;
+    // Update badge
+    var badge = _manageCard.querySelector('.gallery-status-badge');
+    if (badge) {
+      var map = {
+        active:    { cls:'badge-active',    label:'Active' },
+        pending:   { cls:'badge-pending',   label:'Pending Review' },
+        delivered: { cls:'badge-delivered', label:'Delivered' },
+        archived:  { cls:'badge-archived',  label:'Archived' },
+      };
+      var m = map[_manageStatus] || map.active;
+      badge.className = 'gallery-status-badge ' + m.cls;
+      badge.innerHTML = '<i class="ph-fill ph-circle" style="font-size:7px;"></i> ' + m.label;
+    }
+  }
+  closeManage();
+  showGalleryToast('<i class="ti ti-circle-check" style="color:#4ade80;font-size:18px;"></i> Gallery settings saved successfully.');
+}
+
+function archiveFromManage() {
+  _manageStatus = 'archived';
+  saveManage();
+}
+
+function deleteFromManage() {
+  if (!confirm('Permanently delete this gallery? This cannot be undone.')) return;
+  if (_manageCard) _manageCard.remove();
+  closeManage();
+  showGalleryToast('<i class="ti ti-trash" style="color:#f87171;font-size:18px;"></i> Gallery deleted.');
+}
+
+// ── NOTIFY CLIENT ──────────────────────────────────────────
+function openNotifyClient(btn) {
+  var card   = btn.closest('.gallery-card');
+  var name   = (card.querySelector('.gallery-name')   || {}).textContent || 'your gallery';
+  var client = (card.querySelector('.gallery-client') || {}).textContent || '';
+  var firstName = client.split('·')[0].trim().split(' ')[0];
+
+  document.getElementById('notify-title').innerHTML = '<i class="ti ti-send" style="color:#2563eb;margin-right:6px;"></i>Notify — ' + name;
+  document.getElementById('notify-to').value      = '';
+  document.getElementById('notify-subject').value = 'Your gallery is ready — ' + name;
+  document.getElementById('notify-body').value    =
+    'Hi ' + (firstName||'there') + ',
+
+' +
+    'Great news — your photo gallery is ready for viewing!
+
+' +
+    '📸 Gallery: ' + name + '
+' +
+    '🔗 Link: https://lensflow.app/gallery/[LINK]
+' +
+    '🔒 Password: [PASSWORD]
+' +
+    '📅 Available until: [EXPIRY DATE]
+
+' +
+    'You can browse, favourite, and download your photos directly from the gallery.
+
+' +
+    'Please let me know if you have any questions!
+
+' +
+    'Warm regards,
+Sarah Kim Photography';
+
+  document.getElementById('notify-overlay').style.display = 'flex';
+}
+
+function closeNotify() {
+  document.getElementById('notify-overlay').style.display = 'none';
+}
+
+function sendNotify() {
+  var to = document.getElementById('notify-to').value.trim() || 'client';
+  closeNotify();
+  showGalleryToast('<i class="ti ti-send" style="color:#4ade80;font-size:18px;"></i> Notification sent to <strong style="margin-left:4px;">' + to + '</strong>');
+}
+
+function showGalleryToast(msg) {
+  var t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:28px;right:28px;background:#1a1d2e;color:#fff;padding:14px 20px;border-radius:10px;font-size:13.5px;font-family:Inter,sans-serif;z-index:99999;display:flex;align-items:center;gap:10px;box-shadow:0 6px 24px rgba(0,0,0,.3);max-width:400px;';
+  t.innerHTML = msg;
+  document.body.appendChild(t);
+  setTimeout(function(){ t.remove(); }, 4000);
+}
+</script>
+
+
+<script>
+// ── GRID / LIST VIEW TOGGLE ───────────────────────────────────
+function setGalleryView(mode, btn) {
+  document.querySelectorAll('#btn-grid-view,#btn-list-view').forEach(function(b){
+    b.style.background = ''; b.style.color = ''; b.style.borderColor = '';
+  });
+  btn.style.background = '#eff6ff'; btn.style.color = '#2563eb'; btn.style.borderColor = '#bfdbfe';
+  var grid = document.querySelector('.gallery-grid');
+  if (!grid) return;
+  if (mode === 'list') {
+    grid.style.gridTemplateColumns = '1fr';
+    grid.querySelectorAll('.gallery-card').forEach(function(c){
+      c.style.display = 'flex'; c.style.flexDirection = 'row'; c.style.maxHeight = '100px';
+    });
+    grid.querySelectorAll('.gallery-thumb').forEach(function(t){ t.style.width = '120px'; t.style.minWidth = '120px'; t.style.height = '100px'; });
+  } else {
+    grid.style.gridTemplateColumns = '';
+    grid.querySelectorAll('.gallery-card').forEach(function(c){ c.style.display = ''; c.style.flexDirection = ''; c.style.maxHeight = ''; });
+    grid.querySelectorAll('.gallery-thumb').forEach(function(t){ t.style.width = ''; t.style.minWidth = ''; t.style.height = ''; });
+  }
+}
+
+// ── TOPBAR FILTER ─────────────────────────────────────────────
+function openGalleryFilter(btn) {
+  var existing = document.getElementById('gallery-filter-popup');
+  if (existing) { existing.remove(); return; }
+  var popup = document.createElement('div');
+  popup.id = 'gallery-filter-popup';
+  popup.style.cssText = 'position:fixed;top:70px;right:120px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px 18px;z-index:9980;box-shadow:0 8px 24px rgba(0,0,0,.12);font-family:Inter,sans-serif;min-width:220px;';
+  popup.innerHTML =
+    '<div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Filter by</div>' +
+    ['Wedding','Portrait','Engagement','Corporate','Event','Maternity'].map(function(t){
+      return '<label style="display:flex;align-items:center;gap:8px;padding:5px 0;cursor:pointer;font-size:13px;color:#475569;">' +
+        '<input type="checkbox" checked style="accent-color:#2563eb;" onchange="applyTypeFilter()"> '+t+'</label>';
+    }).join('') +
+    '<div style="margin-top:12px;padding-top:10px;border-top:1px solid #f1f5f9;display:flex;gap:8px;">' +
+      '<button onclick="document.getElementById('gallery-filter-popup').remove()" style="flex:1;padding:7px;border:1px solid #e2e8f0;border-radius:7px;background:#fff;font-size:12.5px;cursor:pointer;font-family:inherit;color:#475569;">Close</button>' +
+      '<button onclick="applyTypeFilter();document.getElementById('gallery-filter-popup').remove()" style="flex:1;padding:7px;background:#2563eb;color:#fff;border:none;border-radius:7px;font-size:12.5px;cursor:pointer;font-family:inherit;">Apply</button>' +
+    '</div>';
+  document.body.appendChild(popup);
+  document.addEventListener('click', function closeF(e){ if(!popup.contains(e.target)&&e.target!==btn){popup.remove();document.removeEventListener('click',closeF);}}, true);
+}
+
+function applyTypeFilter() {
+  var popup = document.getElementById('gallery-filter-popup');
+  if (!popup) return;
+  var checked = Array.from(popup.querySelectorAll('input[type=checkbox]')).filter(function(c){return c.checked;}).map(function(c){return c.parentElement.textContent.trim();});
+  document.querySelectorAll('.gallery-card').forEach(function(card){
+    var thumb = card.querySelector('.gallery-thumb');
+    var matched = checked.some(function(t){ return thumb && thumb.className.indexOf(t.toLowerCase()) > -1; });
+    card.style.display = (matched || checked.length === 0) ? '' : 'none';
+  });
+}
+
+// ── RESTORE ARCHIVED GALLERY ──────────────────────────────────
+function restoreGallery(btn) {
+  var card = btn.closest('.gallery-card');
+  if (!card) return;
+  card.dataset.status = 'active';
+  var badge = card.querySelector('.gallery-status-badge');
+  if (badge) { badge.className = 'gallery-status-badge badge-active'; badge.innerHTML = '<i class="ph-fill ph-circle" style="font-size:7px;"></i> Active'; }
+  var actions = card.querySelector('.gallery-actions');
+  if (actions) {
+    var name = (card.querySelector('.gallery-name')||{}).textContent||'';
+    actions.innerHTML =
+      '<button class="btn-action" onclick="copyGalleryLink(this)"><i class="ti ti-link"></i> Link</button>' +
+      '<button class="btn-action" onclick="openNotifyClient(this)"><i class="ti ti-bell"></i> Notify</button>' +
+      '<button class="btn-action btn-action-primary" onclick="openManageGallery(this)"><i class="ti ti-settings"></i> Manage</button>';
+  }
+  showGalleryToast('<i class="ti ti-circle-check" style="color:#4ade80;font-size:18px;"></i> Gallery restored to Active.');
+}
+
+// ── TABLE BUTTONS ─────────────────────────────────────────────
+function tblCopyLink(btn) {
+  var row = btn.closest('tr');
+  var name = row ? (row.querySelector('td strong')||{}).textContent||'gallery' : 'gallery';
+  var url = 'https://gallery.lensflow.io/' + name.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+  navigator.clipboard.writeText(url).catch(function(){});
+  var orig = btn.innerHTML; btn.innerHTML = '<i class="ti ti-check"></i>';
+  btn.style.color = '#15803d';
+  setTimeout(function(){ btn.innerHTML = orig; btn.style.color = ''; }, 2000);
+  showGalleryToast('<i class="ti ti-link" style="color:#60a5fa;font-size:16px;"></i> Gallery link copied to clipboard.');
+}
+
+function tblEditGallery(btn) {
+  var row = btn.closest('tr');
+  var nameEl = row ? row.querySelector('td strong') : null;
+  // Find matching gallery card and open its Manage panel
+  var name = nameEl ? nameEl.textContent.trim() : '';
+  var found = false;
+  document.querySelectorAll('.gallery-card').forEach(function(card){
+    var n = (card.querySelector('.gallery-name')||{}).textContent||'';
+    if (n.indexOf(name.split('—')[0].trim()) > -1 && !found) {
+      found = true;
+      openManageGallery(card.querySelector('.btn-action-primary'));
+    }
+  });
+  if (!found) showGalleryToast('<i class="ti ti-settings" style="color:#60a5fa;font-size:16px;"></i> Opening gallery settings for: ' + name);
+}
+
+function tblDeleteGallery(btn) {
+  var row = btn.closest('tr');
+  var name = row ? ((row.querySelector('td strong')||{}).textContent||'this gallery') : 'this gallery';
+  if (!confirm('Delete "' + name + '"? This cannot be undone.')) return;
+  if (row) row.remove();
+  showGalleryToast('<i class="ti ti-trash" style="color:#f87171;font-size:16px;"></i> Gallery deleted.');
+}
+
+// ── TABLE FILTER POPUP ────────────────────────────────────────
+function openTableFilter(btn) {
+  var existing = document.getElementById('tbl-filter-popup');
+  if (existing) { existing.remove(); return; }
+  var popup = document.createElement('div');
+  popup.id = 'tbl-filter-popup';
+  popup.style.cssText = 'position:absolute;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px 18px;z-index:9980;box-shadow:0 8px 24px rgba(0,0,0,.12);font-family:Inter,sans-serif;min-width:200px;margin-top:4px;';
+  var rect = btn.getBoundingClientRect();
+  popup.style.top = (rect.bottom + window.scrollY + 4) + 'px';
+  popup.style.left = (rect.left + window.scrollX) + 'px';
+  popup.innerHTML =
+    '<div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Status Filter</div>' +
+    ['active','pending','delivered','archived'].map(function(s){
+      var labels = {active:'Active',pending:'Pending Review',delivered:'Delivered',archived:'Archived'};
+      return '<label style="display:flex;align-items:center;gap:8px;padding:5px 0;cursor:pointer;font-size:13px;color:#475569;">' +
+        '<input type="checkbox" checked style="accent-color:#2563eb;" data-status="'+s+'"> '+labels[s]+'</label>';
+    }).join('') +
+    '<button onclick="document.getElementById('tbl-filter-popup').remove()" style="margin-top:10px;width:100%;padding:7px;border:1px solid #e2e8f0;border-radius:7px;background:#fff;font-size:12.5px;cursor:pointer;font-family:inherit;color:#475569;">Close</button>';
+  document.body.appendChild(popup);
+}
+
+// ── EXPORT CSV ────────────────────────────────────────────────
+function exportGalleryCSV() {
+  var rows = [['Gallery','Client','Status','Photos','Views','Downloads','Expiry']];
+  document.querySelectorAll('.gallery-card').forEach(function(card){
+    var name   = (card.querySelector('.gallery-name')||{}).textContent||'';
+    var client = (card.querySelector('.gallery-client')||{}).textContent||'';
+    var status = card.dataset.status||'';
+    var photos = (card.querySelector('.gallery-photo-count')||{}).textContent||'';
+    var stats  = Array.from(card.querySelectorAll('.gallery-stat strong')).map(function(s){return s.textContent;});
+    var expiry = (card.querySelector('.gallery-expiry')||{}).textContent||'';
+    rows.push([name, client.replace(/\s+/g,' ').trim(), status, photos.replace(/\D/g,''), stats[0]||'', stats[1]||'', expiry]);
+  });
+  var csv = rows.map(function(r){ return r.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(','); }).join('
+');
+  var a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'galleries-export.csv';
+  a.click();
+  showGalleryToast('<i class="ti ti-download" style="color:#4ade80;font-size:16px;"></i> CSV exported — ' + (rows.length-1) + ' galleries.');
+}
+
+// ── GALLERY SETTINGS SAVE ─────────────────────────────────────
+function saveGallerySettings(btn) {
+  var orig = btn.innerHTML;
+  btn.innerHTML = '<i class="ph-fill ph-check" style="font-size:15px;"></i> Saved!';
+  btn.style.background = '#22c55e';
+  setTimeout(function(){ btn.innerHTML = orig; btn.style.background = ''; }, 2500);
+  showGalleryToast('<i class="ti ti-circle-check" style="color:#4ade80;font-size:16px;"></i> Gallery default settings saved.');
+}
+
+// ── PAGINATION ────────────────────────────────────────────────
+var _currentPage = 1; var _pageSize = 12;
+function changePage(dir) {
+  var cards = Array.from(document.querySelectorAll('.gallery-grid .gallery-card'));
+  var total = cards.length;
+  var maxPage = Math.ceil(total / _pageSize);
+  _currentPage = Math.max(1, Math.min(_currentPage + dir, maxPage));
+  cards.forEach(function(c, i){
+    c.style.display = (i >= (_currentPage-1)*_pageSize && i < _currentPage*_pageSize) ? '' : 'none';
+  });
+  var pg = document.getElementById('pg-num'); if (pg) pg.textContent = _currentPage;
+  var prev = document.getElementById('pg-prev'); if (prev) prev.disabled = _currentPage <= 1;
+  var next = document.getElementById('pg-next'); if (next) next.disabled = _currentPage >= maxPage;
+}
+</script>
+
 </body>
 </html>

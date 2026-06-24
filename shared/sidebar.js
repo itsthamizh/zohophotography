@@ -172,6 +172,8 @@
 
   // ── NOTIFICATION SYSTEM ───────────────────────────────────────
   var notifications = [
+    { id: 7, type: 'danger', icon: 'ti ti-package-export', title: 'Equipment Return Due', body: 'DJI Mavic 3 Pro Drone — due in 3 days on Jun 20 · SkyRent Drones', time: 'Just now', read: false, action: 'StudioManager/StudioManager.html' },
+    { id: 8, type: 'danger', icon: 'ti ti-package-export', title: 'Equipment Return Due', body: 'Canon EF 400mm f/2.8L — due in 11 days on Jun 28 · Pro Gear Rentals NYC', time: '1h ago', read: false, action: 'StudioManager/StudioManager.html' },
     { id: 1, type: 'warning', icon: 'ti ti-file-invoice', title: 'Invoice Overdue', body: 'Sarah Reed — Balance $570 is 5 days past due', time: '2h ago', read: false, action: 'StudioManager/StudioManager.html' },
     { id: 2, type: 'info', icon: 'ti ti-photo-up', title: 'Gallery Uploaded', body: 'Emma & Jake — 347 photos ready for client review', time: '3h ago', read: false, action: 'ClientGallery/ClientGallery.html' },
     { id: 3, type: 'success', icon: 'ti ti-circle-check', title: 'Contract Signed', body: 'Nexus Corp signed their headshot contract via Zoho Sign', time: '5h ago', read: true, action: 'StudioManager/StudioManager.html' },
