@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LensFlow — Photography Studio Platform</title>
+<title>Zoho Photography Platform — Studio Management</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
@@ -297,6 +297,26 @@ a { text-decoration: none; }
 .chart-legend { display: flex; gap: 18px; margin-bottom: 12px; }
 .cl-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748b; }
 .cl-box { width: 11px; height: 11px; border-radius: 3px; }
+
+/* ===== ROLE SWITCHER ===== */
+.role-switcher { display:flex; background:#f1f5f9; border-radius:9px; padding:3px; gap:2px; }
+.role-btn { padding:6px 14px; border:none; background:none; border-radius:7px; font-size:12.5px; font-weight:500; color:#64748b; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:5px; transition:all .15s; white-space:nowrap; }
+.role-btn.active { background:#fff; color:#111827; font-weight:600; box-shadow:0 1px 4px rgba(0,0,0,.1); }
+.role-btn.active.r-super  { color:#2563eb; }
+.role-btn.active.r-studio { color:#7c3aed; }
+.role-btn.active.r-photo  { color:#0891b2; }
+
+/* ===== ROLE VIEWS ===== */
+.role-view { display:none; }
+.role-view.active { display:block; }
+
+/* ===== PHOTOGRAPHER CARDS ===== */
+.today-shoot-banner { background:linear-gradient(135deg,#1e3a8a,#2563eb); color:#fff; border-radius:14px; padding:22px 24px; margin-bottom:22px; display:flex; align-items:center; gap:20px; }
+.my-shoot-card { background:#fff; border:1px solid #e8edf3; border-radius:12px; padding:0; overflow:hidden; margin-bottom:12px; }
+.my-shoot-head { padding:14px 18px 12px; border-bottom:1px solid #f4f6fa; display:flex; align-items:center; justify-content:space-between; }
+.my-shoot-body { padding:14px 18px; display:grid; grid-template-columns:1fr 1fr; gap:12px 24px; }
+.my-field-lbl { font-size:11px; font-weight:600; color:#9ca3af; text-transform:uppercase; letter-spacing:.5px; margin-bottom:3px; }
+.my-field-val { font-size:13.5px; color:#111827; font-weight:500; }
 </style>
   <!-- Shared sidebar + layout (explicit link ensures consistent styling) -->
   <link rel="stylesheet" href="shared/sidebar.css">
@@ -315,7 +335,7 @@ a { text-decoration: none; }
 
   <!-- TOPBAR -->
   <div class="topbar">
-    <div class="topbar-title">Good morning, Sarah 👋</div>
+    <div class="topbar-title" id="topbar-greeting">Good morning, Thamizh 👑</div>
     <div class="topbar-date">Monday, June 15, 2026</div>
     <div class="search-box">
       <i class="ti ti-search"></i>
@@ -327,9 +347,23 @@ a { text-decoration: none; }
     </div>
     <div class="icon-btn" title="Messages"><i class="ti ti-message"></i></div>
     <div class="icon-btn" title="Calendar"><i class="ti ti-calendar"></i></div>
-    <div class="topbar-user" title="Sign out">
-      <div class="t-avatar">SK</div>
-      <div class="t-name">Sarah Kim</div>
+
+    <!-- Role Switcher -->
+    <div class="role-switcher">
+      <button class="role-btn r-super active" onclick="switchRole('super-admin',this)" id="rbtn-super">
+        <i class="ti ti-crown" style="font-size:13px;"></i> Super Admin
+      </button>
+      <button class="role-btn r-studio" onclick="switchRole('studio-manager',this)" id="rbtn-studio">
+        <i class="ti ti-briefcase" style="font-size:13px;"></i> Studio Manager
+      </button>
+      <button class="role-btn r-photo" onclick="switchRole('photographer',this)" id="rbtn-photo">
+        <i class="ti ti-camera" style="font-size:13px;"></i> Photographer
+      </button>
+    </div>
+
+    <div class="topbar-user" title="Switch user">
+      <div class="t-avatar" id="role-avatar" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">TS</div>
+      <div class="t-name" id="role-name">Thamizh S.</div>
       <i class="ti ti-chevron-down" style="font-size:13px;color:#94a3b8;"></i>
     </div>
   </div>
@@ -337,10 +371,13 @@ a { text-decoration: none; }
   <!-- CONTENT -->
   <div class="content">
 
+  <!-- ══════════ SUPER ADMIN VIEW ══════════ -->
+  <div id="view-super-admin" class="role-view active">
+
     <!-- PAGE HEADER -->
     <div class="page-header">
       <div class="page-title">Dashboard Overview</div>
-      <div class="page-sub">Sarah Kim Photography · Your studio performance at a glance</div>
+      <div class="page-sub">Thamizh S. · Studio CEO &amp; Super Admin — Full studio performance</div>
     </div>
 
     <!-- KPI STATS -->
@@ -693,6 +730,306 @@ a { text-decoration: none; }
       </table>
     </div>
 
+  </div><!-- /view-super-admin -->
+
+  <!-- ══════════ STUDIO MANAGER VIEW ══════════ -->
+  <div id="view-studio-manager" class="role-view">
+    <div class="page-header">
+      <div class="page-title">Studio Operations</div>
+      <div class="page-sub">Ravi Singh · Studio Manager — Bookings, clients &amp; shoot coordination</div>
+    </div>
+
+    <!-- Operational Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-accent" style="background:#2563eb;"></div>
+        <div class="stat-icon" style="background:rgba(37,99,235,0.12);color:#2563eb;"><i class="ti ti-calendar-event"></i></div>
+        <div class="stat-lbl">Today's Shoots</div>
+        <div class="stat-val">1</div>
+        <div class="stat-delta up"><i class="ti ti-map-pin"></i> Emma &amp; Jake — Central Park</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-accent" style="background:#f59e0b;"></div>
+        <div class="stat-icon" style="background:rgba(245,158,11,0.12);color:#d97706;"><i class="ti ti-file-invoice"></i></div>
+        <div class="stat-lbl">Pending Invoices</div>
+        <div class="stat-val">3</div>
+        <div class="stat-delta nt"><i class="ti ti-clock"></i> $2,610 outstanding</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-accent" style="background:#22c55e;"></div>
+        <div class="stat-icon" style="background:rgba(34,197,94,0.12);color:#22c55e;"><i class="ti ti-users"></i></div>
+        <div class="stat-lbl">Active Clients</div>
+        <div class="stat-val">28</div>
+        <div class="stat-delta up"><i class="ti ti-trending-up"></i> +3 new this month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-accent" style="background:#8b5cf6;"></div>
+        <div class="stat-icon" style="background:rgba(139,92,246,0.12);color:#8b5cf6;"><i class="ti ti-mail"></i></div>
+        <div class="stat-lbl">New Enquiries</div>
+        <div class="stat-val">2</div>
+        <div class="stat-delta nt"><i class="ti ti-clock"></i> Awaiting response</div>
+      </div>
+    </div>
+
+    <!-- Modules available to Studio Manager -->
+    <div class="sec-head" style="margin-bottom:14px;">
+      <div class="sec-title">My Modules</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px;">
+      <a href="StudioManager/StudioManager.html" class="mod-card">
+        <div class="mod-icon" style="background:rgba(37,99,235,0.1);"><i class="ti ti-calendar-event" style="color:#2563eb;font-size:24px;"></i></div>
+        <div class="mod-name">Studio Manager</div><div class="mod-meta">Bookings &amp; clients</div>
+      </a>
+      <a href="ShootPlanning/ShootPlanning.html" class="mod-card">
+        <div class="mod-icon" style="background:rgba(139,92,246,0.1);"><i class="ti ti-users" style="color:#7c3aed;font-size:24px;"></i></div>
+        <div class="mod-name">Shoot Planning</div><div class="mod-meta">Crew &amp; gear planning</div>
+      </a>
+      <a href="EquipmentInventory/EquipmentInventory.html" class="mod-card">
+        <div class="mod-icon" style="background:rgba(8,145,178,0.1);"><i class="ti ti-camera" style="color:#0891b2;font-size:24px;"></i></div>
+        <div class="mod-name">Equipment</div><div class="mod-meta">Gear &amp; service</div>
+      </a>
+      <a href="ClientGallery/ClientGallery.html" class="mod-card">
+        <div class="mod-icon" style="background:rgba(59,130,246,0.1);"><i class="ti ti-photo" style="color:#3b82f6;font-size:24px;"></i></div>
+        <div class="mod-name">Client Gallery</div><div class="mod-meta">18 galleries live</div>
+      </a>
+    </div>
+
+    <!-- Upcoming Sessions + Activity -->
+    <div class="grid-1-1">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title"><i class="ti ti-calendar-check" style="color:#3b82f6;"></i> Upcoming Sessions</div>
+          <a href="StudioManager/StudioManager.html" class="btn btn-outline btn-sm">View all</a>
+        </div>
+        <div class="card-body" style="padding:0 20px;">
+          <div class="session-row" style="padding-top:14px;">
+            <div class="date-block"><div class="date-day">15</div><div class="date-mon">Jun</div></div>
+            <div class="av" style="background:rgba(201,168,76,0.14);color:#b8963e;">EJ</div>
+            <div style="flex:1;"><div class="sess-client">Emma &amp; Jake — Wedding</div><div class="sess-type"><i class="ti ti-map-pin" style="font-size:11px;"></i> Central Park · 10:00 AM</div></div>
+            <span class="badge b-green">Today</span>
+          </div>
+          <div class="session-row">
+            <div class="date-block"><div class="date-day">17</div><div class="date-mon">Jun</div></div>
+            <div class="av" style="background:rgba(59,130,246,0.14);color:#1d4ed8;">NC</div>
+            <div style="flex:1;"><div class="sess-client">Nexus Corp Headshots</div><div class="sess-type"><i class="ti ti-map-pin" style="font-size:11px;"></i> Studio 4 · 2:00 PM</div></div>
+            <span class="badge b-blue">2 days</span>
+          </div>
+          <div class="session-row">
+            <div class="date-block"><div class="date-day">20</div><div class="date-mon">Jun</div></div>
+            <div class="av" style="background:rgba(34,197,94,0.14);color:#15803d;">LF</div>
+            <div style="flex:1;"><div class="sess-client">Liu Family Portrait</div><div class="sess-type"><i class="ti ti-map-pin" style="font-size:11px;"></i> Riverside Park · 4:30 PM</div></div>
+            <span class="badge b-gray">5 days</span>
+          </div>
+          <div class="session-row" style="padding-bottom:14px;">
+            <div class="date-block"><div class="date-day">28</div><div class="date-mon">Jun</div></div>
+            <div class="av" style="background:rgba(239,68,68,0.14);color:#b91c1c;">HE</div>
+            <div style="flex:1;"><div class="sess-client">Horizon Events Corp</div><div class="sess-type"><i class="ti ti-map-pin" style="font-size:11px;"></i> Marriott Hotel · 8:00 AM</div></div>
+            <span class="badge b-gray">13 days</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title"><i class="ti ti-activity" style="color:#22c55e;"></i> Recent Activity</div>
+        </div>
+        <div class="card-body" style="padding:0 20px;">
+          <div class="act-item" style="padding-top:14px;">
+            <div class="act-dot" style="background:rgba(37,99,235,0.1);color:#2563eb;"><i class="ti ti-user-plus"></i></div>
+            <div><div class="act-text"><strong>Martinez Family</strong> submitted booking inquiry for Jul 4</div><div class="act-time">1 hour ago</div></div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:rgba(239,68,68,0.1);color:#b91c1c;"><i class="ti ti-file-invoice"></i></div>
+            <div><div class="act-text"><strong>Sarah Reed</strong> — Invoice INV-2839 overdue $570</div><div class="act-time">2 hours ago</div></div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:rgba(34,197,94,0.1);color:#16a34a;"><i class="ti ti-circle-check"></i></div>
+            <div><div class="act-text"><strong>Nexus Corp</strong> contract signed · deposit $850 received</div><div class="act-time">5 hours ago</div></div>
+          </div>
+          <div class="act-item" style="padding-bottom:14px;">
+            <div class="act-dot" style="background:rgba(139,92,246,0.1);color:#7e22ce;"><i class="ti ti-calendar-plus"></i></div>
+            <div><div class="act-text"><strong>Patel Wedding</strong> confirmed for Jul 12 — $4,200</div><div class="act-time">Yesterday</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Actions -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title"><i class="ti ti-alert-triangle" style="color:#d97706;"></i> Actions Needed</div>
+      </div>
+      <div class="card-body" style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:#fff7ed;border-radius:9px;border:1px solid #fed7aa;">
+          <i class="ti ti-users-plus" style="color:#c2410c;font-size:18px;flex-shrink:0;"></i>
+          <div style="flex:1;"><div style="font-size:13.5px;font-weight:600;color:#111827;">Patel Wedding (Jul 12) — Crew not yet assigned</div><div style="font-size:12px;color:#9ca3af;margin-top:2px;">4 crew members needed: Lead Photographer, Jr, Light Man, Asst.</div></div>
+          <a href="ShootPlanning/ShootPlanning.html" style="font-size:12.5px;color:#2563eb;font-weight:600;white-space:nowrap;">Plan Shoot →</a>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:#fff7ed;border-radius:9px;border:1px solid #fed7aa;">
+          <i class="ti ti-camera" style="color:#c2410c;font-size:18px;flex-shrink:0;"></i>
+          <div style="flex:1;"><div style="font-size:13.5px;font-weight:600;color:#111827;">Sarah &amp; Tom Engagement (Jun 22) — Gear not allocated</div><div style="font-size:12px;color:#9ca3af;margin-top:2px;">No equipment assigned yet for this shoot.</div></div>
+          <a href="EquipmentInventory/EquipmentInventory.html" style="font-size:12.5px;color:#2563eb;font-weight:600;white-space:nowrap;">Allocate →</a>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:#fef9c3;border-radius:9px;border:1px solid #fde68a;">
+          <i class="ti ti-tool" style="color:#a16207;font-size:18px;flex-shrink:0;"></i>
+          <div style="flex:1;"><div style="font-size:13.5px;font-weight:600;color:#111827;">Sony A7R V (Backup) — Service Overdue</div><div style="font-size:12px;color:#9ca3af;margin-top:2px;">28,100 shots since last service · interval 50,000 shots</div></div>
+          <a href="EquipmentInventory/EquipmentInventory.html" style="font-size:12.5px;color:#2563eb;font-weight:600;white-space:nowrap;">View →</a>
+        </div>
+      </div>
+    </div>
+  </div><!-- /view-studio-manager -->
+
+  <!-- ══════════ PHOTOGRAPHER VIEW ══════════ -->
+  <div id="view-photographer" class="role-view">
+    <div class="page-header">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0;">AK</div>
+        <div>
+          <div class="page-title">My Schedule</div>
+          <div class="page-sub">Alex Kumar · Lead Photographer — Today &amp; upcoming shoots</div>
+        </div>
+      </div>
+      <a href="ShootPlanning/ShootPlanning.html" class="btn btn-gold btn-sm"><i class="ti ti-calendar"></i> Full Schedule</a>
+    </div>
+
+    <!-- Today's Shoot Banner -->
+    <div class="today-shoot-banner">
+      <div style="width:52px;height:52px;border-radius:13px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <i class="ti ti-rings-wedding" style="font-size:26px;"></i>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;opacity:.7;margin-bottom:4px;">Today's Shoot</div>
+        <div style="font-size:18px;font-weight:800;">Emma &amp; Jake — Wedding</div>
+        <div style="font-size:13px;opacity:.8;margin-top:3px;"><i class="ti ti-map-pin" style="font-size:12px;margin-right:4px;"></i>Central Park · 10:00 AM &nbsp;·&nbsp; Your role: <strong>Lead Photographer</strong></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button onclick="alert('Shoot started! 📸')" style="padding:9px 18px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;"><i class="ti ti-player-play"></i> Start Shoot</button>
+        <a href="ShootPlanning/ShootPlanning.html" style="padding:9px 18px;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;text-decoration:none;"><i class="ti ti-eye"></i> View Details</a>
+      </div>
+    </div>
+
+    <!-- My Stats -->
+    <div class="stats-row" style="grid-template-columns:repeat(4,1fr);">
+      <div class="stat-card">
+        <div class="stat-accent" style="background:#2563eb;"></div>
+        <div class="stat-icon" style="background:rgba(37,99,235,0.12);color:#2563eb;"><i class="ti ti-calendar-event"></i></div>
+        <div class="stat-lbl">Upcoming Shoots</div>
+        <div class="stat-val">3</div>
+        <div class="stat-delta nt">Assigned to me</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-accent" style="background:#22c55e;"></div>
+        <div class="stat-icon" style="background:rgba(34,197,94,0.12);color:#22c55e;"><i class="ti ti-circle-check"></i></div>
+        <div class="stat-lbl">Completed (Jun)</div>
+        <div class="stat-val">4</div>
+        <div class="stat-delta up"><i class="ti ti-trending-up"></i> 1 more than May</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-accent" style="background:#0891b2;"></div>
+        <div class="stat-icon" style="background:rgba(8,145,178,0.12);color:#0891b2;"><i class="ti ti-camera"></i></div>
+        <div class="stat-lbl">Gear Assigned</div>
+        <div class="stat-val">6</div>
+        <div class="stat-delta nt">For today's shoot</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-accent" style="background:#f59e0b;"></div>
+        <div class="stat-icon" style="background:rgba(245,158,11,0.12);color:#d97706;"><i class="ti ti-tool"></i></div>
+        <div class="stat-lbl">Service Alerts</div>
+        <div class="stat-val">1</div>
+        <div class="stat-delta nt" style="color:#d97706;">Backup camera due</div>
+      </div>
+    </div>
+
+    <div class="grid-1-1">
+      <!-- My Upcoming Shoots -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title"><i class="ti ti-calendar-event" style="color:#2563eb;"></i> My Upcoming Shoots</div>
+          <a href="ShootPlanning/ShootPlanning.html" class="btn btn-outline btn-sm">View all</a>
+        </div>
+        <div style="padding:0 4px 4px;">
+          <div class="my-shoot-card">
+            <div class="my-shoot-head">
+              <div>
+                <div style="font-size:14px;font-weight:700;color:#111827;">Emma &amp; Jake — Wedding</div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:2px;">Jun 15 · Central Park · 10:00 AM</div>
+              </div>
+              <span class="badge b-yellow" style="font-size:11px;">Today</span>
+            </div>
+            <div class="my-shoot-body">
+              <div><div class="my-field-lbl">Your Role</div><div class="my-field-val" style="color:#2563eb;">Lead Photographer</div></div>
+              <div><div class="my-field-lbl">Gear Items</div><div class="my-field-val">6 allocated</div></div>
+              <div><div class="my-field-lbl">Team Size</div><div class="my-field-val">4 crew members</div></div>
+              <div><div class="my-field-lbl">Status</div><div class="my-field-val"><span class="badge b-yellow" style="font-size:11px;">Allocated</span></div></div>
+            </div>
+          </div>
+
+          <div class="my-shoot-card">
+            <div class="my-shoot-head">
+              <div>
+                <div style="font-size:14px;font-weight:700;color:#111827;">Nexus Corp — Headshots</div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:2px;">Jun 17 · Studio 4 · 2:00 PM</div>
+              </div>
+              <span class="badge b-blue" style="font-size:11px;">2 days</span>
+            </div>
+            <div class="my-shoot-body">
+              <div><div class="my-field-lbl">Your Role</div><div class="my-field-val" style="color:#2563eb;">Lead Photographer</div></div>
+              <div><div class="my-field-lbl">Gear Items</div><div class="my-field-val">3 allocated</div></div>
+              <div><div class="my-field-lbl">Team Size</div><div class="my-field-val">2 crew members</div></div>
+              <div><div class="my-field-lbl">Status</div><div class="my-field-val"><span class="badge b-blue" style="font-size:11px;">Allocated</span></div></div>
+            </div>
+          </div>
+
+          <div class="my-shoot-card">
+            <div class="my-shoot-head">
+              <div>
+                <div style="font-size:14px;font-weight:700;color:#111827;">Horizon Events — Gala</div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:2px;">Jun 28 · Marriott Hotel · 8:00 AM</div>
+              </div>
+              <span class="badge b-gray" style="font-size:11px;">13 days</span>
+            </div>
+            <div class="my-shoot-body">
+              <div><div class="my-field-lbl">Your Role</div><div class="my-field-val" style="color:#2563eb;">Lead Photographer</div></div>
+              <div><div class="my-field-lbl">Gear Items</div><div class="my-field-val">Not yet allocated</div></div>
+              <div><div class="my-field-lbl">Team Size</div><div class="my-field-val">4 crew members</div></div>
+              <div><div class="my-field-lbl">Status</div><div class="my-field-val"><span class="badge b-gray" style="font-size:11px;">Pending</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Today's Gear + Team -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title"><i class="ti ti-camera" style="color:#0891b2;"></i> Today's Gear</div>
+            <a href="EquipmentInventory/EquipmentInventory.html" class="btn btn-outline btn-sm">Inventory</a>
+          </div>
+          <div class="card-body" style="padding:0 20px;">
+            <div class="session-row" style="padding-top:12px;"><div class="act-dot" style="background:rgba(8,145,178,0.1);color:#0891b2;font-size:14px;"><i class="ti ti-camera"></i></div><div style="flex:1;"><div style="font-size:13.5px;font-weight:500;color:#111827;">Sony A7R V (Primary)</div><div style="font-size:12px;color:#9ca3af;">SON-A7RV-001 · Camera</div></div><span class="badge b-green" style="font-size:11px;">Ready</span></div>
+            <div class="session-row"><div class="act-dot" style="background:rgba(8,145,178,0.1);color:#0891b2;font-size:14px;"><i class="ti ti-camera"></i></div><div style="flex:1;"><div style="font-size:13.5px;font-weight:500;color:#111827;">Sony A7R V (Backup)</div><div style="font-size:12px;color:#9ca3af;">SON-A7RV-002 · Camera</div></div><span class="badge b-red" style="font-size:11px;background:#fee2e2;color:#b91c1c;">Svc Due</span></div>
+            <div class="session-row"><div class="act-dot" style="background:rgba(8,145,178,0.1);color:#0891b2;font-size:14px;"><i class="ti ti-adjustments"></i></div><div style="flex:1;"><div style="font-size:13.5px;font-weight:500;color:#111827;">Sony 24-70mm f/2.8 GM</div><div style="font-size:12px;color:#9ca3af;">SON-2470-001 · Lens</div></div><span class="badge b-green" style="font-size:11px;">Ready</span></div>
+            <div class="session-row"><div class="act-dot" style="background:rgba(8,145,178,0.1);color:#0891b2;font-size:14px;"><i class="ti ti-bolt"></i></div><div style="flex:1;"><div style="font-size:13.5px;font-weight:500;color:#111827;">Profoto B10X Plus (1)</div><div style="font-size:12px;color:#9ca3af;">PRO-B10X-001 · Lighting</div></div><span class="badge b-green" style="font-size:11px;">Ready</span></div>
+            <div class="session-row"><div class="act-dot" style="background:rgba(8,145,178,0.1);color:#0891b2;font-size:14px;"><i class="ti ti-bolt"></i></div><div style="flex:1;"><div style="font-size:13.5px;font-weight:500;color:#111827;">Profoto B10X Plus (2)</div><div style="font-size:12px;color:#9ca3af;">PRO-B10X-002 · Lighting</div></div><span class="badge b-green" style="font-size:11px;">Ready</span></div>
+            <div class="session-row" style="padding-bottom:12px;"><div class="act-dot" style="background:rgba(8,145,178,0.1);color:#0891b2;font-size:14px;"><i class="ti ti-tool"></i></div><div style="flex:1;"><div style="font-size:13.5px;font-weight:500;color:#111827;">Manfrotto Tripod</div><div style="font-size:12px;color:#9ca3af;">MAN-055-001 · Accessory</div></div><span class="badge b-green" style="font-size:11px;">Ready</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title"><i class="ti ti-users" style="color:#7c3aed;"></i> Today's Team</div>
+          </div>
+          <div class="card-body" style="padding:0 20px;">
+            <div class="session-row" style="padding-top:12px;"><div class="av" style="background:#2563eb;color:#fff;font-size:11px;font-weight:700;">AK</div><div style="flex:1;"><div style="font-size:13.5px;font-weight:600;color:#111827;">Alex Kumar <span style="font-size:11px;background:#dbeafe;color:#1d4ed8;padding:1px 7px;border-radius:4px;font-weight:600;margin-left:4px;">You</span></div><div style="font-size:12px;color:#9ca3af;">Lead Photographer</div></div></div>
+            <div class="session-row"><div class="av" style="background:#7c3aed;color:#fff;font-size:11px;font-weight:700;">PN</div><div style="flex:1;"><div style="font-size:13.5px;font-weight:500;color:#111827;">Priya Nair</div><div style="font-size:12px;color:#9ca3af;">Junior Photographer · +65 8765 4321</div></div></div>
+            <div class="session-row"><div class="av" style="background:#d97706;color:#fff;font-size:11px;font-weight:700;">RS</div><div style="flex:1;"><div style="font-size:13.5px;font-weight:500;color:#111827;">Ravi Singh</div><div style="font-size:12px;color:#9ca3af;">Light Man · +65 9876 5432</div></div></div>
+            <div class="session-row" style="padding-bottom:12px;"><div class="av" style="background:#059669;color:#fff;font-size:11px;font-weight:700;">MC</div><div style="flex:1;"><div style="font-size:13.5px;font-weight:500;color:#111827;">Maya Chen</div><div style="font-size:12px;color:#9ca3af;">Lighting Assistant · +65 9111 2222</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /view-photographer -->
+
   </div><!-- /content -->
 </div><!-- /main -->
 </div><!-- /app -->
@@ -772,7 +1109,7 @@ function dashSearch(q) {
 <script>
 // ── CONVERSION RATE ───────────────────────────────────────────
 (function() {
-  var bookings = typeof LFData !== 'undefined' ? LFData.get('bookings') : [];
+  var bookings = typeof ZPData !== 'undefined' ? ZPData.get('bookings') : [];
   if (bookings.length === 0) return;
   var total = bookings.length;
   var confirmed = bookings.filter(function(b) { return b.status === 'confirmed' || b.status === 'completed'; }).length;
@@ -808,6 +1145,54 @@ function dashSearch(q) {
       '<div style="font-size:12px;font-weight:600;color:#1a1d2e;min-width:32px;text-align:right;">' + pct + '%</div>' +
     '</div>';
   }).join('');
+})();
+</script>
+
+<script>
+/* ══════════ ROLE SWITCHER ══════════ */
+var ROLE_META = {
+  'super-admin':    { greeting:'Good morning, Thamizh', name:'Thamizh S.',  initials:'TS', color:'#2563eb', sub:'Studio CEO &amp; Super Admin' },
+  'studio-manager': { greeting:'Good morning, Ravi',    name:'Ravi Singh',   initials:'RS', color:'#d97706', sub:'Studio Manager' },
+  'photographer':   { greeting:'Good morning, Alex',    name:'Alex Kumar',   initials:'AK', color:'#7c3aed', sub:'Lead Photographer' }
+};
+
+function switchRole(role, btn) {
+  /* ── persist ── */
+  localStorage.setItem('zp_role', role);
+
+  /* ── buttons ── */
+  document.querySelectorAll('.role-btn').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+
+  /* ── views ── */
+  document.querySelectorAll('.role-view').forEach(function(v){ v.classList.remove('active'); });
+  var view = document.getElementById('view-' + role);
+  if (view) view.classList.add('active');
+
+  /* ── topbar greeting + avatar ── */
+  var meta = ROLE_META[role] || ROLE_META['super-admin'];
+  var greetEl = document.getElementById('topbar-greeting');
+  var avEl    = document.getElementById('role-avatar');
+  var nameEl  = document.getElementById('role-name');
+  if (greetEl) greetEl.textContent = meta.greeting;
+  if (avEl)   { avEl.textContent = meta.initials; avEl.style.background = meta.color; }
+  if (nameEl) nameEl.textContent = meta.name;
+
+  /* ── sidebar: show/hide items + update footer ── */
+  if (typeof window.applyRoleSidebar === 'function') window.applyRoleSidebar(role);
+
+  /* ── re-render chart only for super-admin ── */
+  if (role === 'super-admin' && typeof updateDashChart === 'function') {
+    setTimeout(updateDashChart, 50);
+  }
+}
+
+/* ── restore saved role on page load ── */
+(function() {
+  var saved = localStorage.getItem('zp_role');
+  if (!saved || saved === 'super-admin') return; // default is already active
+  var btn = document.getElementById('rbtn-' + (saved === 'studio-manager' ? 'studio' : saved === 'photographer' ? 'photo' : 'super'));
+  switchRole(saved, btn);
 })();
 </script>
 </body>
