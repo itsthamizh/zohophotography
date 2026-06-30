@@ -1,12 +1,12 @@
 /**
- * LensFlow — Central Data Store
+ * Zoho Photography — Central Data Store
  * All application data persists here via localStorage.
  * Initialises with realistic sample data on first load.
  */
 (function () {
   'use strict';
 
-  var INIT_KEY = 'lf_v2_initialized';
+  var INIT_KEY = 'zp_v2_initialized';
 
   var defaults = {
 
@@ -66,8 +66,8 @@
   };
 
   /* ── Public API ────────────────────────────────────────────── */
-  window.LFData = {
-    _key: function (k) { return 'lf_' + k; },
+  window.ZPData = {
+    _key: function (k) { return 'zp_' + k; },
 
     init: function () {
       if (localStorage.getItem(INIT_KEY)) return;
@@ -119,6 +119,6 @@
     }
   };
 
-  window.LFData.init();
+  window.ZPData.init();
 
 })();

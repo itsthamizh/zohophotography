@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equipment Inventory — Zoho Photography Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f0f2f7; min-height: 100vh; }
+
+    /* ── Layout ── */
+    .main-wrapper {
+      margin-left: 250px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Top Bar ── */
+    .topbar {
+      background: #fff;
+      border-bottom: 1px solid #e8edf3;
+      padding: 0 28px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .topbar-title .icon-wrap {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .topbar-title h1 { font-size: 17px; font-weight: 800; color: #1a1d2e; }
+    .topbar-title p  { font-size: 12px; color: #94a3b8; margin-top: 1px; }
+    .topbar-actions  { display: flex; align-items: center; gap: 10px; }
+
+    /* ── Content ── */
+    .content { padding: 24px 28px; flex: 1; }
+
+    /* ── Sub-tab bar ── */
+    .eq-subtab-bar {
+      background: #fff;
+      border: 1px solid #e8edf3;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .eq-subtab-scroll {
+      display: flex;
+      border-bottom: 2px solid #e8edf3;
+      overflow-x: auto;
+    }
+    .eq-sub-btn {
+      flex: 1;
+      padding: 14px 16px;
+      border: none;
+      background: none;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: Inter, sans-serif;
+      color: #64748b;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      white-space: nowrap;
+      min-width: fit-content;
+      transition: color .14s, border-color .14s;
+    }
+    .eq-sub-btn.active {
+      color: #2563eb;
+      border-bottom-color: #2563eb;
+    }
+    .eq-sub-btn:hover { color: #2563eb; }
+
+    .eq-sub-panel { display: none; }
+    .eq-sub-panel.active { display: block; }
+
+    /* ── Status badge — fixed width, same size every row ── */
+    .eq-status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      width: 130px;
+      padding: 8px 0;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .eq-status .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .eq-status.available  { background: #dcfce7; color: #15803d; }
+    .eq-status.available  .dot { background: #22c55e; }
+    .eq-status.checkout   { background: #fef9c3; color: #a16207; }
+    .eq-status.checkout   .dot { background: #eab308; }
+    .eq-status.service    { background: #ede9fe; color: #6d28d9; }
+    .eq-status.service    .dot { background: #8b5cf6; }
+    .eq-status.damaged    { background: #fee2e2; color: #b91c1c; }
+    .eq-status.damaged    .dot { background: #ef4444; }
+    .eq-status.lost       { background: #f1f5f9; color: #475569; }
+    .eq-status.lost       .dot { background: #94a3b8; }
+
+    /* ── Action button — fixed width, same size every row ── */
+    .eq-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 130px;
+      padding: 9px 0;
+      background: #fff;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: Inter, sans-serif;
+      color: #374151;
+      transition: background .12s, border-color .12s;
+    }
+    .eq-action-btn:hover {
+      background: #f8fafc;
+      border-color: #9ca3af;
+    }
+
+    /* ── Shared table badge — used in Shoot Log & Service Tracker ── */
+    .tbl-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-width: 130px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .tbl-badge .dot { width:8px;height:8px;border-radius:50%;flex-shrink:0; }
+    .tbl-badge.completed { background:#dcfce7; color:#15803d; }
+    .tbl-badge.completed .dot { background:#22c55e; }
+    .tbl-badge.allocated { background:#dbeafe; color:#1d4ed8; }
+    .tbl-badge.allocated .dot { background:#3b82f6; }
+    .tbl-badge.pending     { background:#f1f5f9; color:#475569; }
+    .tbl-badge.pending     .dot { background:#94a3b8; }
+    .tbl-badge.in-progress { background:#fef9c3; color:#a16207; }
+    .tbl-badge.in-progress .dot { background:#f59e0b; }
+    .tbl-badge.svc-over  { background:#fee2e2; color:#b91c1c; }
+    .tbl-badge.svc-over  .dot { background:#ef4444; }
+    .tbl-badge.svc-soon  { background:#fef9c3; color:#a16207; }
+    .tbl-badge.svc-soon  .dot { background:#f59e0b; }
+    .tbl-badge.svc-ok    { background:#dcfce7; color:#15803d; }
+    .tbl-badge.svc-ok    .dot { background:#22c55e; }
+
+    /* ── Shared table action button — used in all sub-tabs ── */
+    .tbl-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-width: 130px;
+      padding: 9px 12px;
+      background: #fff;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: Inter, sans-serif;
+      color: #374151;
+    }
+    .tbl-btn:hover { background:#f8fafc; border-color:#9ca3af; }
+    .tbl-btn.primary { background:#eff6ff; border-color:#bfdbfe; color:#2563eb; }
+    .tbl-btn.primary:hover { background:#dbeafe; }
+    .tbl-btn.success { background:#f0fdf4; border-color:#bbf7d0; color:#15803d; }
+    .tbl-btn.success:hover { background:#dcfce7; }
+
+    /* ── Utility ── */
+    .btn-blue {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 18px;
+      background: #2563eb; color: #fff;
+      border: none; border-radius: 10px;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer; font-family: Inter, sans-serif;
+    }
+    .btn-blue:hover { background: #1d4ed8; }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-root"></div>
+
+<div class="main-wrapper">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-title">
+      <div class="icon-wrap">
+        <i class="ti ti-camera" style="color:#fff;font-size:18px;"></i>
+      </div>
+      <div>
+        <h1>Equipment Inventory</h1>
+        <p>Track, service, and allocate your photography gear</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button onclick="openSimpleAddEquip()" class="btn-blue">
+        <i class="ti ti-plus"></i> Add Equipment
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- SUB-TAB BAR -->
+    <div class="eq-subtab-bar">
+      <div class="eq-subtab-scroll">
+        <button class="eq-sub-btn active" onclick="switchEqSub('inventory',this)">
+          <i class="ti ti-camera" style="font-size:14px;margin-right:6px;"></i>Equipment Inventory
+        </button>
+        <button class="eq-sub-btn" onclick="switchEqSub('shootlog',this)">
+          <i class="ti ti-calendar-event" style="font-size:14px;margin-right:6px;"></i>Shoot Equipment Log
+        </button>
+        <button class="eq-sub-btn" onclick="switchEqSub('service',this)">
+          <i class="ti ti-tool" style="font-size:14px;margin-right:6px;"></i>Service Due Tracker
+        </button>
+        <button class="eq-sub-btn" onclick="switchEqSub('consumables',this)">
+          <i class="ti ti-stack-2" style="font-size:14px;margin-right:6px;"></i>Consumables Stock
+        </button>
+        <button class="eq-sub-btn" onclick="switchEqSub('planner',this)">
+          <i class="ti ti-calendar-stats" style="font-size:14px;margin-right:6px;"></i>Upcoming Shoots Check
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ SUB-PANEL: EQUIPMENT INVENTORY ══ -->
+    <div id="eq-sub-inventory" class="eq-sub-panel active">
+
+      <!-- TOOLBAR -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap;">
+        <div style="display:flex;gap:10px;align-items:center;">
+          <select id="eq-cat-select" onchange="filterEqSimple()" style="border:1px solid #e2e8f0;border-radius:10px;padding:10px 14px;font-size:14px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;background:#fff;font-weight:500;">
+            <option value="all">All Equipment</option>
+            <option value="cameras">Cameras</option>
+            <option value="lenses">Lenses</option>
+            <option value="lighting">Lighting</option>
+            <option value="memory">Memory Cards</option>
+            <option value="bags">Bags &amp; Cases</option>
+            <option value="computer">Computer &amp; Storage</option>
+          </select>
+          <select id="eq-status-select" onchange="filterEqSimple()" style="border:1px solid #e2e8f0;border-radius:10px;padding:10px 14px;font-size:14px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;background:#fff;font-weight:500;">
+            <option value="">All Status</option>
+            <option value="available">Available</option>
+            <option value="checkout">Checked Out</option>
+            <option value="service">In Service</option>
+            <option value="damaged">Damaged</option>
+            <option value="lost">Lost</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button onclick="exportEquipmentCSV()" style="padding:10px 14px;border:1px solid #e2e8f0;border-radius:10px;background:#fff;font-size:13.5px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;color:#64748b;display:flex;align-items:center;gap:6px;">
+            <i class="ti ti-download"></i> Export CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <div style="background:#fff;border:1px solid #e8edf3;border-radius:14px;overflow:hidden;margin-bottom:20px;">
+        <div style="padding:16px 22px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-size:16px;font-weight:700;color:#1a1d2e;"><i class="ti ti-camera" style="color:#2563eb;margin-right:7px;"></i>Equipment Inventory</div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="background:#f8fafc;">
+              <th style="padding:14px 20px;text-align:left;font-size:12px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.7px;border-bottom:2px solid #e8edf3;">Equipment Name</th>
+              <th style="padding:14px 20px;font-size:12px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.7px;border-bottom:2px solid #e8edf3;">Type</th>
+              <th style="padding:14px 20px;font-size:12px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.7px;border-bottom:2px solid #e8edf3;">Status</th>
+              <th style="padding:14px 20px;font-size:12px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.7px;border-bottom:2px solid #e8edf3;">Condition</th>
+              <th style="padding:14px 20px;font-size:12px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.7px;border-bottom:2px solid #e8edf3;">Where Is It</th>
+              <th style="padding:14px 20px;font-size:12px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.7px;border-bottom:2px solid #e8edf3;text-align:center;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="eq-simple-tbody">
+
+            <!-- CAMERAS -->
+            <tr class="eq-s-row" data-cat="cameras" data-status="available" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openEqDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+              <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Sony A7R V</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">SN: SON-A7RV-001 · Primary body</div></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:500;color:#475569;">Camera</td>
+              <td style="padding:15px 20px;"><span class="eq-status available"><span class="dot"></span>Available</span></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:600;color:#1a1d2e;">Excellent</td>
+              <td style="padding:15px 20px;font-size:14px;color:#475569;">Studio Cabinet A</td>
+              <td style="padding:15px 20px;text-align:center;"><button onclick="openSimpleCheckout(this)" class="eq-action-btn"><i class="ti ti-arrow-up-right" style="font-size:14px;"></i>Check Out</button></td>
+            </tr>
+
+            <tr class="eq-s-row" data-cat="cameras" data-status="checkout" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openEqDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+              <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Sony A7R V (Backup)</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">SN: SON-A7RV-002 · Out with Emma &amp; Jake shoot</div></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:500;color:#475569;">Camera</td>
+              <td style="padding:15px 20px;"><span class="eq-status checkout"><span class="dot"></span>Checked Out</span></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:600;color:#1a1d2e;">Good</td>
+              <td style="padding:15px 20px;font-size:14px;color:#475569;">Emma &amp; Jake Shoot</td>
+              <td style="padding:15px 20px;text-align:center;"><button onclick="openSimpleReturn(this)" class="eq-action-btn"><i class="ti ti-arrow-down-left" style="font-size:14px;"></i>Return</button></td>
+            </tr>
+
+            <tr class="eq-s-row" data-cat="cameras" data-status="damaged" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openEqDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+              <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Sony A1</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">LCD cracked · Sent to Sony Service Centre · Return Jun 30</div></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:500;color:#475569;">Camera</td>
+              <td style="padding:15px 20px;"><span class="eq-status damaged"><span class="dot"></span>Damaged</span></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:600;color:#1a1d2e;">Needs Repair</td>
+              <td style="padding:15px 20px;font-size:14px;color:#475569;">Sony Service Centre</td>
+              <td style="padding:15px 20px;text-align:center;"><button onclick="showToast('Repair status: Sony Service — ETA Jun 30, 2026')" class="eq-action-btn"><i class="ti ti-tool" style="font-size:14px;"></i>Track Repair</button></td>
+            </tr>
+
+            <tr class="eq-s-row" data-cat="cameras" data-status="lost" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openEqDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+              <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Sony ZV-E10 (Vlog)</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">Lost at Horizon Events · Jun 10 · Insurance claim filed</div></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:500;color:#475569;">Camera</td>
+              <td style="padding:15px 20px;"><span class="eq-status lost"><span class="dot"></span>Lost</span></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:600;color:#1a1d2e;">—</td>
+              <td style="padding:15px 20px;font-size:14px;color:#475569;">Insurance Claim Pending</td>
+              <td style="padding:15px 20px;text-align:center;"><button onclick="showToast('Claim CLM-2026-0041 — Processing. Settlement Jul 5')" class="eq-action-btn"><i class="ti ti-file-text" style="font-size:14px;"></i>Claim Status</button></td>
+            </tr>
+
+            <!-- LENSES -->
+            <tr class="eq-s-row" data-cat="lenses" data-status="available" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openEqDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+              <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Sony 24-70mm f/2.8 GM II</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">SN: SON-2470-001 · Zoom lens</div></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:500;color:#475569;">Lens</td>
+              <td style="padding:15px 20px;"><span class="eq-status available"><span class="dot"></span>Available</span></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:600;color:#1a1d2e;">Excellent</td>
+              <td style="padding:15px 20px;font-size:14px;color:#475569;">Studio Cabinet B</td>
+              <td style="padding:15px 20px;text-align:center;"><button onclick="openSimpleCheckout(this)" class="eq-action-btn"><i class="ti ti-arrow-up-right" style="font-size:14px;"></i>Check Out</button></td>
+            </tr>
+
+            <tr class="eq-s-row" data-cat="lenses" data-status="service" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openEqDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+              <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Sony 85mm f/1.4 GM</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">Annual calibration at Sony Service · Return Jun 28</div></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:500;color:#475569;">Lens</td>
+              <td style="padding:15px 20px;"><span class="eq-status service"><span class="dot"></span>In Service</span></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:600;color:#1a1d2e;">Good</td>
+              <td style="padding:15px 20px;font-size:14px;color:#475569;">Sony Service Centre</td>
+              <td style="padding:15px 20px;text-align:center;"><button onclick="showToast('Service: Calibration. Cost: $120. Return: Jun 28')" class="eq-action-btn"><i class="ti ti-info-circle" style="font-size:14px;"></i>View Details</button></td>
+            </tr>
+
+            <tr class="eq-s-row" data-cat="lenses" data-status="available" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openEqDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+              <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Sony 135mm f/1.8 GM</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">SN: SON-135G-001 · Portrait prime</div></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:500;color:#475569;">Lens</td>
+              <td style="padding:15px 20px;"><span class="eq-status available"><span class="dot"></span>Available</span></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:600;color:#1a1d2e;">Excellent</td>
+              <td style="padding:15px 20px;font-size:14px;color:#475569;">Studio Cabinet B</td>
+              <td style="padding:15px 20px;text-align:center;"><button onclick="openSimpleCheckout(this)" class="eq-action-btn"><i class="ti ti-arrow-up-right" style="font-size:14px;"></i>Check Out</button></td>
+            </tr>
+
+            <!-- LIGHTING -->
+            <tr class="eq-s-row" data-cat="lighting" data-status="available" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openEqDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+              <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Profoto B10X Plus</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">SN: PRO-B10X-001 · 200Ws · Service due Sep 2026</div></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:500;color:#475569;">Lighting</td>
+              <td style="padding:15px 20px;"><span class="eq-status available"><span class="dot"></span>Available</span></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:600;color:#1a1d2e;">Good</td>
+              <td style="padding:15px 20px;font-size:14px;color:#475569;">Lighting Cabinet</td>
+              <td style="padding:15px 20px;text-align:center;"><button onclick="openSimpleCheckout(this)" class="eq-action-btn"><i class="ti ti-arrow-up-right" style="font-size:14px;"></i>Check Out</button></td>
+            </tr>
+
+            <tr class="eq-s-row" data-cat="lighting" data-status="checkout" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openEqDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+              <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Profoto B10X Plus (2nd)</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">SN: PRO-B10X-002 · Out with Horizon Events</div></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:500;color:#475569;">Lighting</td>
+              <td style="padding:15px 20px;"><span class="eq-status checkout"><span class="dot"></span>Checked Out</span></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:600;color:#1a1d2e;">Good</td>
+              <td style="padding:15px 20px;font-size:14px;color:#475569;">Horizon Events</td>
+              <td style="padding:15px 20px;text-align:center;"><button onclick="openSimpleReturn(this)" class="eq-action-btn"><i class="ti ti-arrow-down-left" style="font-size:14px;"></i>Return</button></td>
+            </tr>
+
+            <tr class="eq-s-row" data-cat="lighting" data-status="available" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openEqDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+              <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Godox AD600 Pro</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">SN: GOD-600-001 · 600Ws Outdoor Strobe</div></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:500;color:#475569;">Lighting</td>
+              <td style="padding:15px 20px;"><span class="eq-status available"><span class="dot"></span>Available</span></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:600;color:#1a1d2e;">Good</td>
+              <td style="padding:15px 20px;font-size:14px;color:#475569;">Lighting Cabinet</td>
+              <td style="padding:15px 20px;text-align:center;"><button onclick="openSimpleCheckout(this)" class="eq-action-btn"><i class="ti ti-arrow-up-right" style="font-size:14px;"></i>Check Out</button></td>
+            </tr>
+
+            <!-- MEMORY / BAGS / COMPUTER -->
+            <tr class="eq-s-row" data-cat="memory" data-status="available" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openEqDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+              <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">SanDisk 256GB CFexpress (×3)</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">Type B · Set of 3 cards</div></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:500;color:#475569;">Memory</td>
+              <td style="padding:15px 20px;"><span class="eq-status available"><span class="dot"></span>Available</span></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:600;color:#1a1d2e;">Good</td>
+              <td style="padding:15px 20px;font-size:14px;color:#475569;">Memory Drawer</td>
+              <td style="padding:15px 20px;text-align:center;"><button onclick="openSimpleCheckout(this)" class="eq-action-btn"><i class="ti ti-arrow-up-right" style="font-size:14px;"></i>Check Out</button></td>
+            </tr>
+
+            <tr class="eq-s-row" data-cat="bags" data-status="available" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openEqDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+              <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Think Tank Photo Backpack</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">Airport Advantage · Main shoot bag</div></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:500;color:#475569;">Bag</td>
+              <td style="padding:15px 20px;"><span class="eq-status available"><span class="dot"></span>Available</span></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:600;color:#1a1d2e;">Good</td>
+              <td style="padding:15px 20px;font-size:14px;color:#475569;">Equipment Room</td>
+              <td style="padding:15px 20px;text-align:center;"><button onclick="openSimpleCheckout(this)" class="eq-action-btn"><i class="ti ti-arrow-up-right" style="font-size:14px;"></i>Check Out</button></td>
+            </tr>
+
+            <tr class="eq-s-row" data-cat="computer" data-status="available" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openEqDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+              <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">MacBook Pro 16" M3 Max</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">64GB RAM · 1TB · Editing workstation</div></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:500;color:#475569;">Computer</td>
+              <td style="padding:15px 20px;"><span class="eq-status available"><span class="dot"></span>Available</span></td>
+              <td style="padding:15px 20px;font-size:14px;font-weight:600;color:#1a1d2e;">Excellent</td>
+              <td style="padding:15px 20px;font-size:14px;color:#475569;">Editing Desk</td>
+              <td style="padding:15px 20px;text-align:center;"><button onclick="showToast('MacBook Pro — Editing workstation. Studio use only.')" class="eq-action-btn"><i class="ti ti-info-circle" style="font-size:14px;"></i>View Details</button></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ SUB-PANEL: SHOOT EQUIPMENT LOG ══ -->
+    <div id="eq-sub-shootlog" class="eq-sub-panel">
+      <div style="background:#fff;border:1px solid #e8edf3;border-radius:14px;overflow:hidden;margin-bottom:20px;">
+        <div style="padding:16px 22px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:16px;font-weight:700;color:#1a1d2e;display:flex;align-items:center;gap:8px;"><i class="ti ti-calendar-event" style="color:#2563eb;font-size:18px;"></i>Shoot Equipment Log</div>
+            <div style="font-size:12.5px;color:#64748b;margin-top:2px;">Allocate gear before shoots · log usage after · track shutter count per camera</div>
+          </div>
+          <button onclick="openAllocateModal()" class="btn-blue" style="font-size:13px;padding:8px 16px;"><i class="ti ti-plus"></i> Allocate for Shoot</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;min-width:700px;">
+            <thead>
+              <tr style="background:#f8fafc;">
+                <th style="padding:11px 18px;text-align:left;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Shoot / Event</th>
+                <th style="padding:11px 18px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Date</th>
+                <th style="padding:11px 18px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Crew</th>
+                <th style="padding:11px 18px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Equipment</th>
+                <th style="padding:11px 18px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Status</th>
+                <th style="padding:11px 18px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;text-align:center;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="shoot-alloc-tbody"><!-- rendered by JS --></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SUB-PANEL: SERVICE DUE TRACKER ══ -->
+    <div id="eq-sub-service" class="eq-sub-panel">
+      <div style="background:#fff;border:1px solid #e8edf3;border-radius:14px;overflow:hidden;margin-bottom:20px;">
+        <div style="padding:16px 22px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:16px;font-weight:700;color:#1a1d2e;display:flex;align-items:center;gap:8px;"><i class="ti ti-tool" style="color:#8b5cf6;font-size:18px;"></i>Service Due Tracker</div>
+            <div style="font-size:12.5px;color:#64748b;margin-top:2px;">Calendar-based (every 6 months) + Counter-based (every 50,000 shots) — whichever comes first</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span style="font-size:12px;color:#64748b;display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:#ef4444;display:inline-block;"></span>Overdue</span>
+            <span style="font-size:12px;color:#64748b;display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:#f59e0b;display:inline-block;"></span>Due Soon</span>
+            <span style="font-size:12px;color:#64748b;display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:#22c55e;display:inline-block;"></span>OK</span>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;min-width:900px;">
+            <thead>
+              <tr style="background:#f8fafc;">
+                <th style="padding:11px 18px;text-align:left;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Equipment</th>
+                <th style="padding:11px 18px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Total Shots (Lifetime)</th>
+                <th style="padding:11px 18px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Shots Since Service</th>
+                <th style="padding:11px 18px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Counter Progress</th>
+                <th style="padding:11px 18px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Last Service</th>
+                <th style="padding:11px 18px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Calendar Due</th>
+                <th style="padding:11px 18px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Service Status</th>
+                <th style="padding:11px 18px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;text-align:center;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="service-tbody"><!-- rendered by JS --></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SUB-PANEL: CONSUMABLES ══ -->
+    <div id="eq-sub-consumables" class="eq-sub-panel">
+      <div style="background:#fff;border:1px solid #e8edf3;border-radius:14px;overflow:hidden;margin-bottom:20px;">
+        <div style="padding:16px 22px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <i class="ti ti-stack-2" style="color:#f59e0b;font-size:18px;"></i>
+            <span style="font-size:16px;font-weight:700;color:#1a1d2e;">Consumables Stock</span>
+          </div>
+          <button onclick="showToast('Add consumable item form opened')" class="btn-blue" style="font-size:13px;padding:8px 16px;"><i class="ti ti-plus"></i> Add Item</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;">
+            <thead>
+              <tr style="background:#f8fafc;">
+                <th style="padding:11px 20px;text-align:left;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Item</th>
+                <th style="padding:11px 20px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">In Stock</th>
+                <th style="padding:11px 20px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Reorder Level</th>
+                <th style="padding:11px 20px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Status</th>
+                <th style="padding:11px 20px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;text-align:center;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="cons-row" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openConsumableDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Profoto Flash Tubes</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">For Profoto B10X Plus strobes</div></td>
+                <td style="padding:15px 20px;font-size:20px;font-weight:800;color:#dc2626;">0 <span style="font-size:13px;font-weight:400;color:#94a3b8;">units</span></td>
+                <td style="padding:15px 20px;font-size:14px;color:#475569;">2 units</td>
+                <td style="padding:15px 20px;"><span class="tbl-badge svc-over"><span class="dot"></span>Out of Stock</span></td>
+                <td style="padding:15px 20px;text-align:center;"><button onclick="event.stopPropagation();showToast('Reorder placed for Profoto Flash Tubes — S$45 each')" class="tbl-btn"><i class="ti ti-shopping-cart"></i> Order Now</button></td>
+              </tr>
+              <tr class="cons-row" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openConsumableDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">AA Batteries (for Flash)</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">Godox AD600 Pro remote trigger</div></td>
+                <td style="padding:15px 20px;font-size:20px;font-weight:800;color:#d97706;">2 <span style="font-size:13px;font-weight:400;color:#94a3b8;">units</span></td>
+                <td style="padding:15px 20px;font-size:14px;color:#475569;">6 units</td>
+                <td style="padding:15px 20px;"><span class="tbl-badge svc-soon"><span class="dot"></span>Low Stock</span></td>
+                <td style="padding:15px 20px;text-align:center;"><button onclick="event.stopPropagation();showToast('AA Batteries added to reorder list')" class="tbl-btn"><i class="ti ti-shopping-cart"></i> Reorder</button></td>
+              </tr>
+              <tr class="cons-row" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openConsumableDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Sony Camera Batteries</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">NP-FZ100 — for A7R V and A1</div></td>
+                <td style="padding:15px 20px;font-size:20px;font-weight:800;color:#15803d;">8 <span style="font-size:13px;font-weight:400;color:#94a3b8;">units</span></td>
+                <td style="padding:15px 20px;font-size:14px;color:#475569;">4 units</td>
+                <td style="padding:15px 20px;"><span class="tbl-badge svc-ok"><span class="dot"></span>OK</span></td>
+                <td style="padding:15px 20px;text-align:center;"><button onclick="event.stopPropagation();showToast('Stock count updated')" class="tbl-btn"><i class="ti ti-edit"></i> Update Count</button></td>
+              </tr>
+              <tr class="cons-row" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openConsumableDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Lens Cleaning Wipes</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">Pre-moistened optical cleaning wipes</div></td>
+                <td style="padding:15px 20px;font-size:20px;font-weight:800;color:#15803d;">24 <span style="font-size:13px;font-weight:400;color:#94a3b8;">units</span></td>
+                <td style="padding:15px 20px;font-size:14px;color:#475569;">10 units</td>
+                <td style="padding:15px 20px;"><span class="tbl-badge svc-ok"><span class="dot"></span>OK</span></td>
+                <td style="padding:15px 20px;text-align:center;"><button onclick="event.stopPropagation();showToast('Stock count updated')" class="tbl-btn"><i class="ti ti-edit"></i> Update Count</button></td>
+              </tr>
+              <tr class="cons-row" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openConsumableDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Gaffer Tape Rolls</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">Black matte, 2" width</div></td>
+                <td style="padding:15px 20px;font-size:20px;font-weight:800;color:#d97706;">1 <span style="font-size:13px;font-weight:400;color:#94a3b8;">rolls</span></td>
+                <td style="padding:15px 20px;font-size:14px;color:#475569;">3 rolls</td>
+                <td style="padding:15px 20px;"><span class="tbl-badge svc-soon"><span class="dot"></span>Low Stock</span></td>
+                <td style="padding:15px 20px;text-align:center;"><button onclick="event.stopPropagation();showToast('Gaffer Tape added to reorder list')" class="tbl-btn"><i class="ti ti-shopping-cart"></i> Reorder</button></td>
+              </tr>
+              <tr class="cons-row" style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openConsumableDetail(this)" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
+                <td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">Silica Gel Packs</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">Moisture absorbers for camera bags</div></td>
+                <td style="padding:15px 20px;font-size:20px;font-weight:800;color:#15803d;">12 <span style="font-size:13px;font-weight:400;color:#94a3b8;">packs</span></td>
+                <td style="padding:15px 20px;font-size:14px;color:#475569;">6 packs</td>
+                <td style="padding:15px 20px;"><span class="tbl-badge svc-ok"><span class="dot"></span>OK</span></td>
+                <td style="padding:15px 20px;text-align:center;"><button onclick="event.stopPropagation();showToast('Stock count updated')" class="tbl-btn"><i class="ti ti-edit"></i> Update Count</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SUB-PANEL: UPCOMING SHOOTS CHECK ══ -->
+    <div id="eq-sub-planner" class="eq-sub-panel">
+      <div style="background:#fff;border:1px solid #e8edf3;border-radius:14px;overflow:hidden;">
+        <div style="padding:16px 22px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <i class="ti ti-calendar-stats" style="color:#2563eb;font-size:18px;"></i>
+            <span style="font-size:16px;font-weight:700;color:#1a1d2e;">Upcoming Shoots — Equipment Check</span>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;">
+            <thead>
+              <tr style="background:#f8fafc;">
+                <th style="padding:11px 20px;text-align:left;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Shoot / Client</th>
+                <th style="padding:11px 20px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Date</th>
+                <th style="padding:11px 20px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Type</th>
+                <th style="padding:11px 20px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Gear Status</th>
+                <th style="padding:11px 20px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;">Rental Cost</th>
+                <th style="padding:11px 20px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid #e8edf3;text-align:center;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="planner-tbody"><!-- rendered by JS --></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main-wrapper -->
+
+<!-- ══ JS: UTILITY ══ -->
+<script>
+function showToast(msg) {
+  var t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:28px;right:28px;background:#1a1d2e;color:#fff;padding:13px 20px;border-radius:10px;font-size:13.5px;font-family:Inter,sans-serif;z-index:99999;box-shadow:0 6px 24px rgba(0,0,0,.22);display:flex;align-items:center;gap:10px;max-width:400px;';
+  t.innerHTML = '<i class="ti ti-circle-check" style="font-size:18px;color:#4ade80;flex-shrink:0;"></i>' + msg;
+  document.body.appendChild(t);
+  setTimeout(function() { t.remove(); }, 3500);
+}
+
+function switchEqSub(name, btn) {
+  document.querySelectorAll('.eq-sub-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('.eq-sub-panel').forEach(function(p) { p.classList.remove('active'); });
+  var panel = document.getElementById('eq-sub-' + name);
+  if (panel) panel.classList.add('active');
+  if (name === 'shootlog')  { typeof renderShootAllocTable === 'function' && renderShootAllocTable(); }
+  if (name === 'service')   { typeof renderServiceTable   === 'function' && renderServiceTable();    }
+  if (name === 'planner')   { typeof renderPlannerTable   === 'function' && renderPlannerTable();    }
+}
+</script>
+
+<!-- ══ JS: EQUIPMENT INVENTORY FUNCTIONS ══ -->
+<script>
+function filterEqSimple() {
+  var cat    = (document.getElementById('eq-cat-select')    || {}).value || 'all';
+  var status = (document.getElementById('eq-status-select') || {}).value || '';
+  document.querySelectorAll('.eq-s-row').forEach(function(row) {
+    var catOk    = cat === 'all' || row.dataset.cat === cat;
+    var statusOk = !status || row.dataset.status === status;
+    row.style.display = (catOk && statusOk) ? '' : 'none';
+  });
+}
+
+function _makeInput(lbl, id, type, ph) {
+  var wrap  = document.createElement('div');
+  var label = document.createElement('label');
+  label.textContent = lbl;
+  label.style.cssText = 'font-size:14px;font-weight:700;color:#1a1d2e;display:block;margin-bottom:8px;';
+  var inp = document.createElement('input');
+  inp.id = id; inp.type = type; inp.placeholder = ph || '';
+  inp.style.cssText = 'width:100%;border:2px solid #e2e8f0;border-radius:10px;padding:12px 14px;font-size:15px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;box-sizing:border-box;';
+  wrap.appendChild(label); wrap.appendChild(inp);
+  return wrap;
+}
+
+function _eqModal(headerBg, headerColor, title, subtitle) {
+  var ov = document.createElement('div');
+  ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;';
+  ov.addEventListener('click', function(e){ if(e.target===ov) ov.remove(); });
+  var box = document.createElement('div');
+  box.style.cssText = 'background:#fff;border-radius:16px;width:500px;max-width:95vw;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.2);';
+  var hdr = document.createElement('div');
+  hdr.style.cssText = 'padding:20px 24px;border-bottom:1px solid rgba(0,0,0,.08);background:' + headerBg + ';';
+  hdr.innerHTML = '<div style="font-size:18px;font-weight:800;color:' + headerColor + ';margin-bottom:4px;">' + title + '</div>' +
+    '<div style="font-size:13.5px;color:' + headerColor + ';opacity:.75;">' + subtitle + '</div>';
+  box.appendChild(hdr); ov.appendChild(box);
+  document.body.appendChild(ov);
+  return { ov: ov, box: box };
+}
+
+function _addBtn(footer, label, bg, color, cb) {
+  var b = document.createElement('button');
+  b.innerHTML = label;
+  b.style.cssText = 'flex:1;padding:12px;background:' + bg + ';color:' + color + ';border:' + (bg==='#fff'?'2px solid #e2e8f0':'none') + ';border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;';
+  b.addEventListener('click', cb);
+  footer.appendChild(b);
+}
+
+function openSimpleCheckout(btn) {
+  var row  = btn.closest('tr');
+  var name = row ? ((row.querySelector('strong') || {}).textContent || 'Equipment') : 'Equipment';
+  var m    = _eqModal('#eff6ff','#1e40af','Check Out Equipment', name);
+  var body = document.createElement('div');
+  body.style.cssText = 'padding:24px;display:flex;flex-direction:column;gap:16px;';
+  body.appendChild(_makeInput('Who is taking it?','sco-person','text','Enter person name'));
+  body.appendChild(_makeInput('For which shoot?','sco-shoot','text','e.g. Patel Wedding'));
+  body.appendChild(_makeInput('Return by (date)','sco-return','date',''));
+  var condWrap = document.createElement('div');
+  condWrap.innerHTML = '<label style="font-size:14px;font-weight:700;color:#1a1d2e;display:block;margin-bottom:8px;">Condition when leaving</label>';
+  var sel = document.createElement('select');
+  sel.id = 'sco-cond';
+  sel.style.cssText = 'width:100%;border:2px solid #e2e8f0;border-radius:10px;padding:12px 14px;font-size:15px;font-family:inherit;outline:none;color:#1a1d2e;';
+  ['Excellent','Good','Fair'].forEach(function(v){ var o=document.createElement('option');o.textContent=v;sel.appendChild(o); });
+  condWrap.appendChild(sel); body.appendChild(condWrap);
+  m.box.appendChild(body);
+  var ftr = document.createElement('div');
+  ftr.style.cssText = 'padding:16px 24px;border-top:1px solid #f1f5f9;display:flex;gap:12px;';
+  _addBtn(ftr,'Cancel','#fff','#475569',function(){ m.ov.remove(); });
+  _addBtn(ftr,'Confirm Check Out','#2563eb','#fff',function(){
+    var person = (document.getElementById('sco-person')||{}).value || 'staff';
+    var shoot  = (document.getElementById('sco-shoot') ||{}).value;
+    m.ov.remove();
+    showToast(name + ' checked out to ' + person + (shoot ? ' for ' + shoot : ''));
+  });
+  m.box.appendChild(ftr);
+  var d = new Date(); d.setDate(d.getDate()+3);
+  var f = document.getElementById('sco-return'); if(f) f.value = d.toISOString().split('T')[0];
+}
+
+function openSimpleReturn(btn) {
+  var row  = btn.closest('tr');
+  var name = row ? ((row.querySelector('strong') || {}).textContent || 'Equipment') : 'Equipment';
+  var m    = _eqModal('#f0fdf4','#15803d','Return Equipment', name);
+  var body = document.createElement('div');
+  body.style.cssText = 'padding:24px;display:flex;flex-direction:column;gap:16px;';
+  var condWrap = document.createElement('div');
+  condWrap.innerHTML = '<label style="font-size:14px;font-weight:700;color:#1a1d2e;display:block;margin-bottom:8px;">What condition is it in now?</label>';
+  var sel = document.createElement('select');
+  sel.id = 'sret-cond';
+  sel.style.cssText = 'width:100%;border:2px solid #e2e8f0;border-radius:10px;padding:12px 14px;font-size:15px;font-family:inherit;outline:none;color:#1a1d2e;';
+  ['Excellent — no issues','Good — minor wear','Fair — some scratches','Damaged — needs attention'].forEach(function(v){ var o=document.createElement('option');o.textContent=v;sel.appendChild(o); });
+  condWrap.appendChild(sel); body.appendChild(condWrap);
+  body.appendChild(_makeInput('Returned by','sret-person','text','Enter name'));
+  body.appendChild(_makeInput('Any notes?','sret-notes','text','e.g. battery flat, sensor dust…'));
+  m.box.appendChild(body);
+  var ftr = document.createElement('div');
+  ftr.style.cssText = 'padding:16px 24px;border-top:1px solid #f1f5f9;display:flex;gap:12px;';
+  _addBtn(ftr,'Cancel','#fff','#475569',function(){ m.ov.remove(); });
+  _addBtn(ftr,'Confirm Return','#22c55e','#fff',function(){
+    var cond = (document.getElementById('sret-cond')||{}).value || 'OK';
+    m.ov.remove();
+    showToast(name + ' returned — ' + cond);
+  });
+  m.box.appendChild(ftr);
+}
+
+function openSimpleAddEquip() {
+  var m = _eqModal('#f8fafc','#1a1d2e','Add New Equipment','Fill in the details below');
+  var body = document.createElement('div');
+  body.style.cssText = 'padding:24px;display:flex;flex-direction:column;gap:16px;';
+  body.appendChild(_makeInput('Equipment Name','ae2-name','text','e.g. Sony A7R V'));
+  body.appendChild(_makeInput('Serial Number','ae2-serial','text','e.g. SON-A7RV-003'));
+  var catWrap = document.createElement('div');
+  catWrap.innerHTML = '<label style="font-size:14px;font-weight:700;color:#1a1d2e;display:block;margin-bottom:8px;">Category</label>';
+  var catSel = document.createElement('select');
+  catSel.style.cssText = 'width:100%;border:2px solid #e2e8f0;border-radius:10px;padding:12px 14px;font-size:15px;font-family:inherit;outline:none;color:#1a1d2e;';
+  ['Cameras','Lenses','Lighting','Memory','Bags & Cases','Computer & Storage','Accessories'].forEach(function(v){ var o=document.createElement('option');o.textContent=v;catSel.appendChild(o); });
+  catWrap.appendChild(catSel); body.appendChild(catWrap);
+  body.appendChild(_makeInput('Purchase Price ($)','ae2-price','number',''));
+  body.appendChild(_makeInput('Storage Location','ae2-loc','text','e.g. Studio Cabinet A'));
+  m.box.appendChild(body);
+  var ftr = document.createElement('div');
+  ftr.style.cssText = 'padding:16px 24px;border-top:1px solid #f1f5f9;display:flex;gap:12px;';
+  _addBtn(ftr,'Cancel','#fff','#475569',function(){ m.ov.remove(); });
+  _addBtn(ftr,'Add Equipment','#2563eb','#fff',function(){
+    var n = (document.getElementById('ae2-name')||{}).value || 'New Item';
+    m.ov.remove();
+    showToast(n + ' added to inventory!');
+  });
+  m.box.appendChild(ftr);
+}
+
+function exportEquipmentCSV() {
+  var rows = [['Equipment','Type','Status','Condition','Location']];
+  document.querySelectorAll('.eq-s-row').forEach(function(tr) {
+    var c = tr.cells;
+    if (c.length < 5) return;
+    rows.push([(c[0].querySelector('strong')||{}).textContent||'',(c[1].textContent||'').trim(),(c[2].textContent||'').trim(),(c[3].textContent||'').trim(),(c[4].textContent||'').trim()]);
+  });
+  var csv = rows.map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'equipment-inventory.csv';
+  a.click();
+  showToast('Equipment list exported as CSV.');
+}
+</script>
+
+<!-- ══ JS: EQUIPMENT DETAIL VIEW ══ -->
+<script>
+function openEqDetail(row) {
+  if (window.event && window.event.target && window.event.target.closest('button')) return;
+  var cells = row.cells;
+  // Name is in the first <div> of cells[0]
+  var nameDiv  = cells[0] ? cells[0].querySelector('div') : null;
+  var subDiv   = cells[0] ? cells[0].querySelectorAll('div')[1] : null;
+  var name     = nameDiv ? nameDiv.textContent.trim() : '';
+  var subtitle = subDiv  ? subDiv.textContent.trim()  : '';
+  // Parse serial from subtitle: "SN: SON-A7RV-001 · Primary body"
+  var serialRaw = subtitle.replace(/^SN:\s*/,'').split('·')[0].trim();
+  var note      = subtitle.split('·').slice(1).join('·').trim();
+  var type  = cells[1] ? cells[1].textContent.trim() : '';
+  var status= cells[2] ? cells[2].textContent.trim() : '';
+  var cond  = cells[3] ? cells[3].textContent.trim() : '';
+  var loc   = cells[4] ? cells[4].textContent.trim() : '';
+  var cat   = row.dataset.cat || '';
+  var sv    = row.dataset.status || '';
+
+  var sColors = { available:'#15803d', checkout:'#a16207', service:'#7c3aed', damaged:'#dc2626', lost:'#475569' };
+  var sBgs    = { available:'#dcfce7', checkout:'#fef9c3', service:'#ede9fe', damaged:'#fee2e2', lost:'#f1f5f9' };
+  var sc = sColors[sv] || '#64748b';
+  var sb = sBgs[sv]    || '#f8fafc';
+  var catIcons = { cameras:'ti-camera', lenses:'ti-adjustments', lighting:'ti-bolt', memory:'ti-database', bags:'ti-backpack', computer:'ti-device-laptop' };
+  var icon = catIcons[cat] || 'ti-package';
+
+  var ex = document.getElementById('eq-detail-overlay'); if (ex) ex.remove();
+  var ov = document.createElement('div');
+  ov.id = 'eq-detail-overlay';
+  ov.style.cssText = 'position:fixed;top:0;left:250px;right:0;bottom:0;background:#fff;z-index:9990;overflow-y:auto;font-family:Inter,sans-serif;';
+
+  function closeOv() { ov.remove(); }
+
+  /* ── TOP BAR ── */
+  var tb = document.createElement('div');
+  tb.style.cssText = 'background:#fff;border-bottom:1.5px solid #e8edf3;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:2;';
+  function buildTopBar(editMode) {
+    tb.innerHTML = '';
+    /* left: back + name */
+    var left = document.createElement('div'); left.style.cssText = 'display:flex;align-items:center;gap:14px;';
+    var back = document.createElement('button');
+    back.innerHTML = '<i class="ti ti-arrow-left" style="font-size:15px;"></i> Back';
+    back.style.cssText = 'background:#f1f5f9;border:none;border-radius:9px;padding:9px 16px;cursor:pointer;color:#475569;font-size:14px;font-weight:600;font-family:Inter,sans-serif;display:flex;align-items:center;gap:6px;';
+    back.addEventListener('click', editMode ? function(){ buildTopBar(false); buildContent(); } : closeOv);
+    var iconBox = document.createElement('div');
+    iconBox.style.cssText = 'width:36px;height:36px;background:#f1f5f9;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;';
+    iconBox.innerHTML = '<i class="ti ' + icon + '" style="color:#6b7280;font-size:17px;"></i>';
+    var nameInfo = document.createElement('div');
+    nameInfo.innerHTML = '<div style="font-size:17px;font-weight:800;color:#1a1d2e;line-height:1.2;">' + name + '</div>'
+      + '<div style="font-size:13px;color:#94a3b8;margin-top:2px;">' + (editMode ? 'Editing record' : (serialRaw || subtitle)) + '</div>';
+    left.appendChild(back); left.appendChild(iconBox); left.appendChild(nameInfo);
+    /* right: status badge + edit + close */
+    var right = document.createElement('div'); right.style.cssText = 'display:flex;align-items:center;gap:10px;';
+    var badge = document.createElement('span');
+    badge.textContent = editMode ? 'Edit Mode' : status;
+    badge.style.cssText = 'font-size:13.5px;font-weight:700;background:' + (editMode?'#eff6ff':sb) + ';color:' + (editMode?'#2563eb':sc) + ';padding:7px 16px;border-radius:8px;white-space:nowrap;';
+    right.appendChild(badge);
+    if (!editMode) {
+      var editBtn = document.createElement('button');
+      editBtn.innerHTML = '<i class="ti ti-edit" style="font-size:15px;"></i> Edit';
+      editBtn.style.cssText = 'padding:9px 18px;border:1.5px solid #d1d5db;border-radius:9px;background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;color:#374151;display:flex;align-items:center;gap:6px;';
+      editBtn.addEventListener('click', function(){ buildTopBar(true); buildEditForm(); });
+      right.appendChild(editBtn);
+    } else {
+      var saveBtn = document.createElement('button');
+      saveBtn.innerHTML = '<i class="ti ti-device-floppy" style="font-size:15px;"></i> Save';
+      saveBtn.style.cssText = 'padding:9px 18px;border:none;border-radius:9px;background:#2563eb;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;color:#fff;display:flex;align-items:center;gap:6px;';
+      saveBtn.addEventListener('click', function(){
+        name = (document.getElementById('ef-name')||{}).value || name;
+        cond = (document.getElementById('ef-cond')||{}).value || cond;
+        loc  = (document.getElementById('ef-loc') ||{}).value || loc;
+        showToast(name + ' updated successfully.');
+        buildTopBar(false); buildContent();
+      });
+      var cancelBtn = document.createElement('button');
+      cancelBtn.innerHTML = 'Cancel';
+      cancelBtn.style.cssText = 'padding:9px 16px;border:1.5px solid #d1d5db;border-radius:9px;background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;color:#374151;';
+      cancelBtn.addEventListener('click', function(){ buildTopBar(false); buildContent(); });
+      right.appendChild(cancelBtn); right.appendChild(saveBtn);
+    }
+    var closeB = document.createElement('button');
+    closeB.innerHTML = '<i class="ti ti-x" style="font-size:16px;"></i>';
+    closeB.style.cssText = 'padding:9px 12px;border:none;border-radius:9px;background:#f1f5f9;cursor:pointer;font-family:Inter,sans-serif;color:#64748b;display:flex;align-items:center;';
+    closeB.addEventListener('click', closeOv);
+    right.appendChild(closeB);
+    tb.appendChild(left); tb.appendChild(right);
+  }
+  buildTopBar(false);
+  ov.appendChild(tb);
+
+  var contentWrap = document.createElement('div');
+  contentWrap.id = 'eq-content-wrap';
+  contentWrap.style.cssText = 'padding:0 0 40px;';
+  ov.appendChild(contentWrap);
+
+  /* ── CONTENT ── */
+  function buildContent() {
+    contentWrap.innerHTML = '';
+
+    function mkSection(title) {
+      var sec = document.createElement('div');
+      sec.style.cssText = 'padding:0 28px 20px;border-bottom:1px solid #edf0f5;';
+      var sh = document.createElement('div');
+      sh.style.cssText = 'padding:18px 0 10px;border-bottom:2px solid #e2e8f0;margin-bottom:4px;';
+      sh.innerHTML = '<span style="font-size:11px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:0.8px;">' + title + '</span>';
+      sec.appendChild(sh);
+      return sec;
+    }
+    function mkGrid(sec) {
+      var w = document.createElement('div'); w._rc = 0; sec.appendChild(w); return w;
+    }
+    function addR(w, label, value, valCol) {
+      if (w._rc % 2 === 0) { var row = document.createElement('div'); row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;column-gap:40px;padding:13px 0;border-bottom:1px solid #f0f2f5;'; w.appendChild(row); }
+      w._rc++;
+      var cell = document.createElement('div');
+      cell.innerHTML = '<div style="font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;">' + label + '</div>'
+        + '<div style="font-size:14px;color:' + (valCol||'#111827') + ';">' + (value||'—') + '</div>';
+      w.lastElementChild.appendChild(cell);
+    }
+
+    /* Equipment Details */
+    var c1 = mkSection('Equipment Details');
+    var g1 = mkGrid(c1);
+    addR(g1, 'Equipment Name',   name);
+    addR(g1, 'Serial Number',    serialRaw || '—');
+    addR(g1, 'Category',         type);
+    addR(g1, 'Condition',        cond);
+    addR(g1, 'Current Status',   status, sc);
+    addR(g1, 'Current Location', loc);
+    addR(g1, 'Owned / Rented',   'Owned');
+    addR(g1, 'Purchase Year',    '2023');
+    addR(g1, 'Insurance Value',  'S$4,200');
+    addR(g1, 'Warranty Expires', 'Dec 2025');
+    addR(g1, 'Next Service Due', 'Sep 2026');
+    addR(g1, 'Notes',            note || '—');
+    contentWrap.appendChild(c1);
+
+    /* Service & History */
+    var c2 = mkSection('Service & History');
+    var logs = [
+      { date:'Jun 10, 2026', event:'Checked Out',    detail:'Emma & Jake Wedding' },
+      { date:'May 15, 2026', event:'Annual Service', detail:'Sensor cleaning — S$120' },
+      { date:'Apr 2, 2026',  event:'Checked Out',    detail:'Liu Family Portrait' },
+      { date:'Dec 2023',     event:'Purchased',      detail:'New from B&H Photo. 2-year warranty.' }
+    ];
+    logs.forEach(function(lg) {
+      var r = document.createElement('div');
+      r.style.cssText = 'display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-bottom:1px solid #f0f2f5;';
+      r.innerHTML = '<div style="width:7px;height:7px;border-radius:50%;background:#d1d5db;flex-shrink:0;margin-top:5px;"></div>'
+        + '<div style="flex:1;"><div style="display:flex;justify-content:space-between;">'
+        + '<span style="font-size:14px;font-weight:500;color:#111827;">' + lg.event + '</span>'
+        + '<span style="font-size:12px;color:#9ca3af;">' + lg.date + '</span></div>'
+        + '<div style="font-size:13px;color:#6b7280;margin-top:2px;">' + lg.detail + '</div></div>';
+      c2.appendChild(r);
+    });
+    contentWrap.appendChild(c2);
+
+    /* Actions */
+    var c3 = mkSection('Actions');
+    var actBody = document.createElement('div'); actBody.style.cssText = 'padding-top:14px;display:flex;flex-wrap:wrap;gap:10px;';
+    function mkBtn(lbl, ico, primary, cb) {
+      var btn = document.createElement('button');
+      btn.innerHTML = '<i class="ti ' + ico + '" style="font-size:14px;"></i><span>' + lbl + '</span>';
+      btn.style.cssText = 'padding:9px 18px;background:' + (primary?'#2563eb':'#fff') + ';color:' + (primary?'#fff':'#374151') + ';border:1px solid ' + (primary?'#2563eb':'#d1d5db') + ';border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:Inter,sans-serif;display:inline-flex;align-items:center;gap:7px;';
+      btn.addEventListener('click', cb); return btn;
+    }
+    if (sv === 'available') actBody.appendChild(mkBtn('Check Out this Equipment', 'ti-arrow-up-right', true,  function(){ closeOv(); openSimpleCheckout(row); }));
+    if (sv === 'checkout')  actBody.appendChild(mkBtn('Return Equipment',          'ti-arrow-down-left', true, function(){ closeOv(); openSimpleReturn(row); }));
+    if (sv === 'damaged' || sv === 'lost')    actBody.appendChild(mkBtn('File Insurance Claim',   'ti-shield', false, function(){ showToast('Insurance claim opened for: '+name); }));
+    if (sv === 'damaged' || sv === 'service') actBody.appendChild(mkBtn('Track Repair / Service', 'ti-tool',   false, function(){ showToast('Service tracking opened for: '+name); }));
+    actBody.appendChild(mkBtn('Export This Record', 'ti-download', false, function(){ showToast(name+' exported.'); }));
+    c3.appendChild(actBody);
+    contentWrap.appendChild(c3);
+  }
+
+  function buildEditForm() {
+    contentWrap.innerHTML = '';
+    var formCard = document.createElement('div'); formCard.style.cssText = 'background:#fff;border:1.5px solid #e8edf3;border-radius:14px;overflow:hidden;';
+    var fHdr = document.createElement('div'); fHdr.style.cssText = 'padding:18px 24px;border-bottom:1.5px solid #f1f5f9;display:flex;align-items:center;gap:10px;background:#eff6ff;';
+    fHdr.innerHTML = '<i class="ti ti-edit" style="color:#2563eb;font-size:17px;"></i><span style="font-size:15px;font-weight:700;color:#1e40af;">Edit — ' + name + '</span>';
+    formCard.appendChild(fHdr);
+    var fBody = document.createElement('div'); fBody.style.cssText = 'padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:20px;';
+    function mkEF(lbl,id,t,val,fw) {
+      var w=document.createElement('div'); if(fw) w.style.gridColumn='1/-1';
+      var l=document.createElement('label'); l.textContent=lbl;
+      l.style.cssText='font-size:13px;font-weight:700;color:#64748b;display:block;margin-bottom:7px;text-transform:uppercase;letter-spacing:.5px;';
+      var i=document.createElement('input'); i.id=id; i.type=t; i.value=val||'';
+      i.style.cssText='width:100%;border:2px solid #e2e8f0;border-radius:10px;padding:13px 15px;font-size:15px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;box-sizing:border-box;';
+      i.addEventListener('focus',function(){this.style.borderColor='#2563eb';}); i.addEventListener('blur',function(){this.style.borderColor='#e2e8f0';});
+      w.appendChild(l); w.appendChild(i); return w;
+    }
+    function mkSel(lbl,id,opts,val,fw) {
+      var w=document.createElement('div'); if(fw) w.style.gridColumn='1/-1';
+      var l=document.createElement('label'); l.textContent=lbl;
+      l.style.cssText='font-size:13px;font-weight:700;color:#64748b;display:block;margin-bottom:7px;text-transform:uppercase;letter-spacing:.5px;';
+      var s=document.createElement('select'); s.id=id;
+      s.style.cssText='width:100%;border:2px solid #e2e8f0;border-radius:10px;padding:13px 15px;font-size:15px;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;background:#fff;box-sizing:border-box;';
+      opts.forEach(function(o){ var op=document.createElement('option'); op.textContent=o; if(o===val) op.selected=true; s.appendChild(op); });
+      w.appendChild(l); w.appendChild(s); return w;
+    }
+    fBody.appendChild(mkEF('Equipment Name','ef-name','text',name,true));
+    fBody.appendChild(mkEF('Serial Number','ef-serial','text',serialRaw,false));
+    fBody.appendChild(mkSel('Category','ef-cat',['Camera','Lens','Lighting','Memory','Bag','Computer','Accessory'],type,false));
+    fBody.appendChild(mkSel('Status','ef-status',['Available','Checked Out','In Service','Damaged','Lost'],status,false));
+    fBody.appendChild(mkSel('Condition','ef-cond',['Excellent','Good','Fair','Needs Repair'],cond,false));
+    fBody.appendChild(mkEF('Current Location','ef-loc','text',loc,false));
+    fBody.appendChild(mkEF('Purchase Price ($)','ef-price','number','',false));
+    fBody.appendChild(mkEF('Insurance Value ($)','ef-insval','number','',false));
+    fBody.appendChild(mkEF('Next Service Date','ef-service','date','',false));
+    fBody.appendChild(mkEF('Warranty Expires','ef-warranty','date','',false));
+    fBody.appendChild(mkEF('Notes','ef-notes','text','',true));
+    formCard.appendChild(fBody);
+    var dz=document.createElement('div'); dz.style.cssText='padding:16px 24px;border-top:2px solid #fee2e2;background:#fff8f8;display:flex;align-items:center;justify-content:space-between;';
+    dz.innerHTML='<div><div style="font-size:14px;font-weight:700;color:#dc2626;">Danger Zone</div><div style="font-size:13px;color:#64748b;margin-top:2px;">Mark as retired or remove from inventory</div></div>';
+    var retireBtn=document.createElement('button'); retireBtn.innerHTML='<i class="ti ti-archive"></i> Mark as Retired';
+    retireBtn.style.cssText='padding:10px 18px;border:1.5px solid #fecdd3;border-radius:9px;background:#fff1f2;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;color:#dc2626;display:flex;align-items:center;gap:7px;';
+    retireBtn.addEventListener('click',function(){ showToast(name+' marked as Retired.'); closeOv(); });
+    dz.appendChild(retireBtn); formCard.appendChild(dz); contentWrap.appendChild(formCard);
+  }
+
+  buildContent();
+  document.body.appendChild(ov);
+}
+</script>
+
+<!-- ══ JS: UPCOMING SHOOTS PLANNER ══ -->
+<script>
+var OWNED_GEAR = [
+  { name:'Sony A7R V',           cat:'cameras',    serial:'SON-A7RV-001', status:'available' },
+  { name:'Sony A7R V (Backup)',  cat:'cameras',    serial:'SON-A7RV-002', status:'checkout'  },
+  { name:'Sony A1',              cat:'cameras',    serial:'SON-A1-001',   status:'available' },
+  { name:'Sony 24-70mm f/2.8',  cat:'lenses',     serial:'SON-2470-001', status:'available' },
+  { name:'Sony 85mm f/1.4 GM',  cat:'lenses',     serial:'SON-85GM-001', status:'checkout'  },
+  { name:'Sony 135mm f/1.8 GM', cat:'lenses',     serial:'SON-135G-001', status:'available' },
+  { name:'Profoto B10X Plus',    cat:'lighting',   serial:'PRO-B10X-001', status:'available' },
+  { name:'Profoto B10X Plus',    cat:'lighting',   serial:'PRO-B10X-002', status:'inservice' },
+  { name:'Godox AD600 Pro',      cat:'lighting',   serial:'GOD-600-001',  status:'available' },
+  { name:'SanDisk 256GB (×3)',   cat:'memory',     serial:'SD-256-SET',   status:'available' },
+  { name:'Sony UHS-II 128GB',    cat:'memory',     serial:'SON-128-001',  status:'checkout'  },
+  { name:'Manfrotto 055 Tripod', cat:'accessories',serial:'MAN-055-001',  status:'available' },
+];
+
+var SHOOT_NEEDS = {
+  'Wedding':    { cameras:2, lenses:2, lighting:2, memory:4, accessories:1 },
+  'Engagement': { cameras:1, lenses:1, lighting:1, memory:2, accessories:1 },
+  'Portrait':   { cameras:1, lenses:2, lighting:2, memory:2, accessories:1 },
+  'Corporate':  { cameras:1, lenses:1, lighting:1, memory:2, accessories:1 },
+  'Event':      { cameras:2, lenses:2, lighting:1, memory:4, accessories:0 },
+  'Commercial': { cameras:1, lenses:1, lighting:3, memory:2, accessories:1 },
+};
+
+var RENTAL_RATES = { cameras:250, lenses:120, lighting:150, memory:40, accessories:60 };
+
+// Static upcoming shoots for standalone page
+var UPCOMING_SHOOTS = [
+  { client:'Emma & Jake', date:'Jun 28, 2026', type:'Wedding',    budget:'$3,200' },
+  { client:'Nexus Corp',  date:'Jun 30, 2026', type:'Corporate',  budget:'$1,200' },
+  { client:'Liu Family',  date:'Jul 2, 2026',  type:'Portrait',   budget:'$650'  },
+  { client:'Sarah & Tom', date:'Jul 5, 2026',  type:'Engagement', budget:'$950'  },
+];
+
+function calcEquipForShoot(type) {
+  var needs = SHOOT_NEEDS[type] || SHOOT_NEEDS['Portrait'];
+  var avail = {
+    cameras:     OWNED_GEAR.filter(function(g){ return g.cat==='cameras'     && g.status==='available'; }).length,
+    lenses:      OWNED_GEAR.filter(function(g){ return g.cat==='lenses'      && g.status==='available'; }).length,
+    lighting:    OWNED_GEAR.filter(function(g){ return g.cat==='lighting'    && g.status==='available'; }).length,
+    memory:      OWNED_GEAR.filter(function(g){ return g.cat==='memory'      && g.status==='available'; }).length,
+    accessories: OWNED_GEAR.filter(function(g){ return g.cat==='accessories' && g.status==='available'; }).length,
+  };
+  var result = { own:[], rental:[], short:[], rentalCost:0 };
+  ['cameras','lenses','lighting','memory','accessories'].forEach(function(cat) {
+    var need = needs[cat]; var have = avail[cat];
+    var catLabel = { cameras:'Camera body', lenses:'Lens', lighting:'Light/Flash', memory:'Memory card', accessories:'Tripod/Accessory' }[cat];
+    if (have >= need) {
+      if (need > 0) result.own.push({ cat:cat, have:have, need:need, label:catLabel });
+    } else {
+      var owned = have; var short = need - have;
+      if (owned > 0) result.own.push({ cat:cat, have:owned, need:owned, label:catLabel });
+      result.rental.push({ cat:cat, qty:short, label:catLabel, cost:short*RENTAL_RATES[cat] });
+      result.rentalCost += short * RENTAL_RATES[cat];
+      result.short.push(cat);
+    }
+  });
+  return result;
+}
+
+/* ── Planner list table ── */
+function renderPlannerTable() {
+  var tbody = document.getElementById('planner-tbody');
+  if (!tbody) return;
+  var typeColors = { Wedding:'#e11d48', Portrait:'#8b5cf6', Engagement:'#ec4899', Corporate:'#2563eb', Event:'#f59e0b', Commercial:'#0891b2' };
+  tbody.innerHTML = UPCOMING_SHOOTS.map(function(b, i) {
+    var eq = calcEquipForShoot(b.type);
+    var hasRental = eq.rental.length > 0;
+    var tc = typeColors[b.type] || '#64748b';
+    var gearBadge = hasRental
+      ? '<span class="tbl-badge svc-soon"><span class="dot"></span>Rental Needed</span>'
+      : '<span class="tbl-badge svc-ok"><span class="dot"></span>All Gear Ready</span>';
+    var rentalCost = hasRental ? 'S$' + eq.rentalCost : '—';
+    return '<tr style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openShootDetail(' + i + ')" onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\'\'">' +
+      '<td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">' + b.client + '</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">' + b.budget + ' session budget</div></td>' +
+      '<td style="padding:15px 20px;font-size:14px;font-weight:600;color:#1a1d2e;">' + b.date + '</td>' +
+      '<td style="padding:15px 20px;"><span style="font-size:13px;font-weight:700;background:' + tc + '18;color:' + tc + ';padding:5px 12px;border-radius:6px;">' + b.type + '</span></td>' +
+      '<td style="padding:15px 20px;">' + gearBadge + '</td>' +
+      '<td style="padding:15px 20px;font-size:15px;font-weight:700;color:' + (hasRental ? '#c2410c' : '#15803d') + ';">' + rentalCost + '</td>' +
+      '<td style="padding:15px 20px;text-align:center;"><button onclick="event.stopPropagation();openShootDetail(' + i + ')" class="tbl-btn primary"><i class="ti ti-eye"></i> Check Gear</button></td>' +
+    '</tr>';
+  }).join('');
+}
+
+/* ── Shoot gear detail overlay ── */
+function openShootDetail(idx) {
+  var b  = UPCOMING_SHOOTS[idx];
+  var eq = calcEquipForShoot(b.type);
+  var hasRental = eq.rental.length > 0;
+  var needs = SHOOT_NEEDS[b.type] || {};
+  var catLabels = { cameras:'Camera Bodies', lenses:'Lenses', lighting:'Lights / Flash', memory:'Memory Cards', accessories:'Tripods / Accessories' };
+  var gearStatusLbl = hasRental ? 'Rental Needed' : 'All Gear Ready';
+  var gearStatusCol = hasRental ? '#d97706' : '#15803d';
+
+  var ex = document.getElementById('eq-detail-overlay'); if (ex) ex.remove();
+  var ov = document.createElement('div');
+  ov.id = 'eq-detail-overlay';
+  ov.style.cssText = 'position:fixed;top:0;left:250px;right:0;bottom:0;background:#fff;z-index:9990;overflow-y:auto;font-family:Inter,sans-serif;';
+  function closeOv() { ov.remove(); }
+
+  /* Top bar */
+  var tb = document.createElement('div');
+  tb.style.cssText = 'background:#fff;border-bottom:1px solid #e2e8f0;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:2;';
+  var tLeft = document.createElement('div'); tLeft.style.cssText = 'display:flex;align-items:center;gap:12px;';
+  var backBtn = document.createElement('button');
+  backBtn.innerHTML = '<i class="ti ti-arrow-left" style="font-size:14px;"></i> Back';
+  backBtn.style.cssText = 'background:#f1f5f9;border:none;border-radius:8px;padding:8px 14px;cursor:pointer;color:#374151;font-size:13px;font-weight:600;font-family:Inter,sans-serif;display:flex;align-items:center;gap:6px;';
+  backBtn.addEventListener('click', closeOv);
+  var titleDiv = document.createElement('div');
+  titleDiv.innerHTML = '<div style="font-size:16px;font-weight:700;color:#111827;">' + b.client + '</div>'
+    + '<div style="font-size:13px;color:#9ca3af;margin-top:1px;">' + b.date + ' · ' + b.type + ' Shoot</div>';
+  tLeft.appendChild(backBtn); tLeft.appendChild(titleDiv);
+  var tRight = document.createElement('div'); tRight.style.cssText = 'display:flex;align-items:center;gap:10px;';
+  var gBadge = document.createElement('span');
+  gBadge.textContent = gearStatusLbl;
+  gBadge.style.cssText = 'font-size:13px;font-weight:600;color:' + gearStatusCol + ';border:1px solid ' + gearStatusCol + ';padding:5px 12px;border-radius:6px;';
+  var closeB = document.createElement('button');
+  closeB.innerHTML = '<i class="ti ti-x" style="font-size:15px;"></i>';
+  closeB.style.cssText = 'padding:8px 10px;border:none;border-radius:8px;background:#f1f5f9;cursor:pointer;color:#6b7280;display:flex;align-items:center;';
+  closeB.addEventListener('click', closeOv);
+  tRight.appendChild(gBadge); tRight.appendChild(closeB);
+  tb.appendChild(tLeft); tb.appendChild(tRight);
+  ov.appendChild(tb);
+
+  var cw = document.createElement('div'); cw.style.cssText = 'padding:0 0 40px;';
+  ov.appendChild(cw);
+
+  function mkSection(title) {
+    var sec = document.createElement('div'); sec.style.cssText = 'padding:0 28px 20px;border-bottom:1px solid #edf0f5;';
+    var sh = document.createElement('div'); sh.style.cssText = 'padding:18px 0 10px;border-bottom:2px solid #e2e8f0;margin-bottom:4px;';
+    sh.innerHTML = '<span style="font-size:11px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:0.8px;">' + title + '</span>';
+    sec.appendChild(sh); return sec;
+  }
+  function mkGrid(sec) { var w = document.createElement('div'); w._rc = 0; sec.appendChild(w); return w; }
+  function addRow(w, label, value, valCol) {
+    if (w._rc % 2 === 0) { var row = document.createElement('div'); row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;column-gap:40px;padding:13px 0;border-bottom:1px solid #f0f2f5;'; w.appendChild(row); }
+    w._rc++;
+    var cell = document.createElement('div');
+    cell.innerHTML = '<div style="font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;">' + label + '</div>'
+      + '<div style="font-size:14px;color:' + (valCol||'#111827') + ';">' + (value||'—') + '</div>';
+    w.lastElementChild.appendChild(cell);
+  }
+  function mkBtn(lbl, ico, primary, cb) {
+    var btn = document.createElement('button');
+    btn.innerHTML = '<i class="ti ' + ico + '" style="font-size:14px;"></i><span>' + lbl + '</span>';
+    btn.style.cssText = 'padding:9px 18px;background:' + (primary?'#2563eb':'#fff') + ';color:' + (primary?'#fff':'#374151') + ';border:1px solid ' + (primary?'#2563eb':'#d1d5db') + ';border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:Inter,sans-serif;display:inline-flex;align-items:center;gap:7px;';
+    btn.addEventListener('click', cb); return btn;
+  }
+
+  /* Section 1: Session Details */
+  var c1 = mkSection('Session Details');
+  var g1 = mkGrid(c1);
+  addRow(g1, 'Client / Event',  b.client);
+  addRow(g1, 'Shoot Date',      b.date);
+  addRow(g1, 'Shoot Type',      b.type);
+  addRow(g1, 'Session Budget',  b.budget);
+  addRow(g1, 'Photographer',    'Sarah Kim');
+  addRow(g1, 'Gear Status',     gearStatusLbl, gearStatusCol);
+  cw.appendChild(c1);
+
+  /* Section 2: Equipment Required */
+  var c2 = mkSection('Equipment Required — ' + b.type + ' Shoot');
+  var g2 = mkGrid(c2);
+  ['cameras','lenses','lighting','memory','accessories'].forEach(function(cat) {
+    addRow(g2, catLabels[cat], (needs[cat]||0) + ' needed');
+  });
+  cw.appendChild(c2);
+
+  /* Section 3: Own Gear Available */
+  var c3 = mkSection('Own Gear Available (' + eq.own.length + ' categories covered)');
+  if (eq.own.length === 0) {
+    var emp = document.createElement('div'); emp.style.cssText = 'padding:14px 0;font-size:14px;color:#9ca3af;';
+    emp.textContent = 'No owned gear fully available for this shoot type.'; c3.appendChild(emp);
+  } else {
+    var g3 = mkGrid(c3);
+    eq.own.forEach(function(item) { addRow(g3, catLabels[item.cat], item.need + '× ' + item.label + ' — in stock', '#15803d'); });
+  }
+  cw.appendChild(c3);
+
+  /* Section 4: Rental Required (if any) */
+  if (hasRental) {
+    var c4 = mkSection('Rental Required — ' + eq.rental.length + ' items · Total S$' + eq.rentalCost);
+    var g4 = mkGrid(c4);
+    eq.rental.forEach(function(r) { addRow(g4, catLabels[r.cat], r.qty + '× ' + r.label + ' — ~S$' + r.cost, '#d97706'); });
+    cw.appendChild(c4);
+  }
+
+  /* Section 5: Actions */
+  var c5 = mkSection('Actions');
+  var actBody = document.createElement('div'); actBody.style.cssText = 'padding-top:14px;display:flex;flex-wrap:wrap;gap:10px;';
+  actBody.appendChild(mkBtn('Go to Shoot Equipment Log', 'ti-arrow-right', true,  function(){ closeOv(); }));
+  if (hasRental) actBody.appendChild(mkBtn('Contact Rental Store', 'ti-phone', false, function(){ showToast('Rental store: +65 6123 4567 — Photo Rental SG'); }));
+  actBody.appendChild(mkBtn('Export Gear List', 'ti-download', false, function(){ showToast('Gear list exported for: ' + b.client); }));
+  c5.appendChild(actBody);
+  cw.appendChild(c5);
+
+  document.body.appendChild(ov);
+}
+
+/* ── Consumable detail overlay ── */
+function openConsumableDetail(row) {
+  if (window.event && window.event.target && window.event.target.closest('button')) return;
+  var cells      = row.cells;
+  var name       = cells[0] ? cells[0].querySelector('div').textContent.trim() : '';
+  var note       = cells[0] ? cells[0].querySelectorAll('div')[1].textContent.trim() : '';
+  var stockNum   = cells[1] ? parseInt(cells[1].textContent) : 0;
+  var reorderNum = parseInt(cells[2] ? cells[2].textContent : '0') || 0;
+  var statusEl   = cells[3] ? cells[3].querySelector('.tbl-badge') : null;
+  var statusTxt  = statusEl ? statusEl.textContent.trim() : '';
+  var isOut = statusTxt.indexOf('Out') > -1;
+  var isLow = statusTxt.indexOf('Low') > -1;
+  var statusColor = isOut ? '#dc2626' : isLow ? '#d97706' : '#15803d';
+
+  var META = {
+    'Profoto Flash Tubes':   { cat:'Lighting Consumables', usedFor:'Profoto B10 / D2 Strobe', unit:'Units', supplier:'Profoto Singapore', sku:'PRO-FT-BX', reorderQty:4, lastOrdered:'15 Apr 2026', lastOrderQty:4, lastOrderCost:'S$320' },
+    'Lens Cleaning Tissues': { cat:'Cleaning & Maintenance', usedFor:'All Lenses & Filters', unit:'Packs (50 sheets)', supplier:'Photographic Accessories SG', sku:'PAG-LCT-50', reorderQty:5, lastOrdered:'2 May 2026', lastOrderQty:10, lastOrderCost:'S$45' },
+    'SD Cards (32GB)':       { cat:'Memory & Storage', usedFor:'Sony A7RV / Canon R5', unit:'Units', supplier:'SanDisk Authorised Dealer', sku:'SDSD-32-EXT', reorderQty:3, lastOrdered:'10 Mar 2026', lastOrderQty:5, lastOrderCost:'S$180' },
+    'Camera Batteries':      { cat:'Power Accessories', usedFor:'Sony A7RV / Canon R5', unit:'Units', supplier:'Battery World SG', sku:'BW-NP-FZ100', reorderQty:2, lastOrdered:'22 Feb 2026', lastOrderQty:4, lastOrderCost:'S$240' },
+    'Backdrop Paper Rolls':  { cat:'Studio Backdrops', usedFor:'All Studio Shoots', unit:'Rolls (2.72m wide)', supplier:'Studio Depot Asia', sku:'SDA-BP-272', reorderQty:2, lastOrdered:'1 Jun 2026', lastOrderQty:3, lastOrderCost:'S$150' },
+    'Gaffer Tape':           { cat:'Studio Accessories', usedFor:'Cable Management', unit:'Rolls (50m)', supplier:'Pro Tools SG', sku:'PTS-GT-50BK', reorderQty:3, lastOrdered:'18 May 2026', lastOrderQty:6, lastOrderCost:'S$72' },
+  };
+  var m = META[name] || { cat:'Consumables', usedFor:'General Photography', unit:'Units', supplier:'—', sku:'—', reorderQty:reorderNum, lastOrdered:'—', lastOrderQty:'—', lastOrderCost:'—' };
+
+  var ex = document.getElementById('eq-detail-overlay'); if (ex) ex.remove();
+  var ov = document.createElement('div');
+  ov.id = 'eq-detail-overlay';
+  ov.style.cssText = 'position:fixed;top:0;left:250px;right:0;bottom:0;background:#fff;z-index:9990;overflow-y:auto;font-family:Inter,sans-serif;';
+  function closeOv() { ov.remove(); }
+
+  /* Top bar */
+  var tb = document.createElement('div');
+  tb.style.cssText = 'background:#fff;border-bottom:1px solid #e2e8f0;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:2;';
+  var tLeft = document.createElement('div'); tLeft.style.cssText = 'display:flex;align-items:center;gap:12px;';
+  var backBtn = document.createElement('button');
+  backBtn.innerHTML = '<i class="ti ti-arrow-left" style="font-size:14px;"></i> Back';
+  backBtn.style.cssText = 'background:#f1f5f9;border:none;border-radius:8px;padding:8px 14px;cursor:pointer;color:#374151;font-size:13px;font-weight:600;font-family:Inter,sans-serif;display:flex;align-items:center;gap:6px;';
+  backBtn.addEventListener('click', closeOv);
+  var titleDiv = document.createElement('div');
+  titleDiv.innerHTML = '<div style="font-size:16px;font-weight:700;color:#111827;">' + name + '</div>'
+    + '<div style="font-size:13px;color:#9ca3af;margin-top:1px;">' + m.cat + '</div>';
+  tLeft.appendChild(backBtn); tLeft.appendChild(titleDiv);
+  var tRight = document.createElement('div'); tRight.style.cssText = 'display:flex;align-items:center;gap:10px;';
+  var sBadge = document.createElement('span');
+  sBadge.textContent = statusTxt;
+  sBadge.style.cssText = 'font-size:13px;font-weight:600;color:' + statusColor + ';border:1px solid ' + statusColor + ';padding:5px 12px;border-radius:6px;';
+  var closeB = document.createElement('button');
+  closeB.innerHTML = '<i class="ti ti-x" style="font-size:15px;"></i>';
+  closeB.style.cssText = 'padding:8px 10px;border:none;border-radius:8px;background:#f1f5f9;cursor:pointer;color:#6b7280;display:flex;align-items:center;';
+  closeB.addEventListener('click', closeOv);
+  tRight.appendChild(sBadge); tRight.appendChild(closeB);
+  tb.appendChild(tLeft); tb.appendChild(tRight);
+  ov.appendChild(tb);
+
+  var cw = document.createElement('div'); cw.style.cssText = 'padding:0 0 40px;';
+  ov.appendChild(cw);
+
+  function mkSection(title) {
+    var sec = document.createElement('div'); sec.style.cssText = 'padding:0 28px 20px;border-bottom:1px solid #edf0f5;';
+    var sh = document.createElement('div'); sh.style.cssText = 'padding:18px 0 10px;border-bottom:2px solid #e2e8f0;margin-bottom:4px;';
+    sh.innerHTML = '<span style="font-size:11px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:0.8px;">' + title + '</span>';
+    sec.appendChild(sh); return sec;
+  }
+  function mkGrid(sec) { var w = document.createElement('div'); w._rc = 0; sec.appendChild(w); return w; }
+  function addRow(w, label, value, valCol) {
+    if (w._rc % 2 === 0) { var row = document.createElement('div'); row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;column-gap:40px;padding:13px 0;border-bottom:1px solid #f0f2f5;'; w.appendChild(row); }
+    w._rc++;
+    var cell = document.createElement('div');
+    cell.innerHTML = '<div style="font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;">' + label + '</div>'
+      + '<div style="font-size:14px;color:' + (valCol||'#111827') + ';">' + (value||'—') + '</div>';
+    w.lastElementChild.appendChild(cell);
+  }
+  function mkBtn(lbl, ico, primary, cb) {
+    var btn = document.createElement('button');
+    btn.innerHTML = '<i class="ti ' + ico + '" style="font-size:14px;"></i><span>' + lbl + '</span>';
+    btn.style.cssText = 'padding:9px 18px;background:' + (primary?'#2563eb':'#fff') + ';color:' + (primary?'#fff':'#374151') + ';border:1px solid ' + (primary?'#2563eb':'#d1d5db') + ';border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:Inter,sans-serif;display:inline-flex;align-items:center;gap:7px;';
+    btn.addEventListener('click', cb); return btn;
+  }
+
+  /* Section 1: Item Details */
+  var c1 = mkSection('Item Details');
+  var g1 = mkGrid(c1);
+  addRow(g1, 'Item Name',      name);
+  addRow(g1, 'Category',       m.cat);
+  addRow(g1, 'Used For',       m.usedFor);
+  addRow(g1, 'Unit Type',      m.unit);
+  addRow(g1, 'Supplier',       m.supplier);
+  addRow(g1, 'SKU / Part No.', m.sku);
+  cw.appendChild(c1);
+
+  /* Section 2: Stock Level */
+  var c2 = mkSection('Stock Level');
+  var g2 = mkGrid(c2);
+  addRow(g2, 'Current Stock',    stockNum + ' ' + m.unit,     statusColor);
+  addRow(g2, 'Reorder Level',    reorderNum + ' ' + m.unit);
+  addRow(g2, 'Reorder Quantity', m.reorderQty + ' ' + m.unit);
+  addRow(g2, 'Stock Status',     statusTxt,                   statusColor);
+  cw.appendChild(c2);
+
+  /* Section 3: Order Information */
+  var c3 = mkSection('Order Information');
+  var g3 = mkGrid(c3);
+  addRow(g3, 'Last Order Date',     m.lastOrdered);
+  addRow(g3, 'Last Order Quantity', m.lastOrderQty + ' ' + m.unit);
+  addRow(g3, 'Last Order Cost',     m.lastOrderCost);
+  addRow(g3, 'Supplier',            m.supplier);
+  cw.appendChild(c3);
+
+  /* Section 4: Order History */
+  var c4 = mkSection('Order History');
+  var histItems = [
+    { date: m.lastOrdered, label:'Order received',  detail: m.lastOrderQty + ' ' + m.unit },
+    { date: '12 Jan 2026',  label:'Order placed',   detail: m.reorderQty   + ' ' + m.unit },
+    { date: '3 Nov 2025',   label:'Order received', detail: (m.reorderQty+1) + ' ' + m.unit },
+    { date: '28 Oct 2025',  label:'Stock low alert', detail:'Reorder triggered' },
+  ];
+  histItems.forEach(function(h) {
+    var r = document.createElement('div');
+    r.style.cssText = 'display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-bottom:1px solid #f0f2f5;';
+    r.innerHTML = '<div style="width:7px;height:7px;border-radius:50%;background:#d1d5db;flex-shrink:0;margin-top:5px;"></div>'
+      + '<div style="flex:1;"><div style="display:flex;justify-content:space-between;">'
+      + '<span style="font-size:14px;font-weight:500;color:#111827;">' + h.label + '</span>'
+      + '<span style="font-size:12px;color:#9ca3af;">' + h.date + '</span></div>'
+      + '<div style="font-size:13px;color:#6b7280;margin-top:2px;">' + h.detail + '</div></div>';
+    c4.appendChild(r);
+  });
+  cw.appendChild(c4);
+
+  /* Section 5: Actions */
+  var c5 = mkSection('Actions');
+  var actBody = document.createElement('div'); actBody.style.cssText = 'padding-top:14px;display:flex;flex-wrap:wrap;gap:10px;';
+  if (isOut || isLow) actBody.appendChild(mkBtn('Place Reorder Now',   'ti-shopping-cart', true,  function(){ showToast('Reorder placed for ' + name); closeOv(); }));
+  actBody.appendChild(mkBtn('Update Stock Count', 'ti-edit',      !isOut && !isLow, function(){ showToast('Stock count updated for ' + name); closeOv(); }));
+  actBody.appendChild(mkBtn('Export Stock Report','ti-download',  false,            function(){ showToast('Report exported for: ' + name); }));
+  c5.appendChild(actBody);
+  cw.appendChild(c5);
+
+  document.body.appendChild(ov);
+}
+
+/* ── Auto-render planner list on tab switch (called from switchEqSub) ── */
+function renderPlannerOnSwitch() { renderPlannerTable(); }
+</script>
+
+<script src="shootlog.js"></script>
+<script src="../shared/sidebar.js"></script>
+</body>
+</html>

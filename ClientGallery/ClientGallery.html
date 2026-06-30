@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Client Gallery — LensFlow</title>
+  <title>Client Gallery — Zoho Photography Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -182,7 +182,7 @@
       <div class="topbar-left">
         <div class="topbar-title">Client Gallery</div>
         <nav class="breadcrumb">
-          <a href="#">LensFlow</a>
+          <a href="#">Zoho Photography</a>
           <i class="ti ti-chevron-right"></i>
           <span>Client Gallery</span>
         </nav>
@@ -1114,7 +1114,7 @@
 function copyGalleryLink(btn) {
   var card = btn.closest('.gallery-card');
   var name = card ? (card.querySelector('.gallery-name') || {textContent:''}).textContent.trim() : '';
-  var fakeUrl = 'https://gallery.lensflow.io/' + name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-+$/,'');
+  var fakeUrl = 'https://gallery.zohophotography.io/' + name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-+$/,'');
   navigator.clipboard.writeText(fakeUrl).then(function() {
     var orig = btn.innerHTML;
     btn.innerHTML = '<i class="ti ti-check"></i> Copied!';
@@ -1144,7 +1144,7 @@ function copyGalleryLink(btn) {
 <script>
 // ── WATERMARK SETTING ─────────────────────────────────────────
 function toggleWatermark(enabled) {
-  localStorage.setItem('lf_watermark', enabled ? 'true' : 'false');
+  localStorage.setItem('zp_watermark', enabled ? 'true' : 'false');
   // Show visual feedback
   var msg = enabled ? 'Watermark enabled — applied to all client preview images' : 'Watermark disabled — clients see clean images';
   var toast = document.createElement('div');
@@ -2127,7 +2127,7 @@ function openNotifyClient(btn) {
 ' +
     '📸 Gallery: ' + name + '
 ' +
-    '🔗 Link: https://lensflow.app/gallery/[LINK]
+    '🔗 Link: https://zohophotography.app/gallery/[LINK]
 ' +
     '🔒 Password: [PASSWORD]
 ' +
@@ -2242,7 +2242,7 @@ function restoreGallery(btn) {
 function tblCopyLink(btn) {
   var row = btn.closest('tr');
   var name = row ? (row.querySelector('td strong')||{}).textContent||'gallery' : 'gallery';
-  var url = 'https://gallery.lensflow.io/' + name.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+  var url = 'https://gallery.zohophotography.io/' + name.toLowerCase().replace(/[^a-z0-9]+/g,'-');
   navigator.clipboard.writeText(url).catch(function(){});
   var orig = btn.innerHTML; btn.innerHTML = '<i class="ti ti-check"></i>';
   btn.style.color = '#15803d';

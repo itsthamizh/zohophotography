@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shoot Planning — Zoho Photography Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',sans-serif; background:#f0f2f7; color:#1a1d2e; min-height:100vh; -webkit-font-smoothing:antialiased; }
+    .app { display:flex; min-height:100vh; }
+    .main-wrapper { margin-left:250px; flex:1; display:flex; flex-direction:column; min-height:100vh; }
+
+    /* Topbar */
+    .topbar { height:62px; background:#fff; border-bottom:1px solid #e8edf3; display:flex; align-items:center; padding:0 28px; gap:14px; position:sticky; top:0; z-index:50; }
+    .topbar-title { font-size:15.5px; font-weight:600; color:#1a1d2e; }
+    .topbar-sub { font-size:12.5px; color:#94a3b8; }
+    .icon-btn { width:36px; height:36px; border-radius:8px; border:1px solid #e8edf3; background:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#64748b; font-size:18px; }
+    .t-avatar { width:29px; height:29px; border-radius:50%; background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:600; color:#fff; }
+    .topbar-user { display:flex; align-items:center; gap:8px; padding:5px 10px; border-radius:8px; cursor:pointer; border:1px solid #e8edf3; }
+    .t-name { font-size:13.5px; font-weight:500; color:#1a1d2e; }
+
+    /* Content */
+    .content { padding:26px 28px 50px; }
+    .page-header { margin-bottom:22px; display:flex; align-items:center; justify-content:space-between; }
+    .page-title { font-size:21px; font-weight:700; color:#1a1d2e; }
+    .page-sub { font-size:13.5px; color:#64748b; margin-top:3px; }
+
+    /* Role switcher */
+    .role-switcher { display:flex; background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:4px; gap:4px; }
+    .role-btn { padding:8px 18px; border:none; background:none; border-radius:7px; font-size:13px; font-weight:500; color:#64748b; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:6px; transition:all .15s; }
+    .role-btn.active { background:#2563eb; color:#fff; font-weight:600; }
+
+    /* Cards */
+    .card { background:#fff; border-radius:13px; border:1px solid #e8edf3; overflow:hidden; margin-bottom:18px; }
+    .card-head { padding:15px 20px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; }
+    .card-title { font-size:14px; font-weight:600; color:#1a1d2e; display:flex; align-items:center; gap:7px; }
+
+    /* Status badges */
+    .badge { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:11.5px; font-weight:500; white-space:nowrap; }
+    .badge .dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .b-completed   { background:#dcfce7; color:#15803d; } .b-completed   .dot { background:#22c55e; }
+    .b-allocated   { background:#dbeafe; color:#1d4ed8; } .b-allocated   .dot { background:#3b82f6; }
+    .b-pending     { background:#f1f5f9; color:#475569; } .b-pending     .dot { background:#94a3b8; }
+    .b-in-progress { background:#fef9c3; color:#a16207; } .b-in-progress .dot { background:#f59e0b; }
+
+    /* Shoot card (Admin view) */
+    .shoot-card { border:1px solid #e8edf3; border-radius:12px; background:#fff; padding:0; overflow:hidden; margin-bottom:14px; transition:box-shadow .15s; }
+    .shoot-card:hover { box-shadow:0 4px 18px rgba(0,0,0,.07); }
+    .shoot-card-header { padding:14px 18px 12px; border-bottom:1px solid #f4f6fa; display:flex; align-items:center; justify-content:space-between; }
+    .shoot-card-body   { padding:14px 18px; }
+
+    /* Crew rows */
+    .crew-row { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid #f4f6fa; }
+    .crew-row:last-child { border-bottom:none; }
+    .crew-av { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; }
+    .crew-name { font-size:13.5px; font-weight:500; color:#111827; }
+    .crew-role { font-size:12px; color:#9ca3af; }
+
+    /* Gear tags */
+    .gear-tag { display:inline-flex; align-items:center; gap:5px; background:#f1f5f9; color:#475569; padding:3px 9px; border-radius:5px; font-size:12px; font-weight:500; margin:2px; }
+
+    /* Btn */
+    .btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer; border:none; font-family:inherit; transition:all .13s; }
+    .btn-primary { background:#2563eb; color:#fff; }
+    .btn-primary:hover { background:#1d4ed8; }
+    .btn-outline { background:#fff; color:#374151; border:1px solid #d1d5db; }
+    .btn-outline:hover { background:#f9fafb; }
+    .btn-green  { background:#16a34a; color:#fff; }
+    .btn-green:hover { background:#15803d; }
+    .btn-red    { background:#dc2626; color:#fff; }
+    .btn-red:hover { background:#b91c1c; }
+    .btn-amber  { background:#d97706; color:#fff; }
+
+    /* My Schedule (photographer view) */
+    .my-schedule-card { border-radius:14px; border:1.5px solid #e2e8f0; background:#fff; padding:24px; margin-bottom:20px; }
+    .my-schedule-header { display:flex; align-items:flex-start; gap:18px; margin-bottom:18px; }
+    .type-icon { width:52px; height:52px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; }
+
+    /* Info grid */
+    .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px 32px; margin-bottom:18px; }
+    .info-cell-label { font-size:11px; font-weight:600; color:#9ca3af; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
+    .info-cell-val   { font-size:14px; color:#111827; }
+
+    /* Today highlight */
+    .today-bar { background:linear-gradient(90deg,#2563eb,#7c3aed); color:#fff; border-radius:10px; padding:13px 18px; display:flex; align-items:center; gap:12px; margin-bottom:22px; }
+
+    /* Stats row */
+    .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px; }
+    .stat-card { background:#fff; border-radius:12px; padding:18px 18px 16px; border:1px solid #e8edf3; }
+    .stat-lbl { font-size:11.5px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:.6px; margin-bottom:5px; }
+    .stat-val { font-size:26px; font-weight:800; color:#1a1d2e; letter-spacing:-1px; }
+    .stat-sub { font-size:12px; color:#64748b; margin-top:5px; }
+
+    /* Hidden */
+    .view-panel { display:none; }
+    .view-panel.active { display:block; }
+
+    /* Toast */
+    #sp-toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%); background:#1a1d2e; color:#fff; padding:12px 24px; border-radius:10px; font-size:14px; font-weight:500; z-index:9999; opacity:0; transition:opacity .3s; pointer-events:none; font-family:Inter,sans-serif; }
+    #sp-toast.show { opacity:1; }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div id="sidebar-root"></div>
+  <div class="main-wrapper">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div>
+        <div class="topbar-title">Shoot Planning</div>
+        <div class="topbar-sub" id="topbar-date"></div>
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
+        <!-- Role Switcher -->
+        <div class="role-switcher">
+          <button class="role-btn active" onclick="switchView('admin',this)" id="btn-admin">
+            <i class="ti ti-layout-dashboard" style="font-size:14px;"></i> Studio Admin
+          </button>
+          <button class="role-btn" onclick="switchView('photographer',this)" id="btn-photo">
+            <i class="ti ti-camera" style="font-size:14px;"></i> My Schedule
+          </button>
+        </div>
+        <div class="icon-btn" title="Notifications" style="position:relative;">
+          <i class="ti ti-bell"></i>
+          <div class="notif-dot" style="position:absolute;top:7px;right:7px;width:7px;height:7px;background:#ef4444;border-radius:50%;border:1.5px solid #fff;"></div>
+        </div>
+        <div class="topbar-user">
+          <div class="t-avatar" id="user-initials">AK</div>
+          <div class="t-name" id="user-name-top">Alex Kumar</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- ═══ ADMIN VIEW ═══ -->
+      <div id="view-admin" class="view-panel active">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Shoot Planning — Studio Admin</div>
+            <div class="page-sub">Plan crew, equipment, and track all upcoming shoots</div>
+          </div>
+          <button class="btn btn-primary" onclick="showToastSP('Opening Equipment Inventory to allocate gear…')">
+            <i class="ti ti-plus"></i> New Shoot
+          </button>
+        </div>
+
+        <!-- KPI Stats -->
+        <div class="stats-row" id="admin-stats"></div>
+
+        <!-- Filter bar -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+          <div style="font-size:13px;font-weight:600;color:#374151;">Filter:</div>
+          <button class="btn btn-outline" onclick="filterShoots('all',this)" id="f-all" style="background:#2563eb;color:#fff;border-color:#2563eb;">All</button>
+          <button class="btn btn-outline" onclick="filterShoots('pending',this)">Not Planned</button>
+          <button class="btn btn-outline" onclick="filterShoots('allocated',this)">Crew &amp; Gear Ready</button>
+          <button class="btn btn-outline" onclick="filterShoots('in_progress',this)">In Progress</button>
+          <button class="btn btn-outline" onclick="filterShoots('completed',this)">Completed</button>
+        </div>
+
+        <!-- Shoot Cards -->
+        <div id="admin-shoot-list"></div>
+      </div>
+
+      <!-- ═══ PHOTOGRAPHER VIEW ═══ -->
+      <div id="view-photographer" class="view-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">My Schedule</div>
+            <div class="page-sub">Your assigned shoots, crew, and allocated gear</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="font-size:13px;color:#64748b;">Viewing as:</div>
+            <select id="staff-selector" onchange="renderPhotographerView()" style="border:1.5px solid #e2e8f0;border-radius:8px;padding:7px 12px;font-size:13px;font-family:inherit;outline:none;background:#fff;color:#111827;font-weight:500;">
+            </select>
+          </div>
+        </div>
+        <div id="photo-view-content"></div>
+      </div>
+
+    </div><!-- /content -->
+  </div>
+</div>
+
+<div id="sp-toast"></div>
+
+<script src="../shared/sidebar.js"></script>
+<script>
+// ── Shared data (mirrors shootlog.js) ────────────────────────
+var STAFF_LIST = [
+  { id:'STF-001', name:'Alex Kumar',   role:'Lead Photographer',   phone:'+65 9123 4567', initials:'AK', color:'#2563eb' },
+  { id:'STF-002', name:'Priya Nair',   role:'Junior Photographer', phone:'+65 8765 4321', initials:'PN', color:'#7c3aed' },
+  { id:'STF-003', name:'Ravi Singh',   role:'Light Man',           phone:'+65 9876 5432', initials:'RS', color:'#d97706' },
+  { id:'STF-004', name:'Maya Chen',    role:'Lighting Assistant',  phone:'+65 9111 2222', initials:'MC', color:'#059669' },
+  { id:'STF-005', name:'Thamizh S.',   role:'Studio Manager',      phone:'+65 9000 0001', initials:'TS', color:'#dc2626' },
+];
+
+var SHOOT_DATA = [
+  { id:'SA-001', shootName:'Emma & Jake — Wedding',    date:'Jun 15, 2026', type:'Wedding',    status:'completed',
+    team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-002',name:'Priya Nair',role:'Junior Photographer',initials:'PN',color:'#7c3aed'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'},{staffId:'STF-004',name:'Maya Chen',role:'Lighting Assistant',initials:'MC',color:'#059669'}],
+    gear:['Camera','Camera','Lighting','Lighting','Lens','Accessory'], gearCount:6 },
+  { id:'SA-002', shootName:'Nexus Corp — Headshots',   date:'Jun 17, 2026', type:'Corporate',  status:'allocated',
+    team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'}],
+    gear:['Camera','Lighting','Lens'], gearCount:3 },
+  { id:'SA-003', shootName:'Liu Family — Portrait',    date:'Jun 20, 2026', type:'Portrait',   status:'pending',
+    team:[{staffId:'STF-002',name:'Priya Nair',role:'Lead Photographer',initials:'PN',color:'#7c3aed'}],
+    gear:[], gearCount:0 },
+  { id:'SA-004', shootName:'Sarah & Tom — Engagement', date:'Jun 22, 2026', type:'Engagement', status:'pending',
+    team:[], gear:[], gearCount:0 },
+  { id:'SA-005', shootName:'Horizon Events — Gala',   date:'Jun 28, 2026', type:'Event',      status:'pending',
+    team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-002',name:'Priya Nair',role:'Junior Photographer',initials:'PN',color:'#7c3aed'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'},{staffId:'STF-004',name:'Maya Chen',role:'Lighting Assistant',initials:'MC',color:'#059669'}],
+    gear:[], gearCount:0 },
+  { id:'SA-006', shootName:'Patel — Wedding',          date:'Jul 1, 2026',  type:'Wedding',    status:'allocated',
+    team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-002',name:'Priya Nair',role:'Junior Photographer',initials:'PN',color:'#7c3aed'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'},{staffId:'STF-004',name:'Maya Chen',role:'Lighting Assistant',initials:'MC',color:'#059669'}],
+    gear:['Camera','Camera','Lighting','Lighting','Lens','Lens','Accessory','Accessory','Memory'], gearCount:9 },
+];
+
+var _activeFilter = 'all';
+var _currentView  = 'admin';
+
+// ── Topbar date ───────────────────────────────────────────────
+document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+// ── View switch ───────────────────────────────────────────────
+function switchView(view, btn) {
+  _currentView = view;
+  document.querySelectorAll('.role-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('.view-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById('view-' + view).classList.add('active');
+  if (view === 'photographer') renderPhotographerView();
+  if (view === 'admin') renderAdminView();
+}
+
+// ── Status helpers ────────────────────────────────────────────
+var STATUS_LBL  = { completed:'Completed', allocated:'Crew & Gear Ready', pending:'Not Planned', in_progress:'In Progress' };
+var STATUS_CLS  = { completed:'b-completed', allocated:'b-allocated', pending:'b-pending', in_progress:'b-in-progress' };
+var TYPE_ICONS  = { Wedding:'ti-rings-wedding', Corporate:'ti-briefcase', Portrait:'ti-user', Engagement:'ti-heart', Event:'ti-confetti', Commercial:'ti-building-store' };
+var TYPE_COLORS = { Wedding:'#fce7f3', Corporate:'#dbeafe', Portrait:'#f3e8ff', Engagement:'#fce7f3', Event:'#dcfce7', Commercial:'#ffedd5' };
+var TYPE_ICON_C = { Wedding:'#db2777', Corporate:'#1d4ed8', Portrait:'#7e22ce', Engagement:'#db2777', Event:'#15803d', Commercial:'#c2410c' };
+
+// ── Toast ─────────────────────────────────────────────────────
+function showToastSP(msg) {
+  var t = document.getElementById('sp-toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2800);
+}
+
+// ── ADMIN VIEW ────────────────────────────────────────────────
+function renderAdminView() {
+  renderAdminStats();
+  renderAdminShoots(_activeFilter);
+}
+
+function renderAdminStats() {
+  var total  = SHOOT_DATA.length;
+  var done   = SHOOT_DATA.filter(function(s){ return s.status==='completed'; }).length;
+  var ready  = SHOOT_DATA.filter(function(s){ return s.status==='allocated'; }).length;
+  var unplan = SHOOT_DATA.filter(function(s){ return s.status==='pending'; }).length;
+  document.getElementById('admin-stats').innerHTML =
+    mkStat('Total Shoots', total, 'ti-calendar-event', '#2563eb', 'This month') +
+    mkStat('Ready to Shoot', ready, 'ti-circle-check-filled', '#16a34a', 'Crew & gear done') +
+    mkStat('Needs Planning', unplan, 'ti-alert-triangle', '#d97706', 'Action required') +
+    mkStat('Completed', done, 'ti-camera-check', '#7c3aed', 'Shoots wrapped up');
+}
+
+function mkStat(lbl, val, ico, col, sub) {
+  return '<div class="stat-card">'
+    + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">'
+    + '<div style="width:36px;height:36px;border-radius:9px;background:' + col + '1a;display:flex;align-items:center;justify-content:center;">'
+    + '<i class="ti ' + ico + '" style="font-size:18px;color:' + col + ';"></i></div>'
+    + '<div class="stat-lbl">' + lbl + '</div></div>'
+    + '<div class="stat-val">' + val + '</div>'
+    + '<div class="stat-sub">' + sub + '</div></div>';
+}
+
+function filterShoots(status, btn) {
+  _activeFilter = status;
+  document.querySelectorAll('.content button.btn-outline, .content button.btn-primary').forEach(function(b){
+    if (['all','pending','allocated','in_progress','completed'].some(function(s){ return b.textContent.toLowerCase().includes(s==='all'?'all':STATUS_LBL[s].toLowerCase().split(' ')[0]); })) {
+      b.style.background = ''; b.style.color = ''; b.style.borderColor = '';
+    }
+  });
+  btn.style.background = '#2563eb'; btn.style.color = '#fff'; btn.style.borderColor = '#2563eb';
+  renderAdminShoots(status);
+}
+
+function renderAdminShoots(filter) {
+  var list = document.getElementById('admin-shoot-list');
+  var shoots = filter === 'all' ? SHOOT_DATA : SHOOT_DATA.filter(function(s){ return s.status === filter; });
+  if (!shoots.length) {
+    list.innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8;font-size:14px;">No shoots match this filter.</div>';
+    return;
+  }
+  list.innerHTML = shoots.map(function(shoot) {
+    var typeCol   = TYPE_COLORS[shoot.type] || '#f1f5f9';
+    var typeIco   = TYPE_ICONS[shoot.type]  || 'ti-camera';
+    var typeIcoC  = TYPE_ICON_C[shoot.type] || '#475569';
+    var statusCls = STATUS_CLS[shoot.status] || 'b-pending';
+    var statusLbl = STATUS_LBL[shoot.status] || 'Not Planned';
+
+    // Crew avatars
+    var crewAv = shoot.team && shoot.team.length
+      ? shoot.team.map(function(m){ return '<div title="' + m.name + ' — ' + m.role + '" style="width:28px;height:28px;border-radius:50%;background:' + m.color + ';border:2px solid #fff;display:inline-flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;color:#fff;margin-right:-6px;">' + m.initials + '</div>'; }).join('')
+      : '<span style="font-size:12.5px;color:#94a3b8;font-style:italic;">No crew assigned</span>';
+
+    // Gear
+    var gearHtml = shoot.gearCount > 0
+      ? '<span style="font-size:12.5px;color:#64748b;"><i class="ti ti-camera" style="font-size:13px;margin-right:4px;"></i>' + shoot.gearCount + ' items allocated</span>'
+      : '<span style="font-size:12.5px;color:#94a3b8;font-style:italic;">No gear allocated</span>';
+
+    // Readiness checklist
+    var crewOk = shoot.team && shoot.team.length > 0;
+    var gearOk = shoot.gearCount > 0;
+    var check = function(ok, lbl) {
+      return '<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:' + (ok?'#15803d':'#94a3b8') + ';">'
+        + '<i class="ti ' + (ok?'ti-circle-check':'ti-circle-x') + '" style="font-size:13px;"></i>' + lbl + '</div>';
+    };
+
+    // Action button
+    var actionBtn = '';
+    if (shoot.status === 'pending') {
+      actionBtn = '<button onclick="showToastSP(\'Open Equipment Inventory → Shoot Log to plan: ' + shoot.shootName + '\')" class="btn btn-primary" style="font-size:12px;padding:7px 14px;"><i class="ti ti-users-plus" style="font-size:13px;"></i> Plan Shoot</button>';
+    } else if (shoot.status === 'allocated') {
+      actionBtn = '<button onclick="showToastSP(\'Start shoot for: ' + shoot.shootName + '\')" class="btn btn-green" style="font-size:12px;padding:7px 14px;"><i class="ti ti-player-play" style="font-size:13px;"></i> Start Shoot</button>';
+    } else if (shoot.status === 'in_progress') {
+      actionBtn = '<button onclick="showToastSP(\'End shoot for: ' + shoot.shootName + '\')" class="btn btn-red" style="font-size:12px;padding:7px 14px;"><i class="ti ti-player-stop" style="font-size:13px;"></i> End Shoot</button>';
+    }
+
+    return '<div class="shoot-card">'
+      + '<div class="shoot-card-header">'
+        + '<div style="display:flex;align-items:center;gap:14px;">'
+          + '<div class="type-icon" style="background:' + typeCol + ';width:44px;height:44px;border-radius:11px;">'
+            + '<i class="ti ' + typeIco + '" style="font-size:22px;color:' + typeIcoC + ';"></i></div>'
+          + '<div>'
+            + '<div style="font-size:15px;font-weight:700;color:#111827;">' + shoot.shootName + '</div>'
+            + '<div style="font-size:12.5px;color:#9ca3af;margin-top:2px;">'
+              + '<i class="ti ti-calendar" style="font-size:12px;margin-right:4px;"></i>' + shoot.date
+              + ' &nbsp;·&nbsp; <i class="ti ti-tag" style="font-size:12px;margin-right:4px;"></i>' + shoot.type
+            + '</div>'
+          + '</div>'
+        + '</div>'
+        + '<div style="display:flex;align-items:center;gap:10px;">'
+          + '<span class="badge ' + statusCls + '"><span class="dot"></span>' + statusLbl + '</span>'
+          + actionBtn
+        + '</div>'
+      + '</div>'
+
+      + '<div class="shoot-card-body">'
+        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">'
+
+          + '<div>'
+            + '<div style="font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;">Crew Assigned</div>'
+            + '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">' + crewAv + '</div>'
+            + (shoot.team && shoot.team.length
+                ? '<div style="margin-top:10px;">' + shoot.team.map(function(m){
+                    return '<div style="font-size:12.5px;color:#374151;margin-bottom:3px;"><span style="font-weight:600;">' + m.name + '</span> <span style="color:#9ca3af;">— ' + m.role + '</span></div>';
+                  }).join('') + '</div>'
+                : '')
+          + '</div>'
+
+          + '<div>'
+            + '<div style="font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;">Equipment</div>'
+            + gearHtml
+            + '<div style="margin-top:14px;display:flex;flex-direction:column;gap:5px;">'
+              + check(crewOk, 'Crew assigned')
+              + check(gearOk, 'Gear allocated')
+              + check(shoot.status === 'completed', 'Shoot completed')
+            + '</div>'
+          + '</div>'
+
+        + '</div>'
+      + '</div>'
+    + '</div>';
+  }).join('');
+}
+
+// ── PHOTOGRAPHER VIEW ─────────────────────────────────────────
+function renderPhotographerView() {
+  // Populate staff selector
+  var sel = document.getElementById('staff-selector');
+  if (!sel.options.length) {
+    STAFF_LIST.forEach(function(s) {
+      var opt = document.createElement('option');
+      opt.value = s.id; opt.textContent = s.name + ' (' + s.role + ')';
+      sel.appendChild(opt);
+    });
+  }
+  var staffId = sel.value || 'STF-001';
+  var staff   = STAFF_LIST.find(function(s){ return s.id === staffId; }) || STAFF_LIST[0];
+
+  // Update topbar name
+  document.getElementById('user-initials').textContent = staff.initials;
+  document.getElementById('user-initials').style.background = 'linear-gradient(135deg,' + staff.color + ',#374151)';
+  document.getElementById('user-name-top').textContent = staff.name;
+
+  // My shoots
+  var myShoots = SHOOT_DATA.filter(function(s){
+    return s.team && s.team.some(function(m){ return m.staffId === staffId; });
+  });
+
+  var today = new Date();
+  var todayStr = today.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  var tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+
+  var upcoming = myShoots.filter(function(s){ return s.status !== 'completed'; });
+  var past     = myShoots.filter(function(s){ return s.status === 'completed'; });
+
+  var html = '';
+
+  // Today banner
+  html += '<div class="today-bar">'
+    + '<div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
+      + '<i class="ti ti-sun" style="font-size:22px;"></i></div>'
+    + '<div>'
+      + '<div style="font-size:15px;font-weight:700;">Good day, ' + staff.name + '!</div>'
+      + '<div style="font-size:12.5px;opacity:.85;margin-top:2px;">Today is ' + today.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}) + ' · You have ' + upcoming.length + ' upcoming shoot' + (upcoming.length!==1?'s':'') + '</div>'
+    + '</div>'
+  + '</div>';
+
+  // Personal stats
+  html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;">'
+    + mkStat('Total Assigned', myShoots.length, 'ti-calendar-event', staff.color, 'All shoots')
+    + mkStat('Upcoming', upcoming.length, 'ti-clock', '#d97706', 'Not yet completed')
+    + mkStat('Completed', past.length, 'ti-circle-check', '#16a34a', 'Wrapped up')
+  + '</div>';
+
+  if (!upcoming.length) {
+    html += '<div class="card" style="text-align:center;padding:40px;">'
+      + '<div style="font-size:40px;margin-bottom:12px;">📷</div>'
+      + '<div style="font-size:16px;font-weight:600;color:#374151;margin-bottom:6px;">No upcoming shoots</div>'
+      + '<div style="font-size:13.5px;color:#94a3b8;">Check back after new assignments are made.</div>'
+    + '</div>';
+  } else {
+    html += '<div style="font-size:14px;font-weight:700;color:#111827;margin-bottom:14px;">Upcoming Shoots</div>';
+    upcoming.forEach(function(shoot) {
+      var myRole = '';
+      var myMember = shoot.team && shoot.team.find(function(m){ return m.staffId === staffId; });
+      if (myMember) myRole = myMember.role;
+
+      var typeCol  = TYPE_COLORS[shoot.type]  || '#f1f5f9';
+      var typeIco  = TYPE_ICONS[shoot.type]   || 'ti-camera';
+      var typeIcoC = TYPE_ICON_C[shoot.type]  || '#475569';
+      var statusCls = STATUS_CLS[shoot.status] || 'b-pending';
+      var statusLbl = STATUS_LBL[shoot.status] || 'Not Planned';
+
+      // Teammates (excluding self)
+      var teammates = (shoot.team || []).filter(function(m){ return m.staffId !== staffId; });
+
+      html += '<div class="my-schedule-card">'
+        + '<div class="my-schedule-header">'
+          + '<div class="type-icon" style="background:' + typeCol + ';">'
+            + '<i class="ti ' + typeIco + '" style="font-size:26px;color:' + typeIcoC + ';"></i></div>'
+          + '<div style="flex:1;">'
+            + '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'
+              + '<div style="font-size:17px;font-weight:700;color:#111827;">' + shoot.shootName + '</div>'
+              + '<span class="badge ' + statusCls + '"><span class="dot"></span>' + statusLbl + '</span>'
+            + '</div>'
+            + '<div style="font-size:13px;color:#9ca3af;margin-top:4px;">'
+              + '<i class="ti ti-calendar" style="font-size:12px;margin-right:4px;"></i>' + shoot.date
+              + ' &nbsp;·&nbsp; ' + shoot.type
+            + '</div>'
+            + (myRole ? '<div style="margin-top:6px;"><span style="background:' + staff.color + '1a;color:' + staff.color + ';font-size:12px;font-weight:600;padding:3px 10px;border-radius:5px;">Your Role: ' + myRole + '</span></div>' : '')
+          + '</div>'
+        + '</div>'
+
+        + '<div class="info-grid">'
+          + '<div><div class="info-cell-label">Date</div><div class="info-cell-val">' + shoot.date + '</div></div>'
+          + '<div><div class="info-cell-label">Shoot Type</div><div class="info-cell-val">' + shoot.type + '</div></div>'
+          + '<div><div class="info-cell-label">Your Role</div><div class="info-cell-val" style="color:' + staff.color + ';font-weight:600;">' + (myRole||'—') + '</div></div>'
+          + '<div><div class="info-cell-label">Gear Allocated</div><div class="info-cell-val">' + (shoot.gearCount > 0 ? shoot.gearCount + ' items' : 'Not yet allocated') + '</div></div>'
+        + '</div>'
+
+        // Teammates
+        + (teammates.length ? '<div style="margin-bottom:16px;">'
+          + '<div style="font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;">Your Team</div>'
+          + teammates.map(function(m){
+              return '<div class="crew-row">'
+                + '<div class="crew-av" style="background:' + m.color + ';">' + m.initials + '</div>'
+                + '<div><div class="crew-name">' + m.name + '</div><div class="crew-role">' + m.role + '</div></div>'
+                + (m.phone ? '<div style="font-size:12px;color:#6b7280;margin-left:auto;">' + m.phone + '</div>' : '')
+              + '</div>';
+            }).join('')
+          + '</div>'
+          : '')
+
+        // Gear list (abbreviated)
+        + (shoot.gearCount > 0 ? '<div style="margin-bottom:16px;">'
+          + '<div style="font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;">Allocated Gear (' + shoot.gearCount + ' items)</div>'
+          + '<div>' + shoot.gear.map(function(cat){
+              var catIco = {Camera:'ti-camera',Lens:'ti-adjustments',Lighting:'ti-bolt',Memory:'ti-database',Accessory:'ti-tool'}[cat]||'ti-package';
+              return '<span class="gear-tag"><i class="ti ' + catIco + '" style="font-size:12px;"></i>' + cat + '</span>';
+            }).join('') + '</div>'
+          + '</div>'
+          : '<div style="margin-bottom:16px;padding:12px 14px;background:#fef9c3;border-radius:8px;font-size:13px;color:#a16207;"><i class="ti ti-alert-triangle" style="margin-right:6px;"></i>Gear not yet allocated for this shoot</div>')
+
+        // Action buttons
+        + '<div style="display:flex;flex-wrap:wrap;gap:8px;">'
+          + (shoot.status === 'allocated' ? '<button onclick="showToastSP(\'Shoot started! Go make amazing photos 📷\')" class="btn btn-green"><i class="ti ti-player-play"></i> Start Shoot</button>' : '')
+          + (shoot.status === 'in_progress' ? '<button onclick="showToastSP(\'Shoot ended. Please log equipment usage.\')" class="btn btn-red"><i class="ti ti-player-stop"></i> End Shoot</button>' : '')
+          + (shoot.status !== 'completed' && shoot.status !== 'pending' ? '<button onclick="showToastSP(\'Opening equipment usage log…\')" class="btn btn-outline"><i class="ti ti-camera-check"></i> Log Usage</button>' : '')
+          + '<button onclick="showToastSP(\'Opening shoot details in Equipment Inventory…\')" class="btn btn-outline"><i class="ti ti-eye"></i> View Full Details</button>'
+        + '</div>'
+      + '</div>';
+    });
+  }
+
+  // Past shoots
+  if (past.length) {
+    html += '<div style="font-size:14px;font-weight:700;color:#111827;margin:24px 0 14px;">Past Shoots</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">';
+    past.forEach(function(shoot) {
+      var myMember = shoot.team && shoot.team.find(function(m){ return m.staffId === staffId; });
+      var myRole   = myMember ? myMember.role : '';
+      html += '<div style="background:#fff;border:1px solid #e8edf3;border-radius:11px;padding:16px;">'
+        + '<div style="font-size:14px;font-weight:600;color:#111827;margin-bottom:4px;">' + shoot.shootName + '</div>'
+        + '<div style="font-size:12.5px;color:#9ca3af;margin-bottom:8px;">' + shoot.date + '</div>'
+        + (myRole ? '<div style="font-size:12px;color:#475569;margin-bottom:6px;">Role: <strong>' + myRole + '</strong></div>' : '')
+        + '<span class="badge b-completed"><span class="dot"></span>Completed</span>'
+      + '</div>';
+    });
+    html += '</div>';
+  }
+
+  document.getElementById('photo-view-content').innerHTML = html;
+}
+
+// ── Init ──────────────────────────────────────────────────────
+renderAdminView();
+</script>
+</body>
+</html>

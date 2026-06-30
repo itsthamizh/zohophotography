@@ -1,5 +1,5 @@
 /**
- * LensFlow — Shared Sidebar (self-contained)
+ * Zoho Photography — Shared Sidebar (self-contained)
  * CSS + HTML live in this one file. No external loads needed.
  * Works with file://, http://, and https:// protocols.
  */
@@ -85,12 +85,14 @@
   /* ── 2. Detect active page and base path ─────────────────── */
   var p = (window.location.pathname + window.location.href).toLowerCase();
   var inSub = (
-    p.indexOf('/studiomanager/')    > -1 ||
-    p.indexOf('/clientgallery/')    > -1 ||
-    p.indexOf('/website/')          > -1 ||
-    p.indexOf('/store/')            > -1 ||
-    p.indexOf('/mobilegalleryapp/') > -1 ||
-    p.indexOf('/settings/')         > -1
+    p.indexOf('/studiomanager/')      > -1 ||
+    p.indexOf('/clientgallery/')      > -1 ||
+    p.indexOf('/equipmentinventory/') > -1 ||
+    p.indexOf('/shootplanning/')      > -1 ||
+    p.indexOf('/website/')            > -1 ||
+    p.indexOf('/store/')              > -1 ||
+    p.indexOf('/mobilegalleryapp/')   > -1 ||
+    p.indexOf('/settings/')           > -1
   );
   var r = inSub ? '../' : '';
 
@@ -109,33 +111,39 @@
       '<div class="sidebar-logo">' +
         '<div class="logo-icon"><i class="ph-fill ph-camera" style="color:#fff;font-size:20px;"></i></div>' +
         '<div>' +
-          '<div class="logo-name">LensFlow</div>' +
-          '<div class="logo-tag">Studio Platform</div>' +
+          '<div class="logo-name">Zoho Photography</div>' +
+          '<div class="logo-tag">Photography Platform</div>' +
         '</div>' +
       '</div>' +
 
       '<div class="nav-group">' +
         '<div class="nav-group-label">Overview</div>' +
-        '<a href="' + r + 'index.html" class="' + a('dashboard') + '">' +
+        '<a href="' + r + 'index.html" class="' + a('dashboard') + '" data-roles="super-admin,studio-manager,photographer">' +
           '<i class="ti ti-layout-dashboard"></i> Dashboard' +
         '</a>' +
       '</div>' +
 
-      '<div class="nav-group">' +
+      '<div class="nav-group" id="nav-group-core">' +
         '<div class="nav-group-label">Core Modules</div>' +
-        '<a href="' + r + 'StudioManager/StudioManager.html" class="' + a('studiomanager') + '">' +
+        '<a href="' + r + 'StudioManager/StudioManager.html" class="' + a('studiomanager') + '" data-roles="super-admin,studio-manager">' +
           '<i class="ti ti-calendar-event"></i> Studio Manager' +
         '</a>' +
-        '<a href="' + r + 'ClientGallery/ClientGallery.html" class="' + a('clientgallery') + '">' +
+        '<a href="' + r + 'ClientGallery/ClientGallery.html" class="' + a('clientgallery') + '" data-roles="super-admin,studio-manager,photographer">' +
           '<i class="ti ti-photo"></i> Client Gallery' +
         '</a>' +
-        '<a href="' + r + 'Website/Website.html" class="' + a('website') + '">' +
+        '<a href="' + r + 'EquipmentInventory/EquipmentInventory.html" class="' + a('equipmentinventory') + '" data-roles="super-admin,studio-manager,photographer">' +
+          '<i class="ti ti-camera"></i> Equipment Inventory' +
+        '</a>' +
+        '<a href="' + r + 'ShootPlanning/ShootPlanning.html" class="' + a('shootplanning') + '" data-roles="super-admin,studio-manager,photographer">' +
+          '<i class="ti ti-users"></i> Shoot Planning' +
+        '</a>' +
+        '<a href="' + r + 'Website/Website.html" class="' + a('website') + '" data-roles="super-admin">' +
           '<i class="ti ti-world"></i> Website' +
         '</a>' +
-        '<a href="' + r + 'Store/Store.html" class="' + a('/store/') + '">' +
+        '<a href="' + r + 'Store/Store.html" class="' + a('/store/') + '" data-roles="super-admin,studio-manager">' +
           '<i class="ti ti-shopping-bag"></i> Store' +
         '</a>' +
-        '<a href="' + r + 'MobileGalleryApp/MobileGalleryApp.html" class="' + a('mobilegalleryapp') + '">' +
+        '<a href="' + r + 'MobileGalleryApp/MobileGalleryApp.html" class="' + a('mobilegalleryapp') + '" data-roles="super-admin,studio-manager">' +
           '<i class="ti ti-device-mobile"></i> Mobile App' +
         '</a>' +
       '</div>' +
@@ -144,16 +152,16 @@
 
       '<div class="nav-group">' +
         '<div class="nav-group-label">Account</div>' +
-        '<a href="' + r + 'Settings/Settings.html" class="' + a('settings') + '">' +
+        '<a href="' + r + 'Settings/Settings.html" class="' + a('settings') + '" data-roles="super-admin,studio-manager">' +
           '<i class="ti ti-settings"></i> Settings' +
         '</a>' +
       '</div>' +
 
-      '<div class="sidebar-footer">' +
-        '<div class="s-avatar">SK</div>' +
-        '<div>' +
-          '<div class="s-name">Sarah Kim</div>' +
-          '<div class="s-role">Studio Owner</div>' +
+      '<div class="sidebar-footer" id="sidebar-footer-user">' +
+        '<div class="s-avatar" id="sb-avatar" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">TS</div>' +
+        '<div style="flex:1;min-width:0;">' +
+          '<div class="s-name" id="sb-name">Thamizh S.</div>' +
+          '<div class="s-role" id="sb-role"><span id="sb-role-badge" style="display:inline-block;padding:1px 7px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(37,99,235,.25);color:#93c5fd;letter-spacing:.3px;">Super Admin</span></div>' +
         '</div>' +
         '<i class="ti ti-dots s-more"></i>' +
       '</div>' +
@@ -169,6 +177,39 @@
     tmp.innerHTML = html;
     document.body.insertBefore(tmp.firstElementChild, document.body.firstChild);
   }
+
+  /* ── 4b. Role-based sidebar access ──────────────────────────── */
+  var SIDEBAR_ROLES = {
+    'super-admin':    { name:'Thamizh S.',  sub:'Super Admin',      initials:'TS', color:'linear-gradient(135deg,#2563eb,#1d4ed8)', badgeBg:'rgba(37,99,235,.25)',  badgeColor:'#93c5fd' },
+    'studio-manager': { name:'Ravi Singh',  sub:'Studio Manager',   initials:'RS', color:'linear-gradient(135deg,#d97706,#b45309)', badgeBg:'rgba(217,119,6,.25)',   badgeColor:'#fcd34d' },
+    'photographer':   { name:'Alex Kumar',  sub:'Lead Photographer',initials:'AK', color:'linear-gradient(135deg,#7c3aed,#6d28d9)', badgeBg:'rgba(124,58,237,.25)',  badgeColor:'#c4b5fd' }
+  };
+
+  window.applyRoleSidebar = function(role) {
+    role = role || localStorage.getItem('zp_role') || 'super-admin';
+
+    /* show / hide nav items */
+    document.querySelectorAll('.nav-item[data-roles]').forEach(function(el) {
+      var allowed = el.getAttribute('data-roles').split(',');
+      el.style.display = allowed.indexOf(role) > -1 ? '' : 'none';
+    });
+
+    /* update sidebar footer persona */
+    var meta = SIDEBAR_ROLES[role] || SIDEBAR_ROLES['super-admin'];
+    var avEl    = document.getElementById('sb-avatar');
+    var nameEl  = document.getElementById('sb-name');
+    var badgeEl = document.getElementById('sb-role-badge');
+    if (avEl)    { avEl.textContent = meta.initials; avEl.style.background = meta.color; }
+    if (nameEl)  nameEl.textContent = meta.name;
+    if (badgeEl) {
+      badgeEl.textContent = meta.sub;
+      badgeEl.style.background = meta.badgeBg;
+      badgeEl.style.color = meta.badgeColor;
+    }
+  };
+
+  /* apply on load from stored preference */
+  window.applyRoleSidebar(localStorage.getItem('zp_role') || 'super-admin');
 
   // ── NOTIFICATION SYSTEM ───────────────────────────────────────
   var notifications = [
