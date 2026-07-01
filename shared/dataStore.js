@@ -62,7 +62,24 @@
       { num:'CON-2838', client:'Thompson Family',     type:'Portrait',   sent:'Apr 10', signed:'Apr 12', value:'$550',   status:'signed', zoho:'Completed' }
     ],
 
-    equipment_status: {}  // key: serial → { status, assignedTo }
+    equipment_status: {},  // key: serial → { status, assignedTo }
+
+    /* ── Master equipment list — single source of truth ── */
+    equipment: [
+      { id:'EQ-001', name:'Sony A7R V',             cat:'Camera',    serial:'SON-A7RV-001', status:'available', condition:'Excellent', location:'Studio Cabinet A',  purchaseYear:2023, insuranceValue:'$3,800', warrantyExpires:'Dec 2026', shutterCount:45230, serviceEvery:50000, nextServiceDue:'Mar 2026' },
+      { id:'EQ-002', name:'Sony A7R V (Backup)',     cat:'Camera',    serial:'SON-A7RV-002', status:'checkout',  condition:'Good',      location:'Emma & Jake Shoot', purchaseYear:2023, insuranceValue:'$3,800', warrantyExpires:'Dec 2026', shutterCount:28100, serviceEvery:50000, nextServiceDue:'Aug 2026' },
+      { id:'EQ-003', name:'Sony A1',                 cat:'Camera',    serial:'SON-A1-001',   status:'damaged',   condition:'Needs Repair', location:'Sony Service Centre', purchaseYear:2023, insuranceValue:'$4,200', warrantyExpires:'Dec 2025', shutterCount:12400, serviceEvery:50000, nextServiceDue:'Sep 2026' },
+      { id:'EQ-004', name:'Sony 24-70mm f/2.8 GM II',cat:'Lens',     serial:'SON-2470-001', status:'available', condition:'Excellent', location:'Studio Cabinet B',  purchaseYear:2022, insuranceValue:'$2,600', warrantyExpires:'Jun 2027' },
+      { id:'EQ-005', name:'Sony 85mm f/1.4 GM',      cat:'Lens',     serial:'SON-85GM-001', status:'service',   condition:'Good',      location:'Sony Service Centre', purchaseYear:2022, insuranceValue:'$2,100', warrantyExpires:'Jun 2027' },
+      { id:'EQ-006', name:'Sony 135mm f/1.8 GM',     cat:'Lens',     serial:'SON-135G-001', status:'available', condition:'Excellent', location:'Studio Cabinet B',  purchaseYear:2023, insuranceValue:'$1,900', warrantyExpires:'Jun 2028' },
+      { id:'EQ-007', name:'Profoto B10X Plus',        cat:'Lighting', serial:'PRO-B10X-001', status:'available', condition:'Good',      location:'Lighting Cabinet',  purchaseYear:2022, insuranceValue:'$1,800', warrantyExpires:'Sep 2026' },
+      { id:'EQ-008', name:'Profoto B10X Plus (2nd)',  cat:'Lighting', serial:'PRO-B10X-002', status:'checkout',  condition:'Good',      location:'Horizon Events',    purchaseYear:2022, insuranceValue:'$1,800', warrantyExpires:'Sep 2026' },
+      { id:'EQ-009', name:'Godox AD600 Pro',          cat:'Lighting', serial:'GOD-600-001',  status:'available', condition:'Good',      location:'Lighting Cabinet',  purchaseYear:2023, insuranceValue:'$900',   warrantyExpires:'Dec 2026' },
+      { id:'EQ-010', name:'SanDisk 256GB CFexpress ×3', cat:'Memory', serial:'SD-256-SET',  status:'available', condition:'Good',      location:'Memory Drawer',     purchaseYear:2024, insuranceValue:'$300' },
+      { id:'EQ-011', name:'Sony UHS-II 128GB',        cat:'Memory',   serial:'SON-128-001',  status:'available', condition:'Good',      location:'Memory Drawer',     purchaseYear:2023, insuranceValue:'$80' },
+      { id:'EQ-012', name:'Manfrotto 055 Tripod',     cat:'Accessory',serial:'MAN-055-001',  status:'available', condition:'Good',      location:'Equipment Room',    purchaseYear:2022, insuranceValue:'$350' },
+      { id:'EQ-013', name:'Rode VideoMic Pro+',       cat:'Accessory',serial:'ROD-VMP-001',  status:'available', condition:'Good',      location:'Equipment Room',    purchaseYear:2023, insuranceValue:'$250' }
+    ]
   };
 
   /* ── Public API ────────────────────────────────────────────── */
@@ -70,8 +87,8 @@
     _key: function (k) { return 'zp_' + k; },
 
     init: function () {
-      if (localStorage.getItem(INIT_KEY)) return;
       var self = this;
+      /* always seed any key that doesn't exist yet (handles new keys added after first init) */
       Object.keys(defaults).forEach(function (k) {
         if (!localStorage.getItem(self._key(k))) {
           localStorage.setItem(self._key(k), JSON.stringify(defaults[k]));

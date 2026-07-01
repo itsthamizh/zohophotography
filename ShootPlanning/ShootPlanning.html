@@ -13,7 +13,7 @@
     .app { display:flex; min-height:100vh; }
     .main-wrapper { margin-left:250px; flex:1; display:flex; flex-direction:column; min-height:100vh; }
 
-    /* Topbar */
+    /* ── Topbar ── */
     .topbar { height:62px; background:#fff; border-bottom:1px solid #e8edf3; display:flex; align-items:center; padding:0 28px; gap:14px; position:sticky; top:0; z-index:50; }
     .topbar-title { font-size:15.5px; font-weight:600; color:#1a1d2e; }
     .topbar-sub { font-size:12.5px; color:#94a3b8; }
@@ -22,85 +22,228 @@
     .topbar-user { display:flex; align-items:center; gap:8px; padding:5px 10px; border-radius:8px; cursor:pointer; border:1px solid #e8edf3; }
     .t-name { font-size:13.5px; font-weight:500; color:#1a1d2e; }
 
-    /* Content */
-    .content { padding:26px 28px 50px; }
-    .page-header { margin-bottom:22px; display:flex; align-items:center; justify-content:space-between; }
-    .page-title { font-size:21px; font-weight:700; color:#1a1d2e; }
-    .page-sub { font-size:13.5px; color:#64748b; margin-top:3px; }
-
-    /* Role switcher */
+    /* ── Role switcher in topbar ── */
     .role-switcher { display:flex; background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:4px; gap:4px; }
     .role-btn { padding:8px 18px; border:none; background:none; border-radius:7px; font-size:13px; font-weight:500; color:#64748b; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:6px; transition:all .15s; }
     .role-btn.active { background:#2563eb; color:#fff; font-weight:600; }
 
-    /* Cards */
-    .card { background:#fff; border-radius:13px; border:1px solid #e8edf3; overflow:hidden; margin-bottom:18px; }
-    .card-head { padding:15px 20px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; }
-    .card-title { font-size:14px; font-weight:600; color:#1a1d2e; display:flex; align-items:center; gap:7px; }
+    /* ── Content ── */
+    .content { padding:26px 28px 50px; }
+    .page-header { margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; }
+    .page-title { font-size:21px; font-weight:700; color:#1a1d2e; }
+    .page-sub { font-size:13.5px; color:#64748b; margin-top:3px; }
 
-    /* Status badges */
-    .badge { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:11.5px; font-weight:500; white-space:nowrap; }
+    /* ── Buttons ── */
+    .btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer; border:none; font-family:inherit; transition:all .13s; white-space:nowrap; }
+    .btn-primary { background:#2563eb; color:#fff; } .btn-primary:hover { background:#1d4ed8; }
+    .btn-outline  { background:#fff; color:#374151; border:1px solid #d1d5db; } .btn-outline:hover { background:#f9fafb; }
+    .btn-green    { background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; } .btn-green:hover { background:#dcfce7; }
+    .btn-red      { background:#fff1f2; color:#dc2626; border:1px solid #fecdd3; } .btn-red:hover   { background:#fee2e2; }
+    .btn-amber    { background:#fffbeb; color:#d97706; border:1px solid #fde68a; } .btn-amber:hover { background:#fef9c3; }
+    .btn-sm       { padding:6px 12px; font-size:12px; }
+
+    /* ── Status badges ── */
+    .badge { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:11.5px; font-weight:600; white-space:nowrap; }
     .badge .dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
     .b-completed   { background:#dcfce7; color:#15803d; } .b-completed   .dot { background:#22c55e; }
     .b-allocated   { background:#dbeafe; color:#1d4ed8; } .b-allocated   .dot { background:#3b82f6; }
     .b-pending     { background:#f1f5f9; color:#475569; } .b-pending     .dot { background:#94a3b8; }
     .b-in-progress { background:#fef9c3; color:#a16207; } .b-in-progress .dot { background:#f59e0b; }
 
-    /* Shoot card (Admin view) */
-    .shoot-card { border:1px solid #e8edf3; border-radius:12px; background:#fff; padding:0; overflow:hidden; margin-bottom:14px; transition:box-shadow .15s; }
-    .shoot-card:hover { box-shadow:0 4px 18px rgba(0,0,0,.07); }
-    .shoot-card-header { padding:14px 18px 12px; border-bottom:1px solid #f4f6fa; display:flex; align-items:center; justify-content:space-between; }
-    .shoot-card-body   { padding:14px 18px; }
+    /* ── Stats row ── */
+    .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px; }
+    .stat-card { background:#fff; border-radius:12px; padding:16px 18px; border:1px solid #e8edf3; }
+    .stat-lbl { font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:.6px; margin-bottom:5px; }
+    .stat-val { font-size:24px; font-weight:800; color:#1a1d2e; letter-spacing:-1px; }
+    .stat-sub { font-size:11.5px; color:#64748b; margin-top:4px; }
 
-    /* Crew rows */
+    /* ── Filter toolbar ── */
+    .filter-bar { display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+    .filter-btn { padding:6px 14px; border:1px solid #e2e8f0; background:#fff; border-radius:7px; font-size:12.5px; font-weight:500; color:#64748b; cursor:pointer; font-family:inherit; transition:all .13s; }
+    .filter-btn.active { background:#2563eb; color:#fff; border-color:#2563eb; }
+    .filter-btn:hover:not(.active) { background:#f8fafc; }
+
+    /* ── Search box ── */
+    .search-wrap { display:flex; align-items:center; gap:8px; margin-left:auto; }
+    .search-input { border:1px solid #e2e8f0; border-radius:8px; padding:7px 12px 7px 32px; font-size:13px; font-family:inherit; outline:none; color:#1a1d2e; background:#f8fafc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 10px center; width:200px; transition:border-color .15s; }
+    .search-input:focus { border-color:#2563eb; background-color:#fff; }
+
+    /* ══ LIST TABLE ══ */
+    .sp-table-wrap { background:#fff; border-radius:13px; border:1px solid #e8edf3; overflow:hidden; }
+    .sp-table { width:100%; border-collapse:collapse; }
+    .sp-table thead th {
+      padding:11px 16px; font-size:11px; font-weight:700; color:#6b7280;
+      text-transform:uppercase; letter-spacing:.7px; background:#f8fafc;
+      border-bottom:1px solid #e8edf3; text-align:left; white-space:nowrap;
+    }
+    .sp-table tbody tr {
+      border-bottom:1px solid #f1f5f9; cursor:pointer; transition:background .12s;
+    }
+    .sp-table tbody tr:last-child { border-bottom:none; }
+    .sp-table tbody tr:hover { background:#f4f8ff; }
+    .sp-table tbody td { padding:13px 16px; font-size:13.5px; color:#1a1d2e; vertical-align:middle; }
+    .sp-shoot-name { font-weight:600; color:#1a1d2e; font-size:14px; }
+    .sp-shoot-id   { font-size:11px; color:#94a3b8; margin-top:2px; }
+    .sp-crew-avs   { display:flex; align-items:center; }
+    .sp-av { width:26px; height:26px; border-radius:50%; border:2px solid #fff; display:inline-flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:#fff; margin-right:-6px; }
+    .sp-av-more { background:#e2e8f0; color:#475569; font-size:9px; font-weight:700; }
+    .sp-gear-chip { display:inline-flex; align-items:center; gap:4px; background:#f1f5f9; color:#475569; padding:3px 9px; border-radius:5px; font-size:12px; font-weight:500; }
+    .sp-empty { padding:48px; text-align:center; color:#94a3b8; font-size:14px; }
+
+    /* type icon in table */
+    .sp-type-cell { display:flex; align-items:center; gap:10px; }
+    .sp-type-dot  { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+    /* ══ DETAIL VIEW ══ */
+    #admin-detail-view { display:none; }
+
+    .det-breadcrumb { display:flex; align-items:center; gap:8px; margin-bottom:18px; font-size:13px; }
+    .det-breadcrumb a { color:#2563eb; cursor:pointer; font-weight:500; display:flex; align-items:center; gap:4px; }
+    .det-breadcrumb a:hover { text-decoration:underline; }
+    .det-breadcrumb span { color:#94a3b8; }
+
+    .det-head { background:#fff; border:1px solid #e8edf3; border-radius:13px; padding:20px 24px; margin-bottom:16px; display:flex; align-items:center; gap:18px; }
+    .det-head-icon { width:52px; height:52px; border-radius:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:24px; }
+    .det-head-info { flex:1; }
+    .det-head-name { font-size:20px; font-weight:800; color:#1a1d2e; letter-spacing:-.4px; }
+    .det-head-meta { font-size:13px; color:#64748b; margin-top:4px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .det-actions   { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+
+    /* record sections */
+    .det-section { background:#fff; border:1px solid #e8edf3; border-radius:13px; margin-bottom:14px; overflow:hidden; }
+    .det-sec-head { padding:13px 20px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; }
+    .det-sec-title { font-size:11px; font-weight:700; color:#6b7280; text-transform:uppercase; letter-spacing:1px; display:flex; align-items:center; gap:7px; }
+    .det-sec-title i { font-size:15px; }
+    .det-row { display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid #f4f6fa; }
+    .det-row:last-child { border-bottom:none; }
+    .det-field { padding:13px 20px; }
+    .det-label { font-size:10.5px; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:.7px; margin-bottom:5px; }
+    .det-val   { font-size:13.5px; color:#1a1d2e; font-weight:500; }
+    .det-val.muted { color:#64748b; font-weight:400; font-style:italic; }
+
+    /* crew rows in detail */
+    .det-crew-row { display:flex; align-items:center; gap:14px; padding:12px 20px; border-bottom:1px solid #f4f6fa; }
+    .det-crew-row:last-child { border-bottom:none; }
+    .det-crew-av { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; }
+    .det-crew-name { font-size:13.5px; font-weight:600; color:#111827; }
+    .det-crew-role { font-size:12px; color:#9ca3af; margin-top:1px; }
+    .det-crew-phone { font-size:12px; color:#64748b; margin-left:auto; display:flex; align-items:center; gap:4px; }
+
+    /* gear section */
+    .det-gear-wrap { padding:16px 20px; display:flex; flex-wrap:wrap; gap:8px; }
+    .det-gear-tag { display:inline-flex; align-items:center; gap:5px; background:#f1f5f9; color:#374151; padding:5px 12px; border-radius:7px; font-size:12.5px; font-weight:500; }
+
+    /* readiness section */
+    .det-ready-wrap { padding:16px 20px; display:flex; gap:24px; flex-wrap:wrap; }
+    .det-ready-item { display:flex; align-items:center; gap:7px; font-size:13px; }
+
+    /* checklist in detail (no gear) */
+    .det-warn { margin:12px 20px 14px; padding:10px 14px; background:#fef9c3; border-radius:8px; font-size:13px; color:#a16207; display:flex; align-items:center; gap:8px; }
+
+    /* photographer view */
+    .view-panel { display:none; }
+    .view-panel.active { display:block; }
+    .my-schedule-card { border-radius:14px; border:1.5px solid #e2e8f0; background:#fff; padding:24px; margin-bottom:20px; }
+    .my-schedule-header { display:flex; align-items:flex-start; gap:18px; margin-bottom:18px; }
+    .type-icon { width:52px; height:52px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; }
+    .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px 32px; margin-bottom:18px; }
+    .info-cell-label { font-size:11px; font-weight:600; color:#9ca3af; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
+    .info-cell-val { font-size:14px; color:#111827; }
     .crew-row { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid #f4f6fa; }
     .crew-row:last-child { border-bottom:none; }
     .crew-av { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; }
     .crew-name { font-size:13.5px; font-weight:500; color:#111827; }
     .crew-role { font-size:12px; color:#9ca3af; }
-
-    /* Gear tags */
     .gear-tag { display:inline-flex; align-items:center; gap:5px; background:#f1f5f9; color:#475569; padding:3px 9px; border-radius:5px; font-size:12px; font-weight:500; margin:2px; }
-
-    /* Btn */
-    .btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer; border:none; font-family:inherit; transition:all .13s; }
-    .btn-primary { background:#2563eb; color:#fff; }
-    .btn-primary:hover { background:#1d4ed8; }
-    .btn-outline { background:#fff; color:#374151; border:1px solid #d1d5db; }
-    .btn-outline:hover { background:#f9fafb; }
-    .btn-green  { background:#16a34a; color:#fff; }
-    .btn-green:hover { background:#15803d; }
-    .btn-red    { background:#dc2626; color:#fff; }
-    .btn-red:hover { background:#b91c1c; }
-    .btn-amber  { background:#d97706; color:#fff; }
-
-    /* My Schedule (photographer view) */
-    .my-schedule-card { border-radius:14px; border:1.5px solid #e2e8f0; background:#fff; padding:24px; margin-bottom:20px; }
-    .my-schedule-header { display:flex; align-items:flex-start; gap:18px; margin-bottom:18px; }
-    .type-icon { width:52px; height:52px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; }
-
-    /* Info grid */
-    .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px 32px; margin-bottom:18px; }
-    .info-cell-label { font-size:11px; font-weight:600; color:#9ca3af; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
-    .info-cell-val   { font-size:14px; color:#111827; }
-
-    /* Today highlight */
     .today-bar { background:linear-gradient(90deg,#2563eb,#7c3aed); color:#fff; border-radius:10px; padding:13px 18px; display:flex; align-items:center; gap:12px; margin-bottom:22px; }
-
-    /* Stats row */
-    .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px; }
-    .stat-card { background:#fff; border-radius:12px; padding:18px 18px 16px; border:1px solid #e8edf3; }
-    .stat-lbl { font-size:11.5px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:.6px; margin-bottom:5px; }
-    .stat-val { font-size:26px; font-weight:800; color:#1a1d2e; letter-spacing:-1px; }
-    .stat-sub { font-size:12px; color:#64748b; margin-top:5px; }
-
-    /* Hidden */
-    .view-panel { display:none; }
-    .view-panel.active { display:block; }
 
     /* Toast */
     #sp-toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%); background:#1a1d2e; color:#fff; padding:12px 24px; border-radius:10px; font-size:14px; font-weight:500; z-index:9999; opacity:0; transition:opacity .3s; pointer-events:none; font-family:Inter,sans-serif; }
     #sp-toast.show { opacity:1; }
+
+    /* ══ CREATE PAGE ══ */
+    .cr-section { background:#fff; border:1px solid #e8edf3; border-radius:13px; margin-bottom:14px; overflow:hidden; }
+    .cr-sec-head { padding:13px 20px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; gap:8px; }
+    .cr-sec-title { font-size:11px; font-weight:700; color:#6b7280; text-transform:uppercase; letter-spacing:1px; }
+    .cr-row { display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid #f4f6fa; }
+    .cr-row.full { grid-template-columns:1fr; }
+    .cr-row:last-child { border-bottom:none; }
+    .cr-field { padding:14px 20px; }
+    .cr-label { font-size:10.5px; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:.7px; margin-bottom:6px; }
+    .cr-val-ro { font-size:13.5px; color:#1a1d2e; font-weight:500; } /* read-only */
+    .cr-val-ro.empty { color:#94a3b8; font-style:italic; font-weight:400; }
+    .cr-input { width:100%; border:1.5px solid #e2e8f0; border-radius:8px; padding:8px 12px; font-size:13.5px; font-family:'Inter',sans-serif; outline:none; color:#1a1d2e; transition:border-color .15s; background:#fff; }
+    .cr-input:focus { border-color:#2563eb; }
+    .cr-select { width:100%; border:1.5px solid #e2e8f0; border-radius:8px; padding:9px 32px 9px 12px; font-size:13.5px; font-family:'Inter',sans-serif; outline:none; color:#1a1d2e; background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 10px center; appearance:none; transition:border-color .15s; cursor:pointer; }
+    .cr-select:focus { border-color:#2563eb; }
+    .cr-textarea { width:100%; border:1.5px solid #e2e8f0; border-radius:8px; padding:9px 12px; font-size:13.5px; font-family:'Inter',sans-serif; outline:none; color:#1a1d2e; resize:none; transition:border-color .15s; background:#fff; }
+    .cr-textarea:focus { border-color:#2563eb; }
+    /* auto-fill flash */
+    .cr-val-ro.filled { color:#1a1d2e; animation:fillFlash .4s ease; }
+    @keyframes fillFlash { from { background:#eff6ff; } to { background:transparent; } }
+    /* crew rows in create page */
+    .cr-crew-row { display:flex; align-items:center; gap:14px; padding:12px 20px; border-bottom:1px solid #f4f6fa; cursor:pointer; transition:background .12s; }
+    .cr-crew-row:last-child { border-bottom:none; }
+    .cr-crew-row:hover { background:#f8fafc; }
+    .cr-crew-row.selected { background:#eff6ff; }
+    .cr-crew-row input[type=checkbox] { accent-color:#2563eb; width:16px; height:16px; flex-shrink:0; cursor:pointer; }
+    .cr-crew-av { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; }
+    /* gear rows in create page */
+    .cr-gear-row { display:flex; align-items:center; gap:14px; padding:10px 14px; border-radius:9px; margin-bottom:6px; }
+    .cr-qty-wrap { margin-left:auto; display:flex; align-items:center; gap:8px; }
+    /* owned gear item rows */
+    .cr-gear-item-row { display:flex; align-items:center; gap:12px; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:9px; margin-bottom:5px; cursor:pointer; transition:border-color .13s,background .13s; }
+    .cr-gear-item-row.selected { border-color:#2563eb; background:#eff6ff; }
+    .cr-gear-item-row:hover:not(.cr-gear-busy) { background:#f8fafc; }
+    .cr-gear-item-row input[type=checkbox] { accent-color:#2563eb; width:15px; height:15px; flex-shrink:0; cursor:pointer; }
+    .cr-gear-busy { opacity:.55; cursor:default; }
+    .cr-gear-busy input[type=checkbox] { cursor:not-allowed; }
+    .cr-qty-btn { width:30px; height:30px; border:1.5px solid #e2e8f0; background:#f8fafc; border-radius:7px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; color:#374151; line-height:1; font-weight:600; }
+    .cr-qty-btn:hover { background:#e2e8f0; }
+    .cr-qty-val { font-size:16px; font-weight:700; color:#1a1d2e; min-width:24px; text-align:center; }
+
+    /* ══ MODALS ══ */
+    .sp-modal-bg { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:2000; display:flex; align-items:center; justify-content:center; padding:24px; }
+    .sp-modal { background:#fff; border-radius:16px; width:100%; max-width:560px; max-height:90vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,.22); font-family:'Inter',sans-serif; }
+    .sp-modal.wide { max-width:680px; }
+    .sp-modal-head { padding:20px 24px 16px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; }
+    .sp-modal-title { font-size:16px; font-weight:700; color:#1a1d2e; }
+    .sp-modal-sub { font-size:12.5px; color:#94a3b8; margin-top:2px; }
+    .sp-modal-close { width:32px; height:32px; border:none; background:#f1f5f9; border-radius:8px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; color:#64748b; }
+    .sp-modal-body { padding:20px 24px; }
+    .sp-modal-foot { padding:14px 24px; border-top:1px solid #f1f5f9; display:flex; justify-content:flex-end; gap:8px; }
+
+    /* form fields */
+    .fm-group { margin-bottom:16px; }
+    .fm-label { font-size:11.5px; font-weight:700; color:#374151; text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; }
+    .fm-input { width:100%; border:1.5px solid #e2e8f0; border-radius:8px; padding:9px 12px; font-size:13.5px; font-family:'Inter',sans-serif; outline:none; color:#1a1d2e; transition:border-color .15s; background:#fff; }
+    .fm-input:focus { border-color:#2563eb; }
+    .fm-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .fm-select { appearance:none; background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 10px center; padding-right:32px; }
+
+    /* crew selection */
+    .crew-pick-row { display:flex; align-items:center; gap:12px; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; margin-bottom:8px; cursor:pointer; transition:border-color .15s,background .15s; }
+    .crew-pick-row.selected { border-color:#2563eb; background:#eff6ff; }
+    .crew-pick-row input[type=checkbox] { accent-color:#2563eb; width:16px; height:16px; flex-shrink:0; cursor:pointer; }
+    .crew-pick-av { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; }
+
+    /* gear item picker */
+    .gear-pick-row { display:flex; align-items:center; gap:12px; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; margin-bottom:6px; cursor:pointer; transition:border-color .15s,background .15s; }
+    .gear-pick-row.selected { border-color:#2563eb; background:#eff6ff; }
+    .gear-pick-row input[type=checkbox] { accent-color:#2563eb; width:15px; height:15px; flex-shrink:0; cursor:pointer; }
+    .gear-qty-wrap { margin-left:auto; display:flex; align-items:center; gap:6px; }
+    .gear-qty-btn { width:28px; height:28px; border:1px solid #e2e8f0; background:#f8fafc; border-radius:6px; cursor:pointer; font-size:15px; display:flex; align-items:center; justify-content:center; color:#374151; line-height:1; }
+    .gear-qty-btn:hover { background:#e2e8f0; }
+    .gear-qty-val { font-size:15px; font-weight:700; color:#1a1d2e; min-width:20px; text-align:center; }
+
+    /* modal section divider */
+    .sp-modal-sec { font-size:11px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.8px; margin:18px 0 10px; }
+
+    /* booking picker rows */
+    .bk-pick-row { display:flex; align-items:center; gap:12px; padding:11px 14px; border:1.5px solid #e2e8f0; border-radius:10px; margin-bottom:8px; cursor:pointer; transition:border-color .15s,background .15s; }
+    .bk-pick-row:hover { border-color:#2563eb; background:#f4f8ff; }
+    .bk-pick-row.bk-done { opacity:.5; cursor:not-allowed; background:#f8fafc; }
+    .bk-pick-row.selected { border-color:#2563eb; background:#eff6ff; }
   </style>
 </head>
 <body>
@@ -115,7 +258,6 @@
         <div class="topbar-sub" id="topbar-date"></div>
       </div>
       <div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
-        <!-- Role Switcher -->
         <div class="role-switcher">
           <button class="role-btn active" onclick="switchView('admin',this)" id="btn-admin">
             <i class="ti ti-layout-dashboard" style="font-size:14px;"></i> Studio Admin
@@ -129,8 +271,8 @@
           <div class="notif-dot" style="position:absolute;top:7px;right:7px;width:7px;height:7px;background:#ef4444;border-radius:50%;border:1.5px solid #fff;"></div>
         </div>
         <div class="topbar-user">
-          <div class="t-avatar" id="user-initials">AK</div>
-          <div class="t-name" id="user-name-top">Alex Kumar</div>
+          <div class="t-avatar" id="user-initials">TS</div>
+          <div class="t-name" id="user-name-top">Thamizh S.</div>
         </div>
       </div>
     </div>
@@ -140,32 +282,80 @@
 
       <!-- ═══ ADMIN VIEW ═══ -->
       <div id="view-admin" class="view-panel active">
-        <div class="page-header">
-          <div>
-            <div class="page-title">Shoot Planning — Studio Admin</div>
-            <div class="page-sub">Plan crew, equipment, and track all upcoming shoots</div>
+
+        <!-- ── LIST VIEW ── -->
+        <div id="admin-list-view">
+          <div class="page-header">
+            <div>
+              <div class="page-title">Shoot Planning</div>
+              <div class="page-sub">Plan crew, equipment, and track all upcoming shoots</div>
+            </div>
+            <button class="btn btn-primary" onclick="openCreateShootPlan()">
+              <i class="ti ti-plus"></i> New Shoot Plan
+            </button>
           </div>
-          <button class="btn btn-primary" onclick="showToastSP('Opening Equipment Inventory to allocate gear…')">
-            <i class="ti ti-plus"></i> New Shoot
-          </button>
-        </div>
 
-        <!-- KPI Stats -->
-        <div class="stats-row" id="admin-stats"></div>
+          <!-- KPI Stats -->
+          <div class="stats-row" id="admin-stats"></div>
 
-        <!-- Filter bar -->
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
-          <div style="font-size:13px;font-weight:600;color:#374151;">Filter:</div>
-          <button class="btn btn-outline" onclick="filterShoots('all',this)" id="f-all" style="background:#2563eb;color:#fff;border-color:#2563eb;">All</button>
-          <button class="btn btn-outline" onclick="filterShoots('pending',this)">Not Planned</button>
-          <button class="btn btn-outline" onclick="filterShoots('allocated',this)">Crew &amp; Gear Ready</button>
-          <button class="btn btn-outline" onclick="filterShoots('in_progress',this)">In Progress</button>
-          <button class="btn btn-outline" onclick="filterShoots('completed',this)">Completed</button>
-        </div>
+          <!-- Filter + Search bar -->
+          <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterShoots('all',this)">All</button>
+            <button class="filter-btn" onclick="filterShoots('pending',this)">Not Planned</button>
+            <button class="filter-btn" onclick="filterShoots('allocated',this)">Crew &amp; Gear Ready</button>
+            <button class="filter-btn" onclick="filterShoots('in_progress',this)">In Progress</button>
+            <button class="filter-btn" onclick="filterShoots('completed',this)">Completed</button>
+            <div class="search-wrap">
+              <input class="search-input" type="text" placeholder="Search shoots…" id="shoot-search" oninput="renderAdminTable(_activeFilter)" />
+            </div>
+          </div>
 
-        <!-- Shoot Cards -->
-        <div id="admin-shoot-list"></div>
-      </div>
+          <!-- Bulk action bar (hidden until rows selected) -->
+          <div id="bulk-action-bar" style="display:none;align-items:center;gap:12px;padding:10px 16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;margin-bottom:12px;">
+            <span id="bulk-count" style="font-size:13px;font-weight:600;color:#1d4ed8;"></span>
+            <div style="flex:1;"></div>
+            <button class="btn btn-outline btn-sm" onclick="bulkEdit()" style="color:#2563eb;border-color:#bfdbfe;background:#fff;">
+              <i class="ti ti-edit" style="font-size:12px;"></i> Edit Selected
+            </button>
+            <button class="btn btn-outline btn-sm" onclick="bulkDelete()" style="color:#dc2626;border-color:#fca5a5;background:#fff;">
+              <i class="ti ti-trash" style="font-size:12px;"></i> Delete Selected
+            </button>
+            <button onclick="clearSelection()" style="background:none;border:none;cursor:pointer;color:#64748b;font-size:18px;line-height:1;padding:2px 6px;">&times;</button>
+          </div>
+
+          <!-- Table -->
+          <div class="sp-table-wrap">
+            <table class="sp-table">
+              <thead>
+                <tr>
+                  <th style="width:40px;padding:0 0 0 16px;">
+                    <input type="checkbox" id="select-all-cb" onchange="toggleSelectAll(this)" style="accent-color:#2563eb;width:15px;height:15px;cursor:pointer;" />
+                  </th>
+                  <th>Shoot Name</th>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Crew</th>
+                  <th>Equipment</th>
+                  <th>Status</th>
+                  <th style="text-align:right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="shoot-table-body"></tbody>
+            </table>
+            <div id="shoot-table-empty" class="sp-empty" style="display:none;">No shoots match this filter.</div>
+          </div>
+        </div><!-- /admin-list-view -->
+
+        <!-- ── DETAIL VIEW ── -->
+        <div id="admin-detail-view"></div>
+
+        <!-- ── CREATE VIEW ── -->
+        <div id="admin-create-view" style="display:none;"></div>
+
+        <!-- ── PLAN VIEW (crew + gear full screen) ── -->
+        <div id="admin-plan-view" style="display:none;"></div>
+
+      </div><!-- /view-admin -->
 
       <!-- ═══ PHOTOGRAPHER VIEW ═══ -->
       <div id="view-photographer" class="view-panel">
@@ -176,8 +366,7 @@
           </div>
           <div style="display:flex;align-items:center;gap:10px;">
             <div style="font-size:13px;color:#64748b;">Viewing as:</div>
-            <select id="staff-selector" onchange="renderPhotographerView()" style="border:1.5px solid #e2e8f0;border-radius:8px;padding:7px 12px;font-size:13px;font-family:inherit;outline:none;background:#fff;color:#111827;font-weight:500;">
-            </select>
+            <select id="staff-selector" onchange="renderPhotographerView()" style="border:1.5px solid #e2e8f0;border-radius:8px;padding:7px 12px;font-size:13px;font-family:inherit;outline:none;background:#fff;color:#111827;font-weight:500;"></select>
           </div>
         </div>
         <div id="photo-view-content"></div>
@@ -189,44 +378,90 @@
 
 <div id="sp-toast"></div>
 
+<!-- ══ MODALS ══ -->
+<div id="sp-modal-root"></div>
+
+<script src="../shared/dataStore.js"></script>
 <script src="../shared/sidebar.js"></script>
 <script>
-// ── Shared data (mirrors shootlog.js) ────────────────────────
+// ── Data ─────────────────────────────────────────────────────
 var STAFF_LIST = [
-  { id:'STF-001', name:'Alex Kumar',   role:'Lead Photographer',   phone:'+65 9123 4567', initials:'AK', color:'#2563eb' },
-  { id:'STF-002', name:'Priya Nair',   role:'Junior Photographer', phone:'+65 8765 4321', initials:'PN', color:'#7c3aed' },
-  { id:'STF-003', name:'Ravi Singh',   role:'Light Man',           phone:'+65 9876 5432', initials:'RS', color:'#d97706' },
-  { id:'STF-004', name:'Maya Chen',    role:'Lighting Assistant',  phone:'+65 9111 2222', initials:'MC', color:'#059669' },
-  { id:'STF-005', name:'Thamizh S.',   role:'Studio Manager',      phone:'+65 9000 0001', initials:'TS', color:'#dc2626' },
+  { id:'STF-001', name:'Alex Kumar',  role:'Lead Photographer',   phone:'+65 9123 4567', initials:'AK', color:'#2563eb' },
+  { id:'STF-002', name:'Priya Nair',  role:'Junior Photographer', phone:'+65 8765 4321', initials:'PN', color:'#7c3aed' },
+  { id:'STF-003', name:'Ravi Singh',  role:'Light Man',           phone:'+65 9876 5432', initials:'RS', color:'#d97706' },
+  { id:'STF-004', name:'Maya Chen',   role:'Lighting Assistant',  phone:'+65 9111 2222', initials:'MC', color:'#059669' },
+  { id:'STF-005', name:'Thamizh S.',  role:'Studio Manager',      phone:'+65 9000 0001', initials:'TS', color:'#dc2626' },
 ];
 
+/* ── Equipment — loaded from shared dataStore (single source of truth) ── */
+/* Category display colors for the gear picker */
+var EQ_CAT_COLORS = { Camera:'#2563eb', Lens:'#7c3aed', Lighting:'#d97706', Memory:'#059669', Accessory:'#64748b' };
+
+/* Load from localStorage via ZPData; fallback to empty array */
+var OWNED_GEAR = (typeof ZPData !== 'undefined') ? ZPData.get('equipment') : [];
+/* Attach display color to each item at runtime (not stored) */
+OWNED_GEAR.forEach(function(eq) { eq.color = EQ_CAT_COLORS[eq.cat] || '#64748b'; });
+
+/* Persist any in-memory changes back to localStorage */
+function _saveEquipment() {
+  if (typeof ZPData !== 'undefined') ZPData.set('equipment', OWNED_GEAR);
+}
+
+/* Mark which gear is currently allocated to a shoot */
+function getGearShootId(gearId) {
+  for (var i=0;i<SHOOT_DATA.length;i++) {
+    var s = SHOOT_DATA[i];
+    if (s.status === 'completed') continue;
+    if (s.gearItems && s.gearItems.some(function(g){ return g.id === gearId; })) return s.id;
+  }
+  return null;
+}
+
 var SHOOT_DATA = [
-  { id:'SA-001', shootName:'Emma & Jake — Wedding',    date:'Jun 15, 2026', type:'Wedding',    status:'completed',
+  { id:'SA-001', shootName:'Emma & Jake — Wedding',     date:'Jun 15, 2026', location:'Central Park',  type:'Wedding',    status:'completed',
     team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-002',name:'Priya Nair',role:'Junior Photographer',initials:'PN',color:'#7c3aed'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'},{staffId:'STF-004',name:'Maya Chen',role:'Lighting Assistant',initials:'MC',color:'#059669'}],
+    gearItems:[{id:'EQ-001',name:'Sony A7R V',cat:'Camera',serial:'SON-A7RV-001'},{id:'EQ-002',name:'Sony A7R V (Backup)',cat:'Camera',serial:'SON-A7RV-002'},{id:'EQ-007',name:'Profoto B10X Plus #1',cat:'Lighting',serial:'PRO-B10X-001'},{id:'EQ-008',name:'Profoto B10X Plus #2',cat:'Lighting',serial:'PRO-B10X-002'},{id:'EQ-004',name:'Sony 24-70mm f/2.8',cat:'Lens',serial:'SON-2470-001'},{id:'EQ-012',name:'Manfrotto 055 Tripod',cat:'Accessory',serial:'MAN-055-001'}],
     gear:['Camera','Camera','Lighting','Lighting','Lens','Accessory'], gearCount:6 },
-  { id:'SA-002', shootName:'Nexus Corp — Headshots',   date:'Jun 17, 2026', type:'Corporate',  status:'allocated',
+  { id:'SA-002', shootName:'Nexus Corp — Headshots',    date:'Jun 17, 2026', location:'Studio 4',      type:'Corporate',  status:'allocated',
     team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'}],
+    gearItems:[{id:'EQ-003',name:'Sony A1',cat:'Camera',serial:'SON-A1-001'},{id:'EQ-009',name:'Godox AD600 Pro',cat:'Lighting',serial:'GOD-600-001'},{id:'EQ-005',name:'Sony 85mm f/1.4 GM',cat:'Lens',serial:'SON-85GM-001'}],
     gear:['Camera','Lighting','Lens'], gearCount:3 },
-  { id:'SA-003', shootName:'Liu Family — Portrait',    date:'Jun 20, 2026', type:'Portrait',   status:'pending',
+  { id:'SA-003', shootName:'Liu Family — Portrait',     date:'Jun 20, 2026', location:'Riverside Park', type:'Portrait',   status:'pending',
     team:[{staffId:'STF-002',name:'Priya Nair',role:'Lead Photographer',initials:'PN',color:'#7c3aed'}],
-    gear:[], gearCount:0 },
-  { id:'SA-004', shootName:'Sarah & Tom — Engagement', date:'Jun 22, 2026', type:'Engagement', status:'pending',
-    team:[], gear:[], gearCount:0 },
-  { id:'SA-005', shootName:'Horizon Events — Gala',   date:'Jun 28, 2026', type:'Event',      status:'pending',
+    gearItems:[], gear:[], gearCount:0 },
+  { id:'SA-004', shootName:'Sarah & Tom — Engagement',  date:'Jun 22, 2026', location:'TBD',           type:'Engagement', status:'pending',
+    team:[], gearItems:[], gear:[], gearCount:0 },
+  { id:'SA-005', shootName:'Horizon Events — Gala',     date:'Jun 28, 2026', location:'Marriott Hotel', type:'Event',      status:'pending',
     team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-002',name:'Priya Nair',role:'Junior Photographer',initials:'PN',color:'#7c3aed'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'},{staffId:'STF-004',name:'Maya Chen',role:'Lighting Assistant',initials:'MC',color:'#059669'}],
-    gear:[], gearCount:0 },
-  { id:'SA-006', shootName:'Patel — Wedding',          date:'Jul 1, 2026',  type:'Wedding',    status:'allocated',
+    gearItems:[], gear:[], gearCount:0 },
+  { id:'SA-006', shootName:'Patel — Wedding',            date:'Jul 1, 2026',  location:'ITC Hotel',     type:'Wedding',    status:'allocated',
     team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-002',name:'Priya Nair',role:'Junior Photographer',initials:'PN',color:'#7c3aed'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'},{staffId:'STF-004',name:'Maya Chen',role:'Lighting Assistant',initials:'MC',color:'#059669'}],
-    gear:['Camera','Camera','Lighting','Lighting','Lens','Lens','Accessory','Accessory','Memory'], gearCount:9 },
+    gearItems:[{id:'EQ-006',name:'Sony 135mm f/1.8 GM',cat:'Lens',serial:'SON-135G-001'},{id:'EQ-010',name:'SanDisk 256GB (×3)',cat:'Memory',serial:'SD-256-SET'},{id:'EQ-013',name:'Rode VideoMic Pro+',cat:'Accessory',serial:'ROD-VMP-001'},{id:'EQ-011',name:'Sony UHS-II 128GB',cat:'Memory',serial:'SON-128-001'}],
+    gear:['Lens','Memory','Accessory','Memory'], gearCount:4 },
 ];
 
 var _activeFilter = 'all';
 var _currentView  = 'admin';
+var _detailOpen   = false;
 
-// ── Topbar date ───────────────────────────────────────────────
-document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+// ── Helpers ───────────────────────────────────────────────────
+var STATUS_LBL  = { completed:'Completed', allocated:'Crew & Gear Ready', pending:'Not Planned', in_progress:'In Progress' };
+var STATUS_CLS  = { completed:'b-completed', allocated:'b-allocated', pending:'b-pending', in_progress:'b-in-progress' };
+var TYPE_ICONS  = { Wedding:'ti-rings-wedding', Corporate:'ti-briefcase', Portrait:'ti-user', Engagement:'ti-heart', Event:'ti-confetti', Commercial:'ti-building-store' };
+var TYPE_COLORS = { Wedding:'#fce7f3', Corporate:'#dbeafe', Portrait:'#f3e8ff', Engagement:'#fce7f3', Event:'#dcfce7', Commercial:'#ffedd5' };
+var TYPE_ICON_C = { Wedding:'#db2777', Corporate:'#1d4ed8', Portrait:'#7e22ce', Engagement:'#db2777', Event:'#15803d', Commercial:'#c2410c' };
+var CAT_ICONS   = { Camera:'ti-camera', Lens:'ti-adjustments', Lighting:'ti-bolt', Memory:'ti-database', Accessory:'ti-tool' };
 
-// ── View switch ───────────────────────────────────────────────
+document.getElementById('topbar-date').textContent =
+  new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+function showToastSP(msg) {
+  var t = document.getElementById('sp-toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2800);
+}
+
+// ── View switch (Admin / Photographer) ───────────────────────
 function switchView(view, btn) {
   _currentView = view;
   document.querySelectorAll('.role-btn').forEach(function(b){ b.classList.remove('active'); });
@@ -237,25 +472,8 @@ function switchView(view, btn) {
   if (view === 'admin') renderAdminView();
 }
 
-// ── Status helpers ────────────────────────────────────────────
-var STATUS_LBL  = { completed:'Completed', allocated:'Crew & Gear Ready', pending:'Not Planned', in_progress:'In Progress' };
-var STATUS_CLS  = { completed:'b-completed', allocated:'b-allocated', pending:'b-pending', in_progress:'b-in-progress' };
-var TYPE_ICONS  = { Wedding:'ti-rings-wedding', Corporate:'ti-briefcase', Portrait:'ti-user', Engagement:'ti-heart', Event:'ti-confetti', Commercial:'ti-building-store' };
-var TYPE_COLORS = { Wedding:'#fce7f3', Corporate:'#dbeafe', Portrait:'#f3e8ff', Engagement:'#fce7f3', Event:'#dcfce7', Commercial:'#ffedd5' };
-var TYPE_ICON_C = { Wedding:'#db2777', Corporate:'#1d4ed8', Portrait:'#7e22ce', Engagement:'#db2777', Event:'#15803d', Commercial:'#c2410c' };
-
-// ── Toast ─────────────────────────────────────────────────────
-function showToastSP(msg) {
-  var t = document.getElementById('sp-toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 2800);
-}
-
-// ── ADMIN VIEW ────────────────────────────────────────────────
-function renderAdminView() {
-  renderAdminStats();
-  renderAdminShoots(_activeFilter);
-}
+// ── ADMIN: stats ─────────────────────────────────────────────
+function renderAdminView() { renderAdminStats(); renderAdminTable(_activeFilter); }
 
 function renderAdminStats() {
   var total  = SHOOT_DATA.length;
@@ -271,118 +489,652 @@ function renderAdminStats() {
 
 function mkStat(lbl, val, ico, col, sub) {
   return '<div class="stat-card">'
-    + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">'
-    + '<div style="width:36px;height:36px;border-radius:9px;background:' + col + '1a;display:flex;align-items:center;justify-content:center;">'
-    + '<i class="ti ' + ico + '" style="font-size:18px;color:' + col + ';"></i></div>'
+    + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">'
+    + '<div style="width:34px;height:34px;border-radius:8px;background:' + col + '1a;display:flex;align-items:center;justify-content:center;">'
+    + '<i class="ti ' + ico + '" style="font-size:17px;color:' + col + ';"></i></div>'
     + '<div class="stat-lbl">' + lbl + '</div></div>'
     + '<div class="stat-val">' + val + '</div>'
     + '<div class="stat-sub">' + sub + '</div></div>';
 }
 
+// ── ADMIN: filter ────────────────────────────────────────────
 function filterShoots(status, btn) {
   _activeFilter = status;
-  document.querySelectorAll('.content button.btn-outline, .content button.btn-primary').forEach(function(b){
-    if (['all','pending','allocated','in_progress','completed'].some(function(s){ return b.textContent.toLowerCase().includes(s==='all'?'all':STATUS_LBL[s].toLowerCase().split(' ')[0]); })) {
-      b.style.background = ''; b.style.color = ''; b.style.borderColor = '';
-    }
-  });
-  btn.style.background = '#2563eb'; btn.style.color = '#fff'; btn.style.borderColor = '#2563eb';
-  renderAdminShoots(status);
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  clearSelection();
+  renderAdminTable(status);
 }
 
-function renderAdminShoots(filter) {
-  var list = document.getElementById('admin-shoot-list');
+// ── ADMIN: TABLE LIST VIEW ───────────────────────────────────
+function renderAdminTable(filter) {
+  var q = (document.getElementById('shoot-search').value || '').toLowerCase().trim();
   var shoots = filter === 'all' ? SHOOT_DATA : SHOOT_DATA.filter(function(s){ return s.status === filter; });
+  if (q) shoots = shoots.filter(function(s){
+    return s.shootName.toLowerCase().indexOf(q) > -1 ||
+           s.type.toLowerCase().indexOf(q) > -1 ||
+           s.date.toLowerCase().indexOf(q) > -1 ||
+           (s.location||'').toLowerCase().indexOf(q) > -1;
+  });
+
+  var tbody = document.getElementById('shoot-table-body');
+  var empty = document.getElementById('shoot-table-empty');
+
   if (!shoots.length) {
-    list.innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8;font-size:14px;">No shoots match this filter.</div>';
+    tbody.innerHTML = '';
+    empty.style.display = '';
     return;
   }
-  list.innerHTML = shoots.map(function(shoot) {
-    var typeCol   = TYPE_COLORS[shoot.type] || '#f1f5f9';
-    var typeIco   = TYPE_ICONS[shoot.type]  || 'ti-camera';
-    var typeIcoC  = TYPE_ICON_C[shoot.type] || '#475569';
-    var statusCls = STATUS_CLS[shoot.status] || 'b-pending';
-    var statusLbl = STATUS_LBL[shoot.status] || 'Not Planned';
+  empty.style.display = 'none';
 
-    // Crew avatars
-    var crewAv = shoot.team && shoot.team.length
-      ? shoot.team.map(function(m){ return '<div title="' + m.name + ' — ' + m.role + '" style="width:28px;height:28px;border-radius:50%;background:' + m.color + ';border:2px solid #fff;display:inline-flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;color:#fff;margin-right:-6px;">' + m.initials + '</div>'; }).join('')
-      : '<span style="font-size:12.5px;color:#94a3b8;font-style:italic;">No crew assigned</span>';
+  tbody.innerHTML = shoots.map(function(shoot, idx) {
+    var typeCol  = TYPE_COLORS[shoot.type] || '#f1f5f9';
+    var typeIco  = TYPE_ICONS[shoot.type]  || 'ti-camera';
+    var typeIcoC = TYPE_ICON_C[shoot.type] || '#475569';
+    var sCls     = STATUS_CLS[shoot.status]  || 'b-pending';
+    var sLbl     = STATUS_LBL[shoot.status]  || 'Not Planned';
 
-    // Gear
-    var gearHtml = shoot.gearCount > 0
-      ? '<span style="font-size:12.5px;color:#64748b;"><i class="ti ti-camera" style="font-size:13px;margin-right:4px;"></i>' + shoot.gearCount + ' items allocated</span>'
-      : '<span style="font-size:12.5px;color:#94a3b8;font-style:italic;">No gear allocated</span>';
-
-    // Readiness checklist
-    var crewOk = shoot.team && shoot.team.length > 0;
-    var gearOk = shoot.gearCount > 0;
-    var check = function(ok, lbl) {
-      return '<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:' + (ok?'#15803d':'#94a3b8') + ';">'
-        + '<i class="ti ' + (ok?'ti-circle-check':'ti-circle-x') + '" style="font-size:13px;"></i>' + lbl + '</div>';
-    };
-
-    // Action button
-    var actionBtn = '';
-    if (shoot.status === 'pending') {
-      actionBtn = '<button onclick="showToastSP(\'Open Equipment Inventory → Shoot Log to plan: ' + shoot.shootName + '\')" class="btn btn-primary" style="font-size:12px;padding:7px 14px;"><i class="ti ti-users-plus" style="font-size:13px;"></i> Plan Shoot</button>';
-    } else if (shoot.status === 'allocated') {
-      actionBtn = '<button onclick="showToastSP(\'Start shoot for: ' + shoot.shootName + '\')" class="btn btn-green" style="font-size:12px;padding:7px 14px;"><i class="ti ti-player-play" style="font-size:13px;"></i> Start Shoot</button>';
-    } else if (shoot.status === 'in_progress') {
-      actionBtn = '<button onclick="showToastSP(\'End shoot for: ' + shoot.shootName + '\')" class="btn btn-red" style="font-size:12px;padding:7px 14px;"><i class="ti ti-player-stop" style="font-size:13px;"></i> End Shoot</button>';
+    /* crew chips (max 4 + overflow) */
+    var crewHtml = '';
+    if (shoot.team && shoot.team.length) {
+      var show = shoot.team.slice(0,4);
+      crewHtml = '<div class="sp-crew-avs">'
+        + show.map(function(m){
+            return '<div class="sp-av" title="' + m.name + ' — ' + m.role + '" style="background:' + m.color + ';">' + m.initials + '</div>';
+          }).join('')
+        + (shoot.team.length > 4 ? '<div class="sp-av sp-av-more">+' + (shoot.team.length - 4) + '</div>' : '')
+        + '<span style="font-size:12px;color:#64748b;margin-left:10px;">' + shoot.team.length + ' assigned</span>'
+        + '</div>';
+    } else {
+      crewHtml = '<span style="font-size:12px;color:#94a3b8;font-style:italic;">Not assigned</span>';
     }
 
-    return '<div class="shoot-card">'
-      + '<div class="shoot-card-header">'
-        + '<div style="display:flex;align-items:center;gap:14px;">'
-          + '<div class="type-icon" style="background:' + typeCol + ';width:44px;height:44px;border-radius:11px;">'
-            + '<i class="ti ' + typeIco + '" style="font-size:22px;color:' + typeIcoC + ';"></i></div>'
-          + '<div>'
-            + '<div style="font-size:15px;font-weight:700;color:#111827;">' + shoot.shootName + '</div>'
-            + '<div style="font-size:12.5px;color:#9ca3af;margin-top:2px;">'
-              + '<i class="ti ti-calendar" style="font-size:12px;margin-right:4px;"></i>' + shoot.date
-              + ' &nbsp;·&nbsp; <i class="ti ti-tag" style="font-size:12px;margin-right:4px;"></i>' + shoot.type
-            + '</div>'
-          + '</div>'
+    /* gear chip */
+    var gearHtml = shoot.gearCount > 0
+      ? '<span class="sp-gear-chip"><i class="ti ti-camera" style="font-size:12px;"></i>' + shoot.gearCount + ' items</span>'
+      : '<span style="font-size:12px;color:#94a3b8;font-style:italic;">Not allocated</span>';
+
+    /* action button in row */
+    var actBtn = '';
+    if (shoot.status === 'pending') {
+      actBtn = '<button onclick="event.stopPropagation();openPlanModal(\'' + shoot.id + '\',\'crew\')" class="btn btn-amber btn-sm"><i class="ti ti-users-plus" style="font-size:12px;"></i> Plan</button>';
+    } else if (shoot.status === 'allocated') {
+      actBtn = '<button onclick="event.stopPropagation();startShootSP(\'' + shoot.id + '\')" class="btn btn-green btn-sm"><i class="ti ti-player-play" style="font-size:12px;"></i> Start</button>';
+    } else if (shoot.status === 'in_progress') {
+      actBtn = '<button onclick="event.stopPropagation();endShootSP(\'' + shoot.id + '\')" class="btn btn-red btn-sm"><i class="ti ti-player-stop" style="font-size:12px;"></i> End</button>';
+    } else {
+      actBtn = '<button onclick="event.stopPropagation();openShootDetail(\'' + shoot.id + '\')" class="btn btn-outline btn-sm"><i class="ti ti-eye" style="font-size:12px;"></i> View</button>';
+    }
+
+    return '<tr onclick="openShootDetail(\'' + shoot.id + '\')" id="row-' + shoot.id + '">'
+      + '<td style="padding:0 0 0 16px;" onclick="event.stopPropagation();">'
+        + '<input type="checkbox" class="row-cb" data-id="' + shoot.id + '" onchange="onRowCheck()" style="accent-color:#2563eb;width:15px;height:15px;cursor:pointer;" />'
+      + '</td>'
+      /* name cell */
+      + '<td>'
+        + '<div class="sp-shoot-name">' + shoot.shootName + '</div>'
+        + '<div class="sp-shoot-id">' + shoot.id + (shoot.location ? ' · ' + shoot.location : '') + '</div>'
+      + '</td>'
+      + '<td><div style="font-size:13.5px;font-weight:500;">' + shoot.date + '</div></td>'
+      + '<td><span style="font-size:12px;background:' + typeCol + ';color:' + typeIcoC + ';padding:3px 10px;border-radius:5px;font-weight:600;">' + shoot.type + '</span></td>'
+      + '<td>' + crewHtml + '</td>'
+      + '<td>' + gearHtml + '</td>'
+      + '<td><span class="badge ' + sCls + '"><span class="dot"></span>' + sLbl + '</span></td>'
+      + '<td style="text-align:right;">' + actBtn + '</td>'
+    + '</tr>';
+  }).join('');
+}
+
+// ── Gear list builder for detail view ────────────────────────
+function _buildGearList(shoot) {
+  var items = shoot.gearItems && shoot.gearItems.length ? shoot.gearItems : [];
+  if (!items.length) return '';
+
+  var catOrder = ['Camera','Lens','Lighting','Memory','Accessory'];
+  var rows = '';
+  catOrder.forEach(function(cat) {
+    var catItems = items.filter(function(g){ return g.cat === cat; });
+    if (!catItems.length) return;
+    var ico = CAT_ICONS[cat] || 'ti-package';
+    catItems.forEach(function(g, i) {
+      var eq = OWNED_GEAR.find(function(e){ return e.id === g.id; });
+      var isFirst = i === 0;
+      var shutterCell = '';
+      if (eq && eq.cat === 'Camera' && eq.shutterCount !== undefined) {
+        var pct = Math.round(eq.shutterCount / eq.serviceEvery * 100);
+        var warn = pct >= 80;
+        shutterCell = '<td style="font-size:12.5px;color:' + (warn?'#d97706':'#64748b') + ';font-weight:' + (warn?'600':'400') + ';">'
+          + (warn ? '<i class="ti ti-alert-triangle" style="font-size:11px;margin-right:3px;"></i>' : '')
+          + eq.shutterCount.toLocaleString() + ' shots</td>';
+      } else {
+        shutterCell = '<td style="color:#9ca3af;font-size:12.5px;">—</td>';
+      }
+      rows += '<tr style="border-bottom:1px solid #f4f6fa;">'
+        + '<td style="padding:11px 16px;width:36px;">'
+          + '<div style="width:30px;height:30px;border-radius:7px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;">'
+            + '<i class="ti ' + ico + '" style="font-size:14px;color:#64748b;"></i></div>'
+        + '</td>'
+        + '<td style="padding:11px 8px;font-size:13.5px;font-weight:600;color:#111827;">' + g.name + '</td>'
+        + '<td style="padding:11px 8px;font-size:12px;color:#9ca3af;font-family:monospace;">SN: ' + g.serial + '</td>'
+        + '<td style="padding:11px 8px;">'
+          + '<span style="font-size:11.5px;background:#f1f5f9;color:#475569;padding:2px 9px;border-radius:5px;font-weight:600;">' + cat + '</span>'
+        + '</td>'
+        + shutterCell
+        + '<td style="padding:11px 16px;">'
+          + '<span style="font-size:11.5px;background:#dcfce7;color:#15803d;padding:2px 9px;border-radius:5px;font-weight:600;">Studio owned</span>'
+        + '</td>'
+      + '</tr>';
+    });
+  });
+
+  /* rental rows */
+  if (shoot.rentalNeeds && shoot.rentalNeeds.length) {
+    shoot.rentalNeeds.forEach(function(r) {
+      var ico = CAT_ICONS[r.cat] || 'ti-package';
+      for (var i = 0; i < r.qty; i++) {
+        rows += '<tr style="border-bottom:1px solid #f4f6fa;">'
+          + '<td style="padding:11px 16px;width:36px;">'
+            + '<div style="width:30px;height:30px;border-radius:7px;background:#fef9c3;display:flex;align-items:center;justify-content:center;">'
+              + '<i class="ti ' + ico + '" style="font-size:14px;color:#d97706;"></i></div>'
+          + '</td>'
+          + '<td style="padding:11px 8px;font-size:13.5px;font-weight:600;color:#92400e;">' + r.cat + ' (Rental)</td>'
+          + '<td style="padding:11px 8px;font-size:12px;color:#9ca3af;">To be sourced</td>'
+          + '<td style="padding:11px 8px;">'
+            + '<span style="font-size:11.5px;background:#f1f5f9;color:#475569;padding:2px 9px;border-radius:5px;font-weight:600;">' + r.cat + '</span>'
+          + '</td>'
+          + '<td style="color:#9ca3af;font-size:12.5px;">—</td>'
+          + '<td style="padding:11px 16px;">'
+            + '<span style="font-size:11.5px;background:#fef9c3;color:#92400e;border:1px solid #fde68a;padding:2px 9px;border-radius:5px;font-weight:600;">Rental needed</span>'
+          + '</td>'
+        + '</tr>';
+      }
+    });
+  }
+
+  return '<table style="width:100%;border-collapse:collapse;">'
+    + '<thead><tr style="background:#f8fafc;border-bottom:1px solid #e8edf3;">'
+      + '<th style="padding:9px 16px;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;width:36px;"></th>'
+      + '<th style="padding:9px 8px;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;text-align:left;">Item</th>'
+      + '<th style="padding:9px 8px;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;text-align:left;">Serial</th>'
+      + '<th style="padding:9px 8px;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;text-align:left;">Category</th>'
+      + '<th style="padding:9px 8px;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;text-align:left;">Shutter</th>'
+      + '<th style="padding:9px 16px;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;text-align:left;">Source</th>'
+    + '</tr></thead>'
+    + '<tbody>' + rows + '</tbody>'
+  + '</table>';
+}
+
+// ── Timeline step builder ─────────────────────────────────────
+function _tlStep(num, done, title, sub, icon, unlocked, isLast) {
+  var lineColor  = done ? '#22c55e' : '#e2e8f0';
+  var dotBg      = done ? '#22c55e' : (unlocked ? '#e2e8f0' : '#f1f5f9');
+  var dotIcon    = done ? 'ti-check' : icon;
+  var dotIconCol = done ? '#fff' : (unlocked ? '#94a3b8' : '#d1d5db');
+  var titleCol   = done ? '#111827' : (unlocked ? '#374151' : '#94a3b8');
+  var subCol     = done ? '#16a34a' : (unlocked ? '#64748b' : '#d1d5db');
+  return '<div style="display:flex;gap:16px;position:relative;">'
+    /* left: dot + line */
+    + '<div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">'
+      + '<div style="width:36px;height:36px;border-radius:50%;background:' + dotBg + ';display:flex;align-items:center;justify-content:center;z-index:1;' + (done?'box-shadow:0 0 0 4px #dcfce7;':'') + '">'
+        + '<i class="ti ' + dotIcon + '" style="font-size:16px;color:' + dotIconCol + ';"></i>'
+      + '</div>'
+      + (!isLast ? '<div style="width:2px;flex:1;min-height:28px;background:' + lineColor + ';margin:2px 0;"></div>' : '')
+    + '</div>'
+    /* right: content */
+    + '<div style="padding:6px 0 ' + (isLast?'0':'24px') + ';">'
+      + '<div style="font-size:14px;font-weight:700;color:' + titleCol + ';">' + title + '</div>'
+      + '<div style="font-size:12.5px;color:' + subCol + ';margin-top:2px;">' + sub + '</div>'
+    + '</div>'
+  + '</div>';
+}
+
+// ── ADMIN: DETAIL VIEW ────────────────────────────────────────
+function openShootDetail(shootId) {
+  var shoot = SHOOT_DATA.find(function(s){ return s.id === shootId; });
+  if (!shoot) return;
+
+  var typeCol  = TYPE_COLORS[shoot.type] || '#f1f5f9';
+  var typeIco  = TYPE_ICONS[shoot.type]  || 'ti-camera';
+  var typeIcoC = TYPE_ICON_C[shoot.type] || '#475569';
+  var sCls     = STATUS_CLS[shoot.status]  || 'b-pending';
+  var sLbl     = STATUS_LBL[shoot.status]  || 'Not Planned';
+
+  /* action buttons */
+  var actionBtns = '';
+  if (shoot.status === 'pending' || shoot.status === 'allocated') {
+    actionBtns += '<button onclick="openPlanModal(\'' + shoot.id + '\',\'crew\')" class="btn btn-outline btn-sm"><i class="ti ti-edit" style="font-size:12px;"></i> Edit Plan</button>';
+  }
+  if (shoot.status === 'pending') {
+    actionBtns += '<button onclick="openPlanModal(\'' + shoot.id + '\',\'crew\')" class="btn btn-amber btn-sm"><i class="ti ti-users-plus" style="font-size:12px;"></i> Plan Shoot</button>';
+  }
+  if (shoot.status === 'allocated') {
+    actionBtns += '<button onclick="startShootSP(\'' + shoot.id + '\')" class="btn btn-green btn-sm"><i class="ti ti-player-play" style="font-size:12px;"></i> Start Shoot</button>';
+  }
+  if (shoot.status === 'in_progress') {
+    actionBtns += '<button onclick="endShootSP(\'' + shoot.id + '\')" class="btn btn-red btn-sm"><i class="ti ti-player-stop" style="font-size:12px;"></i> End Shoot</button>';
+  }
+  if (shoot.status !== 'completed' && shoot.status !== 'in_progress') {
+    actionBtns += '<button onclick="deletePlan(\'' + shoot.id + '\')" class="btn btn-outline btn-sm" style="color:#dc2626;border-color:#fca5a5;" title="Delete this shoot plan"><i class="ti ti-trash" style="font-size:12px;"></i> Delete</button>';
+  }
+
+  /* gear rows — specific items if available, fallback to category tags */
+  var gearItems = shoot.gearItems && shoot.gearItems.length ? shoot.gearItems : null;
+  var gearTagsHtml = '';
+  if (gearItems) {
+    /* group items by category for a tidy display */
+    var catOrder = ['Camera','Lens','Lighting','Memory','Accessory'];
+    gearTagsHtml = catOrder.map(function(cat) {
+      var items = gearItems.filter(function(g){ return g.cat === cat; });
+      if (!items.length) return '';
+      var ico = CAT_ICONS[cat] || 'ti-package';
+      return items.map(function(g) {
+        var eq = OWNED_GEAR.find(function(e){ return e.id === g.id; });
+        var shutterNote = (eq && eq.cat === 'Camera' && eq.shutterCount !== undefined)
+          ? ' <span style="font-size:10px;color:#64748b;font-weight:400;">' + eq.shutterCount.toLocaleString() + ' shots</span>'
+          : '';
+        return '<span class="det-gear-tag" style="flex-direction:column;align-items:flex-start;gap:1px;padding:6px 10px;">'
+          + '<span style="display:flex;align-items:center;gap:5px;"><i class="ti ' + ico + '" style="font-size:12px;"></i><strong>' + g.name + '</strong>' + shutterNote + '</span>'
+          + '<span style="font-size:10px;color:#9ca3af;padding-left:17px;">SN: ' + g.serial + '</span>'
+          + '</span>';
+      }).join('');
+    }).join('');
+  } else {
+    var gearGroups = {};
+    (shoot.gear || []).forEach(function(cat){ gearGroups[cat] = (gearGroups[cat]||0)+1; });
+    gearTagsHtml = Object.keys(gearGroups).length
+      ? Object.keys(gearGroups).map(function(cat){
+          var ico = CAT_ICONS[cat] || 'ti-package';
+          var cnt = gearGroups[cat];
+          return '<span class="det-gear-tag"><i class="ti ' + ico + '" style="font-size:13px;"></i>' + cat + (cnt > 1 ? ' ×' + cnt : '') + '</span>';
+        }).join('')
+      : '';
+  }
+
+  /* crew rows */
+  var crewHtml = '';
+  if (shoot.team && shoot.team.length) {
+    crewHtml = shoot.team.map(function(m){
+      var staff = STAFF_LIST.find(function(st){ return st.id === m.staffId; }) || {};
+      var phone = staff.phone || '';
+      return '<div class="det-crew-row">'
+        + '<div class="det-crew-av" style="background:' + m.color + ';">' + m.initials + '</div>'
+        + '<div style="flex:1;">'
+          + '<div class="det-crew-name">' + m.name + '</div>'
+          + '<div class="det-crew-role">' + m.role + '</div>'
         + '</div>'
-        + '<div style="display:flex;align-items:center;gap:10px;">'
-          + '<span class="badge ' + statusCls + '"><span class="dot"></span>' + statusLbl + '</span>'
-          + actionBtn
+        + (phone ? '<div class="det-crew-phone"><i class="ti ti-phone" style="font-size:12px;"></i>' + phone + '</div>' : '')
+      + '</div>';
+    }).join('');
+  } else {
+    crewHtml = '<div class="det-warn"><i class="ti ti-alert-triangle" style="font-size:16px;"></i>No crew assigned yet. Use Plan Shoot to assign team members.</div>';
+  }
+
+  /* readiness */
+  var crewOk = shoot.team && shoot.team.length > 0;
+  var gearOk = shoot.gearCount > 0;
+  var inProg = shoot.status === 'in_progress';
+  var doneOk = shoot.status === 'completed';
+
+  function rdItem(ok, lbl) {
+    return '<div class="det-ready-item" style="color:' + (ok?'#15803d':'#94a3b8') + ';">'
+      + '<i class="ti ' + (ok?'ti-circle-check':'ti-circle-x') + '" style="font-size:17px;"></i>'
+      + '<span style="font-size:13px;">' + lbl + '</span></div>';
+  }
+
+  var html =
+    /* breadcrumb */
+    '<div class="det-breadcrumb">'
+      + '<a onclick="closeShootDetail()"><i class="ti ti-arrow-left" style="font-size:14px;"></i> All Shoots</a>'
+      + '<span>›</span>'
+      + '<span style="color:#1a1d2e;font-weight:500;">' + shoot.shootName + '</span>'
+    + '</div>'
+
+    /* header card */
+    + '<div class="det-head">'
+      + '<div class="det-head-icon" style="background:' + typeCol + ';">'
+        + '<i class="ti ' + typeIco + '" style="color:' + typeIcoC + ';font-size:26px;"></i>'
+      + '</div>'
+      + '<div class="det-head-info">'
+        + '<div class="det-head-name">' + shoot.shootName + '</div>'
+        + '<div class="det-head-meta">'
+          + '<span class="badge ' + sCls + '"><span class="dot"></span>' + sLbl + '</span>'
+          + '<span><i class="ti ti-calendar" style="font-size:12px;margin-right:4px;"></i>' + shoot.date + '</span>'
+          + (shoot.location ? '<span><i class="ti ti-map-pin" style="font-size:12px;margin-right:4px;"></i>' + shoot.location + '</span>' : '')
+          + '<span><i class="ti ti-tag" style="font-size:12px;margin-right:4px;"></i>' + shoot.type + '</span>'
+          + '<span style="color:#94a3b8;font-size:12px;">' + shoot.id + '</span>'
         + '</div>'
       + '</div>'
+      + '<div class="det-actions">' + actionBtns + '</div>'
+    + '</div>'
 
-      + '<div class="shoot-card-body">'
-        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">'
+    /* Section 1: Shoot Information */
+    + '<div class="det-section">'
+      + '<div class="det-sec-head">'
+        + '<div class="det-sec-title"><i class="ti ti-info-circle"></i> Shoot Information</div>'
+      + '</div>'
+      + '<div class="det-row">'
+        + '<div class="det-field"><div class="det-label">Shoot Name</div><div class="det-val">' + shoot.shootName + '</div></div>'
+        + '<div class="det-field"><div class="det-label">Shoot ID</div><div class="det-val" style="color:#64748b;font-family:monospace;">' + shoot.id + '</div></div>'
+      + '</div>'
+      + '<div class="det-row">'
+        + '<div class="det-field"><div class="det-label">Date</div><div class="det-val">' + shoot.date + '</div></div>'
+        + '<div class="det-field"><div class="det-label">Shoot Type</div><div class="det-val"><span style="background:' + typeCol + ';color:' + typeIcoC + ';padding:3px 10px;border-radius:5px;font-size:12.5px;font-weight:600;">' + shoot.type + '</span></div></div>'
+      + '</div>'
+      + '<div class="det-row">'
+        + '<div class="det-field"><div class="det-label">Location</div><div class="det-val ' + (shoot.location?'':'muted') + '">' + (shoot.location||'Not specified') + '</div></div>'
+        + '<div class="det-field"><div class="det-label">Status</div><div class="det-val"><span class="badge ' + sCls + '"><span class="dot"></span>' + sLbl + '</span></div></div>'
+      + '</div>'
+      + '<div class="det-row">'
+        + '<div class="det-field"><div class="det-label">Crew Assigned</div><div class="det-val">' + (shoot.team && shoot.team.length ? shoot.team.length + ' members' : '<span class="muted">None</span>') + '</div></div>'
+        + '<div class="det-field"><div class="det-label">Equipment Allocated</div><div class="det-val">' + (shoot.gearCount > 0 ? shoot.gearCount + ' items' : '<span class="muted">Not allocated</span>') + '</div></div>'
+      + '</div>'
+    + '</div>'
 
-          + '<div>'
-            + '<div style="font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;">Crew Assigned</div>'
-            + '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">' + crewAv + '</div>'
-            + (shoot.team && shoot.team.length
-                ? '<div style="margin-top:10px;">' + shoot.team.map(function(m){
-                    return '<div style="font-size:12.5px;color:#374151;margin-bottom:3px;"><span style="font-weight:600;">' + m.name + '</span> <span style="color:#9ca3af;">— ' + m.role + '</span></div>';
-                  }).join('') + '</div>'
-                : '')
+    /* Section 2: Crew */
+    + '<div class="det-section">'
+      + '<div class="det-sec-head">'
+        + '<div class="det-sec-title"><i class="ti ti-users"></i> Crew Assignment</div>'
+        + (shoot.status !== 'completed'
+          ? '<button onclick="openPlanModal(\'' + shoot.id + '\',\'crew\')" class="btn btn-outline btn-sm"><i class="ti ti-users-plus" style="font-size:12px;"></i> Assign Crew</button>'
+          : '')
+      + '</div>'
+      + crewHtml
+    + '</div>'
+
+    /* Section 3: Equipment */
+    + '<div class="det-section">'
+      + '<div class="det-sec-head">'
+        + '<div class="det-sec-title"><i class="ti ti-camera"></i> Equipment Allocation</div>'
+        + (shoot.status !== 'completed'
+          ? '<button onclick="openPlanModal(\'' + shoot.id + '\',\'gear\')" class="btn btn-outline btn-sm"><i class="ti ti-camera-plus" style="font-size:12px;"></i> Allocate Gear</button>'
+          : '')
+      + '</div>'
+      + ((shoot.gearItems && shoot.gearItems.length) || (shoot.rentalNeeds && shoot.rentalNeeds.length)
+          ? _buildGearList(shoot)
+          : '<div class="det-warn"><i class="ti ti-alert-triangle" style="font-size:16px;"></i>No gear allocated yet. Click Allocate Gear to assign equipment.</div>')
+    + '</div>'
+
+    /* Section 4: Readiness — vertical timeline */
+    + '<div class="det-section">'
+      + '<div class="det-sec-head">'
+        + '<div class="det-sec-title"><i class="ti ti-timeline"></i> Shoot Readiness</div>'
+      + '</div>'
+      + '<div style="padding:8px 20px 20px;display:flex;flex-direction:column;gap:0;">'
+        + _tlStep(1, crewOk,  'Crew Assigned',      crewOk ? (shoot.team.length + ' members ready') : 'No crew assigned yet',         'ti-users',      true)
+        + _tlStep(2, gearOk,  'Gear Allocated',      gearOk ? (shoot.gearCount + ' items allocated') : 'No equipment allocated yet',   'ti-camera',     crewOk)
+        + _tlStep(3, inProg||doneOk, 'Shoot Started', inProg ? 'Currently in progress' : (doneOk ? 'Shoot was started' : 'Not started yet'), 'ti-player-play', gearOk)
+        + _tlStep(4, doneOk, 'Shoot Completed',      doneOk ? 'All done — shoot wrapped up' : 'Pending completion',                   'ti-camera-check', inProg||doneOk, true)
+      + '</div>'
+    + '</div>';
+
+  document.getElementById('admin-detail-view').innerHTML = html;
+  document.getElementById('admin-list-view').style.display  = 'none';
+  document.getElementById('admin-detail-view').style.display = 'block';
+  _detailOpen = true;
+  window.scrollTo(0, 0);
+}
+
+function closeShootDetail() {
+  document.getElementById('admin-list-view').style.display   = '';
+  document.getElementById('admin-detail-view').style.display = 'none';
+  _detailOpen = false;
+}
+
+// ── Delete shoot plan ─────────────────────────────────────────
+function deletePlan(shootId) {
+  var shoot = SHOOT_DATA.find(function(s){ return s.id === shootId; });
+  if (!shoot) return;
+  var confirmed = window.confirm(
+    'Delete shoot plan for "' + shoot.shootName + '"?\n\nThis will remove the crew and equipment allocation. This action cannot be undone.'
+  );
+  if (!confirmed) return;
+  var idx = SHOOT_DATA.findIndex(function(s){ return s.id === shootId; });
+  if (idx > -1) SHOOT_DATA.splice(idx, 1);
+  // close detail if open
+  if (_detailOpen) {
+    document.getElementById('admin-detail-view').style.display = 'none';
+    document.getElementById('admin-list-view').style.display   = '';
+    _detailOpen = false;
+  }
+  renderAdminStats();
+  renderAdminTable(_activeFilter);
+  showToastSP('Shoot plan deleted: ' + shoot.shootName);
+}
+
+// ── Current logged-in user → staff ID ────────────────────────
+function getCurrentStaffId() {
+  var role = localStorage.getItem('zp_role') || 'super-admin';
+  var map  = { 'super-admin':'STF-005', 'studio-manager':'STF-003', 'photographer':'STF-001' };
+  return map[role] || 'STF-005';
+}
+
+function getCurrentStaffMeta() {
+  var id = getCurrentStaffId();
+  return STAFF_LIST.find(function(s){ return s.id === id; }) || STAFF_LIST[0];
+}
+
+// ── Availability check: is staff free on given date? ─────────
+function getStaffConflicts(staffId, date, excludeShootId) {
+  return SHOOT_DATA.filter(function(s){
+    return s.id !== excludeShootId
+      && s.date === date
+      && s.status !== 'completed'
+      && s.team && s.team.some(function(m){ return m.staffId === staffId; });
+  });
+}
+
+// ── Shoot status actions ─────────────────────────────────────
+function startShootSP(shootId) {
+  var shoot = SHOOT_DATA.find(function(s){ return s.id === shootId; });
+  if (!shoot) return;
+  shoot.status = 'in_progress';
+  showToastSP('Shoot started — ' + shoot.shootName);
+  renderAdminStats();
+  if (_detailOpen) { openShootDetail(shootId); } else { renderAdminTable(_activeFilter); }
+}
+
+function endShootSP(shootId) {
+  var shoot = SHOOT_DATA.find(function(s){ return s.id === shootId; });
+  if (!shoot) return;
+
+  var cameras = (shoot.gearItems||[]).filter(function(g){ return g.cat === 'Camera'; });
+  var allGear = shoot.gearItems || [];
+
+  /* ── Camera rows: just the camera name + big number input ── */
+  var camRows = cameras.map(function(cam) {
+    var eq = OWNED_GEAR.find(function(g){ return g.id === cam.id; });
+    var current = eq ? eq.shutterCount : 0;
+    var svcEvery = eq ? eq.serviceEvery : 50000;
+    var pct = Math.round(current / svcEvery * 100);
+    var barCol = pct >= 100 ? '#dc2626' : pct >= 80 ? '#f59e0b' : '#22c55e';
+    return '<div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid #f1f5f9;">'
+      + '<div style="flex:1;">'
+        + '<div style="font-size:15px;font-weight:700;color:#111827;">' + cam.name + '</div>'
+        + '<div style="display:flex;align-items:center;gap:8px;margin-top:5px;">'
+          + '<div style="flex:1;height:4px;background:#e2e8f0;border-radius:4px;max-width:120px;">'
+            + '<div style="width:' + Math.min(pct,100) + '%;height:4px;border-radius:4px;background:' + barCol + ';"></div>'
           + '</div>'
-
-          + '<div>'
-            + '<div style="font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;">Equipment</div>'
-            + gearHtml
-            + '<div style="margin-top:14px;display:flex;flex-direction:column;gap:5px;">'
-              + check(crewOk, 'Crew assigned')
-              + check(gearOk, 'Gear allocated')
-              + check(shoot.status === 'completed', 'Shoot completed')
-            + '</div>'
-          + '</div>'
-
+          + '<span style="font-size:11.5px;color:#94a3b8;">' + current.toLocaleString() + ' / ' + svcEvery.toLocaleString() + ' shots</span>'
         + '</div>'
+      + '</div>'
+      + '<div style="display:flex;align-items:center;gap:8px;">'
+        + '<span style="font-size:13px;color:#64748b;white-space:nowrap;">Shots today</span>'
+        + '<input type="number" id="sc-' + cam.id + '" min="0" max="9999" placeholder="0"'
+          + ' style="width:90px;border:2px solid #e2e8f0;border-radius:10px;padding:10px 12px;font-size:18px;font-weight:700;text-align:center;font-family:Inter,sans-serif;outline:none;color:#1a1d2e;"'
+          + ' onfocus="this.style.borderColor=\'#2563eb\'" onblur="this.style.borderColor=\'#e2e8f0\'" />'
       + '</div>'
     + '</div>';
   }).join('');
+
+  var shutterBlock = cameras.length
+    ? '<div style="background:#fff;border:1px solid #e8edf3;border-radius:14px;padding:20px 24px;margin-bottom:14px;">'
+        + '<div style="font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">Shutter Count</div>'
+        + camRows
+      + '</div>'
+    : '';
+
+  /* ── Gear condition: one pill per item, tap to toggle damaged ── */
+  var gearPills = allGear.map(function(g) {
+    return '<button id="dmg-' + g.id + '" onclick="_toggleDamage(this,\'' + g.id + '\')"'
+      + ' style="display:flex;align-items:center;gap:8px;padding:9px 14px;border:1.5px solid #e2e8f0;border-radius:30px;background:#fff;font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#374151;cursor:pointer;transition:all .13s;" data-dmg="0">'
+      + '<i class="ti ti-check" style="font-size:14px;color:#22c55e;"></i>'
+      + g.name
+    + '</button>';
+  }).join('');
+
+  var gearBlock = allGear.length
+    ? '<div style="background:#fff;border:1px solid #e8edf3;border-radius:14px;padding:20px 24px;margin-bottom:14px;">'
+        + '<div style="font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">All gear back?</div>'
+        + '<div style="font-size:13px;color:#64748b;margin-bottom:14px;">Tap any item that has damage</div>'
+        + '<div style="display:flex;flex-wrap:wrap;gap:8px;">' + gearPills + '</div>'
+      + '</div>'
+    : '';
+
+  /* ── Notes: single text area, no heading clutter ── */
+  var notesBlock = '<div style="background:#fff;border:1px solid #e8edf3;border-radius:14px;padding:20px 24px;margin-bottom:14px;">'
+    + '<div style="font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px;">Any notes? <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></div>'
+    + '<textarea id="comp-notes" rows="2" placeholder="Issues, client feedback, follow-ups…"'
+      + ' style="width:100%;border:2px solid #e2e8f0;border-radius:10px;padding:11px 14px;font-size:14px;font-family:Inter,sans-serif;resize:none;outline:none;box-sizing:border-box;color:#374151;"'
+      + ' onfocus="this.style.borderColor=\'#2563eb\'" onblur="this.style.borderColor=\'#e2e8f0\'"></textarea>'
+  + '</div>';
+
+  var html =
+    /* ── back link ── */
+    '<div class="det-breadcrumb">'
+      + '<a onclick="closeCompleteView()" style="cursor:pointer;"><i class="ti ti-arrow-left" style="font-size:14px;"></i> ' + shoot.shootName + '</a>'
+      + '<span>›</span><span style="color:#1a1d2e;font-weight:500;">Wrap Up</span>'
+    + '</div>'
+
+    /* ── hero row: shoot name + single CTA ── */
+    + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">'
+      + '<div>'
+          + '<div style="font-size:22px;font-weight:800;color:#1a1d2e;letter-spacing:-.4px;">Wrap up shoot</div>'
+          + '<div style="font-size:13.5px;color:#64748b;margin-top:3px;">' + shoot.shootName + ' · ' + shoot.date + '</div>'
+        + '</div>'
+      + '<button onclick="closeCompleteView()" style="background:none;border:none;font-size:22px;color:#94a3b8;cursor:pointer;padding:4px 8px;line-height:1;">×</button>'
+    + '</div>'
+
+    + shutterBlock
+    + gearBlock
+    + notesBlock
+
+    /* ── big complete button ── */
+    + '<button onclick="_saveCompletion(\'' + shootId + '\')"'
+      + ' style="width:100%;padding:16px;background:#16a34a;color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:background .13s;"'
+      + ' onmouseover="this.style.background=\'#15803d\'" onmouseout="this.style.background=\'#16a34a\'">'
+      + '<i class="ti ti-circle-check" style="font-size:20px;"></i> Mark Shoot as Completed'
+    + '</button>';
+
+  var planView = document.getElementById('admin-plan-view');
+  planView.innerHTML = html;
+  document.getElementById('admin-list-view').style.display   = 'none';
+  document.getElementById('admin-detail-view').style.display = 'none';
+  document.getElementById('admin-create-view').style.display = 'none';
+  planView.style.display = 'block';
+  _planOpenFromDetail = _detailOpen;
+  _completeShootId    = shootId;
+  window.scrollTo(0, 0);
+}
+
+function _toggleDamage(btn, gearId) {
+  var isDmg = btn.getAttribute('data-dmg') === '1';
+  if (isDmg) {
+    btn.setAttribute('data-dmg','0');
+    btn.style.borderColor = '#e2e8f0';
+    btn.style.background  = '#fff';
+    btn.style.color       = '#374151';
+    btn.querySelector('i').className     = 'ti ti-check';
+    btn.querySelector('i').style.color   = '#22c55e';
+  } else {
+    btn.setAttribute('data-dmg','1');
+    btn.style.borderColor = '#fca5a5';
+    btn.style.background  = '#fff1f2';
+    btn.style.color       = '#dc2626';
+    btn.querySelector('i').className     = 'ti ti-alert-triangle';
+    btn.querySelector('i').style.color   = '#dc2626';
+  }
+}
+
+function closeCompleteView() {
+  document.getElementById('admin-plan-view').style.display = 'none';
+  if (_planOpenFromDetail && _completeShootId) {
+    openShootDetail(_completeShootId);
+  } else {
+    document.getElementById('admin-list-view').style.display = '';
+  }
+}
+
+function _saveCompletion(shootId) {
+  var shoot = SHOOT_DATA.find(function(s){ return s.id === shootId; });
+  if (!shoot) return;
+
+  /* shutter counts */
+  var cameras = (shoot.gearItems||[]).filter(function(g){ return g.cat === 'Camera'; });
+  var maintenanceAlerts = [];
+  cameras.forEach(function(cam) {
+    var inp = document.getElementById('sc-' + cam.id);
+    var shots = inp ? parseInt(inp.value, 10) : 0;
+    if (!shots || shots < 0) return;
+    var eq = OWNED_GEAR.find(function(g){ return g.id === cam.id; });
+    if (!eq) return;
+    eq.shutterCount += shots;
+    cam.shutterShots = shots;
+    var pct = eq.shutterCount / eq.serviceEvery;
+    if (pct >= 1.0)  maintenanceAlerts.push('🔴 ' + eq.name + ' — SERVICE OVERDUE (' + eq.shutterCount.toLocaleString() + ' shots)');
+    else if (pct >= 0.8) maintenanceAlerts.push('🟡 ' + eq.name + ' — Service soon (' + Math.round(pct*100) + '% of interval)');
+  });
+  /* persist updated shutter counts to localStorage immediately */
+  _saveEquipment();
+
+  /* equipment conditions — read damage pills, update ZPData */
+  var damagedItems = [];
+  (shoot.gearItems||[]).forEach(function(g) {
+    var btn = document.getElementById('dmg-' + g.id);
+    if (btn) {
+      var isDmg = btn.getAttribute('data-dmg') === '1';
+      g.conditionReturned = isDmg ? 'damaged' : 'ok';
+      if (isDmg) {
+        damagedItems.push(g.name);
+        /* mark item as damaged in the master equipment list */
+        var eq = OWNED_GEAR.find(function(e){ return e.id === g.id; });
+        if (eq) { eq.status = 'damaged'; eq.condition = 'Needs Repair'; }
+      }
+    }
+  });
+  if (damagedItems.length) _saveEquipment(); /* persist damage status too */
+
+  /* notes */
+  var notesEl = document.getElementById('comp-notes');
+  shoot.completionNotes = notesEl ? notesEl.value.trim() : '';
+
+  /* warn only if damage flagged */
+  if (damagedItems.length) {
+    var proceed = window.confirm('Damage flagged on: ' + damagedItems.join(', ') + '\n\nComplete shoot anyway?');
+    if (!proceed) return;
+  }
+
+  document.getElementById('admin-plan-view').style.display = 'none';
+  var wasFromDetail = _planOpenFromDetail;
+  _completeShootId = null;
+  _doCompleteShoot(shoot, wasFromDetail);
+
+  if (maintenanceAlerts.length) {
+    setTimeout(function() {
+      showToastSP('⚠ Maintenance alert — check Equipment Inventory');
+      alert('Equipment Maintenance Alerts:\n\n' + maintenanceAlerts.join('\n'));
+    }, 400);
+  }
+}
+
+function _doCompleteShoot(shoot, returnToDetail) {
+  shoot.status = 'completed';
+  renderAdminStats();
+  if (returnToDetail || _detailOpen) { _detailOpen = true; openShootDetail(shoot.id); } else { renderAdminTable(_activeFilter); }
+  showToastSP('Shoot completed — ' + shoot.shootName);
 }
 
 // ── PHOTOGRAPHER VIEW ─────────────────────────────────────────
 function renderPhotographerView() {
-  // Populate staff selector
   var sel = document.getElementById('staff-selector');
   if (!sel.options.length) {
     STAFF_LIST.forEach(function(s) {
@@ -394,36 +1146,25 @@ function renderPhotographerView() {
   var staffId = sel.value || 'STF-001';
   var staff   = STAFF_LIST.find(function(s){ return s.id === staffId; }) || STAFF_LIST[0];
 
-  // Update topbar name
   document.getElementById('user-initials').textContent = staff.initials;
   document.getElementById('user-initials').style.background = 'linear-gradient(135deg,' + staff.color + ',#374151)';
   document.getElementById('user-name-top').textContent = staff.name;
 
-  // My shoots
   var myShoots = SHOOT_DATA.filter(function(s){
     return s.team && s.team.some(function(m){ return m.staffId === staffId; });
   });
-
-  var today = new Date();
-  var todayStr = today.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
-  var tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
-
   var upcoming = myShoots.filter(function(s){ return s.status !== 'completed'; });
   var past     = myShoots.filter(function(s){ return s.status === 'completed'; });
 
-  var html = '';
-
-  // Today banner
-  html += '<div class="today-bar">'
+  var html = '<div class="today-bar">'
     + '<div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
       + '<i class="ti ti-sun" style="font-size:22px;"></i></div>'
     + '<div>'
       + '<div style="font-size:15px;font-weight:700;">Good day, ' + staff.name + '!</div>'
-      + '<div style="font-size:12.5px;opacity:.85;margin-top:2px;">Today is ' + today.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}) + ' · You have ' + upcoming.length + ' upcoming shoot' + (upcoming.length!==1?'s':'') + '</div>'
+      + '<div style="font-size:12.5px;opacity:.85;margin-top:2px;">Today is ' + new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}) + ' · You have ' + upcoming.length + ' upcoming shoot' + (upcoming.length!==1?'s':'') + '</div>'
     + '</div>'
   + '</div>';
 
-  // Personal stats
   html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;">'
     + mkStat('Total Assigned', myShoots.length, 'ti-calendar-event', staff.color, 'All shoots')
     + mkStat('Upcoming', upcoming.length, 'ti-clock', '#d97706', 'Not yet completed')
@@ -431,25 +1172,21 @@ function renderPhotographerView() {
   + '</div>';
 
   if (!upcoming.length) {
-    html += '<div class="card" style="text-align:center;padding:40px;">'
-      + '<div style="font-size:40px;margin-bottom:12px;">📷</div>'
-      + '<div style="font-size:16px;font-weight:600;color:#374151;margin-bottom:6px;">No upcoming shoots</div>'
-      + '<div style="font-size:13.5px;color:#94a3b8;">Check back after new assignments are made.</div>'
+    html += '<div style="background:#fff;border-radius:12px;border:1px solid #e8edf3;text-align:center;padding:40px;">'
+      + '<div style="font-size:36px;margin-bottom:12px;">📷</div>'
+      + '<div style="font-size:15px;font-weight:600;color:#374151;margin-bottom:6px;">No upcoming shoots</div>'
+      + '<div style="font-size:13px;color:#94a3b8;">Check back after new assignments.</div>'
     + '</div>';
   } else {
-    html += '<div style="font-size:14px;font-weight:700;color:#111827;margin-bottom:14px;">Upcoming Shoots</div>';
+    html += '<div style="font-size:13px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;">Upcoming Shoots</div>';
     upcoming.forEach(function(shoot) {
-      var myRole = '';
       var myMember = shoot.team && shoot.team.find(function(m){ return m.staffId === staffId; });
-      if (myMember) myRole = myMember.role;
-
+      var myRole   = myMember ? myMember.role : '';
       var typeCol  = TYPE_COLORS[shoot.type]  || '#f1f5f9';
       var typeIco  = TYPE_ICONS[shoot.type]   || 'ti-camera';
       var typeIcoC = TYPE_ICON_C[shoot.type]  || '#475569';
-      var statusCls = STATUS_CLS[shoot.status] || 'b-pending';
-      var statusLbl = STATUS_LBL[shoot.status] || 'Not Planned';
-
-      // Teammates (excluding self)
+      var sCls     = STATUS_CLS[shoot.status] || 'b-pending';
+      var sLbl     = STATUS_LBL[shoot.status] || 'Not Planned';
       var teammates = (shoot.team || []).filter(function(m){ return m.staffId !== staffId; });
 
       html += '<div class="my-schedule-card">'
@@ -459,11 +1196,11 @@ function renderPhotographerView() {
           + '<div style="flex:1;">'
             + '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'
               + '<div style="font-size:17px;font-weight:700;color:#111827;">' + shoot.shootName + '</div>'
-              + '<span class="badge ' + statusCls + '"><span class="dot"></span>' + statusLbl + '</span>'
+              + '<span class="badge ' + sCls + '"><span class="dot"></span>' + sLbl + '</span>'
             + '</div>'
             + '<div style="font-size:13px;color:#9ca3af;margin-top:4px;">'
               + '<i class="ti ti-calendar" style="font-size:12px;margin-right:4px;"></i>' + shoot.date
-              + ' &nbsp;·&nbsp; ' + shoot.type
+              + (shoot.location ? ' &nbsp;·&nbsp; <i class="ti ti-map-pin" style="font-size:12px;margin-right:4px;"></i>' + shoot.location : '')
             + '</div>'
             + (myRole ? '<div style="margin-top:6px;"><span style="background:' + staff.color + '1a;color:' + staff.color + ';font-size:12px;font-weight:600;padding:3px 10px;border-radius:5px;">Your Role: ' + myRole + '</span></div>' : '')
           + '</div>'
@@ -471,12 +1208,11 @@ function renderPhotographerView() {
 
         + '<div class="info-grid">'
           + '<div><div class="info-cell-label">Date</div><div class="info-cell-val">' + shoot.date + '</div></div>'
-          + '<div><div class="info-cell-label">Shoot Type</div><div class="info-cell-val">' + shoot.type + '</div></div>'
+          + '<div><div class="info-cell-label">Location</div><div class="info-cell-val">' + (shoot.location||'TBD') + '</div></div>'
           + '<div><div class="info-cell-label">Your Role</div><div class="info-cell-val" style="color:' + staff.color + ';font-weight:600;">' + (myRole||'—') + '</div></div>'
           + '<div><div class="info-cell-label">Gear Allocated</div><div class="info-cell-val">' + (shoot.gearCount > 0 ? shoot.gearCount + ' items' : 'Not yet allocated') + '</div></div>'
         + '</div>'
 
-        // Teammates
         + (teammates.length ? '<div style="margin-bottom:16px;">'
           + '<div style="font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;">Your Team</div>'
           + teammates.map(function(m){
@@ -486,41 +1222,34 @@ function renderPhotographerView() {
                 + (m.phone ? '<div style="font-size:12px;color:#6b7280;margin-left:auto;">' + m.phone + '</div>' : '')
               + '</div>';
             }).join('')
-          + '</div>'
-          : '')
+          + '</div>' : '')
 
-        // Gear list (abbreviated)
         + (shoot.gearCount > 0 ? '<div style="margin-bottom:16px;">'
           + '<div style="font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;">Allocated Gear (' + shoot.gearCount + ' items)</div>'
           + '<div>' + shoot.gear.map(function(cat){
-              var catIco = {Camera:'ti-camera',Lens:'ti-adjustments',Lighting:'ti-bolt',Memory:'ti-database',Accessory:'ti-tool'}[cat]||'ti-package';
-              return '<span class="gear-tag"><i class="ti ' + catIco + '" style="font-size:12px;"></i>' + cat + '</span>';
+              return '<span class="gear-tag"><i class="ti ' + (CAT_ICONS[cat]||'ti-package') + '" style="font-size:12px;"></i>' + cat + '</span>';
             }).join('') + '</div>'
           + '</div>'
-          : '<div style="margin-bottom:16px;padding:12px 14px;background:#fef9c3;border-radius:8px;font-size:13px;color:#a16207;"><i class="ti ti-alert-triangle" style="margin-right:6px;"></i>Gear not yet allocated for this shoot</div>')
+          : '<div style="margin-bottom:16px;padding:10px 14px;background:#fef9c3;border-radius:8px;font-size:13px;color:#a16207;"><i class="ti ti-alert-triangle" style="margin-right:6px;"></i>Gear not yet allocated</div>')
 
-        // Action buttons
         + '<div style="display:flex;flex-wrap:wrap;gap:8px;">'
-          + (shoot.status === 'allocated' ? '<button onclick="showToastSP(\'Shoot started! Go make amazing photos 📷\')" class="btn btn-green"><i class="ti ti-player-play"></i> Start Shoot</button>' : '')
-          + (shoot.status === 'in_progress' ? '<button onclick="showToastSP(\'Shoot ended. Please log equipment usage.\')" class="btn btn-red"><i class="ti ti-player-stop"></i> End Shoot</button>' : '')
-          + (shoot.status !== 'completed' && shoot.status !== 'pending' ? '<button onclick="showToastSP(\'Opening equipment usage log…\')" class="btn btn-outline"><i class="ti ti-camera-check"></i> Log Usage</button>' : '')
-          + '<button onclick="showToastSP(\'Opening shoot details in Equipment Inventory…\')" class="btn btn-outline"><i class="ti ti-eye"></i> View Full Details</button>'
+          + (shoot.status==='allocated' ? '<button onclick="startShootSP(\'' + shoot.id + '\')" class="btn btn-green"><i class="ti ti-player-play"></i> Start Shoot</button>' : '')
+          + (shoot.status==='in_progress' ? '<button onclick="endShootSP(\'' + shoot.id + '\')" class="btn btn-red"><i class="ti ti-player-stop"></i> End Shoot</button>' : '')
+          + '<button onclick="showToastSP(\'Opening equipment usage log…\')" class="btn btn-outline"><i class="ti ti-camera-check"></i> Log Usage</button>'
         + '</div>'
       + '</div>';
     });
   }
 
-  // Past shoots
   if (past.length) {
-    html += '<div style="font-size:14px;font-weight:700;color:#111827;margin:24px 0 14px;">Past Shoots</div>';
+    html += '<div style="font-size:13px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.6px;margin:24px 0 12px;">Past Shoots</div>';
     html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">';
     past.forEach(function(shoot) {
       var myMember = shoot.team && shoot.team.find(function(m){ return m.staffId === staffId; });
-      var myRole   = myMember ? myMember.role : '';
       html += '<div style="background:#fff;border:1px solid #e8edf3;border-radius:11px;padding:16px;">'
         + '<div style="font-size:14px;font-weight:600;color:#111827;margin-bottom:4px;">' + shoot.shootName + '</div>'
-        + '<div style="font-size:12.5px;color:#9ca3af;margin-bottom:8px;">' + shoot.date + '</div>'
-        + (myRole ? '<div style="font-size:12px;color:#475569;margin-bottom:6px;">Role: <strong>' + myRole + '</strong></div>' : '')
+        + '<div style="font-size:12.5px;color:#9ca3af;margin-bottom:8px;">' + shoot.date + (shoot.location ? ' · ' + shoot.location : '') + '</div>'
+        + (myMember ? '<div style="font-size:12px;color:#475569;margin-bottom:8px;">Role: <strong>' + myMember.role + '</strong></div>' : '')
         + '<span class="badge b-completed"><span class="dot"></span>Completed</span>'
       + '</div>';
     });
@@ -530,7 +1259,760 @@ function renderPhotographerView() {
   document.getElementById('photo-view-content').innerHTML = html;
 }
 
-// ── Init ──────────────────────────────────────────────────────
+// ══ MODAL HELPERS ════════════════════════════════════════════
+function closeModal() {
+  var root = document.getElementById('sp-modal-root');
+  root.innerHTML = '';
+}
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+
+// ══ CREATE SHOOT PLAN PAGE ════════════════════════════════════
+var BK_LOCATIONS = {
+  'BK-001':'Central Park', 'BK-002':'Studio 4', 'BK-003':'Riverside Park',
+  'BK-004':'City Gardens', 'BK-005':'Marriott Hotel', 'BK-006':'TBD',
+  'BK-007':'ITC Hotel',    'BK-008':'Client Office'
+};
+
+function openCreateShootPlan() {
+  // Load confirmed / qualified bookings from dataStore
+  var all = (typeof ZPData !== 'undefined' ? ZPData.get('bookings') : []);
+  var bookings = all.filter(function(b){
+    return b.status === 'confirmed' || b.status === 'qualified';
+  });
+
+  // Build booking dropdown options
+  var plannedNames = SHOOT_DATA.map(function(s){ return s.shootName.toLowerCase(); });
+  function isPlanned(b) {
+    return plannedNames.some(function(n){
+      return n.indexOf(b.client.toLowerCase().split('&')[0].trim()) > -1;
+    });
+  }
+
+  var opts = '<option value="">— Select a booking event —</option>'
+    + bookings.map(function(b){
+        var already = isPlanned(b);
+        return '<option value="' + b.id + '"' + (already?' disabled':'') + '>'
+          + b.client + ' · ' + b.date + ' · ' + b.type
+          + (already ? ' (Already planned)' : '')
+        + '</option>';
+      }).join('');
+
+  var GEAR_CATS = [
+    { key:'Camera',    icon:'ti-camera',      label:'Camera / Body',         note:'Sony A7R V, Canon R5…' },
+    { key:'Lens',      icon:'ti-adjustments', label:'Lens',                  note:'24-70mm, 85mm, 70-200mm…' },
+    { key:'Lighting',  icon:'ti-bolt',        label:'Lighting Unit',         note:'Profoto B10X, Godox AD400…' },
+    { key:'Memory',    icon:'ti-database',    label:'Memory Cards',          note:'128GB CF / SD cards' },
+    { key:'Accessory', icon:'ti-tool',        label:'Accessories / Tripod',  note:'Manfrotto, reflectors, filters…' },
+  ];
+
+  var currentStaffIdCr = getCurrentStaffId();
+  var crewRowsHtml = STAFF_LIST.map(function(st) {
+    var isSelf = st.id === currentStaffIdCr;
+    var selfBadge = isSelf
+      ? '<span style="font-size:11px;background:#2563eb;color:#fff;padding:2px 8px;border-radius:4px;font-weight:700;margin-left:6px;flex-shrink:0;">You</span>'
+      : '';
+    return '<div class="cr-crew-row" onclick="toggleCrCreatePick(this)" id="cr-crew-' + st.id + '">'
+      + '<input type="checkbox" data-id="' + st.id + '" />'
+      + '<div class="cr-crew-av" style="background:' + st.color + ';">' + st.initials + '</div>'
+      + '<div style="flex:1;">'
+        + '<div style="font-size:13.5px;font-weight:600;color:#111827;">' + st.name + '</div>'
+        + '<div style="font-size:12px;color:#9ca3af;">' + st.role + '</div>'
+      + '</div>'
+      + '<div style="font-size:12px;color:#6b7280;">' + st.phone + '</div>'
+      + '<span style="font-size:11px;background:' + st.color + '1a;color:' + st.color + ';padding:2px 9px;border-radius:4px;font-weight:700;margin-left:8px;flex-shrink:0;">'
+        + st.role.split(' ')[0] + '</span>'
+      + selfBadge
+      + '<span class="cr-avail-badge-' + st.id + '" style="font-size:11px;background:#dcfce7;color:#15803d;padding:2px 8px;border-radius:4px;font-weight:600;margin-left:6px;flex-shrink:0;">Available</span>'
+    + '</div>';
+  }).join('');
+
+  /* ── owned gear: specific item checkboxes grouped by category ── */
+  var GEAR_CAT_META_CR = [
+    { key:'Camera',    icon:'ti-camera',      label:'Camera / Body' },
+    { key:'Lens',      icon:'ti-adjustments', label:'Lens' },
+    { key:'Lighting',  icon:'ti-bolt',        label:'Lighting Unit' },
+    { key:'Memory',    icon:'ti-database',    label:'Memory Cards' },
+    { key:'Accessory', icon:'ti-tool',        label:'Accessories' },
+  ];
+
+  var ownedGearHtml = GEAR_CAT_META_CR.map(function(gc) {
+    var items = OWNED_GEAR.filter(function(eq){ return eq.cat === gc.key; });
+    if (!items.length) return '';
+    var itemRows = items.map(function(eq) {
+      var usedId  = getGearShootId(eq.id);
+      var isBusy  = !!usedId;
+      var busyName = isBusy ? (SHOOT_DATA.find(function(s){ return s.id === usedId; }) || {}).shootName || '' : '';
+      var availBadge = isBusy
+        ? '<span class="cr-avail-badge-gear-' + eq.id + '" style="font-size:11px;background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:4px;font-weight:600;flex-shrink:0;">In Use · ' + busyName.split('—')[0].trim() + '</span>'
+        : '<span class="cr-avail-badge-gear-' + eq.id + '" style="font-size:11px;background:#dcfce7;color:#15803d;padding:2px 8px;border-radius:4px;font-weight:600;flex-shrink:0;">Available</span>';
+      var shutterNote = (eq.cat === 'Camera' && eq.shutterCount !== undefined)
+        ? ' <span style="font-size:10.5px;color:' + (eq.shutterCount/eq.serviceEvery >= 0.8?'#d97706':'#64748b') + ';">' + (eq.shutterCount/eq.serviceEvery>=0.8?'⚠ ':'') + eq.shutterCount.toLocaleString() + ' shots</span>'
+        : '';
+      return '<div class="cr-gear-item-row' + (isBusy?' cr-gear-busy':'') + '" id="cr-gear-' + eq.id + '" onclick="toggleCrGearPick(this)">'
+        + '<input type="checkbox" data-id="' + eq.id + '" data-cat="' + gc.key + '"' + (isBusy?' disabled':'') + ' />'
+        + '<div style="width:28px;height:28px;border-radius:6px;background:' + eq.color + '18;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
+          + '<i class="ti ' + gc.icon + '" style="font-size:13px;color:' + eq.color + ';"></i></div>'
+        + '<div style="flex:1;min-width:0;">'
+          + '<div style="font-size:13px;font-weight:600;color:#111827;">' + eq.name + shutterNote + '</div>'
+          + '<div style="font-size:11px;color:#9ca3af;margin-top:1px;">SN: ' + eq.serial + '</div>'
+        + '</div>'
+        + availBadge
+      + '</div>';
+    }).join('');
+    return '<div style="margin-bottom:14px;">'
+      + '<div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;display:flex;align-items:center;gap:6px;padding:6px 0 6px;border-bottom:1px solid #f1f5f9;margin-bottom:4px;">'
+        + '<i class="ti ' + gc.icon + '" style="font-size:12px;"></i>' + gc.label
+      + '</div>'
+      + itemRows
+    + '</div>';
+  }).join('');
+
+  /* ── rental planning: qty pickers for items not in inventory ── */
+  var rentalRowsHtml = GEAR_CAT_META_CR.map(function(gc) {
+    return '<div class="cr-gear-row" style="border:1.5px dashed #e2e8f0;background:#fafbfc;">'
+      + '<div style="width:32px;height:32px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
+        + '<i class="ti ' + gc.icon + '" style="font-size:15px;color:#94a3b8;"></i></div>'
+      + '<div style="flex:1;">'
+        + '<div style="font-size:13px;font-weight:600;color:#374151;">' + gc.label + '</div>'
+        + '<div style="font-size:11px;color:#9ca3af;margin-top:1px;">Additional rental units needed</div>'
+      + '</div>'
+      + '<div class="cr-qty-wrap">'
+        + '<button class="cr-qty-btn" onclick="crChangeQty(\'r-' + gc.key + '\',-1)">−</button>'
+        + '<div class="cr-qty-val" id="crqty-r-' + gc.key + '">0</div>'
+        + '<button class="cr-qty-btn" onclick="crChangeQty(\'r-' + gc.key + '\',1)">+</button>'
+      + '</div>'
+    + '</div>';
+  }).join('');
+
+  var html =
+    /* breadcrumb */
+    '<div class="det-breadcrumb">'
+      + '<a onclick="closeCreateView()"><i class="ti ti-arrow-left" style="font-size:14px;"></i> All Shoots</a>'
+      + '<span>›</span>'
+      + '<span style="color:#1a1d2e;font-weight:500;">New Shoot Plan</span>'
+    + '</div>'
+
+    /* page header */
+    + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">'
+      + '<div>'
+        + '<div style="font-size:21px;font-weight:800;color:#1a1d2e;letter-spacing:-.4px;">Create Shoot Plan</div>'
+        + '<div style="font-size:13px;color:#64748b;margin-top:3px;">Select a confirmed booking and assign crew &amp; equipment</div>'
+      + '</div>'
+      + '<div style="display:flex;gap:8px;">'
+        + '<button class="btn btn-outline" onclick="closeCreateView()">Cancel</button>'
+        + '<button class="btn btn-outline" onclick="saveCreatePlan(false)"><i class="ti ti-device-floppy" style="font-size:13px;"></i> Save Draft</button>'
+        + '<button class="btn btn-primary" onclick="saveCreatePlan(true)"><i class="ti ti-circle-check" style="font-size:13px;"></i> Save &amp; Allocate</button>'
+      + '</div>'
+    + '</div>'
+
+    /* ── Section 1: Booking / Event ── */
+    + '<div class="cr-section">'
+      + '<div class="cr-sec-head"><i class="ti ti-calendar-event" style="font-size:15px;color:#2563eb;"></i><span class="cr-sec-title">Booking / Event Information</span></div>'
+
+      /* booking dropdown — full row */
+      + '<div class="cr-row full">'
+        + '<div class="cr-field">'
+          + '<div class="cr-label">Select Booking Event <span style="color:#ef4444;">*</span></div>'
+          + '<select class="cr-select" id="cr-booking-sel" onchange="crBookingSelected()">' + opts + '</select>'
+        + '</div>'
+      + '</div>'
+
+      /* auto-filled fields */
+      + '<div class="cr-row">'
+        + '<div class="cr-field"><div class="cr-label">Client / Event Name</div><div class="cr-val-ro empty" id="cr-client">—</div></div>'
+        + '<div class="cr-field"><div class="cr-label">Booking ID</div><div class="cr-val-ro empty" id="cr-bkid">—</div></div>'
+      + '</div>'
+      + '<div class="cr-row">'
+        + '<div class="cr-field"><div class="cr-label">Shoot Date</div><div class="cr-val-ro empty" id="cr-date">—</div></div>'
+        + '<div class="cr-field"><div class="cr-label">Shoot Type</div><div class="cr-val-ro empty" id="cr-type">—</div></div>'
+      + '</div>'
+      + '<div class="cr-row">'
+        + '<div class="cr-field"><div class="cr-label">Budget</div><div class="cr-val-ro empty" id="cr-budget">—</div></div>'
+        + '<div class="cr-field"><div class="cr-label">Location / Venue <span style="color:#64748b;font-weight:400;font-size:10px;">(editable)</span></div>'
+          + '<input class="cr-input" id="cr-location" type="text" placeholder="e.g. Central Park, ITC Hotel…" /></div>'
+      + '</div>'
+      + '<div class="cr-row full">'
+        + '<div class="cr-field"><div class="cr-label">Notes / Special Requirements</div>'
+          + '<textarea class="cr-textarea" id="cr-notes" rows="2" placeholder="Timing details, special moments to capture, client preferences…"></textarea>'
+        + '</div>'
+      + '</div>'
+    + '</div>'
+
+    /* ── Section 2: Crew Assignment ── */
+    + '<div class="cr-section">'
+      + '<div class="cr-sec-head" style="justify-content:space-between;">'
+        + '<div style="display:flex;align-items:center;gap:8px;"><i class="ti ti-users" style="font-size:15px;color:#7c3aed;"></i><span class="cr-sec-title">Assign Crew Members</span></div>'
+        + '<div style="display:flex;align-items:center;gap:10px;">'
+          + '<button class="btn btn-outline btn-sm" onclick="crAssignMyself()" style="font-size:12px;padding:4px 12px;"><i class="ti ti-user-check" style="font-size:12px;margin-right:4px;"></i>Assign Myself</button>'
+          + '<span id="cr-crew-count" style="font-size:12px;color:#64748b;">0 selected</span>'
+        + '</div>'
+      + '</div>'
+      + '<div id="cr-crew-list">' + crewRowsHtml + '</div>'
+    + '</div>'
+
+    /* ── Section 3a: Studio-owned Equipment ── */
+    + '<div class="cr-section">'
+      + '<div class="cr-sec-head" style="justify-content:space-between;">'
+        + '<div style="display:flex;align-items:center;gap:8px;"><i class="ti ti-camera" style="font-size:15px;color:#0891b2;"></i><span class="cr-sec-title">Studio Equipment</span></div>'
+        + '<span id="cr-gear-count" style="font-size:12px;color:#64748b;">0 selected</span>'
+      + '</div>'
+      + '<div style="font-size:12px;color:#64748b;margin-bottom:12px;">Select specific items from your inventory. Items marked <span style="background:#fee2e2;color:#b91c1c;padding:1px 6px;border-radius:3px;font-size:11px;font-weight:600;">In Use</span> are already allocated to another shoot.</div>'
+      + '<div id="cr-owned-gear-list">' + ownedGearHtml + '</div>'
+    + '</div>'
+
+    /* ── Section 3b: Rental Planning ── */
+    + '<div class="cr-section">'
+      + '<div class="cr-sec-head" style="justify-content:space-between;">'
+        + '<div style="display:flex;align-items:center;gap:8px;">'
+          + '<i class="ti ti-building-store" style="font-size:15px;color:#d97706;"></i>'
+          + '<span class="cr-sec-title">Rental Requirements</span>'
+          + '<span style="font-size:11px;background:#fef9c3;color:#92400e;padding:2px 8px;border-radius:4px;font-weight:600;margin-left:4px;">Optional</span>'
+        + '</div>'
+        + '<span id="cr-rental-count" style="font-size:12px;color:#64748b;">0 rental items</span>'
+      + '</div>'
+      + '<div style="font-size:12px;color:#64748b;margin-bottom:12px;">Need extra gear not in your inventory? Set how many units to source from a rental vendor.</div>'
+      + '<div>' + rentalRowsHtml + '</div>'
+    + '</div>'
+
+    /* bottom actions repeat */
+    + '<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:4px;">'
+      + '<button class="btn btn-outline" onclick="closeCreateView()">Cancel</button>'
+      + '<button class="btn btn-outline" onclick="saveCreatePlan(false)"><i class="ti ti-device-floppy" style="font-size:13px;"></i> Save Draft</button>'
+      + '<button class="btn btn-primary" onclick="saveCreatePlan(true)"><i class="ti ti-circle-check" style="font-size:13px;"></i> Save &amp; Allocate</button>'
+    + '</div>';
+
+  document.getElementById('admin-create-view').innerHTML = html;
+  document.getElementById('admin-list-view').style.display  = 'none';
+  document.getElementById('admin-detail-view').style.display = 'none';
+  document.getElementById('admin-create-view').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+function closeCreateView() {
+  document.getElementById('admin-create-view').style.display = 'none';
+  document.getElementById('admin-list-view').style.display   = '';
+}
+
+// Auto-fill fields when booking is selected
+function crBookingSelected() {
+  var sel = document.getElementById('cr-booking-sel');
+  var bkId = sel.value;
+  var all = (typeof ZPData !== 'undefined' ? ZPData.get('bookings') : []);
+  var b = all.find(function(x){ return x.id === bkId; });
+
+  function setField(id, val, empty) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = val || '—';
+    el.className = 'cr-val-ro' + (val ? ' filled' : ' empty');
+  }
+
+  if (!b) {
+    ['cr-client','cr-bkid','cr-date','cr-type','cr-budget'].forEach(function(id){
+      setField(id, '', true);
+    });
+    document.getElementById('cr-location').value = '';
+    return;
+  }
+
+  setField('cr-client', b.client);
+  setField('cr-bkid',   b.id);
+  setField('cr-date',   b.date);
+  setField('cr-type',   b.type);
+  setField('cr-budget', b.budget);
+
+  var loc = BK_LOCATIONS[b.id] || '';
+  document.getElementById('cr-location').value = loc;
+  document.getElementById('cr-location').placeholder = loc || 'e.g. Central Park, ITC Hotel…';
+
+  /* update availability badges now that we know the shoot date */
+  if (b.date) {
+    STAFF_LIST.forEach(function(st) {
+      var badge = document.querySelector('.cr-avail-badge-' + st.id);
+      if (!badge) return;
+      var conflicts = getStaffConflicts(st.id, b.date, null);
+      if (conflicts.length > 0) {
+        badge.textContent = 'Busy · ' + conflicts[0].shootName.split('—')[0].trim();
+        badge.style.background = '#fee2e2';
+        badge.style.color = '#b91c1c';
+        /* dim the row if not already checked */
+        var row = document.getElementById('cr-crew-' + st.id);
+        var cb  = row ? row.querySelector('input[type=checkbox]') : null;
+        if (row && cb && !cb.checked) row.style.opacity = '0.65';
+      } else {
+        badge.textContent = 'Available';
+        badge.style.background = '#dcfce7';
+        badge.style.color = '#15803d';
+        var row2 = document.getElementById('cr-crew-' + st.id);
+        if (row2) row2.style.opacity = '';
+      }
+    });
+
+    /* also refresh owned gear availability for this date */
+    OWNED_GEAR.forEach(function(eq) {
+      var badge = document.querySelector('.cr-avail-badge-gear-' + eq.id);
+      var row   = document.getElementById('cr-gear-' + eq.id);
+      if (!badge || !row) return;
+      var usedId = getGearShootId(eq.id);
+      if (usedId) {
+        var usedShoot = SHOOT_DATA.find(function(s){ return s.id === usedId; });
+        badge.textContent = 'In Use · ' + (usedShoot ? usedShoot.shootName.split('—')[0].trim() : usedId);
+        badge.style.background = '#fee2e2'; badge.style.color = '#b91c1c';
+        var cb = row.querySelector('input[type=checkbox]');
+        if (cb && !cb.checked) { row.classList.add('cr-gear-busy'); cb.disabled = true; }
+      } else {
+        badge.textContent = 'Available';
+        badge.style.background = '#dcfce7'; badge.style.color = '#15803d';
+        row.classList.remove('cr-gear-busy');
+        var cb2 = row.querySelector('input[type=checkbox]');
+        if (cb2) cb2.disabled = false;
+      }
+    });
+  }
+}
+
+function toggleCrCreatePick(row) {
+  var cb = row.querySelector('input[type=checkbox]');
+  cb.checked = !cb.checked;
+  row.classList.toggle('selected', cb.checked);
+  /* restore opacity when manually checked even if busy */
+  if (cb.checked) row.style.opacity = '';
+  var count = document.querySelectorAll('#cr-crew-list input[type=checkbox]:checked').length;
+  var el = document.getElementById('cr-crew-count');
+  if (el) el.textContent = count + ' selected';
+}
+
+function crAssignMyself() {
+  var myId = getCurrentStaffId();
+  var row  = document.getElementById('cr-crew-' + myId);
+  if (!row) return;
+  var cb = row.querySelector('input[type=checkbox]');
+  if (cb && !cb.checked) {
+    cb.checked = true;
+    row.classList.add('selected');
+    row.style.opacity = '';
+    var count = document.querySelectorAll('#cr-crew-list input[type=checkbox]:checked').length;
+    var el = document.getElementById('cr-crew-count');
+    if (el) el.textContent = count + ' selected';
+    /* scroll the row into view */
+    row.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+}
+
+function toggleCrGearPick(row) {
+  var cb = row.querySelector('input[type=checkbox]');
+  if (!cb || cb.disabled) return;
+  cb.checked = !cb.checked;
+  row.classList.toggle('selected', cb.checked);
+  /* update owned gear count badge */
+  var cnt = document.querySelectorAll('#cr-owned-gear-list input[type=checkbox]:checked').length;
+  var el = document.getElementById('cr-gear-count');
+  if (el) el.textContent = cnt + ' selected';
+}
+
+function crChangeQty(cat, delta) {
+  var el = document.getElementById('crqty-' + cat);
+  if (!el) return;
+  var v = parseInt(el.textContent,10) + delta;
+  if (v < 0) v = 0;
+  el.textContent = v;
+  /* update rental count badge */
+  var GEAR_KEYS = ['r-Camera','r-Lens','r-Lighting','r-Memory','r-Accessory'];
+  var total = 0;
+  GEAR_KEYS.forEach(function(k){
+    var e = document.getElementById('crqty-'+k);
+    if (e) total += parseInt(e.textContent,10)||0;
+  });
+  var rcEl = document.getElementById('cr-rental-count');
+  if (rcEl) rcEl.textContent = total + ' rental item' + (total!==1?'s':'');
+}
+
+function saveCreatePlan(allocate) {
+  var sel = document.getElementById('cr-booking-sel');
+  if (!sel || !sel.value) {
+    sel.style.borderColor='#ef4444'; sel.focus(); return;
+  }
+  var all = (typeof ZPData !== 'undefined' ? ZPData.get('bookings') : []);
+  var b = all.find(function(x){ return x.id === sel.value; });
+  if (!b) return;
+
+  var location = (document.getElementById('cr-location').value||'').trim() || BK_LOCATIONS[b.id] || 'TBD';
+
+  /* collect crew */
+  var checked = document.querySelectorAll('#cr-crew-list input[type=checkbox]:checked');
+  var newTeam = [];
+  checked.forEach(function(cb) {
+    var st = STAFF_LIST.find(function(s){ return s.id === cb.getAttribute('data-id'); });
+    if (st) newTeam.push({ staffId:st.id, name:st.name, role:st.role, initials:st.initials, color:st.color, phone:st.phone });
+  });
+
+  /* collect owned gear (specific items) */
+  var ownedChecked = document.querySelectorAll('#cr-owned-gear-list input[type=checkbox]:checked');
+  var newGearItems = [];
+  ownedChecked.forEach(function(cb) {
+    var gId = cb.getAttribute('data-id');
+    var eq  = OWNED_GEAR.find(function(g){ return g.id === gId; });
+    if (eq) newGearItems.push({ id:eq.id, name:eq.name, cat:eq.cat, serial:eq.serial });
+  });
+
+  /* collect rental requirements */
+  var GEAR_KEYS = ['Camera','Lens','Lighting','Memory','Accessory'];
+  var rentalNeeds = [];
+  GEAR_KEYS.forEach(function(cat) {
+    var el = document.getElementById('crqty-r-' + cat);
+    var qty = el ? parseInt(el.textContent,10) : 0;
+    if (qty > 0) rentalNeeds.push({ cat:cat, qty:qty });
+  });
+
+  var newGear = newGearItems.map(function(g){ return g.cat; })
+    .concat(rentalNeeds.reduce(function(acc,r){ for(var i=0;i<r.qty;i++) acc.push(r.cat); return acc; }, []));
+
+  var newId = 'SA-' + String(SHOOT_DATA.length + 1).padStart(3,'0');
+  var status = (allocate && newTeam.length > 0 && (newGearItems.length > 0 || rentalNeeds.length > 0)) ? 'allocated' : 'pending';
+
+  SHOOT_DATA.push({
+    id: newId, shootName: b.client, date: b.date, location: location,
+    type: b.type, status: status, team: newTeam,
+    gearItems: newGearItems, rentalNeeds: rentalNeeds,
+    gear: newGear, gearCount: newGear.length, bookingId: b.id, budget: b.budget
+  });
+
+  closeCreateView();
+  renderAdminStats();
+  renderAdminTable(_activeFilter);
+
+  var rentalNote = rentalNeeds.length > 0 ? ', ' + rentalNeeds.reduce(function(t,r){ return t+r.qty; },0) + ' rental' : '';
+  showToastSP(status === 'allocated'
+    ? 'Shoot plan created: ' + b.client + ' — ' + newTeam.length + ' crew, ' + newGearItems.length + ' owned gear' + rentalNote
+    : 'Draft saved: ' + b.client + '. Use Plan button to assign crew & gear.');
+}
+
+// ── PLAN SHOOT FULL-SCREEN PAGE ───────────────────────────────
+var _planOpenFromDetail = false;
+var _completeShootId    = null;
+
+function openPlanModal(shootId, activeTab) {
+  activeTab = activeTab || 'crew';
+  var shoot = SHOOT_DATA.find(function(s){ return s.id === shootId; });
+  if (!shoot) return;
+
+  _planOpenFromDetail = _detailOpen;
+
+  var typeCol  = TYPE_COLORS[shoot.type] || '#f1f5f9';
+  var typeIcoC = TYPE_ICON_C[shoot.type] || '#475569';
+  var typeIco  = TYPE_ICONS[shoot.type]  || 'ti-camera';
+
+  /* crew rows — availability check + self-highlight */
+  var assignedIds    = (shoot.team||[]).map(function(m){ return m.staffId; });
+  var currentStaffId = getCurrentStaffId();
+  var crewRows = STAFF_LIST.map(function(st) {
+    var isChecked = assignedIds.indexOf(st.id) > -1;
+    var isSelf    = st.id === currentStaffId;
+    var conflicts = getStaffConflicts(st.id, shoot.date, shoot.id);
+    var isBusy    = conflicts.length > 0 && !isChecked;
+    var availBadge = isBusy
+      ? '<span style="font-size:11px;background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:4px;font-weight:600;white-space:nowrap;flex-shrink:0;">Busy · ' + conflicts[0].shootName.split('—')[0].trim() + '</span>'
+      : '<span style="font-size:11px;background:#dcfce7;color:#15803d;padding:2px 8px;border-radius:4px;font-weight:600;flex-shrink:0;">Available</span>';
+    var selfBadge = isSelf
+      ? '<span style="font-size:10px;background:#2563eb;color:#fff;padding:1px 6px;border-radius:3px;font-weight:700;margin-left:5px;vertical-align:middle;">You</span>'
+      : '';
+    return '<div class="crew-pick-row' + (isChecked?' selected':'') + '" onclick="toggleCrewPick(this)" style="' + (isBusy&&!isChecked?'opacity:.65;':'') + '">'
+      + '<input type="checkbox" ' + (isChecked?'checked':'') + ' data-id="' + st.id + '" />'
+      + '<div class="crew-pick-av" style="background:' + st.color + ';">' + st.initials + '</div>'
+      + '<div style="flex:1;">'
+        + '<div style="font-size:13.5px;font-weight:600;color:#111827;">' + st.name + selfBadge + '</div>'
+        + '<div style="font-size:12px;color:#9ca3af;">' + st.role + ' · ' + st.phone + '</div>'
+      + '</div>'
+      + availBadge
+    + '</div>';
+  }).join('');
+
+  /* gear — specific item picker grouped by category */
+  var GEAR_CAT_META = [
+    { key:'Camera',    icon:'ti-camera',      label:'Camera / Body' },
+    { key:'Lens',      icon:'ti-adjustments', label:'Lens' },
+    { key:'Lighting',  icon:'ti-bolt',        label:'Lighting Unit' },
+    { key:'Memory',    icon:'ti-database',    label:'Memory Cards' },
+    { key:'Accessory', icon:'ti-tool',        label:'Accessories' },
+  ];
+  var allocatedIds = (shoot.gearItems||[]).map(function(g){ return g.id; });
+
+  var gearRows = GEAR_CAT_META.map(function(gc) {
+    var items = OWNED_GEAR.filter(function(eq){ return eq.cat === gc.key; });
+    if (!items.length) return '';
+    var itemRows = items.map(function(eq) {
+      var isChecked   = allocatedIds.indexOf(eq.id) > -1;
+      var usedInShoot = getGearShootId(eq.id);
+      var isBusy      = usedInShoot && usedInShoot !== shoot.id;
+      var busyShoot   = isBusy ? SHOOT_DATA.find(function(s){ return s.id === usedInShoot; }) : null;
+      var availBadge  = isBusy
+        ? '<span style="font-size:11px;background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:4px;font-weight:600;flex-shrink:0;">In Use · ' + (busyShoot ? busyShoot.shootName.split('—')[0].trim() : usedInShoot) + '</span>'
+        : '<span style="font-size:11px;background:#dcfce7;color:#15803d;padding:2px 8px;border-radius:4px;font-weight:600;flex-shrink:0;">Available</span>';
+      /* shutter count / maintenance for cameras */
+      var shutterInfo = '';
+      if (eq.cat === 'Camera' && eq.shutterCount !== undefined) {
+        var pct = Math.round((eq.shutterCount / eq.serviceEvery) * 100);
+        var nearService = pct >= 80;
+        shutterInfo = '<span style="font-size:11px;color:' + (nearService?'#d97706':'#64748b') + ';margin-left:6px;">'
+          + (nearService ? '⚠ ' : '') + eq.shutterCount.toLocaleString() + ' shots</span>';
+      }
+      return '<div class="gear-pick-row' + (isChecked?' selected':'') + '" onclick="toggleGearPick(this)" style="' + (isBusy&&!isChecked?'opacity:.55;pointer-events:'+(isChecked?'auto':'none')+';':'') + '">'
+        + '<input type="checkbox" ' + (isChecked?'checked':'') + ' data-id="' + eq.id + '" data-cat="' + gc.key + '" />'
+        + '<div style="width:30px;height:30px;border-radius:7px;background:' + eq.color + '18;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
+          + '<i class="ti ' + gc.icon + '" style="font-size:14px;color:' + eq.color + ';"></i></div>'
+        + '<div style="flex:1;min-width:0;">'
+          + '<div style="font-size:13px;font-weight:600;color:#111827;display:flex;align-items:center;gap:0;">' + eq.name + shutterInfo + '</div>'
+          + '<div style="font-size:11.5px;color:#9ca3af;margin-top:1px;">SN: ' + eq.serial + '</div>'
+        + '</div>'
+        + availBadge
+      + '</div>';
+    }).join('');
+    return '<div style="margin-bottom:12px;">'
+      + '<div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;display:flex;align-items:center;gap:6px;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #f1f5f9;">'
+        + '<i class="ti ' + gc.icon + '" style="font-size:12px;"></i>' + gc.label
+      + '</div>'
+      + itemRows
+    + '</div>';
+  }).join('');
+
+  var crewCount = assignedIds.length;
+  var gearCount = (shoot.gearItems||[]).length;
+
+  var isCrew = activeTab === 'crew';
+
+  var html =
+    /* breadcrumb */
+    '<div class="det-breadcrumb">'
+      + '<a onclick="closePlanView()"><i class="ti ti-arrow-left" style="font-size:14px;"></i> ' + (shoot.shootName) + '</a>'
+      + '<span>›</span>'
+      + '<span style="color:#1a1d2e;font-weight:500;">Plan Shoot</span>'
+    + '</div>'
+
+    /* page header */
+    + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0;">'
+      + '<div style="display:flex;align-items:center;gap:14px;">'
+        + '<div style="width:44px;height:44px;border-radius:12px;background:' + typeCol + ';display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
+          + '<i class="ti ' + typeIco + '" style="font-size:22px;color:' + typeIcoC + ';"></i></div>'
+        + '<div>'
+          + '<div style="font-size:20px;font-weight:800;color:#1a1d2e;letter-spacing:-.3px;">' + shoot.shootName + '</div>'
+          + '<div style="font-size:13px;color:#64748b;margin-top:2px;">' + shoot.date + (shoot.location?' · '+shoot.location:'') + ' · ' + shoot.type + '</div>'
+        + '</div>'
+      + '</div>'
+      + '<div style="display:flex;gap:8px;">'
+        + '<button class="btn btn-outline" onclick="closePlanView()">Cancel</button>'
+        + '<button class="btn btn-primary" onclick="savePlan(\'' + shootId + '\')"><i class="ti ti-circle-check" style="font-size:13px;"></i> Save Plan</button>'
+      + '</div>'
+    + '</div>'
+
+    /* tab bar */
+    + '<div style="display:flex;border-bottom:2px solid #e8edf3;margin:20px -28px 0;padding:0 28px;background:#fff;">'
+      + '<button id="pm-tab-crew" onclick="pmSwitchTab(\'crew\')" style="padding:14px 24px;border:none;background:none;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;color:' + (isCrew?'#2563eb':'#64748b') + ';border-bottom:2.5px solid ' + (isCrew?'#2563eb':'transparent') + ';margin-bottom:-2px;display:flex;align-items:center;gap:8px;">'
+        + '<i class="ti ti-users" style="font-size:15px;"></i>Assign Crew Members'
+        + '<span id="pm-crew-badge" style="background:' + (isCrew?'#2563eb':'#e2e8f0') + ';color:' + (isCrew?'#fff':'#64748b') + ';font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;">' + crewCount + '</span>'
+      + '</button>'
+      + '<button id="pm-tab-gear" onclick="pmSwitchTab(\'gear\')" style="padding:14px 24px;border:none;background:none;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;color:' + (!isCrew?'#2563eb':'#64748b') + ';border-bottom:2.5px solid ' + (!isCrew?'#2563eb':'transparent') + ';margin-bottom:-2px;display:flex;align-items:center;gap:8px;">'
+        + '<i class="ti ti-camera" style="font-size:15px;"></i>Allocate Equipment'
+        + '<span id="pm-gear-badge" style="background:' + (!isCrew?'#2563eb':'#e2e8f0') + ';color:' + (!isCrew?'#fff':'#64748b') + ';font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;">' + gearCount + '</span>'
+      + '</button>'
+    + '</div>'
+
+    /* crew panel */
+    + '<div id="pm-panel-crew" style="display:' + (isCrew?'block':'none') + ';padding-top:20px;">'
+      + '<div id="crew-pick-list">' + crewRows + '</div>'
+    + '</div>'
+
+    /* gear panel */
+    + '<div id="pm-panel-gear" style="display:' + (!isCrew?'block':'none') + ';padding-top:20px;">'
+      + '<div style="font-size:12.5px;color:#64748b;margin-bottom:14px;">Select specific items from your inventory. Items marked <span style="background:#fee2e2;color:#b91c1c;padding:1px 6px;border-radius:3px;font-size:11px;font-weight:600;">In Use</span> are already allocated to another shoot.</div>'
+      + '<div>' + gearRows + '</div>'
+    + '</div>'
+
+    /* bottom save bar */
+    + '<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:28px;padding-top:20px;border-top:1px solid #e8edf3;">'
+      + '<button class="btn btn-outline" onclick="closePlanView()">Cancel</button>'
+      + '<button class="btn btn-primary" onclick="savePlan(\'' + shootId + '\')"><i class="ti ti-circle-check" style="font-size:13px;"></i> Save Plan</button>'
+    + '</div>';
+
+  var planView = document.getElementById('admin-plan-view');
+  planView.innerHTML = html;
+
+  /* hide all other views, show plan view */
+  document.getElementById('admin-list-view').style.display   = 'none';
+  document.getElementById('admin-detail-view').style.display = 'none';
+  document.getElementById('admin-create-view').style.display = 'none';
+  planView.style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function closePlanView() {
+  document.getElementById('admin-plan-view').style.display = 'none';
+  if (_planOpenFromDetail) {
+    /* re-render detail so it reflects any changes made before cancel */
+    var shootId = (document.getElementById('admin-plan-view').innerHTML.match(/savePlan\('([^']+)'\)/) || [])[1];
+    if (shootId) {
+      openShootDetail(shootId);
+    } else {
+      document.getElementById('admin-detail-view').style.display = 'block';
+      _detailOpen = true;
+    }
+  } else {
+    document.getElementById('admin-list-view').style.display = '';
+  }
+}
+
+function pmSwitchTab(tab) {
+  var isCrew = tab === 'crew';
+  var cp = document.getElementById('pm-panel-crew');
+  var gp = document.getElementById('pm-panel-gear');
+  if (cp) cp.style.display = isCrew ? 'block' : 'none';
+  if (gp) gp.style.display = isCrew ? 'none' : 'block';
+  var ct = document.getElementById('pm-tab-crew');
+  var gt = document.getElementById('pm-tab-gear');
+  if (ct) { ct.style.color = isCrew?'#2563eb':'#64748b'; ct.style.borderBottomColor = isCrew?'#2563eb':'transparent'; }
+  if (gt) { gt.style.color = isCrew?'#64748b':'#2563eb'; gt.style.borderBottomColor = isCrew?'transparent':'#2563eb'; }
+  var cb = document.getElementById('pm-crew-badge');
+  var gb = document.getElementById('pm-gear-badge');
+  if (cb) { cb.style.background = isCrew?'#2563eb':'#e2e8f0'; cb.style.color = isCrew?'#fff':'#64748b'; }
+  if (gb) { gb.style.background = isCrew?'#e2e8f0':'#2563eb'; gb.style.color = isCrew?'#64748b':'#fff'; }
+}
+
+function _pmUpdateCrewBadge() {
+  var cnt = document.querySelectorAll('#crew-pick-list input[type=checkbox]:checked').length;
+  var b = document.getElementById('pm-crew-badge');
+  if (b) b.textContent = cnt;
+}
+
+function _pmUpdateGearBadge() {
+  var cnt = document.querySelectorAll('#pm-panel-gear input[data-cat]:checked').length;
+  var b = document.getElementById('pm-gear-badge');
+  if (b) b.textContent = cnt;
+}
+
+function toggleCrewPick(row) {
+  var cb = row.querySelector('input[type=checkbox]');
+  cb.checked = !cb.checked;
+  row.classList.toggle('selected', cb.checked);
+  _pmUpdateCrewBadge();
+}
+
+function toggleGearPick(row) {
+  var cb = row.querySelector('input[type=checkbox]');
+  cb.checked = !cb.checked;
+  row.classList.toggle('selected', cb.checked);
+  _pmUpdateGearBadge();
+}
+
+function savePlan(shootId) {
+  var shoot = SHOOT_DATA.find(function(s){ return s.id === shootId; });
+  if (!shoot) return;
+
+  /* collect crew */
+  var checked = document.querySelectorAll('#crew-pick-list input[type=checkbox]:checked');
+  var newTeam = [];
+  checked.forEach(function(cb) {
+    var st = STAFF_LIST.find(function(s){ return s.id === cb.getAttribute('data-id'); });
+    if (st) newTeam.push({ staffId:st.id, name:st.name, role:st.role, initials:st.initials, color:st.color, phone:st.phone });
+  });
+
+  /* collect specific gear items (panel may be hidden but checkboxes retain their checked state) */
+  var gearChecked = document.querySelectorAll('#admin-plan-view input[data-id][data-cat]:checked');
+  var newGearItems = [];
+  gearChecked.forEach(function(cb) {
+    var gId = cb.getAttribute('data-id');
+    var eq  = OWNED_GEAR.find(function(g){ return g.id === gId; });
+    if (eq) newGearItems.push({ id:eq.id, name:eq.name, cat:eq.cat, serial:eq.serial });
+  });
+  var newGear = newGearItems.map(function(g){ return g.cat; });
+
+  shoot.team      = newTeam;
+  shoot.gearItems = newGearItems;
+  shoot.gear      = newGear;
+  shoot.gearCount = newGearItems.length;
+
+  /* update status */
+  if (newTeam.length > 0 && newGear.length > 0) {
+    shoot.status = 'allocated';
+  } else {
+    shoot.status = 'pending';
+  }
+
+  document.getElementById('admin-plan-view').style.display = 'none';
+  renderAdminStats();
+  if (_planOpenFromDetail) {
+    openShootDetail(shootId);
+  } else {
+    renderAdminTable(_activeFilter);
+  }
+
+  var msg = newTeam.length > 0 && newGear.length > 0
+    ? 'Plan saved! ' + newTeam.length + ' crew & ' + newGear.length + ' gear items allocated → Status: Crew & Gear Ready'
+    : 'Plan saved. Assign both crew and gear to mark shoot as ready.';
+  showToastSP(msg);
+}
+
+// ── Row selection & bulk actions ─────────────────────────────
+function onRowCheck() {
+  var all  = document.querySelectorAll('.row-cb');
+  var checked = document.querySelectorAll('.row-cb:checked');
+  var selectAll = document.getElementById('select-all-cb');
+  if (selectAll) {
+    selectAll.indeterminate = checked.length > 0 && checked.length < all.length;
+    selectAll.checked = checked.length === all.length && all.length > 0;
+  }
+  /* highlight selected rows */
+  all.forEach(function(cb) {
+    var row = document.getElementById('row-' + cb.getAttribute('data-id'));
+    if (row) row.style.background = cb.checked ? '#f0f7ff' : '';
+  });
+  var bar = document.getElementById('bulk-action-bar');
+  var cnt = document.getElementById('bulk-count');
+  if (bar) bar.style.display = checked.length > 0 ? 'flex' : 'none';
+  if (cnt) cnt.textContent = checked.length + ' shoot' + (checked.length !== 1 ? 's' : '') + ' selected';
+}
+
+function toggleSelectAll(masterCb) {
+  document.querySelectorAll('.row-cb').forEach(function(cb) { cb.checked = masterCb.checked; });
+  onRowCheck();
+}
+
+function clearSelection() {
+  document.querySelectorAll('.row-cb').forEach(function(cb) { cb.checked = false; });
+  var sa = document.getElementById('select-all-cb');
+  if (sa) { sa.checked = false; sa.indeterminate = false; }
+  onRowCheck();
+}
+
+function _getSelectedIds() {
+  return Array.from(document.querySelectorAll('.row-cb:checked')).map(function(cb){ return cb.getAttribute('data-id'); });
+}
+
+function bulkDelete() {
+  var ids = _getSelectedIds();
+  if (!ids.length) return;
+  var names = ids.map(function(id){ var s=SHOOT_DATA.find(function(x){return x.id===id;}); return s?s.shootName:id; });
+  var confirmed = window.confirm('Delete ' + ids.length + ' shoot plan' + (ids.length>1?'s':'') + '?\n\n' + names.join('\n') + '\n\nThis cannot be undone.');
+  if (!confirmed) return;
+  ids.forEach(function(id) {
+    var idx = SHOOT_DATA.findIndex(function(s){ return s.id === id; });
+    if (idx > -1) SHOOT_DATA.splice(idx, 1);
+  });
+  clearSelection();
+  renderAdminStats();
+  renderAdminTable(_activeFilter);
+  showToastSP(ids.length + ' shoot plan' + (ids.length>1?'s':'') + ' deleted.');
+}
+
+function bulkEdit() {
+  var ids = _getSelectedIds();
+  if (ids.length === 1) {
+    clearSelection();
+    openPlanModal(ids[0], 'crew');
+  } else {
+    showToastSP('Select a single shoot to edit, or open each record individually.');
+  }
+}
+
+// ── Init ─────────────────────────────────────────────────────
 renderAdminView();
 </script>
 </body>
