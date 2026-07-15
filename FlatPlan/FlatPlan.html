@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Portal — Zoho Photography Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../shared/sidebar.css">
+<link rel="stylesheet" href="../shared/layout.css">
+<script src="../shared/dataStore.js"></script>
+
+<style>
+/* ── Client Portal Global ── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',-apple-system,sans-serif; background:#f0f2f7; color:#1a1d2e; min-height:100vh; -webkit-font-smoothing:antialiased; }
+
+/* ── Page header ── */
+.fp-topbar {
+  height:62px; background:#fff; border-bottom:1px solid #e8edf3;
+  display:flex; align-items:center; padding:0 28px; gap:14px;
+  position:sticky; top:0; z-index:50;
+}
+.fp-topbar-title { font-size:15.5px; font-weight:700; color:#1a1d2e; }
+.fp-topbar-sub { font-size:13px; color:#94a3b8; }
+.fp-topbar-actions { margin-left:auto; display:flex; align-items:center; gap:9px; }
+
+/* ── Buttons ── */
+.btn { display:inline-flex; align-items:center; gap:6px; padding:7px 15px; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer; border:none; font-family:'Inter',sans-serif; transition:all .13s; }
+.btn-primary { background:#2563eb; color:#fff; }
+.btn-primary:hover { background:#1d4ed8; }
+.btn-outline { background:#fff; color:#64748b; border:1px solid #e2e8f0; }
+.btn-outline:hover { background:#f8fafc; color:#1a1d2e; }
+.btn-sm { padding:5px 12px; font-size:12.5px; }
+.btn-danger { background:#fee2e2; color:#b91c1c; }
+.btn-danger:hover { background:#fecaca; }
+.btn-icon { width:34px; height:34px; padding:0; display:flex; align-items:center; justify-content:center; border-radius:8px; background:#fff; border:1px solid #e2e8f0; color:#64748b; cursor:pointer; font-size:16px; transition:all .13s; }
+.btn-icon:hover { background:#f8fafc; color:#1a1d2e; }
+
+/* ── Album List View ── */
+.fp-list-wrap { padding:28px; }
+.fp-list-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; }
+.fp-list-title { font-size:21px; font-weight:700; color:#1a1d2e; }
+.fp-list-sub { font-size:13.5px; color:#64748b; margin-top:3px; }
+
+.album-grid { display:flex; flex-direction:column; gap:0; background:#fff; border:1px solid #e8edf3; border-radius:10px; overflow:hidden; }
+
+.album-card {
+  background:#fff; border-radius:14px; border:1px solid #e8edf3;
+  overflow:hidden; cursor:pointer; transition:all .18s ease;
+}
+.album-card:hover { transform:translateY(-3px); box-shadow:0 10px 30px rgba(0,0,0,.1); border-color:#93c5fd; }
+.album-card-thumb {
+  height:130px; background:linear-gradient(135deg,#1e3a8a,#2563eb,#7c3aed);
+  display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
+}
+.album-card-thumb-inner { display:flex; gap:4px; }
+.album-card-thumb-page {
+  width:36px; height:48px; background:rgba(255,255,255,.18); border-radius:3px;
+  border:1px solid rgba(255,255,255,.3);
+}
+.album-card-thumb-page.filled { background:rgba(255,255,255,.4); }
+.album-card-thumb-badge {
+  position:absolute; top:10px; right:10px;
+  background:rgba(0,0,0,.35); color:#fff; font-size:10px; font-weight:600;
+  padding:2px 8px; border-radius:10px; backdrop-filter:blur(4px);
+}
+.album-card-body { padding:16px 18px 15px; }
+.album-card-name { font-size:14.5px; font-weight:700; color:#1a1d2e; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.album-card-meta { font-size:12px; color:#94a3b8; display:flex; align-items:center; gap:10px; }
+.album-card-footer {
+  padding:10px 18px; border-top:1px solid #f1f5f9;
+  display:flex; align-items:center; justify-content:space-between;
+}
+
+/* ── Empty state ── */
+.fp-empty {
+  text-align:center; padding:80px 20px;
+  display:flex; flex-direction:column; align-items:center; gap:14px;
+}
+.fp-empty-icon { width:72px; height:72px; background:#f1f5f9; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:30px; color:#94a3b8; }
+.fp-empty-title { font-size:18px; font-weight:700; color:#1a1d2e; }
+.fp-empty-sub { font-size:14px; color:#94a3b8; max-width:320px; line-height:1.5; }
+
+/* ── Client Portal Editor View ── */
+#fp-editor { display:none; flex-direction:column; height:100vh; overflow:hidden; }
+#fp-list-view { display:flex; flex-direction:column; min-height:100vh; }
+
+.fp-editor-header {
+  height:56px; background:#fff; border-bottom:1px solid #e8edf3;
+  display:flex; align-items:center; padding:0 20px; gap:12px;
+  position:sticky; top:0; z-index:50; flex-shrink:0;
+}
+.fp-editor-back { display:flex; align-items:center; gap:6px; font-size:13px; color:#64748b; cursor:pointer; padding:5px 8px; border-radius:7px; transition:all .13s; }
+.fp-editor-back:hover { background:#f1f5f9; color:#1a1d2e; }
+.fp-editor-name-wrap { display:flex; align-items:center; gap:8px; }
+.fp-editor-name { font-size:15px; font-weight:700; color:#1a1d2e; min-width:100px; }
+.fp-editor-name-input {
+  font-size:15px; font-weight:700; color:#1a1d2e; border:1.5px solid #2563eb;
+  border-radius:6px; padding:3px 9px; outline:none; font-family:'Inter',sans-serif;
+  display:none;
+}
+.fp-editor-meta { font-size:12px; color:#94a3b8; margin-left:2px; }
+.fp-lock-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  background:#fef9c3; color:#a16207; font-size:11px; font-weight:600;
+  padding:3px 9px; border-radius:20px;
+}
+.fp-editor-header-right { margin-left:auto; display:flex; align-items:center; gap:8px; }
+
+/* Zoom control */
+.zoom-ctrl { display:flex; align-items:center; gap:4px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:3px 6px; }
+.zoom-btn { width:26px; height:26px; border:none; background:none; cursor:pointer; border-radius:5px; color:#64748b; font-size:15px; display:flex; align-items:center; justify-content:center; transition:all .1s; }
+.zoom-btn:hover { background:#e2e8f0; color:#1a1d2e; }
+.zoom-btn:disabled { opacity:.35; cursor:default; }
+.zoom-val { font-size:12px; font-weight:600; color:#1a1d2e; min-width:36px; text-align:center; }
+
+/* ── Flatplan grid area ── */
+.fp-grid-area {
+  flex:1; overflow-y:auto; padding:28px 28px 40px;
+  background:#f0f2f7;
+}
+
+.fp-section-label {
+  font-size:10px; font-weight:700; color:#94a3b8;
+  text-transform:uppercase; letter-spacing:1.4px; margin-bottom:14px; margin-top:28px;
+}
+.fp-section-label:first-child { margin-top:0; }
+
+/* Full-width responsive grid — fills all available space */
+.fp-spreads-row {
+  display:grid;
+  grid-template-columns:repeat(var(--fp-cols,8),1fr);
+  gap:14px;
+  margin-bottom:6px;
+  width:100%;
+}
+
+/* Page card — fills its grid cell, no fixed width */
+.fp-page-card {
+  background:#fff; border-radius:12px; border:1.5px solid #e2e8f0;
+  cursor:pointer; transition:all .16s ease; overflow:hidden; width:100%;
+}
+.fp-page-card:hover { border-color:#93c5fd; box-shadow:0 8px 24px rgba(37,99,235,.13); transform:translateY(-3px); }
+.fp-page-card.active-page { border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,.18); }
+
+.fp-card-head {
+  padding:8px 12px; border-bottom:1px solid #f1f5f9;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.fp-card-head-title { font-size:12px; font-weight:600; color:#475569; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+.fp-card-body { padding:8px; }
+.fp-mini-slot {
+  border-radius:6px; overflow:hidden; position:relative;
+  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:3px;
+}
+.fp-mini-slot.empty { background:#f8fafc; border:1.5px dashed #e2e8f0; }
+.fp-mini-slot.has-photo { background:#dbeafe; }
+.fp-mini-slot.has-text { background:#f0fdf4; }
+.fp-mini-slot.cover { background:linear-gradient(135deg,#1e3a8a,#2563eb); }
+.fp-mini-slot-icon { font-size:20px; color:#94a3b8; }
+.fp-mini-slot-label { font-size:10px; font-weight:500; color:#94a3b8; }
+.fp-mini-slot.has-photo .fp-mini-slot-icon { color:#1d4ed8; }
+.fp-mini-slot.has-photo .fp-mini-slot-label { color:#1d4ed8; }
+.fp-mini-slot.has-text .fp-mini-slot-icon { color:#15803d; }
+.fp-mini-slot.has-text .fp-mini-slot-label { color:#15803d; }
+.fp-mini-slot.cover .fp-mini-slot-icon { color:rgba(255,255,255,.9); font-size:24px; }
+.fp-mini-slot.cover .fp-mini-slot-label { color:rgba(255,255,255,.7); }
+
+.fp-card-foot {
+  padding:7px 12px; border-top:1px solid #f1f5f9;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.fp-card-foot-num { font-size:11px; font-weight:700; color:#94a3b8; }
+.fp-card-foot-status { font-size:10px; font-weight:600; padding:2px 8px; border-radius:10px; }
+.status-pending { background:#f1f5f9; color:#64748b; }
+.status-in-progress { background:#fef9c3; color:#a16207; }
+.status-done { background:#dcfce7; color:#15803d; }
+
+/* ── Right Drawer ── */
+.fp-drawer-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,.3); z-index:200; display:none;
+  backdrop-filter:blur(2px);
+}
+.fp-drawer {
+  position:fixed; top:0; right:0; width:520px; height:100vh;
+  background:#fff; z-index:201; display:flex; flex-direction:column;
+  box-shadow:-8px 0 40px rgba(0,0,0,.15);
+  transform:translateX(100%); transition:transform .25s ease;
+}
+.fp-drawer.open { transform:translateX(0); }
+
+.fp-drawer-header {
+  padding:16px 20px; border-bottom:1px solid #e8edf3;
+  display:flex; align-items:center; gap:12px; flex-shrink:0;
+}
+.fp-drawer-title { font-size:15px; font-weight:700; color:#1a1d2e; flex:1; }
+.fp-drawer-page-num { font-size:13px; color:#94a3b8; }
+
+.fp-drawer-body { flex:1; overflow-y:auto; padding:20px; }
+
+/* Layout picker */
+.layout-section-label { font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:.8px; margin-bottom:10px; }
+.layout-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:20px; }
+.layout-btn {
+  border:1.5px solid #e2e8f0; border-radius:8px; padding:8px 6px;
+  cursor:pointer; background:#fff; text-align:center; transition:all .13s;
+  display:flex; flex-direction:column; align-items:center; gap:5px;
+}
+.layout-btn:hover { border-color:#93c5fd; background:#f0f7ff; }
+.layout-btn.selected { border-color:#2563eb; background:#eff6ff; }
+.layout-btn-icon { width:44px; height:52px; border-radius:4px; overflow:hidden; position:relative; }
+.layout-btn-name { font-size:10px; color:#64748b; font-weight:500; }
+.layout-btn.selected .layout-btn-name { color:#1d4ed8; }
+
+/* Slots area */
+.slots-section { margin-top:4px; }
+.slot-editor {
+  border:1.5px solid #e2e8f0; border-radius:10px; padding:14px;
+  margin-bottom:10px; background:#fafafa; transition:border-color .13s;
+}
+.slot-editor:hover { border-color:#bfdbfe; }
+.slot-editor-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.slot-num { font-size:11px; font-weight:700; color:#94a3b8; min-width:16px; }
+.slot-type-tabs { display:flex; gap:4px; margin-bottom:10px; }
+.slot-tab { padding:4px 10px; border-radius:20px; font-size:11.5px; font-weight:500; cursor:pointer; border:1.5px solid #e2e8f0; background:#fff; color:#64748b; transition:all .12s; }
+.slot-tab.active { border-color:#2563eb; background:#eff6ff; color:#1d4ed8; font-weight:600; }
+
+.slot-photo-area {
+  height:90px; border:1.5px dashed #e2e8f0; border-radius:8px;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  background:#f8fafc; transition:all .13s; flex-direction:column; gap:6px;
+  box-sizing:border-box; outline:none; padding:0; text-align:center;
+}
+.slot-photo-area:hover { border-color:#93c5fd; background:#f0f7ff; }
+.slot-photo-area.has-photo { border-style:solid; border-color:#bfdbfe; background:#dbeafe; }
+.slot-caption { width:100%; border:1.5px solid #e2e8f0; border-radius:7px; padding:7px 11px; font-size:13px; font-family:'Inter',sans-serif; outline:none; resize:none; color:#1a1d2e; margin-top:8px; }
+.slot-caption:focus { border-color:#2563eb; }
+.slot-text-area { width:100%; border:1.5px solid #e2e8f0; border-radius:7px; padding:9px 11px; font-size:13px; font-family:'Inter',sans-serif; outline:none; resize:vertical; min-height:80px; color:#1a1d2e; }
+.slot-text-area:focus { border-color:#2563eb; }
+
+/* Page title & status */
+.fp-field-row { margin-bottom:14px; }
+.fp-field-label { font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:.6px; margin-bottom:6px; }
+.fp-field-input { width:100%; border:1.5px solid #e2e8f0; border-radius:8px; padding:8px 12px; font-size:13.5px; font-family:'Inter',sans-serif; outline:none; color:#1a1d2e; }
+.fp-field-input:focus { border-color:#2563eb; }
+.fp-status-row { display:flex; gap:7px; flex-wrap:wrap; }
+.fp-status-chip { padding:5px 13px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; border:1.5px solid transparent; transition:all .12s; }
+.fp-status-chip.pending    { background:#f1f5f9; color:#64748b; }
+.fp-status-chip.in-progress{ background:#fef9c3; color:#a16207; }
+.fp-status-chip.done       { background:#dcfce7; color:#15803d; }
+.fp-status-chip.selected   { border-color:currentColor !important; }
+
+.fp-divider { height:1px; background:#f1f5f9; margin:18px 0; }
+
+.fp-drawer-footer {
+  padding:14px 20px; border-top:1px solid #e8edf3;
+  display:flex; align-items:center; gap:8px; flex-shrink:0;
+  background:#fff;
+}
+.fp-nav-btn { display:flex; align-items:center; gap:5px; }
+
+/* ── Modals ── */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:300;
+  display:none; align-items:center; justify-content:center; padding:20px;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.open { display:flex; }
+.modal-box {
+  background:#fff; border-radius:16px; width:100%; max-width:480px;
+  box-shadow:0 24px 60px rgba(0,0,0,.18); overflow:hidden;
+}
+.modal-header {
+  padding:18px 22px 14px; border-bottom:1px solid #f1f5f9;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.modal-title { font-size:16px; font-weight:700; color:#1a1d2e; }
+.modal-close { width:30px; height:30px; border:none; background:none; cursor:pointer; border-radius:7px; color:#94a3b8; font-size:17px; display:flex; align-items:center; justify-content:center; }
+.modal-close:hover { background:#f1f5f9; color:#1a1d2e; }
+.modal-body { padding:20px 22px; }
+.modal-footer { padding:14px 22px; border-top:1px solid #f1f5f9; display:flex; justify-content:flex-end; gap:8px; }
+.modal-field { margin-bottom:16px; }
+.modal-label { font-size:12px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:.6px; margin-bottom:6px; }
+.modal-input { width:100%; border:1.5px solid #e2e8f0; border-radius:8px; padding:9px 13px; font-size:14px; font-family:'Inter',sans-serif; outline:none; color:#1a1d2e; transition:border-color .13s; }
+.modal-input:focus { border-color:#2563eb; }
+.modal-select { width:100%; border:1.5px solid #e2e8f0; border-radius:8px; padding:9px 13px; font-size:14px; font-family:'Inter',sans-serif; outline:none; color:#1a1d2e; background:#fff; }
+.modal-hint { font-size:12px; color:#94a3b8; margin-top:5px; }
+.modal-error { font-size:12.5px; color:#b91c1c; background:#fee2e2; border-radius:7px; padding:8px 12px; margin-top:10px; display:none; }
+
+/* Pages stepper */
+.pages-stepper { display:flex; align-items:center; gap:10px; }
+.stepper-btn { width:34px; height:34px; border:1.5px solid #e2e8f0; border-radius:8px; background:#fff; cursor:pointer; font-size:18px; color:#64748b; display:flex; align-items:center; justify-content:center; transition:all .12s; }
+.stepper-btn:hover { background:#f1f5f9; color:#1a1d2e; }
+.stepper-val { font-size:20px; font-weight:700; color:#1a1d2e; min-width:36px; text-align:center; }
+
+/* Badge */
+.badge { display:inline-flex; align-items:center; padding:3px 9px; border-radius:20px; font-size:11.5px; font-weight:500; }
+.b-blue { background:#dbeafe; color:#1d4ed8; }
+.b-green { background:#dcfce7; color:#15803d; }
+.b-gray { background:#f1f5f9; color:#475569; }
+.b-yellow { background:#fef9c3; color:#a16207; }
+.b-purple { background:#f3e8ff; color:#7e22ce; }
+
+/* Progress bar */
+.fp-progress-bar { height:5px; background:#f1f5f9; border-radius:3px; overflow:hidden; margin-top:6px; }
+.fp-progress-fill { height:100%; border-radius:3px; background:#2563eb; transition:width .3s; }
+
+/* Responsive */
+@media (max-width:900px) {
+  .fp-drawer { width:100%; }
+  .album-grid { font-size:12px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div id="sidebar-root"></div>
+  <div class="main">
+
+    <!-- ═══ LIST VIEW ═══ -->
+    <div id="fp-list-view">
+      <div class="fp-topbar">
+        <i class="ti ti-layout-columns" style="font-size:20px;color:#2563eb;"></i>
+        <div>
+          <div class="fp-topbar-title">Client Portal</div>
+        </div>
+        <div class="fp-topbar-actions">
+          <button class="btn btn-outline btn-sm" onclick="if(confirm('Reset to demo data? This will replace all current albums.')) loadDemoData();" style="font-size:12px;"><i class="ti ti-refresh"></i> Load Demo</button>
+          <button class="btn btn-outline btn-sm" onclick="showAddPagesModal(null)"><i class="ti ti-plus"></i> Quick Add Pages</button>
+          <button class="btn btn-primary btn-sm" onclick="showCreateAlbumModal()"><i class="ti ti-plus"></i> New Album</button>
+        </div>
+      </div>
+
+      <div class="fp-list-wrap">
+        <div class="fp-list-header">
+          <div>
+            <div class="fp-list-title">Photo Albums</div>
+            <div style="font-size:13.5px;color:#64748b;margin-top:3px;">Plan your photo book layouts before sending to print</div>
+          </div>
+        </div>
+        <div class="album-grid" id="album-grid"></div>
+      </div>
+    </div>
+
+    <!-- ═══ EDITOR VIEW ═══ -->
+    <div id="fp-editor">
+
+      <!-- Editor header -->
+      <div class="fp-editor-header">
+        <div class="fp-editor-back" onclick="closeEditor()">
+          <i class="ti ti-arrow-left"></i> All Albums
+        </div>
+        <div style="width:1px;height:22px;background:#e2e8f0;"></div>
+        <div class="fp-editor-name-wrap">
+          <span class="fp-editor-name" id="fp-album-name-display" ondblclick="startNameEdit()"></span>
+          <input class="fp-editor-name-input" id="fp-album-name-input" onblur="saveNameEdit()" onkeydown="nameInputKey(event)">
+          <button class="btn-icon" onclick="startNameEdit()" title="Edit name" style="width:26px;height:26px;font-size:13px;border-radius:5px;"><i class="ti ti-edit"></i></button>
+        </div>
+        <span class="fp-editor-meta" id="fp-album-meta"></span>
+        <span class="fp-lock-badge" id="fp-lock-badge" style="display:none;"><i class="ti ti-lock" style="font-size:12px;"></i> Locked</span>
+
+        <div class="fp-editor-header-right">
+          <!-- Zoom -->
+          <div class="zoom-ctrl">
+            <button class="zoom-btn" id="zoom-out-btn" onclick="changeZoom(-10)" title="Zoom out"><i class="ti ti-minus"></i></button>
+            <span class="zoom-val" id="zoom-val">100%</span>
+            <button class="zoom-btn" id="zoom-in-btn" onclick="changeZoom(10)" title="Zoom in"><i class="ti ti-plus"></i></button>
+          </div>
+
+          <button class="btn btn-outline btn-sm" onclick="showAddPagesModal(STATE.currentAlbumId)"><i class="ti ti-plus"></i> Add Pages</button>
+          <button class="btn btn-outline btn-sm" id="lock-btn" onclick="toggleLock()"><i class="ti ti-lock-open"></i> Lock</button>
+          <button class="btn btn-primary btn-sm" onclick="exportAlbum()"><i class="ti ti-download"></i> Export</button>
+        </div>
+      </div>
+
+      <!-- Grid area -->
+      <div class="fp-grid-area" id="fp-grid-area"></div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- Single persistent file input — avoids Chrome file:// restriction on dynamically created inputs -->
+<input type="file" id="global-file-input" accept="image/*" style="display:none" onchange="handleGlobalFileChange(this)">
+
+<!-- ═══ RIGHT DRAWER ═══ -->
+<div class="fp-drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="fp-drawer" id="fp-drawer">
+  <div class="fp-drawer-header">
+    <div>
+      <div class="fp-drawer-title" id="drawer-title">Edit Page</div>
+      <div class="fp-drawer-page-num" id="drawer-page-num"></div>
+    </div>
+    <button class="btn-icon" onclick="closeDrawer()" title="Close"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="fp-drawer-body" id="drawer-body"></div>
+  <div class="fp-drawer-footer">
+    <button class="btn btn-outline btn-sm fp-nav-btn" id="drawer-prev-btn" onclick="navigatePage(-1)"><i class="ti ti-chevron-left"></i> Prev</button>
+    <button class="btn btn-outline btn-sm fp-nav-btn" id="drawer-next-btn" onclick="navigatePage(1)">Next <i class="ti ti-chevron-right"></i></button>
+    <div style="flex:1;"></div>
+    <button class="btn btn-outline btn-sm" onclick="closeDrawer()">Cancel</button>
+    <button class="btn btn-primary btn-sm" id="save-page-btn" onclick="savePage()"><i class="ti ti-check"></i> Save Page</button>
+  </div>
+</div>
+
+<!-- ═══ CREATE ALBUM MODAL ═══ -->
+<div class="modal-overlay" id="create-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">New Album / Publication</div>
+      <button class="modal-close" onclick="closeCreateModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-field">
+        <div class="modal-label">Album Name</div>
+        <input class="modal-input" id="create-name" placeholder="e.g. Emma & Jake Wedding Album" maxlength="80">
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Linked Shoot (optional)</div>
+        <select class="modal-select" id="create-shoot"></select>
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Starting Pages</div>
+        <div class="pages-stepper">
+          <button class="stepper-btn" onclick="stepPages(-4,'create-pages-val')"><i class="ti ti-minus"></i></button>
+          <span class="stepper-val" id="create-pages-val">20</span>
+          <button class="stepper-btn" onclick="stepPages(4,'create-pages-val')"><i class="ti ti-plus"></i></button>
+        </div>
+        <div class="modal-hint">Pages added in multiples of 4 (for binding)</div>
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Cover Style</div>
+        <select class="modal-select" id="create-cover">
+          <option value="gradient">Blue Gradient</option>
+          <option value="dark">Dark</option>
+          <option value="minimal">Minimal White</option>
+          <option value="rose">Rose Gold</option>
+        </select>
+      </div>
+      <div class="modal-error" id="create-error"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeCreateModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="createAlbum()"><i class="ti ti-plus"></i> Create Album</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADD PAGES MODAL ═══ -->
+<div class="modal-overlay" id="add-pages-modal">
+  <div class="modal-box" style="max-width:360px;">
+    <div class="modal-header">
+      <div class="modal-title">Add Pages</div>
+      <button class="modal-close" onclick="closeAddPagesModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-field">
+        <div class="modal-label">Number of Pages to Add</div>
+        <div class="pages-stepper" style="justify-content:center;margin-top:8px;">
+          <button class="stepper-btn" onclick="stepPages(-4,'add-pages-val')"><i class="ti ti-minus"></i></button>
+          <span class="stepper-val" id="add-pages-val">4</span>
+          <button class="stepper-btn" onclick="stepPages(4,'add-pages-val')"><i class="ti ti-plus"></i></button>
+        </div>
+        <div class="modal-hint" style="text-align:center;margin-top:8px;">Pages are added in multiples of 4</div>
+      </div>
+      <div class="modal-error" id="add-pages-error"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeAddPagesModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmAddPages()"><i class="ti ti-plus"></i> Add Pages</button>
+    </div>
+  </div>
+</div>
+
+<!-- photo picker modal removed — using file upload directly in slots -->
+
+<script>
+// ═══════════════════════════════════════════════════
+//  Client Portal — Main State & Data
+// ═══════════════════════════════════════════════════
+
+var STATE = {
+  currentAlbumId: null,
+  currentPageNum: null,
+  zoom: 100,
+  nameSaving: false,
+  addPagesTargetAlbumId: null
+};
+
+// Layout templates
+var LAYOUTS = [
+  { id:'full',       name:'Full',     slots:1, grid:'1fr',                rows:1, cols:1 },
+  { id:'split-h',    name:'2 Col',    slots:2, grid:'1fr 1fr',             rows:1, cols:2 },
+  { id:'split-v',    name:'2 Row',    slots:2, grid:'1fr',                 rows:2, cols:1 },
+  { id:'featured',   name:'Feature',  slots:3, grid:'2fr 1fr',             rows:1, cols:2, custom:true },
+  { id:'grid4',      name:'4 Grid',   slots:4, grid:'1fr 1fr',             rows:2, cols:2 },
+  { id:'triple',     name:'3 Col',    slots:3, grid:'1fr 1fr 1fr',         rows:1, cols:3 },
+  { id:'text-left',  name:'Text L',   slots:2, grid:'1fr 1.5fr',           rows:1, cols:2 },
+  { id:'text-right', name:'Text R',   slots:2, grid:'1.5fr 1fr',           rows:1, cols:2 },
+];
+
+var COVER_STYLES = {
+  'gradient': 'linear-gradient(135deg,#1e3a8a,#2563eb,#7c3aed)',
+  'dark': 'linear-gradient(135deg,#111827,#374151)',
+  'minimal': 'linear-gradient(135deg,#f8fafc,#e2e8f0)',
+  'rose': 'linear-gradient(135deg,#fda4af,#e11d48,#9f1239)',
+};
+
+// ── Data helpers ──────────────────────────────────
+var FLATPLAN_VERSION = 'v17'; // bump when demo data changes
+function getAlbums() {
+  if (typeof ZPData === 'undefined') return getSampleAlbums();
+  // Version check — reset cache when demo data is updated
+  var storedVer;
+  try { storedVer = localStorage.getItem('zpv4_flatplans_ver'); } catch(e) {}
+  if (storedVer !== FLATPLAN_VERSION) {
+    var fresh = getSampleAlbums();
+    try { ZPData.set('flatplans', fresh); localStorage.setItem('zpv4_flatplans_ver', FLATPLAN_VERSION); } catch(e) {}
+    return fresh;
+  }
+  var albums;
+  try { albums = ZPData.get('flatplans'); } catch(e) {}
+  if (!albums || !albums.length) {
+    albums = getSampleAlbums();
+    try { ZPData.set('flatplans', albums); } catch(e) {}
+    return albums;
+  }
+  return albums;
+}
+function saveAlbums(albums) {
+  if (typeof ZPData !== 'undefined') try { ZPData.set('flatplans', albums); } catch(e) {}
+}
+function getAlbumById(id) {
+  return getAlbums().find(function(a){ return a.id === id; });
+}
+function loadDemoData() {
+  if (typeof ZPData !== 'undefined') ZPData.set('flatplans', getSampleAlbums());
+  renderAlbumList();
+}
+
+function getShoots() {
+  if (typeof ZPData !== 'undefined') return ZPData.get('shoots') || [];
+  return [];
+}
+
+function mkSlots(count, type) {
+  var out = [];
+  for (var i = 0; i < count; i++) out.push({ type: type || 'photo', content: null, caption: '', text: '' });
+  return out;
+}
+
+function getSampleAlbums() {
+  function p(url) { return 'https://picsum.photos/seed/' + url; }
+
+  var weddingPages = [
+    { num:1,  title:'Cover',                  status:'done',        layout:'full',      isCover:true,  slots:[{type:'cover', content:p('w1/600/800'),  caption:'Emma & Jake, June 2026',text:''}] },
+    { num:2,  title:'The Ceremony',           status:'done',        layout:'grid4',     isCover:false, slots:[
+        {type:'photo',content:p('w2/400/300'),  caption:'Venue arrival',text:''},
+        {type:'photo',content:p('w3/400/300'),  caption:'Guests seated',text:''},
+        {type:'photo',content:p('w4/400/300'),  caption:'Officiant',text:''},
+        {type:'photo',content:p('w5/400/300'),  caption:'Ceremony aisle',text:''}]},
+    { num:3,  title:'Walking Down the Aisle', status:'done',        layout:'featured',  isCover:false, slots:[
+        {type:'photo',content:p('w6/600/400'),  caption:'The walk',text:''},
+        {type:'photo',content:p('w7/300/200'),  caption:'Bridesmaids',text:''},
+        {type:'photo',content:p('w8/300/200'),  caption:'Flower girls',text:''}]},
+    { num:4,  title:'The Vows',               status:'done',        layout:'split-h',   isCover:false, slots:[
+        {type:'photo',content:p('w9/500/350'),  caption:'Exchanging vows',text:''},
+        {type:'photo',content:p('w10/500/350'), caption:'Rings',text:''}]},
+    { num:5,  title:'The Kiss',               status:'done',        layout:'full',      isCover:false, slots:[
+        {type:'photo',content:p('w11/700/500'), caption:'The first kiss',text:''}]},
+    { num:6,  title:'Family Portraits',       status:'in-progress', layout:'grid4',     isCover:false, slots:[
+        {type:'photo',content:p('w12/400/300'), caption:'Both families',text:''},
+        {type:'photo',content:p('w13/400/300'), caption:"Bride's family",text:''},
+        {type:'photo',content:null,             caption:'',text:''},
+        {type:'photo',content:null,             caption:'',text:''}]},
+    { num:7,  title:'Bridal Party',           status:'in-progress', layout:'triple',    isCover:false, slots:[
+        {type:'photo',content:p('w14/400/300'), caption:'Bridesmaids',text:''},
+        {type:'photo',content:null,             caption:'',text:''},
+        {type:'photo',content:null,             caption:'',text:''}]},
+    { num:8,  title:'Ring Exchange',          status:'in-progress', layout:'split-h',   isCover:false, slots:[
+        {type:'photo',content:p('w15/500/350'), caption:'His ring',text:''},
+        {type:'photo',content:p('w16/500/350'), caption:'Her ring',text:''}]},
+    { num:9,  title:'First Dance',            status:'in-progress', layout:'featured',  isCover:false, slots:[
+        {type:'photo',content:p('w17/600/400'), caption:'First dance wide',text:''},
+        {type:'photo',content:null,             caption:'',text:''},
+        {type:'photo',content:null,             caption:'',text:''}]},
+    { num:10, title:'First Dance Detail',     status:'in-progress', layout:'split-v',   isCover:false, slots:[
+        {type:'photo',content:p('w18/500/250'), caption:'Close up',text:''},
+        {type:'photo',content:null,             caption:'',text:''}]},
+    { num:11, title:'Reception Venue',        status:'pending',     layout:'full',      isCover:false, slots:mkSlots(1) },
+    { num:12, title:'Reception Highlights',   status:'pending',     layout:'grid4',     isCover:false, slots:mkSlots(4) },
+    { num:13, title:'Cake Cutting',           status:'pending',     layout:'split-h',   isCover:false, slots:mkSlots(2) },
+    { num:14, title:'Speeches',               status:'pending',     layout:'text-left', isCover:false, slots:[{type:'text',content:null,caption:'',text:'A toast to Emma & Jake — may their love story be their greatest adventure.'},{type:'photo',content:null,caption:'',text:''}] },
+    { num:15, title:'Bouquet Toss',           status:'pending',     layout:'triple',    isCover:false, slots:mkSlots(3) },
+    { num:16, title:'Party Time',             status:'pending',     layout:'grid4',     isCover:false, slots:mkSlots(4) },
+    { num:17, title:'Candid Moments',         status:'pending',     layout:'triple',    isCover:false, slots:mkSlots(3) },
+    { num:18, title:'Golden Hour',            status:'pending',     layout:'split-h',   isCover:false, slots:mkSlots(2) },
+    { num:19, title:'Send Off',               status:'pending',     layout:'featured',  isCover:false, slots:mkSlots(3) },
+    { num:20, title:'Back Cover',             status:'pending',     layout:'full',      isCover:true,  slots:[{type:'cover',content:p('w19/600/800'),caption:'',text:''}] }
+  ];
+
+  var headshotPages = [
+    { num:1,  title:'Cover',              status:'done',        layout:'full',      isCover:true,  slots:[{type:'cover',content:p('h1/600/800'),caption:'Nexus Corp 2026',text:''}] },
+    { num:2,  title:'Executive Team',     status:'done',        layout:'triple',    isCover:false, slots:[
+        {type:'photo',content:p('h2/400/300'),caption:'CEO',text:''},
+        {type:'photo',content:p('h3/400/300'),caption:'COO',text:''},
+        {type:'photo',content:p('h4/400/300'),caption:'CFO',text:''}]},
+    { num:3,  title:'CEO Portrait',       status:'done',        layout:'featured',  isCover:false, slots:[
+        {type:'photo',content:p('h5/600/400'),caption:'Alex Chen, CEO',text:''},
+        {type:'photo',content:p('h6/300/200'),caption:'At the office',text:''},
+        {type:'photo',content:p('h7/300/200'),caption:'In a meeting',text:''}]},
+    { num:4,  title:'Sales Team',         status:'done',        layout:'grid4',     isCover:false, slots:[
+        {type:'photo',content:p('h8/400/300'), caption:'',text:''},
+        {type:'photo',content:p('h9/400/300'), caption:'',text:''},
+        {type:'photo',content:p('h10/400/300'),caption:'',text:''},
+        {type:'photo',content:p('h11/400/300'),caption:'',text:''}]},
+    { num:5,  title:'Engineering Team',   status:'in-progress', layout:'grid4',     isCover:false, slots:[
+        {type:'photo',content:p('h12/400/300'),caption:'',text:''},
+        {type:'photo',content:p('h13/400/300'),caption:'',text:''},
+        {type:'photo',content:null,            caption:'',text:''},
+        {type:'photo',content:null,            caption:'',text:''}]},
+    { num:6,  title:'Marketing Team',     status:'in-progress', layout:'triple',    isCover:false, slots:[
+        {type:'photo',content:p('h14/400/300'),caption:'',text:''},
+        {type:'photo',content:null,            caption:'',text:''},
+        {type:'photo',content:null,            caption:'',text:''}]},
+    { num:7,  title:'Office Culture',     status:'in-progress', layout:'split-h',   isCover:false, slots:[
+        {type:'photo',content:p('h15/500/350'),caption:'Team lunch',text:''},
+        {type:'photo',content:null,            caption:'',text:''}]},
+    { num:8,  title:'Team Candids',       status:'pending',     layout:'grid4',     isCover:false, slots:mkSlots(4) },
+    { num:9,  title:'Behind the Scenes',  status:'pending',     layout:'featured',  isCover:false, slots:mkSlots(3) },
+    { num:10, title:'Group Photo',        status:'pending',     layout:'full',      isCover:false, slots:mkSlots(1) },
+    { num:11, title:'About Us',           status:'pending',     layout:'text-right',isCover:false, slots:[{type:'photo',content:null,caption:'',text:''},{type:'text',content:null,caption:'',text:'Nexus Corp — Building tomorrow\'s technology, today.'}] },
+    { num:12, title:'Back Cover',         status:'pending',     layout:'full',      isCover:true,  slots:[{type:'cover',content:p('h16/600/800'),caption:'',text:''}] }
+  ];
+
+  var engagementPages = [
+    { num:1,  title:'Cover',             status:'done',        layout:'full',      isCover:true,  slots:[{type:'cover',content:p('e1/600/800'),caption:'Sarah & Tom, May 2026',text:''}] },
+    { num:2,  title:'Golden Hour',       status:'done',        layout:'featured',  isCover:false, slots:[{type:'photo',content:p('e2/600/400'),caption:'Sunset portraits',text:''},{type:'photo',content:p('e3/300/200'),caption:'',text:''},{type:'photo',content:p('e4/300/200'),caption:'',text:''}]},
+    { num:3,  title:'The Proposal Spot', status:'done',        layout:'split-h',   isCover:false, slots:[{type:'photo',content:p('e5/500/350'),caption:'Where it happened',text:''},{type:'photo',content:p('e6/500/350'),caption:'The ring',text:''}]},
+    { num:4,  title:'Just the Two of Us',status:'in-progress', layout:'grid4',     isCover:false, slots:[{type:'photo',content:p('e7/400/300'),caption:'',text:''},{type:'photo',content:p('e8/400/300'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:5,  title:'Candid Moments',    status:'pending',     layout:'triple',    isCover:false, slots:mkSlots(3) },
+    { num:6,  title:'Close-Ups',         status:'pending',     layout:'split-h',   isCover:false, slots:mkSlots(2) },
+    { num:7,  title:'Final Look',        status:'pending',     layout:'full',      isCover:false, slots:mkSlots(1) },
+    { num:8,  title:'Back Cover',        status:'pending',     layout:'full',      isCover:true,  slots:[{type:'cover',content:null,caption:'',text:''}] }
+  ];
+
+  var familyPages = [
+    { num:1,  title:'Cover',             status:'done',        layout:'full',      isCover:true,  slots:[{type:'cover',content:p('f1/600/800'),caption:'Rivera Family 2026',text:''}] },
+    { num:2,  title:'All Together',      status:'done',        layout:'featured',  isCover:false, slots:[{type:'photo',content:p('f2/600/400'),caption:'Full family wide shot',text:''},{type:'photo',content:p('f3/300/200'),caption:'',text:''},{type:'photo',content:p('f4/300/200'),caption:'',text:''}]},
+    { num:3,  title:'The Kids',          status:'done',        layout:'grid4',     isCover:false, slots:[{type:'photo',content:p('f5/400/300'),caption:'',text:''},{type:'photo',content:p('f6/400/300'),caption:'',text:''},{type:'photo',content:p('f7/400/300'),caption:'',text:''},{type:'photo',content:p('f8/400/300'),caption:'',text:''}]},
+    { num:4,  title:'Parents Portrait',  status:'in-progress', layout:'split-h',   isCover:false, slots:[{type:'photo',content:p('f9/500/350'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:5,  title:'Candid Play',       status:'pending',     layout:'triple',    isCover:false, slots:mkSlots(3) },
+    { num:6,  title:'Pets & Kids',       status:'pending',     layout:'grid4',     isCover:false, slots:mkSlots(4) },
+    { num:7,  title:'Golden Hour',       status:'pending',     layout:'full',      isCover:false, slots:mkSlots(1) },
+    { num:8,  title:'Favorites',         status:'pending',     layout:'featured',  isCover:false, slots:mkSlots(3) },
+    { num:9,  title:'Letter to Family',  status:'pending',     layout:'text-right',isCover:false, slots:[{type:'photo',content:null,caption:'',text:''},{type:'text',content:null,caption:'',text:'Family is where life begins and love never ends.'}] },
+    { num:10, title:'Back Cover',        status:'pending',     layout:'full',      isCover:true,  slots:[{type:'cover',content:null,caption:'',text:''}] }
+  ];
+
+  var maternityPages = [
+    { num:1, title:'Cover',              status:'done',        layout:'full',     isCover:true,  slots:[{type:'cover',content:p('m1/600/800'),caption:'Aria Chen · Awaiting Joy',text:''}] },
+    { num:2, title:'Glow',               status:'done',        layout:'featured', isCover:false, slots:[{type:'photo',content:p('m2/600/400'),caption:'',text:''},{type:'photo',content:p('m3/300/200'),caption:'',text:''},{type:'photo',content:p('m4/300/200'),caption:'',text:''}]},
+    { num:3, title:'Connection',         status:'done',        layout:'split-h',  isCover:false, slots:[{type:'photo',content:p('m5/500/350'),caption:'',text:''},{type:'photo',content:p('m6/500/350'),caption:'',text:''}]},
+    { num:4, title:'The Nursery',        status:'in-progress', layout:'grid4',    isCover:false, slots:[{type:'photo',content:p('m7/400/300'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''},{type:'photo',content:null,caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:5, title:'Silhouettes',        status:'pending',     layout:'full',     isCover:false, slots:mkSlots(1) },
+    { num:6, title:'Details',            status:'pending',     layout:'triple',   isCover:false, slots:mkSlots(3) },
+    { num:7, title:'Letter to Baby',     status:'pending',     layout:'text-left',isCover:false, slots:[{type:'text',content:null,caption:'',text:'Before I even met you, I loved you. Welcome to our world, little one.'},{type:'photo',content:null,caption:'',text:''}] },
+    { num:8, title:'Back Cover',         status:'pending',     layout:'full',     isCover:true,  slots:[{type:'cover',content:null,caption:'',text:''}] }
+  ];
+
+  var wedding2Pages = [
+    { num:1,  title:'Cover',             status:'done',    layout:'full',     isCover:true,  slots:[{type:'cover',content:p('w20/600/800'),caption:'Johnson & Williams · Jul 2026',text:''}] },
+    { num:2,  title:'Getting Ready',     status:'done',    layout:'grid4',    isCover:false, slots:[{type:'photo',content:p('w21/400/300'),caption:'',text:''},{type:'photo',content:p('w22/400/300'),caption:'',text:''},{type:'photo',content:p('w23/400/300'),caption:'',text:''},{type:'photo',content:p('w24/400/300'),caption:'',text:''}]},
+    { num:3,  title:'Ceremony',          status:'done',    layout:'featured', isCover:false, slots:[{type:'photo',content:p('w25/600/400'),caption:'',text:''},{type:'photo',content:p('w26/300/200'),caption:'',text:''},{type:'photo',content:p('w27/300/200'),caption:'',text:''}]},
+    { num:4,  title:'The Kiss',          status:'done',    layout:'full',     isCover:false, slots:[{type:'photo',content:p('w28/700/500'),caption:'',text:''}]},
+    { num:5,  title:'Portraits',         status:'done',    layout:'split-h',  isCover:false, slots:[{type:'photo',content:p('w29/500/350'),caption:'',text:''},{type:'photo',content:p('w30/500/350'),caption:'',text:''}]},
+    { num:6,  title:'Party',             status:'in-progress', layout:'grid4',isCover:false, slots:[{type:'photo',content:p('w31/400/300'),caption:'',text:''},{type:'photo',content:p('w32/400/300'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:7,  title:'Reception',         status:'pending', layout:'triple',   isCover:false, slots:mkSlots(3) },
+    { num:8,  title:'Cake',              status:'pending', layout:'split-h',  isCover:false, slots:mkSlots(2) },
+    { num:9,  title:'Speeches',          status:'pending', layout:'text-left',isCover:false, slots:[{type:'text',content:null,caption:'',text:'Two hearts, one beautiful story.'},{type:'photo',content:null,caption:'',text:''}] },
+    { num:10, title:'Dancing',           status:'pending', layout:'grid4',    isCover:false, slots:mkSlots(4) },
+    { num:11, title:'Send Off',          status:'pending', layout:'full',     isCover:false, slots:mkSlots(1) },
+    { num:12, title:'Back Cover',        status:'pending', layout:'full',     isCover:true,  slots:[{type:'cover',content:null,caption:'',text:''}] }
+  ];
+
+  var brandPages = [
+    { num:1, title:'Cover',              status:'done',    layout:'full',     isCover:true,  slots:[{type:'cover',content:p('b1/600/800'),caption:'TechStart Inc · Brand 2026',text:''}] },
+    { num:2, title:'Leadership',         status:'done',    layout:'triple',   isCover:false, slots:[{type:'photo',content:p('b2/400/300'),caption:'CEO',text:''},{type:'photo',content:p('b3/400/300'),caption:'CTO',text:''},{type:'photo',content:p('b4/400/300'),caption:'Head of Design',text:''}]},
+    { num:3, title:'Office Life',        status:'done',    layout:'grid4',    isCover:false, slots:[{type:'photo',content:p('b5/400/300'),caption:'',text:''},{type:'photo',content:p('b6/400/300'),caption:'',text:''},{type:'photo',content:p('b7/400/300'),caption:'',text:''},{type:'photo',content:p('b8/400/300'),caption:'',text:''}]},
+    { num:4, title:'Product Shots',      status:'in-progress', layout:'split-h',isCover:false, slots:[{type:'photo',content:p('b9/500/350'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:5, title:'Team Culture',       status:'pending', layout:'featured', isCover:false, slots:mkSlots(3) },
+    { num:6, title:'Behind the Scenes',  status:'pending', layout:'triple',   isCover:false, slots:mkSlots(3) },
+    { num:7, title:'Back Cover',         status:'pending', layout:'full',     isCover:true,  slots:[{type:'cover',content:null,caption:'',text:''}] }
+  ];
+
+  var newbornPages = [
+    { num:1, title:'Cover',              status:'done',    layout:'full',     isCover:true,  slots:[{type:'cover',content:p('n1/600/800'),caption:'Priya · Newborn Session',text:''}] },
+    { num:2, title:'First Portrait',     status:'done',    layout:'featured', isCover:false, slots:[{type:'photo',content:p('n2/600/400'),caption:'',text:''},{type:'photo',content:p('n3/300/200'),caption:'',text:''},{type:'photo',content:p('n4/300/200'),caption:'',text:''}]},
+    { num:3, title:'Tiny Details',       status:'done',    layout:'grid4',    isCover:false, slots:[{type:'photo',content:p('n5/400/300'),caption:'Tiny hands',text:''},{type:'photo',content:p('n6/400/300'),caption:'Tiny feet',text:''},{type:'photo',content:p('n7/400/300'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:4, title:'With Mum',           status:'in-progress', layout:'split-h',isCover:false, slots:[{type:'photo',content:p('n8/500/350'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:5, title:'Wrapped Up',         status:'pending', layout:'full',     isCover:false, slots:mkSlots(1) },
+    { num:6, title:'Family of Three',    status:'pending', layout:'triple',   isCover:false, slots:mkSlots(3) },
+    { num:7, title:'Dream',              status:'pending', layout:'text-right',isCover:false, slots:[{type:'photo',content:null,caption:'',text:''},{type:'text',content:null,caption:'',text:'In that tiny moment, everything changed forever.'}] },
+    { num:8, title:'Back Cover',         status:'pending', layout:'full',     isCover:true,  slots:[{type:'cover',content:null,caption:'',text:''}] }
+  ];
+
+  var seniorPages = [
+    { num:1, title:'Cover',              status:'done',    layout:'full',     isCover:true,  slots:[{type:'cover',content:p('s1/600/800'),caption:'Sofia · Class of 2026',text:''}] },
+    { num:2, title:'Opening Look',       status:'done',    layout:'featured', isCover:false, slots:[{type:'photo',content:p('s2/600/400'),caption:'',text:''},{type:'photo',content:p('s3/300/200'),caption:'',text:''},{type:'photo',content:p('s4/300/200'),caption:'',text:''}]},
+    { num:3, title:'Cap & Gown',         status:'done',    layout:'split-h',  isCover:false, slots:[{type:'photo',content:p('s5/500/350'),caption:'',text:''},{type:'photo',content:p('s6/500/350'),caption:'',text:''}]},
+    { num:4, title:'Casual Looks',       status:'in-progress', layout:'grid4',isCover:false, slots:[{type:'photo',content:p('s7/400/300'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''},{type:'photo',content:null,caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:5, title:'Best Friends',       status:'pending', layout:'triple',   isCover:false, slots:mkSlots(3) },
+    { num:6, title:'Quote Page',         status:'pending', layout:'text-left',isCover:false, slots:[{type:'text',content:null,caption:'',text:'She believed she could, so she did.'},{type:'photo',content:null,caption:'',text:''}] },
+    { num:7, title:'Back Cover',         status:'pending', layout:'full',     isCover:true,  slots:[{type:'cover',content:null,caption:'',text:''}] }
+  ];
+
+  var anniversaryPages = [
+    { num:1, title:'Cover',              status:'done',    layout:'full',     isCover:true,  slots:[{type:'cover',content:p('a1/600/800'),caption:'James & Lily · 10 Years',text:''}] },
+    { num:2, title:'Then & Now',         status:'done',    layout:'split-h',  isCover:false, slots:[{type:'photo',content:p('a2/500/350'),caption:'2016',text:''},{type:'photo',content:p('a3/500/350'),caption:'2026',text:''}]},
+    { num:3, title:'Favorite Place',     status:'done',    layout:'featured', isCover:false, slots:[{type:'photo',content:p('a4/600/400'),caption:'',text:''},{type:'photo',content:p('a5/300/200'),caption:'',text:''},{type:'photo',content:p('a6/300/200'),caption:'',text:''}]},
+    { num:4, title:'Candids',            status:'in-progress', layout:'grid4',isCover:false, slots:[{type:'photo',content:p('a7/400/300'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''},{type:'photo',content:null,caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:5, title:'Letter',             status:'pending', layout:'text-right',isCover:false, slots:[{type:'photo',content:null,caption:'',text:''},{type:'text',content:null,caption:'',text:'Ten years. A thousand moments. One perfect love story.'}] },
+    { num:6, title:'Back Cover',         status:'pending', layout:'full',     isCover:true,  slots:[{type:'cover',content:null,caption:'',text:''}] }
+  ];
+
+  var commercialPages = [
+    { num:1,  title:'Cover',             status:'done',    layout:'full',     isCover:true,  slots:[{type:'cover',content:p('c1/600/800'),caption:'Brooklyn Fashion Week 2026',text:''}] },
+    { num:2,  title:'Opening Collection',status:'done',    layout:'featured', isCover:false, slots:[{type:'photo',content:p('c2/600/400'),caption:'',text:''},{type:'photo',content:p('c3/300/200'),caption:'',text:''},{type:'photo',content:p('c4/300/200'),caption:'',text:''}]},
+    { num:3,  title:'Runway Moments',    status:'done',    layout:'grid4',    isCover:false, slots:[{type:'photo',content:p('c5/400/300'),caption:'',text:''},{type:'photo',content:p('c6/400/300'),caption:'',text:''},{type:'photo',content:p('c7/400/300'),caption:'',text:''},{type:'photo',content:p('c8/400/300'),caption:'',text:''}]},
+    { num:4,  title:'Designer Portrait', status:'done',    layout:'split-h',  isCover:false, slots:[{type:'photo',content:p('c9/500/350'),caption:'',text:''},{type:'photo',content:p('c10/500/350'),caption:'',text:''}]},
+    { num:5,  title:'Street Style',      status:'in-progress', layout:'triple',isCover:false, slots:[{type:'photo',content:p('c11/400/300'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:6,  title:'Close-Ups',         status:'pending', layout:'grid4',    isCover:false, slots:mkSlots(4) },
+    { num:7,  title:'Backstage',         status:'pending', layout:'featured', isCover:false, slots:mkSlots(3) },
+    { num:8,  title:'Final Look',        status:'pending', layout:'full',     isCover:false, slots:mkSlots(1) },
+    { num:9,  title:'Credits',           status:'pending', layout:'text-left',isCover:false, slots:[{type:'text',content:null,caption:'',text:'Photography by Zoho Photography Studio. Brooklyn Fashion Week 2026.'},{type:'photo',content:null,caption:'',text:''}] },
+    { num:10, title:'Back Cover',        status:'pending', layout:'full',     isCover:true,  slots:[{type:'cover',content:null,caption:'',text:''}] }
+  ];
+
+  var christmasPages = [
+    { num:1, title:'Cover',              status:'done',    layout:'full',     isCover:true,  slots:[{type:'cover',content:p('xm1/600/800'),caption:'Anderson Family · Christmas 2026',text:''}] },
+    { num:2, title:'The Family',         status:'done',    layout:'featured', isCover:false, slots:[{type:'photo',content:p('xm2/600/400'),caption:'',text:''},{type:'photo',content:p('xm3/300/200'),caption:'',text:''},{type:'photo',content:p('xm4/300/200'),caption:'',text:''}]},
+    { num:3, title:'Around the Tree',    status:'done',    layout:'grid4',    isCover:false, slots:[{type:'photo',content:p('xm5/400/300'),caption:'',text:''},{type:'photo',content:p('xm6/400/300'),caption:'',text:''},{type:'photo',content:p('xm7/400/300'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:4, title:'Candid Joy',         status:'pending', layout:'triple',   isCover:false, slots:mkSlots(3) },
+    { num:5, title:"Season's Greetings", status:'pending', layout:'text-left',isCover:false, slots:[{type:'text',content:null,caption:'',text:'Wishing you peace, joy and love this holiday season. — The Andersons'},{type:'photo',content:null,caption:'',text:''}] },
+    { num:6, title:'Back Cover',         status:'pending', layout:'full',     isCover:true,  slots:[{type:'cover',content:null,caption:'',text:''}] }
+  ];
+
+  var yogaPages = [
+    { num:1,  title:'Cover',             status:'done',    layout:'full',     isCover:true,  slots:[{type:'cover',content:p('y1/600/800'),caption:'Sunrise Yoga · Brand 2026',text:''}] },
+    { num:2,  title:'The Studio',        status:'done',    layout:'featured', isCover:false, slots:[{type:'photo',content:p('y2/600/400'),caption:'',text:''},{type:'photo',content:p('y3/300/200'),caption:'',text:''},{type:'photo',content:p('y4/300/200'),caption:'',text:''}]},
+    { num:3,  title:'Instructors',       status:'done',    layout:'triple',   isCover:false, slots:[{type:'photo',content:p('y5/400/300'),caption:'',text:''},{type:'photo',content:p('y6/400/300'),caption:'',text:''},{type:'photo',content:p('y7/400/300'),caption:'',text:''}]},
+    { num:4,  title:'Flow Session',      status:'done',    layout:'grid4',    isCover:false, slots:[{type:'photo',content:p('y8/400/300'),caption:'',text:''},{type:'photo',content:p('y9/400/300'),caption:'',text:''},{type:'photo',content:p('y10/400/300'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:5,  title:'Outdoor Classes',   status:'in-progress', layout:'split-h',isCover:false, slots:[{type:'photo',content:p('y11/500/350'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:6,  title:'Community',         status:'pending', layout:'featured', isCover:false, slots:mkSlots(3) },
+    { num:7,  title:'Products',          status:'pending', layout:'grid4',    isCover:false, slots:mkSlots(4) },
+    { num:8,  title:'About',             status:'pending', layout:'text-right',isCover:false, slots:[{type:'photo',content:null,caption:'',text:''},{type:'text',content:null,caption:'',text:'Where every breath is a new beginning. Sunrise Yoga Studio, NYC.'}] },
+    { num:9,  title:'Back Cover',        status:'pending', layout:'full',     isCover:true,  slots:[{type:'cover',content:null,caption:'',text:''}] }
+  ];
+
+  var teamPages = [
+    { num:1,  title:'Cover',             status:'done',    layout:'full',     isCover:true,  slots:[{type:'cover',content:p('t1/600/800'),caption:'Park & Associates · Team 2026',text:''}] },
+    { num:2,  title:'Partners',          status:'done',    layout:'triple',   isCover:false, slots:[{type:'photo',content:p('t2/400/300'),caption:'',text:''},{type:'photo',content:p('t3/400/300'),caption:'',text:''},{type:'photo',content:p('t4/400/300'),caption:'',text:''}]},
+    { num:3,  title:'Full Team',         status:'done',    layout:'full',     isCover:false, slots:[{type:'photo',content:p('t5/700/500'),caption:'',text:''}]},
+    { num:4,  title:'Departments',       status:'done',    layout:'grid4',    isCover:false, slots:[{type:'photo',content:p('t6/400/300'),caption:'Legal',text:''},{type:'photo',content:p('t7/400/300'),caption:'Finance',text:''},{type:'photo',content:p('t8/400/300'),caption:'HR',text:''},{type:'photo',content:p('t9/400/300'),caption:'IT',text:''}]},
+    { num:5,  title:'Office Candids',    status:'in-progress', layout:'featured',isCover:false, slots:[{type:'photo',content:p('t10/600/400'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:6,  title:'Work Culture',      status:'pending', layout:'triple',   isCover:false, slots:mkSlots(3) },
+    { num:7,  title:'Values',            status:'pending', layout:'text-left',isCover:false, slots:[{type:'text',content:null,caption:'',text:'Excellence. Integrity. Innovation. The values that drive Park & Associates forward.'},{type:'photo',content:null,caption:'',text:''}] },
+    { num:8,  title:'Back Cover',        status:'pending', layout:'full',     isCover:true,  slots:[{type:'cover',content:null,caption:'',text:''}] }
+  ];
+
+  var mayaPages = [
+    { num:1, title:'Cover',              status:'done',    layout:'full',     isCover:true,  slots:[{type:'cover',content:p('me1/600/800'),caption:'Maya & Carlos · Engaged',text:''}] },
+    { num:2, title:'Urban Love',         status:'done',    layout:'featured', isCover:false, slots:[{type:'photo',content:p('me2/600/400'),caption:'',text:''},{type:'photo',content:p('me3/300/200'),caption:'',text:''},{type:'photo',content:p('me4/300/200'),caption:'',text:''}]},
+    { num:3, title:'The Ring',           status:'done',    layout:'split-h',  isCover:false, slots:[{type:'photo',content:p('me5/500/350'),caption:'',text:''},{type:'photo',content:p('me6/500/350'),caption:'',text:''}]},
+    { num:4, title:'Candids',            status:'pending', layout:'grid4',    isCover:false, slots:mkSlots(4) },
+    { num:5, title:'Golden Hour',        status:'pending', layout:'full',     isCover:false, slots:mkSlots(1) },
+    { num:6, title:'Back Cover',         status:'pending', layout:'full',     isCover:true,  slots:[{type:'cover',content:null,caption:'',text:''}] }
+  ];
+
+  var portraitPages = [
+    { num:1, title:'Cover',              status:'done',    layout:'full',     isCover:true,  slots:[{type:'cover',content:p('po1/600/800'),caption:'Marcus B. · Professional Portrait',text:''}] },
+    { num:2, title:'Executive Shots',    status:'done',    layout:'featured', isCover:false, slots:[{type:'photo',content:p('po2/600/400'),caption:'',text:''},{type:'photo',content:p('po3/300/200'),caption:'',text:''},{type:'photo',content:p('po4/300/200'),caption:'',text:''}]},
+    { num:3, title:'Casual Look',        status:'done',    layout:'split-h',  isCover:false, slots:[{type:'photo',content:p('po5/500/350'),caption:'',text:''},{type:'photo',content:p('po6/500/350'),caption:'',text:''}]},
+    { num:4, title:'Profile Options',    status:'in-progress', layout:'grid4',isCover:false, slots:[{type:'photo',content:p('po7/400/300'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''},{type:'photo',content:null,caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:5, title:'Back Cover',         status:'pending', layout:'full',     isCover:true,  slots:[{type:'cover',content:null,caption:'',text:''}] }
+  ];
+
+  var petPages = [
+    { num:1, title:'Cover',              status:'done',    layout:'full',     isCover:true,  slots:[{type:'cover',content:p('pet1/600/800'),caption:'Cooper the Golden · 2026',text:''}] },
+    { num:2, title:'Hero Shots',         status:'done',    layout:'featured', isCover:false, slots:[{type:'photo',content:p('pet2/600/400'),caption:'',text:''},{type:'photo',content:p('pet3/300/200'),caption:'',text:''},{type:'photo',content:p('pet4/300/200'),caption:'',text:''}]},
+    { num:3, title:'Action',             status:'done',    layout:'grid4',    isCover:false, slots:[{type:'photo',content:p('pet5/400/300'),caption:'',text:''},{type:'photo',content:p('pet6/400/300'),caption:'',text:''},{type:'photo',content:p('pet7/400/300'),caption:'',text:''},{type:'photo',content:null,caption:'',text:''}]},
+    { num:4, title:'With Family',        status:'pending', layout:'triple',   isCover:false, slots:mkSlots(3) },
+    { num:5, title:'Back Cover',         status:'pending', layout:'full',     isCover:true,  slots:[{type:'cover',content:null,caption:'',text:''}] }
+  ];
+
+  return [
+    { id:'fp-001', name:'Emma & Jake — Wedding Album',        shootId:'SA-001', coverStyle:'gradient', locked:false, totalPages:20, createdAt:'2026-06-15', pages:weddingPages },
+    { id:'fp-002', name:'Nexus Corp — Headshots Book',        shootId:'SA-002', coverStyle:'minimal',  locked:false, totalPages:12, createdAt:'2026-06-17', pages:headshotPages },
+    { id:'fp-003', name:'Sarah & Tom — Engagement Session',   shootId:'SA-003', coverStyle:'gradient', locked:false, totalPages:8,  createdAt:'2026-06-20', pages:engagementPages },
+    { id:'fp-004', name:'Rivera Family — Portrait Album',     shootId:'SA-004', coverStyle:'minimal',  locked:false, totalPages:10, createdAt:'2026-06-22', pages:familyPages },
+    { id:'fp-005', name:'Aria Chen — Maternity Session',      shootId:'SA-005', coverStyle:'gradient', locked:false, totalPages:8,  createdAt:'2026-06-25', pages:maternityPages },
+    { id:'fp-006', name:'Johnson & Williams — Wedding',       shootId:'SA-006', coverStyle:'gradient', locked:false, totalPages:12, createdAt:'2026-07-01', pages:wedding2Pages },
+    { id:'fp-007', name:'TechStart Inc — Brand Shoot',        shootId:'SA-007', coverStyle:'minimal',  locked:false, totalPages:7,  createdAt:'2026-07-02', pages:brandPages },
+    { id:'fp-008', name:'Priya — Newborn Session',            shootId:'SA-008', coverStyle:'gradient', locked:false, totalPages:8,  createdAt:'2026-07-03', pages:newbornPages },
+    { id:'fp-009', name:'Sofia — Senior Portraits',           shootId:'SA-009', coverStyle:'minimal',  locked:false, totalPages:7,  createdAt:'2026-07-04', pages:seniorPages },
+    { id:'fp-010', name:'James & Lily — 10th Anniversary',    shootId:'SA-010', coverStyle:'gradient', locked:false, totalPages:6,  createdAt:'2026-07-05', pages:anniversaryPages },
+    { id:'fp-011', name:'Brooklyn Fashion Week — Commercial', shootId:'SA-011', coverStyle:'minimal',  locked:true,  totalPages:10, createdAt:'2026-07-06', pages:commercialPages },
+    { id:'fp-012', name:'Anderson Family — Christmas 2026',   shootId:'SA-012', coverStyle:'gradient', locked:false, totalPages:6,  createdAt:'2026-07-07', pages:christmasPages },
+    { id:'fp-013', name:'Sunrise Yoga — Brand Book',          shootId:'SA-013', coverStyle:'minimal',  locked:false, totalPages:9,  createdAt:'2026-07-08', pages:yogaPages },
+    { id:'fp-014', name:'Park & Associates — Team Photos',    shootId:'SA-014', coverStyle:'minimal',  locked:true,  totalPages:8,  createdAt:'2026-07-09', pages:teamPages },
+    { id:'fp-015', name:'Maya & Carlos — Engagement',         shootId:'SA-015', coverStyle:'gradient', locked:false, totalPages:6,  createdAt:'2026-07-10', pages:mayaPages },
+    { id:'fp-016', name:'Marcus B. — Professional Portrait',  shootId:'SA-016', coverStyle:'minimal',  locked:false, totalPages:5,  createdAt:'2026-07-11', pages:portraitPages },
+    { id:'fp-017', name:'Cooper — Pet Portrait Session',      shootId:'SA-017', coverStyle:'gradient', locked:false, totalPages:5,  createdAt:'2026-07-12', pages:petPages }
+  ];
+}
+
+function buildDefaultPages(count, coverStyle) {
+  var pages = [];
+  for (var i = 1; i <= count; i++) {
+    var isCover = i === 1 || i === count;
+    pages.push({
+      num: i,
+      title: isCover ? (i === 1 ? 'Cover' : 'Back Cover') : '',
+      status: 'pending',
+      layout: 'full',
+      isCover: isCover,
+      slots: [{ type: isCover ? 'cover' : 'photo', content: null, caption: '', text: '' }]
+    });
+  }
+  return pages;
+}
+
+function makeNewSlots(layoutId) {
+  var l = LAYOUTS.find(function(x){ return x.id === layoutId; });
+  if (!l) l = LAYOUTS[0];
+  var slots = [];
+  for (var i = 0; i < l.slots; i++) {
+    slots.push({ type: 'photo', content: null, caption: '', text: '' });
+  }
+  return slots;
+}
+
+function genId() { return 'fp-' + Date.now() + '-' + Math.floor(Math.random()*10000); }
+
+// ═══════════════════════════════════════════════════
+//  Album List View
+// ═══════════════════════════════════════════════════
+function renderAlbumList() {
+  var albums = getAlbums();
+  /* Nuclear fallback — always show sample data if nothing came back */
+  if (!albums || !albums.length) albums = getSampleAlbums();
+  var grid = document.getElementById('album-grid');
+  if (!albums || albums.length === 0) {
+    grid.innerHTML =
+      '<div class="fp-empty" style="grid-column:1/-1;">' +
+        '<div class="fp-empty-icon"><i class="ti ti-layout-columns"></i></div>' +
+        '<div class="fp-empty-title">No Albums Yet</div>' +
+        '<div class="fp-empty-sub">Create your first photo album flatplan to start planning page layouts.</div>' +
+        '<button class="btn btn-primary" onclick="showCreateAlbumModal()" style="margin-top:4px;"><i class="ti ti-plus"></i> Create First Album</button>' +
+      '</div>';
+    return;
+  }
+
+  // Table header
+  var header = '<div style="display:flex;align-items:center;padding:10px 20px;background:#f8fafc;border-bottom:1px solid #e8edf3;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;">' +
+    '<div style="flex:2;min-width:0;">Album Name</div>' +
+    '<div style="flex:1;min-width:0;">Linked Shoot</div>' +
+    '<div style="flex:1;min-width:0;">Created</div>' +
+    '<div style="flex:1;min-width:0;">Progress</div>' +
+    '<div style="width:90px;">Status</div>' +
+    '<div style="width:80px;text-align:right;">Actions</div>' +
+  '</div>';
+
+  var rows = albums.map(function(album) {
+    var pagesCount = (album.pages || []).length;
+    var doneCount  = (album.pages || []).filter(function(p){ return p.status === 'done'; }).length;
+    var pct        = pagesCount > 0 ? Math.round((doneCount / pagesCount) * 100) : 0;
+    var shoot      = getShoots().find(function(s){ return s.id === album.shootId; });
+    var coverBg    = COVER_STYLES[album.coverStyle || 'gradient'];
+
+    return '<div style="display:flex;align-items:center;padding:12px 20px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background .12s;" ' +
+        'onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\'\'" onclick="openEditor(\'' + album.id + '\')">' +
+      // Album name + colour dot
+      '<div style="flex:2;min-width:0;display:flex;align-items:center;gap:10px;">' +
+        '<div style="width:10px;height:10px;border-radius:50%;background:' + coverBg + ';flex-shrink:0;"></div>' +
+        '<div>' +
+          '<div style="font-size:13.5px;font-weight:600;color:#1a1d2e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + album.name + '</div>' +
+          '<div style="font-size:11.5px;color:#94a3b8;margin-top:1px;">' + pagesCount + ' pages</div>' +
+        '</div>' +
+      '</div>' +
+      // Linked shoot
+      '<div style="flex:1;min-width:0;font-size:12.5px;color:#64748b;">' +
+        (shoot ? '<i class="ti ti-camera" style="font-size:11px;margin-right:4px;color:#94a3b8;"></i>' + shoot.name : '<span style="color:#cbd5e1;">—</span>') +
+      '</div>' +
+      // Created date
+      '<div style="flex:1;min-width:0;font-size:12.5px;color:#64748b;">' +
+        '<i class="ti ti-calendar" style="font-size:11px;margin-right:4px;color:#94a3b8;"></i>' + album.createdAt +
+      '</div>' +
+      // Progress bar
+      '<div style="flex:1;min-width:0;">' +
+        '<div style="background:#e8edf3;border-radius:4px;height:5px;width:100%;max-width:120px;">' +
+          '<div style="height:100%;border-radius:4px;background:#2563eb;width:' + pct + '%;"></div>' +
+        '</div>' +
+        '<div style="font-size:11px;color:#94a3b8;margin-top:3px;">' + doneCount + ' / ' + pagesCount + ' done</div>' +
+      '</div>' +
+      // Status badge
+      '<div style="width:90px;">' +
+        '<span style="font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:20px;' +
+          (album.locked ? 'background:#fefce8;color:#a16207;' : 'background:#eff6ff;color:#2563eb;') + '">' +
+          (album.locked ? '<i class="ti ti-lock" style="font-size:10px;"></i> Locked' : '<i class="ti ti-edit" style="font-size:10px;"></i> Editing') +
+        '</span>' +
+      '</div>' +
+      // Actions
+      '<div style="width:80px;display:flex;gap:6px;justify-content:flex-end;" onclick="event.stopPropagation();">' +
+        '<button class="btn btn-outline btn-sm" title="Duplicate" onclick="duplicateAlbum(\'' + album.id + '\')"><i class="ti ti-copy"></i></button>' +
+        '<button class="btn btn-danger btn-sm" title="Delete" onclick="deleteAlbum(\'' + album.id + '\')"><i class="ti ti-trash"></i></button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  grid.innerHTML = header + rows;
+}
+
+// ═══════════════════════════════════════════════════
+//  Editor View
+// ═══════════════════════════════════════════════════
+function openEditor(albumId) {
+  STATE.currentAlbumId = albumId;
+  var album = getAlbumById(albumId);
+  if (!album) return;
+
+  document.getElementById('fp-list-view').style.display = 'none';
+  document.getElementById('fp-editor').style.display = 'flex';
+
+  document.getElementById('fp-album-name-display').textContent = album.name;
+  document.getElementById('fp-album-name-input').value = album.name;
+
+  updateEditorMeta(album);
+  renderGrid(album);
+}
+
+function closeEditor() {
+  STATE.currentAlbumId = null;
+  STATE.currentPageNum = null;
+  document.getElementById('fp-editor').style.display = 'none';
+  document.getElementById('fp-list-view').style.display = '';
+  closeDrawer();
+  renderAlbumList();
+}
+
+function updateEditorMeta(album) {
+  if (!album) album = getAlbumById(STATE.currentAlbumId);
+  if (!album) return;
+  var pagesCount = (album.pages || []).length;
+  var doneCount  = (album.pages || []).filter(function(p){ return p.status === 'done'; }).length;
+  document.getElementById('fp-album-meta').textContent = pagesCount + ' pages · ' + doneCount + ' done';
+  var lockBadge = document.getElementById('fp-lock-badge');
+  var lockBtn = document.getElementById('lock-btn');
+  if (album.locked) {
+    lockBadge.style.display = '';
+    lockBtn.innerHTML = '<i class="ti ti-lock-open"></i> Unlock';
+  } else {
+    lockBadge.style.display = 'none';
+    lockBtn.innerHTML = '<i class="ti ti-lock"></i> Lock';
+  }
+}
+
+// ── Grid rendering ────────────────────────────────
+function renderGrid(album) {
+  var scale   = STATE.zoom / 100;
+  // Slot body height scales with zoom; base 120px at 100%
+  var bodyH   = Math.round(120 * scale);
+  // Columns: base 8 at 100%, fewer at lower zoom, more at higher zoom
+  var cols    = Math.max(4, Math.min(10, Math.round(8 * scale)));
+
+  var pages = album.pages || [];
+  var area  = document.getElementById('fp-grid-area');
+  // Set CSS variable on grid area so .fp-spreads-row children inherit it
+  area.style.cssText = '--fp-cols:' + cols + ';flex:1;overflow-y:auto;padding:28px 28px 40px;background:#f0f2f7;';
+
+  if (!pages.length) {
+    area.innerHTML = '<div class="fp-empty"><div class="fp-empty-icon"><i class="ti ti-file-plus"></i></div><div class="fp-empty-title">No pages yet</div><button class="btn btn-primary" onclick="showAddPagesModal(\'' + album.id + '\')"><i class="ti ti-plus"></i> Add Pages</button></div>';
+    return;
+  }
+
+  // Group pages into rows of `cols` size for section labels
+  var sectionSize = cols;
+  var sections = [];
+  for (var i = 0; i < pages.length; i += sectionSize) {
+    sections.push(pages.slice(i, i + sectionSize));
+  }
+
+  var html = '';
+  sections.forEach(function(section, si) {
+    var start = si * sectionSize + 1;
+    var end   = Math.min(start + sectionSize - 1, pages.length);
+    html += '<div class="fp-section-label">Pages ' + start + '–' + end + '</div>';
+    // Each section row is its own grid (fills full width)
+    html += '<div class="fp-spreads-row">';
+    section.forEach(function(page) {
+      html += renderPageCard(page, bodyH);
+    });
+    html += '</div>';
+  });
+
+  area.innerHTML = html;
+}
+
+function renderPageCard(page, bodyH) {
+  var isActive  = STATE.currentPageNum === page.num;
+  var layout    = LAYOUTS.find(function(l){ return l.id === page.layout; }) || LAYOUTS[0];
+  var statusCls = 'status-' + (page.status || 'pending');
+  var slots     = page.slots || [{ type:'photo', content:null }];
+  var h         = bodyH + 'px';
+
+  var slotsHtml = '';
+  function mkSlot(s, extra) {
+    var cls = slotClass(s);
+    if (hasImage(s)) {
+      // Use <img> tag — CSS background-image is blocked by Chrome on file:// pages for http URLs
+      return '<div class="fp-mini-slot ' + cls + '" style="padding:0;overflow:hidden;' + (extra||'') + '">' +
+        '<img src="' + s.content + '" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy">' +
+        '</div>';
+    }
+    return '<div class="fp-mini-slot ' + cls + '" style="' + (extra||'') + '">' + slotIcon(s) + '</div>';
+  }
+
+  if (layout.id === 'featured') {
+    slotsHtml  = '<div style="display:grid;grid-template-columns:2fr 1fr;gap:3px;height:' + h + ';">';
+    slotsHtml += mkSlot(slots[0]);
+    slotsHtml += '<div style="display:flex;flex-direction:column;gap:3px;">';
+    slotsHtml += mkSlot(slots[1]||{}, 'flex:1;');
+    slotsHtml += mkSlot(slots[2]||{}, 'flex:1;');
+    slotsHtml += '</div></div>';
+  } else if (layout.id === 'split-v') {
+    slotsHtml  = '<div style="display:flex;flex-direction:column;gap:3px;height:' + h + ';">';
+    slotsHtml += slots.map(function(s){ return mkSlot(s, 'flex:1;'); }).join('');
+    slotsHtml += '</div>';
+  } else {
+    slotsHtml  = '<div style="display:grid;grid-template-columns:' + layout.grid + ';gap:3px;height:' + h + ';">';
+    slotsHtml += slots.map(function(s){ return mkSlot(s); }).join('');
+    slotsHtml += '</div>';
+  }
+
+  var statusLabel = { 'pending':'Pending','in-progress':'In Progress','done':'Done' }[page.status] || 'Pending';
+  var titleText   = page.title || 'Page ' + page.num;
+
+  return '<div class="fp-page-card' + (isActive ? ' active-page' : '') + '" ' +
+    'id="page-card-' + page.num + '" onclick="openDrawer(' + page.num + ')">' +
+    '<div class="fp-card-head">' +
+      '<span class="fp-card-head-title" title="' + escHtml(titleText) + '">' + escHtml(titleText) + '</span>' +
+    '</div>' +
+    '<div class="fp-card-body">' + slotsHtml + '</div>' +
+    '<div class="fp-card-foot">' +
+      '<span class="fp-card-foot-num">P.' + page.num + '</span>' +
+      '<span style="font-size:9px;color:#94a3b8;margin:0 auto 0 4px;">' + layout.name + '</span>' +
+      '<span class="fp-card-foot-status ' + statusCls + '">' + statusLabel + '</span>' +
+    '</div>' +
+  '</div>';
+}
+
+function hasImage(slot) {
+  return slot && slot.content && typeof slot.content === 'string' &&
+    (slot.content.startsWith('data:') || slot.content.startsWith('http'));
+}
+
+function slotClass(slot) {
+  if (!slot || !slot.type) return 'empty';
+  if (slot.type === 'cover') return hasImage(slot) ? 'cover has-photo' : 'cover';
+  if (slot.type === 'photo') return hasImage(slot) ? 'has-photo' : 'empty';
+  if (slot.type === 'text')  return slot.text ? 'has-text' : 'empty';
+  return 'empty';
+}
+
+function slotInlineStyle(slot) {
+  if (hasImage(slot)) {
+    return 'background-image:url("' + slot.content + '");background-size:cover;background-position:center;background-repeat:no-repeat;';
+  }
+  return '';
+}
+
+function slotIcon(slot) {
+  if (hasImage(slot)) return ''; // image shows via CSS background
+  if (!slot) return '<i class="ti ti-plus fp-mini-slot-icon"></i><span class="fp-mini-slot-label">Empty</span>';
+  if (slot.type === 'cover')  return '<i class="ti ti-photo fp-mini-slot-icon"></i><span class="fp-mini-slot-label">Cover</span>';
+  if (slot.type === 'photo')  return '<i class="ti ti-camera fp-mini-slot-icon"></i><span class="fp-mini-slot-label">Photo</span>';
+  if (slot.type === 'text')   return slot.text
+    ? '<i class="ti ti-align-left fp-mini-slot-icon"></i><span class="fp-mini-slot-label">Text</span>'
+    : '<i class="ti ti-typography fp-mini-slot-icon"></i><span class="fp-mini-slot-label">Text</span>';
+  return '<i class="ti ti-ban fp-mini-slot-icon"></i><span class="fp-mini-slot-label">Empty</span>';
+}
+
+// ── Zoom ─────────────────────────────────────────
+function changeZoom(delta) {
+  STATE.zoom = Math.max(60, Math.min(160, STATE.zoom + delta));
+  document.getElementById('zoom-val').textContent = STATE.zoom + '%';
+  document.getElementById('zoom-out-btn').disabled = STATE.zoom <= 60;
+  document.getElementById('zoom-in-btn').disabled  = STATE.zoom >= 160;
+  var album = getAlbumById(STATE.currentAlbumId);
+  if (album) renderGrid(album);
+}
+
+// ── Name editing ──────────────────────────────────
+function startNameEdit() {
+  var album = getAlbumById(STATE.currentAlbumId);
+  if (!album || album.locked) return;
+  document.getElementById('fp-album-name-display').style.display = 'none';
+  var inp = document.getElementById('fp-album-name-input');
+  inp.style.display = '';
+  inp.value = album.name;
+  inp.focus(); inp.select();
+}
+
+function saveNameEdit() {
+  var inp = document.getElementById('fp-album-name-input');
+  var val = inp.value.trim();
+  if (!val) { cancelNameEdit(); return; }
+  var albums = getAlbums();
+  var idx = albums.findIndex(function(a){ return a.id === STATE.currentAlbumId; });
+  if (idx >= 0) { albums[idx].name = val; saveAlbums(albums); }
+  document.getElementById('fp-album-name-display').textContent = val;
+  document.getElementById('fp-album-name-display').style.display = '';
+  inp.style.display = 'none';
+}
+
+function cancelNameEdit() {
+  var album = getAlbumById(STATE.currentAlbumId);
+  document.getElementById('fp-album-name-display').style.display = '';
+  document.getElementById('fp-album-name-input').style.display = 'none';
+  if (album) document.getElementById('fp-album-name-display').textContent = album.name;
+}
+
+function nameInputKey(e) {
+  if (e.key === 'Enter') saveNameEdit();
+  if (e.key === 'Escape') cancelNameEdit();
+}
+
+// ── Lock / Unlock ─────────────────────────────────
+function toggleLock() {
+  var albums = getAlbums();
+  var idx = albums.findIndex(function(a){ return a.id === STATE.currentAlbumId; });
+  if (idx < 0) return;
+  albums[idx].locked = !albums[idx].locked;
+  saveAlbums(albums);
+  updateEditorMeta(albums[idx]);
+}
+
+// ── Export stub ───────────────────────────────────
+function exportAlbum() {
+  var album = getAlbumById(STATE.currentAlbumId);
+  alert('Export "' + album.name + '" — This would generate a print-ready PDF with all ' + album.totalPages + ' pages.\n\n(Feature: connect to a PDF export service or local print workflow)');
+}
+
+// ═══════════════════════════════════════════════════
+//  Right Drawer — Page Editor
+// ═══════════════════════════════════════════════════
+function openDrawer(pageNum) {
+  var album = getAlbumById(STATE.currentAlbumId);
+  if (!album) return;
+
+  // Deactivate old card
+  if (STATE.currentPageNum) {
+    var old = document.getElementById('page-card-' + STATE.currentPageNum);
+    if (old) old.classList.remove('active-page');
+  }
+
+  STATE.currentPageNum = pageNum;
+  var page = album.pages.find(function(p){ return p.num === pageNum; });
+  if (!page) return;
+
+  // Mark active card
+  var card = document.getElementById('page-card-' + pageNum);
+  if (card) card.classList.add('active-page');
+
+  // Update nav buttons
+  document.getElementById('drawer-prev-btn').disabled = pageNum <= 1;
+  document.getElementById('drawer-next-btn').disabled = pageNum >= album.pages.length;
+
+  document.getElementById('drawer-title').textContent = page.title || 'Page ' + pageNum;
+  document.getElementById('drawer-page-num').textContent = 'P.' + pageNum + ' of ' + album.pages.length;
+
+  renderDrawerBody(page, album.locked);
+
+  document.getElementById('fp-drawer').classList.add('open');
+  document.getElementById('drawer-overlay').style.display = '';
+}
+
+function closeDrawer() {
+  document.getElementById('fp-drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').style.display = 'none';
+  if (STATE.currentPageNum) {
+    var card = document.getElementById('page-card-' + STATE.currentPageNum);
+    if (card) card.classList.remove('active-page');
+  }
+  STATE.currentPageNum = null;
+}
+
+function navigatePage(delta) {
+  var album = getAlbumById(STATE.currentAlbumId);
+  if (!album) return;
+  var newNum = STATE.currentPageNum + delta;
+  if (newNum < 1 || newNum > album.pages.length) return;
+  // Auto-save current page first
+  savePageSilent();
+  openDrawer(newNum);
+}
+
+function renderDrawerBody(page, locked) {
+  var html = '';
+
+  // ── Page info ──
+  html += '<div class="fp-field-row">';
+  html += '<div class="fp-field-label">Page Title</div>';
+  html += '<input class="fp-field-input" id="drawer-page-title" value="' + escHtml(page.title || '') + '" placeholder="e.g. The Ceremony"' + (locked ? ' disabled' : '') + '>';
+  html += '</div>';
+
+  html += '<div class="fp-field-row">';
+  html += '<div class="fp-field-label">Status</div>';
+  html += '<div class="fp-status-row">';
+  ['pending','in-progress','done'].forEach(function(s) {
+    var sel = (page.status === s || (!page.status && s === 'pending')) ? 'selected' : '';
+    var label = { 'pending':'Pending','in-progress':'In Progress','done':'Done' }[s];
+    html += '<div class="fp-status-chip ' + s + ' ' + sel + '" onclick="selectStatus(\'' + s + '\')" data-status="' + s + '">' + label + '</div>';
+  });
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="fp-divider"></div>';
+
+  // ── Layout picker ──
+  html += '<div class="layout-section-label">Layout Template</div>';
+  html += '<div class="layout-grid">';
+  LAYOUTS.forEach(function(l) {
+    var sel = page.layout === l.id ? 'selected' : '';
+    html += '<div class="layout-btn ' + sel + '" onclick="selectLayout(\'' + l.id + '\')" data-lid="' + l.id + '" title="' + l.name + ' — ' + l.slots + ' slot' + (l.slots > 1 ? 's' : '') + '">';
+    html += '<div class="layout-btn-icon">' + buildLayoutPreviewSvg(l) + '</div>';
+    html += '<div class="layout-btn-name">' + l.name + '</div>';
+    html += '<div style="font-size:9px;color:#94a3b8;">' + l.slots + ' slot' + (l.slots > 1 ? 's' : '') + '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  html += '<div class="fp-divider"></div>';
+
+  // ── Slots ──
+  html += '<div class="layout-section-label">Page Slots</div>';
+  html += '<div class="slots-section" id="drawer-slots">';
+  html += renderSlots(page, locked);
+  html += '</div>';
+
+  document.getElementById('drawer-body').innerHTML = html;
+}
+
+function buildLayoutPreviewSvg(l) {
+  var W = 44; var H = 52;
+  if (l.id === 'full') {
+    return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '"><rect x="0" y="0" width="' + W + '" height="' + H + '" rx="2" fill="#bfdbfe"/></svg>';
+  }
+  if (l.id === 'split-h') {
+    return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '"><rect x="0" y="0" width="20" height="' + H + '" rx="2" fill="#bfdbfe"/><rect x="24" y="0" width="20" height="' + H + '" rx="2" fill="#93c5fd"/></svg>';
+  }
+  if (l.id === 'split-v') {
+    return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '"><rect x="0" y="0" width="' + W + '" height="24" rx="2" fill="#bfdbfe"/><rect x="0" y="28" width="' + W + '" height="24" rx="2" fill="#93c5fd"/></svg>';
+  }
+  if (l.id === 'featured') {
+    return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '"><rect x="0" y="0" width="28" height="' + H + '" rx="2" fill="#bfdbfe"/><rect x="32" y="0" width="12" height="24" rx="2" fill="#93c5fd"/><rect x="32" y="28" width="12" height="24" rx="2" fill="#60a5fa"/></svg>';
+  }
+  if (l.id === 'grid4') {
+    return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '"><rect x="0" y="0" width="20" height="24" rx="2" fill="#bfdbfe"/><rect x="24" y="0" width="20" height="24" rx="2" fill="#93c5fd"/><rect x="0" y="28" width="20" height="24" rx="2" fill="#60a5fa"/><rect x="24" y="28" width="20" height="24" rx="2" fill="#3b82f6"/></svg>';
+  }
+  if (l.id === 'triple') {
+    return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '"><rect x="0" y="0" width="12" height="' + H + '" rx="2" fill="#bfdbfe"/><rect x="16" y="0" width="12" height="' + H + '" rx="2" fill="#93c5fd"/><rect x="32" y="0" width="12" height="' + H + '" rx="2" fill="#60a5fa"/></svg>';
+  }
+  if (l.id === 'text-left') {
+    return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '"><rect x="0" y="0" width="18" height="' + H + '" rx="2" fill="#bbf7d0"/><rect x="22" y="0" width="22" height="' + H + '" rx="2" fill="#bfdbfe"/></svg>';
+  }
+  if (l.id === 'text-right') {
+    return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '"><rect x="0" y="0" width="22" height="' + H + '" rx="2" fill="#bfdbfe"/><rect x="26" y="0" width="18" height="' + H + '" rx="2" fill="#bbf7d0"/></svg>';
+  }
+  return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '"><rect x="0" y="0" width="' + W + '" height="' + H + '" rx="2" fill="#e2e8f0"/></svg>';
+}
+
+function renderSlots(page, locked) {
+  var slots = page.slots || [];
+  var html = '';
+
+  if (!slots.length) {
+    html += '<div style="padding:20px;text-align:center;color:#94a3b8;font-size:13px;">Select a layout above to add slots</div>';
+    return html;
+  }
+
+  slots.forEach(function(slot, idx) {
+    var imgUrl = hasImage(slot) ? slot.content : null; // data: OR http URL
+    html += '<div class="slot-editor">';
+    // Header
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">';
+    html += '<div style="font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.5px;">Slot ' + (idx + 1) + ' / ' + slots.length + '</div>';
+    if (slot.content && !locked) {
+      html += '<button onclick="clearSlotImage(' + idx + ')" style="border:none;background:none;cursor:pointer;font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:4px;" title="Remove image"><i class="ti ti-x"></i> Remove</button>';
+    }
+    html += '</div>';
+
+    if (!locked) {
+      // Type tabs
+      html += '<div class="slot-type-tabs">';
+      [['photo','ti ti-camera','Photo'],['text','ti ti-typography','Text'],['empty','ti ti-ban','Empty']].forEach(function(t) {
+        html += '<div class="slot-tab' + (slot.type === t[0] ? ' active' : '') + '" onclick="setSlotType(' + idx + ',\'' + t[0] + '\')" data-si="' + idx + '" data-type="' + t[0] + '">' +
+          '<i class="' + t[1] + '" style="font-size:11px;"></i> ' + t[2] + '</div>';
+      });
+      html += '</div>';
+    }
+
+    if (slot.type === 'photo' || slot.type === 'cover') {
+      if (imgUrl) {
+        // Has image — show it, click to replace
+        if (locked) {
+          html += '<div class="slot-photo-area has-photo" style="height:130px;padding:6px;background:#f8fafc;border:1.5px solid #bfdbfe;cursor:default;">';
+          html += '<img src="' + imgUrl + '" style="width:100%;height:110px;border-radius:6px;object-fit:cover;">';
+          html += '</div>';
+        } else {
+          html += '<button type="button" class="slot-photo-area has-photo" style="height:130px;padding:6px;background:#f8fafc;border:1.5px solid #bfdbfe;cursor:pointer;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;" onclick="triggerUpload(' + idx + ')">';
+          html += '<img src="' + imgUrl + '" style="width:100%;height:110px;border-radius:6px;object-fit:cover;">';
+          html += '<span style="font-size:11px;color:#64748b;margin-top:4px;display:block;text-align:center;">Click to replace</span>';
+          html += '</button>';
+        }
+      } else if (!locked) {
+        // No image — use button for reliable file picker trigger on Chrome file://
+        html += '<button type="button" class="slot-photo-area" style="cursor:pointer;flex-direction:column;gap:8px;height:110px;border:none;width:100%;background:none;" onclick="triggerUpload(' + idx + ')">';
+        html += '<i class="ti ti-upload" style="font-size:28px;color:#94a3b8;"></i>';
+        html += '<span style="font-size:13px;font-weight:500;color:#64748b;">Click to upload image</span>';
+        html += '<span style="font-size:11px;color:#94a3b8;">JPG, PNG, WEBP supported</span>';
+        html += '</button>';
+      } else {
+        html += '<div class="slot-photo-area" style="height:110px;cursor:default;flex-direction:column;gap:6px;">';
+        html += '<i class="ti ti-photo" style="font-size:28px;color:#cbd5e1;"></i>';
+        html += '<span style="font-size:13px;color:#94a3b8;">No image</span>';
+        html += '</div>';
+      }
+
+      // Caption
+      if (!locked) {
+        html += '<input class="slot-caption" id="slot-caption-' + idx + '" value="' + escHtml(slot.caption || '') + '" placeholder="Caption (optional)">';
+      } else if (slot.caption) {
+        html += '<div style="font-size:12.5px;color:#64748b;font-style:italic;margin-top:6px;">"' + escHtml(slot.caption) + '"</div>';
+      }
+
+    } else if (slot.type === 'text') {
+      html += '<textarea class="slot-text-area" id="slot-text-' + idx + '" placeholder="Enter page text, quote, or description..."' + (locked ? ' disabled' : '') + '>' + escHtml(slot.text || '') + '</textarea>';
+    } else {
+      html += '<div style="height:70px;background:#f8fafc;border-radius:8px;display:flex;align-items:center;justify-content:center;border:1.5px dashed #e2e8f0;color:#94a3b8;font-size:13px;gap:6px;"><i class="ti ti-ban"></i> Empty slot</div>';
+    }
+
+    html += '</div>';
+  });
+
+  return html;
+}
+
+// ── Image upload — uses ONE persistent input to avoid Chrome file:// restriction ──
+// Simpler global approach: onchange="handleGlobalFileChange(this)" is on the input in HTML
+window.ZP_PENDING_SLOT = null;
+
+function triggerUpload(slotIdx) {
+  var inp = document.getElementById('global-file-input');
+  inp.value = ''; // clear first so change fires even if same file re-selected
+  window.ZP_PENDING_SLOT = slotIdx;
+  inp.click();
+}
+
+function handleGlobalFileChange(inp) {
+  if (!inp || !inp.files || !inp.files[0] || window.ZP_PENDING_SLOT === null) return;
+  var file = inp.files[0];
+  var slotIdx = window.ZP_PENDING_SLOT;
+  window.ZP_PENDING_SLOT = null;
+  inp.value = '';
+  if (!file.type.startsWith('image/')) { alert('Please select an image file.'); return; }
+  var reader = new FileReader();
+  reader.onerror = function() { alert('Error reading image file. Please try again.'); };
+  reader.onload = function(e) {
+    var dataUrl = e.target.result;
+    var albums = getAlbums();
+    var albumIdx = albums.findIndex(function(a){ return a.id === STATE.currentAlbumId; });
+    if (albumIdx < 0) return;
+    var page = albums[albumIdx].pages.find(function(p){ return p.num === STATE.currentPageNum; });
+    if (!page || !page.slots[slotIdx]) return;
+    page.slots[slotIdx].content = dataUrl;
+    page.slots[slotIdx].type = 'photo';
+    saveAlbums(albums);
+    document.getElementById('drawer-slots').innerHTML = renderSlots(page, albums[albumIdx].locked);
+    refreshCardInGrid(page);
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearSlotImage(slotIdx) {
+  var albums = getAlbums();
+  var albumIdx = albums.findIndex(function(a){ return a.id === STATE.currentAlbumId; });
+  if (albumIdx < 0) return;
+  var page = albums[albumIdx].pages.find(function(p){ return p.num === STATE.currentPageNum; });
+  if (!page || !page.slots[slotIdx]) return;
+  page.slots[slotIdx].content = null;
+  saveAlbums(albums);
+  document.getElementById('drawer-slots').innerHTML = renderSlots(page, albums[albumIdx].locked);
+  refreshCardInGrid(page); // update grid card to show empty slot
+}
+
+function setSlotType(slotIdx, type) {
+  var albums = getAlbums();
+  var album = albums.find(function(a){ return a.id === STATE.currentAlbumId; });
+  if (!album) return;
+  var page = album.pages.find(function(p){ return p.num === STATE.currentPageNum; });
+  if (!page || !page.slots[slotIdx]) return;
+  page.slots[slotIdx].type = type;
+  if (type !== 'photo' && type !== 'cover') page.slots[slotIdx].content = null; // clear image if switching away
+  saveAlbums(albums);
+  document.getElementById('drawer-slots').innerHTML = renderSlots(page, album.locked);
+  refreshCardInGrid(page); // reflect slot type change in grid card
+}
+
+function selectLayout(layoutId) {
+  // Update layout button UI
+  document.querySelectorAll('.layout-btn').forEach(function(b) {
+    b.classList.toggle('selected', b.dataset.lid === layoutId);
+  });
+
+  // Update page data in localStorage
+  var albums = getAlbums();
+  var albumIdx = albums.findIndex(function(a){ return a.id === STATE.currentAlbumId; });
+  if (albumIdx < 0) return;
+  var page = albums[albumIdx].pages.find(function(p){ return p.num === STATE.currentPageNum; });
+  if (!page) return;
+
+  var l = LAYOUTS.find(function(x){ return x.id === layoutId; });
+  if (!l) return;
+
+  // Preserve existing slot data where possible
+  var oldSlots = page.slots || [];
+  var newSlots = [];
+  for (var i = 0; i < l.slots; i++) {
+    newSlots.push(oldSlots[i] || { type:'photo', content:null, caption:'', text:'' });
+  }
+  page.layout = layoutId;
+  page.slots = newSlots;
+  saveAlbums(albums);
+
+  // Re-render drawer slots
+  document.getElementById('drawer-slots').innerHTML = renderSlots(page, albums[albumIdx].locked);
+
+  // Immediately update the grid card — no Save Page click needed for layout changes
+  refreshCardInGrid(page);
+}
+
+// Update a single page card in the grid without full grid re-render
+function refreshCardInGrid(page) {
+  var scale = STATE.zoom / 100;
+  var bodyH = Math.round(120 * scale);
+  var cardEl = document.getElementById('page-card-' + page.num);
+  if (!cardEl) return;
+  // outerHTML swap is the most reliable cross-browser replacement
+  cardEl.outerHTML = renderPageCard(page, bodyH);
+  var newCard = document.getElementById('page-card-' + page.num);
+  if (!newCard) return;
+  newCard.classList.add('active-page');
+  // Brief flash so user sees the update happened
+  newCard.style.transition = 'none';
+  newCard.style.outline = '3px solid #2563eb';
+  setTimeout(function() {
+    newCard.style.outline = '';
+    newCard.style.transition = '';
+  }, 400);
+}
+
+function selectStatus(status) {
+  document.querySelectorAll('.fp-status-chip').forEach(function(chip) {
+    chip.classList.toggle('selected', chip.dataset.status === status);
+  });
+}
+
+// Photo picker replaced by direct file upload — see handleImageUpload(), triggerUpload(), clearSlotImage()
+
+// ── Save page ─────────────────────────────────────
+function savePageSilent() {
+  var albums = getAlbums();
+  var albumIdx = albums.findIndex(function(a){ return a.id === STATE.currentAlbumId; });
+  if (albumIdx < 0) return;
+  var page = albums[albumIdx].pages.find(function(p){ return p.num === STATE.currentPageNum; });
+  if (!page) return;
+  collectDrawerData(page, albums[albumIdx].locked);
+  saveAlbums(albums);
+}
+
+function savePage() {
+  try {
+    var albums = getAlbums();
+    var albumIdx = albums.findIndex(function(a){ return a.id === STATE.currentAlbumId; });
+    if (albumIdx < 0) return;
+    var page = albums[albumIdx].pages.find(function(p){ return p.num === STATE.currentPageNum; });
+    if (!page) return;
+
+    collectDrawerData(page, albums[albumIdx].locked);
+    saveAlbums(albums);
+
+    // Update only the changed card (fast and reliable)
+    refreshCardInGrid(page);
+    updateEditorMeta(albums[albumIdx]);
+
+    // Update drawer header title
+    var titleEl = document.getElementById('drawer-title');
+    if (titleEl) titleEl.textContent = page.title || 'Page ' + page.num;
+
+    // Green success feedback on button (use stable id)
+    var saveBtn = document.getElementById('save-page-btn');
+    if (saveBtn) {
+      var orig = saveBtn.innerHTML;
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<i class="ti ti-check"></i> Saved!';
+      saveBtn.style.background = '#16a34a';
+      setTimeout(function(){
+        saveBtn.innerHTML = orig;
+        saveBtn.style.background = '';
+        saveBtn.disabled = false;
+      }, 1600);
+    }
+  } catch(e) {
+    console.error('savePage error:', e);
+    alert('Save failed: ' + e.message);
+  }
+}
+
+function collectDrawerData(page, locked) {
+  if (locked) return;
+  // Title
+  var titleEl = document.getElementById('drawer-page-title');
+  if (titleEl) page.title = titleEl.value.trim();
+
+  // Status
+  var activeStatus = document.querySelector('.fp-status-chip.selected');
+  if (activeStatus) page.status = activeStatus.dataset.status;
+
+  // Slots
+  (page.slots || []).forEach(function(slot, idx) {
+    if (slot.type === 'photo' || slot.type === 'cover') {
+      var capEl = document.getElementById('slot-caption-' + idx);
+      if (capEl) slot.caption = capEl.value;
+    } else if (slot.type === 'text') {
+      var txtEl = document.getElementById('slot-text-' + idx);
+      if (txtEl) slot.text = txtEl.value;
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  Create Album Modal
+// ═══════════════════════════════════════════════════
+function showCreateAlbumModal() {
+  // Populate shoot dropdown
+  var sel = document.getElementById('create-shoot');
+  var shoots = getShoots();
+  sel.innerHTML = '<option value="">— No shoot linked —</option>' +
+    shoots.map(function(s){ return '<option value="' + s.id + '">' + s.name + '</option>'; }).join('');
+  document.getElementById('create-name').value = '';
+  document.getElementById('create-pages-val').textContent = '20';
+  document.getElementById('create-error').style.display = 'none';
+  document.getElementById('create-modal').classList.add('open');
+  setTimeout(function(){ document.getElementById('create-name').focus(); }, 100);
+}
+
+function closeCreateModal() {
+  document.getElementById('create-modal').classList.remove('open');
+}
+
+function createAlbum() {
+  var name = document.getElementById('create-name').value.trim();
+  var pages = parseInt(document.getElementById('create-pages-val').textContent) || 20;
+  var shootId = document.getElementById('create-shoot').value;
+  var coverStyle = document.getElementById('create-cover').value;
+  var errEl = document.getElementById('create-error');
+
+  if (!name) { errEl.textContent = 'Please enter an album name.'; errEl.style.display = ''; return; }
+  if (pages < 4) { errEl.textContent = 'Minimum 4 pages required.'; errEl.style.display = ''; return; }
+
+  var album = {
+    id: genId(),
+    name: name,
+    shootId: shootId || null,
+    coverStyle: coverStyle,
+    locked: false,
+    totalPages: pages,
+    createdAt: new Date().toISOString().split('T')[0],
+    pages: buildDefaultPages(pages, coverStyle)
+  };
+
+  var albums = getAlbums();
+  albums.push(album);
+  saveAlbums(albums);
+  closeCreateModal();
+  renderAlbumList();
+  // Auto-open the new album
+  openEditor(album.id);
+}
+
+// ═══════════════════════════════════════════════════
+//  Add Pages Modal
+// ═══════════════════════════════════════════════════
+function showAddPagesModal(albumId) {
+  STATE.addPagesTargetAlbumId = albumId;
+  document.getElementById('add-pages-val').textContent = '4';
+  document.getElementById('add-pages-error').style.display = 'none';
+  document.getElementById('add-pages-modal').classList.add('open');
+}
+
+function closeAddPagesModal() {
+  document.getElementById('add-pages-modal').classList.remove('open');
+  STATE.addPagesTargetAlbumId = null;
+}
+
+function confirmAddPages() {
+  var addCount = parseInt(document.getElementById('add-pages-val').textContent) || 4;
+  var albumId = STATE.addPagesTargetAlbumId || STATE.currentAlbumId;
+  if (!albumId) { closeAddPagesModal(); return; }
+
+  var albums = getAlbums();
+  var idx = albums.findIndex(function(a){ return a.id === albumId; });
+  if (idx < 0) { closeAddPagesModal(); return; }
+
+  var album = albums[idx];
+  var startNum = (album.pages || []).length + 1;
+  for (var i = 0; i < addCount; i++) {
+    album.pages.push({
+      num: startNum + i,
+      title: '', status: 'pending',
+      layout: 'full', isCover: false,
+      slots: [{ type:'photo', content:null, caption:'', text:'' }]
+    });
+  }
+  album.totalPages = album.pages.length;
+  saveAlbums(albums);
+  closeAddPagesModal();
+
+  if (STATE.currentAlbumId === albumId) {
+    updateEditorMeta(album);
+    renderGrid(album);
+  } else {
+    renderAlbumList();
+  }
+}
+
+// ── Stepper ───────────────────────────────────────
+function stepPages(delta, elId) {
+  var el = document.getElementById(elId);
+  var val = parseInt(el.textContent) || 4;
+  val = Math.max(4, val + delta);
+  el.textContent = val;
+}
+
+// ═══════════════════════════════════════════════════
+//  Album actions
+// ═══════════════════════════════════════════════════
+function duplicateAlbum(albumId) {
+  var album = getAlbumById(albumId);
+  if (!album) return;
+  var copy = JSON.parse(JSON.stringify(album));
+  copy.id = genId();
+  copy.name = album.name + ' (Copy)';
+  copy.createdAt = new Date().toISOString().split('T')[0];
+  copy.locked = false;
+  var albums = getAlbums();
+  albums.push(copy);
+  saveAlbums(albums);
+  renderAlbumList();
+}
+
+function deleteAlbum(albumId) {
+  var album = getAlbumById(albumId);
+  if (!album) return;
+  if (!confirm('Delete "' + album.name + '"? This cannot be undone.')) return;
+  var albums = getAlbums().filter(function(a){ return a.id !== albumId; });
+  saveAlbums(albums);
+  renderAlbumList();
+}
+
+// ── Utility ───────────────────────────────────────
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Init ──────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  renderAlbumList();
+});
+</script>
+
+<script src="../shared/sidebar.js"></script>
+</body>
+</html>

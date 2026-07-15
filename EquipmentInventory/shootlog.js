@@ -33,29 +33,16 @@ var GEAR_OPTIONS = [
   { id:'SD-256-SET',   name:'SanDisk 256GB (x3)',     cat:'Memory',    status:'available' },
 ];
 
-var SHOOT_ALLOC = [
-  { id:'SA-001', shootName:'Emma & Jake — Wedding',    date:'Jun 15, 2026', type:'Wedding',    status:'completed',
-    team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-002',name:'Priya Nair',role:'Junior Photographer',initials:'PN',color:'#7c3aed'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'},{staffId:'STF-004',name:'Maya Chen',role:'Lighting Assistant',initials:'MC',color:'#059669'}],
-    gear:[{id:'SON-A7RV-001',name:'Sony A7R V (Primary)',cat:'Camera'},{id:'SON-A7RV-002',name:'Sony A7R V (Backup)',cat:'Camera'},{id:'PRO-B10X-001',name:'Profoto B10X Plus (1)',cat:'Lighting'},{id:'PRO-B10X-002',name:'Profoto B10X Plus (2)',cat:'Lighting'},{id:'SON-2470-001',name:'Sony 24-70mm f/2.8',cat:'Lens'},{id:'MAN-055-001',name:'Manfrotto Tripod',cat:'Accessory'}],
-    usageLog:{'SON-A7RV-001':{shots:847,returned:true,condition:'Excellent',notes:'Battery 40% on return'},'SON-A7RV-002':{shots:412,returned:true,condition:'Good',notes:''}} },
-  { id:'SA-002', shootName:'Nexus Corp — Headshots',   date:'Jun 17, 2026', type:'Corporate',  status:'allocated',
-    team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'}],
-    gear:[{id:'SON-A7RV-001',name:'Sony A7R V (Primary)',cat:'Camera'},{id:'PRO-B10X-001',name:'Profoto B10X Plus (1)',cat:'Lighting'},{id:'SON-2470-001',name:'Sony 24-70mm f/2.8',cat:'Lens'}],
-    usageLog:{} },
-  { id:'SA-003', shootName:'Liu Family — Portrait',    date:'Jun 20, 2026', type:'Portrait',   status:'pending',
-    team:[{staffId:'STF-002',name:'Priya Nair',role:'Lead Photographer',initials:'PN',color:'#7c3aed'}],
-    gear:[], usageLog:{} },
-  { id:'SA-004', shootName:'Sarah & Tom — Engagement', date:'Jun 22, 2026', type:'Engagement', status:'pending',
-    team:[],
-    gear:[], usageLog:{} },
-  { id:'SA-005', shootName:'Horizon Events — Gala',   date:'Jun 28, 2026', type:'Event',      status:'pending',
-    team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-002',name:'Priya Nair',role:'Junior Photographer',initials:'PN',color:'#7c3aed'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'},{staffId:'STF-004',name:'Maya Chen',role:'Lighting Assistant',initials:'MC',color:'#059669'}],
-    gear:[], usageLog:{} },
-  { id:'SA-006', shootName:'Patel — Wedding',          date:'Jul 1, 2026',  type:'Wedding',    status:'allocated',
-    team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-002',name:'Priya Nair',role:'Junior Photographer',initials:'PN',color:'#7c3aed'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'},{staffId:'STF-004',name:'Maya Chen',role:'Lighting Assistant',initials:'MC',color:'#059669'}],
-    gear:[{id:'SON-A7RV-001',name:'Sony A7R V (Primary)',cat:'Camera'},{id:'SON-A7RV-002',name:'Sony A7R V (Backup)',cat:'Camera'},{id:'PRO-B10X-001',name:'Profoto B10X Plus (1)',cat:'Lighting'},{id:'PRO-B10X-002',name:'Profoto B10X Plus (2)',cat:'Lighting'},{id:'SON-2470-001',name:'Sony 24-70mm f/2.8',cat:'Lens'},{id:'SON-135G-001',name:'Sony 135mm f/1.8 GM',cat:'Lens'},{id:'MAN-055-001',name:'Manfrotto Tripod',cat:'Accessory'},{id:'DJI-RS3-001',name:'DJI RS3 Pro Gimbal',cat:'Accessory'},{id:'SD-256-SET',name:'SanDisk 256GB (x3)',cat:'Memory'}],
-    usageLog:{} },
-];
+/* ── SHOOT_ALLOC now reads from shared ZPData — same data as ShootPlanning ── */
+function getShootAlloc() {
+  return (typeof ZPData !== 'undefined') ? ZPData.get('shoots') : [];
+}
+function saveShootAlloc() {
+  if (typeof ZPData !== 'undefined') ZPData.set('shoots', getShootAlloc());
+}
+
+/* Alias for legacy code that references SHOOT_ALLOC directly */
+var SHOOT_ALLOC = getShootAlloc();
 
 // ── Status helpers ────────────────────────────────────────────
 var STATUS_CLASS = { completed:'completed', allocated:'allocated', pending:'pending', in_progress:'in-progress' };
@@ -65,7 +52,9 @@ var STATUS_LBL   = { completed:'Completed', allocated:'Gear Allocated', pending:
 function renderShootAllocTable() {
   var tbody = document.getElementById('shoot-alloc-tbody');
   if (!tbody) return;
-  tbody.innerHTML = SHOOT_ALLOC.map(function(shoot) {
+  /* always pull fresh from ZPData */
+  var shoots = getShootAlloc();
+  tbody.innerHTML = shoots.map(function(shoot) {
     var sc    = STATUS_CLASS[shoot.status] || 'pending';
     var sl    = STATUS_LBL[shoot.status]   || 'Not Allocated';
     var badge = '<span class="tbl-badge ' + sc + '"><span class="dot"></span>' + sl + '</span>';
@@ -80,10 +69,11 @@ function renderShootAllocTable() {
         + '</div>'
       : '<span style="color:#94a3b8;font-size:12.5px;">No crew assigned</span>';
 
-    // Gear tags
-    var gear = shoot.gear.length === 0
+    // Gear tags — use gearItems (from ZPData schema) with fallback to legacy gear array
+    var gearArr = shoot.gearItems && shoot.gearItems.length ? shoot.gearItems : (shoot.gear || []);
+    var gear = gearArr.length === 0
       ? '<span style="color:#94a3b8;font-size:13px;">No gear allocated</span>'
-      : shoot.gear.map(function(g){ return '<span style="font-size:12px;background:#f1f5f9;color:#475569;padding:2px 8px;border-radius:4px;font-weight:500;margin-right:3px;">' + g.cat + '</span>'; }).join('') + '<span style="font-size:12px;color:#94a3b8;margin-left:2px;">(' + shoot.gear.length + ')</span>';
+      : gearArr.map(function(g){ return '<span style="font-size:12px;background:#f1f5f9;color:#475569;padding:2px 8px;border-radius:4px;font-weight:500;margin-right:3px;">' + (g.cat||g) + '</span>'; }).join('') + '<span style="font-size:12px;color:#94a3b8;margin-left:2px;">(' + gearArr.length + ')</span>';
 
     var action = shoot.status === 'completed'
       ? '<button data-fn="usage" data-sid="' + shoot.id + '" onclick="event.stopPropagation()" class="tbl-btn"><i class="ti ti-chart-bar"></i> Usage Report</button>'
@@ -108,12 +98,27 @@ function renderShootAllocTable() {
 function renderServiceTable() {
   var tbody = document.getElementById('service-tbody');
   if (!tbody) return;
-  var today = new Date('2026-06-26');
-  tbody.innerHTML = CAMERAS.map(function(cam) {
+  var today = new Date();
+  /* Read cameras live from ZPData; fall back to hardcoded CAMERAS if ZPData unavailable */
+  var camList = (typeof ZPData !== 'undefined')
+    ? ZPData.get('equipment').filter(function(e){ return e.cat === 'Camera' && e.shutterCount !== undefined; })
+        .map(function(e){
+          return {
+            id: e.id, name: e.name, cat: e.cat, serial: e.serial,
+            totalShots: e.shutterCount || 0,
+            shotsSince: e.shutterCount || 0,   /* until per-service tracking is added */
+            svcIntervalShots: e.serviceEvery || 50000,
+            lastSvcDate: e.nextServiceDue ? e.nextServiceDue : '2026-01-01',
+            svcIntervalDays: 180
+          };
+        })
+    : CAMERAS;
+
+  tbody.innerHTML = camList.map(function(cam) {
     var lastSvc  = new Date(cam.lastSvcDate);
     var calDue   = new Date(lastSvc); calDue.setDate(calDue.getDate() + cam.svcIntervalDays);
     var daysLeft = Math.ceil((calDue - today) / 86400000);
-    var pct      = cam.svcIntervalShots > 0 ? Math.min(100, Math.round(cam.shotsSince / cam.svcIntervalShots * 100)) : 0;
+    var pct      = cam.svcIntervalShots > 0 ? Math.min(100, Math.round(cam.totalShots / cam.svcIntervalShots * 100)) : 0;
     var calSt    = daysLeft < 0 ? 'over' : daysLeft <= 30 ? 'soon' : 'ok';
     var cntSt    = cam.svcIntervalShots > 0 ? (pct >= 100 ? 'over' : pct >= 80 ? 'soon' : 'ok') : 'ok';
     var worst    = (calSt==='over'||cntSt==='over') ? 'over' : (calSt==='soon'||cntSt==='soon') ? 'soon' : 'ok';
@@ -121,18 +126,19 @@ function renderServiceTable() {
     var stLbl   = {over:'Service Overdue',soon:'Due Soon',ok:'OK'}[worst];
     var barCol  = pct>=100?'#ef4444':pct>=80?'#f59e0b':'#22c55e';
     var progress = cam.svcIntervalShots > 0
-      ? '<div style="display:flex;align-items:center;gap:8px;"><div style="flex:1;height:8px;background:#e8edf3;border-radius:4px;overflow:hidden;min-width:80px;"><div style="width:'+pct+'%;height:100%;background:'+barCol+';border-radius:4px;"></div></div><span style="font-size:12.5px;font-weight:700;color:'+barCol+';">'+pct+'%</span></div><div style="font-size:11.5px;color:#94a3b8;margin-top:3px;">'+(Math.max(0,cam.svcIntervalShots-cam.shotsSince).toLocaleString())+' shots left</div>'
+      ? '<div style="display:flex;align-items:center;gap:8px;"><div style="flex:1;height:8px;background:#e8edf3;border-radius:4px;overflow:hidden;min-width:80px;"><div style="width:'+pct+'%;height:100%;background:'+barCol+';border-radius:4px;"></div></div><span style="font-size:12.5px;font-weight:700;color:'+barCol+';">'+pct+'%</span></div><div style="font-size:11.5px;color:#94a3b8;margin-top:3px;">'+(Math.max(0,cam.svcIntervalShots-cam.totalShots).toLocaleString())+' shots left</div>'
       : '<span style="font-size:12.5px;color:#94a3b8;">N/A</span>';
     var calStr = calDue.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) + '<div style="font-size:11.5px;color:'+({over:'#dc2626',soon:'#d97706',ok:'#94a3b8'}[calSt])+';">'+(daysLeft<0?Math.abs(daysLeft)+' days overdue':daysLeft+' days away')+'</div>';
-    return '<tr style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openServiceDetail(\'' + cam.id + '\')" onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\'\'">' +
-      '<td style="padding:15px 18px;"><div style="font-size:14.5px;font-weight:700;color:#1a1d2e;">' + cam.name + '</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">' + cam.id + ' · ' + cam.cat + '</div></td>' +
+    var rowId = cam.id || cam.serial || cam.name;
+    return '<tr style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openServiceDetail(\'' + rowId + '\')" onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\'\'">' +
+      '<td style="padding:15px 18px;"><div style="font-size:14.5px;font-weight:700;color:#1a1d2e;">' + cam.name + '</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">' + (cam.serial||cam.id) + ' · ' + cam.cat + '</div></td>' +
       '<td style="padding:15px 18px;font-size:16px;font-weight:800;color:#1a1d2e;">' + cam.totalShots.toLocaleString() + '<div style="font-size:12px;font-weight:400;color:#94a3b8;">lifetime</div></td>' +
-      '<td style="padding:15px 18px;font-size:16px;font-weight:800;color:'+(cam.shotsSince>40000?'#dc2626':cam.shotsSince>30000?'#d97706':'#1a1d2e')+'">' + (cam.svcIntervalShots>0 ? cam.shotsSince.toLocaleString() : '—') + '<div style="font-size:12px;font-weight:400;color:#94a3b8;">since service</div></td>' +
+      '<td style="padding:15px 18px;font-size:16px;font-weight:800;color:'+(pct>=80?'#dc2626':pct>=60?'#d97706':'#1a1d2e')+'">' + (cam.svcIntervalShots>0 ? cam.totalShots.toLocaleString() : '—') + '<div style="font-size:12px;font-weight:400;color:#94a3b8;">total shots</div></td>' +
       '<td style="padding:15px 18px;">' + progress + '</td>' +
-      '<td style="padding:15px 18px;font-size:14px;color:#475569;">' + new Date(cam.lastSvcDate).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) + '</td>' +
+      '<td style="padding:15px 18px;font-size:14px;color:#475569;">' + lastSvc.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) + '</td>' +
       '<td style="padding:15px 18px;font-size:14px;color:#475569;">' + calStr + '</td>' +
       '<td style="padding:13px 18px;"><span class="tbl-badge ' + stClass + '"><span class="dot"></span>' + stLbl + '</span></td>' +
-      '<td style="padding:13px 18px;text-align:center;"><button data-fn="svc" data-sid="' + cam.id + '" onclick="event.stopPropagation()" class="tbl-btn"><i class="ti ti-tool"></i> Mark Serviced</button></td>' +
+      '<td style="padding:13px 18px;text-align:center;"><button data-fn="svc" data-sid="' + rowId + '" onclick="event.stopPropagation()" class="tbl-btn"><i class="ti ti-tool"></i> Mark Serviced</button></td>' +
     '</tr>';
   }).join('');
 }
@@ -156,10 +162,11 @@ document.addEventListener('click', function(e) {
 
 // ── Start Shoot ───────────────────────────────────────────────
 function startShoot(shootId) {
-  var shoot = SHOOT_ALLOC.find(function(s){ return s.id === shootId; });
+  var shoot = getShootAlloc().find(function(s){ return s.id === shootId; });
   if (!shoot) return;
   shoot.status = 'in_progress';
   shoot.startedAt = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  saveShootAlloc();
   renderShootAllocTable();
   var ov = document.getElementById('eq-detail-overlay');
   if (ov) { ov.remove(); openShootLogDetail(shootId); }
@@ -168,10 +175,11 @@ function startShoot(shootId) {
 
 // ── End Shoot ─────────────────────────────────────────────────
 function endShoot(shootId) {
-  var shoot = SHOOT_ALLOC.find(function(s){ return s.id === shootId; });
+  var shoot = getShootAlloc().find(function(s){ return s.id === shootId; });
   if (!shoot) return;
   shoot.status = 'completed';
   shoot.endedAt = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  saveShootAlloc();
   renderShootAllocTable();
   var ov = document.getElementById('eq-detail-overlay');
   if (ov) ov.remove();
@@ -180,7 +188,7 @@ function endShoot(shootId) {
 
 // ── Allocate Gear Modal ───────────────────────────────────────
 function openAllocateModal(shootId) {
-  var shoot = SHOOT_ALLOC.find(function(s){ return s.id === shootId; });
+  var shoot = getShootAlloc().find(function(s){ return s.id === shootId; });
   if (!shoot) {
     var ov = document.createElement('div');
     ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;';
@@ -191,7 +199,7 @@ function openAllocateModal(shootId) {
     var sel = document.createElement('select');
     sel.style.cssText = 'width:100%;border:2px solid #e2e8f0;border-radius:10px;padding:12px 14px;font-size:14px;font-family:inherit;outline:none;';
     sel.innerHTML = '<option value="">— Select a shoot —</option>' +
-      SHOOT_ALLOC.filter(function(s){return s.status!=='completed';}).map(function(s){
+      getShootAlloc().filter(function(s){return s.status!=='completed';}).map(function(s){
         return '<option value="'+s.id+'">'+s.shootName+' · '+s.date+'</option>';
       }).join('');
     sel.addEventListener('change',function(){ if(sel.value){ov.remove();openAllocateModal(sel.value);} });
@@ -215,12 +223,14 @@ function openAllocateModal(shootId) {
   hdr.innerHTML = '<div><div style="font-size:17px;font-weight:800;color:#1e40af;">Allocate Equipment</div><div style="font-size:13px;color:#2563eb;margin-top:3px;">'+shoot.shootName+' · '+shoot.date+'</div></div>';
   var xBtn=document.createElement('button');xBtn.innerHTML='&#x2715;';xBtn.style.cssText='background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;';xBtn.addEventListener('click',function(){ov.remove();});hdr.appendChild(xBtn);box.appendChild(hdr);
   var body=document.createElement('div');body.style.cssText='flex:1;overflow-y:auto;padding:20px 24px;';
+  var gearPool = (typeof ZPData !== 'undefined') ? ZPData.get('equipment') : GEAR_OPTIONS;
+  var allocatedIds = (shoot.gearItems||[]).map(function(g){ return g.id; });
   ['Camera','Lens','Lighting','Accessory','Memory'].forEach(function(cat){
-    var items=GEAR_OPTIONS.filter(function(g){return g.cat===cat;});
+    var items=gearPool.filter(function(g){return g.cat===cat;});
     if(!items.length)return;
     var catHdr=document.createElement('div');catHdr.style.cssText='font-size:11.5px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.7px;margin:14px 0 8px;';catHdr.textContent=cat+'s';body.appendChild(catHdr);
     items.forEach(function(gear){
-      var isAlloc=shoot.gear.some(function(g){return g.id===gear.id;});
+      var isAlloc=allocatedIds.indexOf(gear.id)!==-1;
       var isUnavail=gear.status!=='available'&&!isAlloc;
       var lbl=document.createElement('label');
       lbl.style.cssText='display:flex;align-items:center;gap:12px;padding:11px 14px;border:1.5px solid '+(isAlloc?'#bfdbfe':'#e2e8f0')+';border-radius:9px;margin-bottom:6px;cursor:'+(isUnavail?'not-allowed':'pointer')+';background:'+(isAlloc?'#eff6ff':isUnavail?'#f9fafb':'#fff')+';';
@@ -237,8 +247,14 @@ function openAllocateModal(shootId) {
   var cancel=document.createElement('button');cancel.textContent='Cancel';cancel.style.cssText='padding:10px 20px;border:1.5px solid #e2e8f0;border-radius:9px;background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:#475569;';cancel.addEventListener('click',function(){ov.remove();});
   var save=document.createElement('button');save.innerHTML='<i class="ti ti-check"></i> Save Allocation';save.style.cssText='padding:10px 20px;border:none;border-radius:9px;background:#2563eb;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;color:#fff;display:flex;align-items:center;gap:7px;';
   save.addEventListener('click',function(){
-    shoot.gear=Array.from(body.querySelectorAll('input[type=checkbox]:checked')).map(function(cb){var g=GEAR_OPTIONS.find(function(x){return x.id===cb.dataset.gid;});return g||{id:cb.dataset.gid,name:cb.dataset.gid,cat:'Equipment'};});
-    if(shoot.gear.length>0&&shoot.status==='pending')shoot.status='allocated';
+    var pool = (typeof ZPData !== 'undefined') ? ZPData.get('equipment') : GEAR_OPTIONS;
+    shoot.gearItems=Array.from(body.querySelectorAll('input[type=checkbox]:checked')).map(function(cb){
+      var g=pool.find(function(x){return x.id===cb.dataset.gid;});
+      return g ? {id:g.id,name:g.name,cat:g.cat,serial:g.serial||g.id} : {id:cb.dataset.gid,name:cb.dataset.gid,cat:'Equipment',serial:cb.dataset.gid};
+    });
+    shoot.gear = shoot.gearItems.map(function(g){ return g.cat; });
+    if(shoot.gearItems.length>0&&shoot.status==='pending')shoot.status='allocated';
+    saveShootAlloc();
     renderShootAllocTable();ov.remove();showToast('Equipment allocated for '+shoot.shootName);
   });
   ftr.appendChild(cancel);ftr.appendChild(save);box.appendChild(ftr);ov.appendChild(box);document.body.appendChild(ov);
@@ -246,7 +262,7 @@ function openAllocateModal(shootId) {
 
 // ── Team Allocation Modal ─────────────────────────────────────
 function openTeamAllocModal(shootId) {
-  var shoot = SHOOT_ALLOC.find(function(s){ return s.id === shootId; });
+  var shoot = getShootAlloc().find(function(s){ return s.id === shootId; });
   if (!shoot) return;
   var ov = document.createElement('div');
   ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;padding:20px;';
@@ -294,6 +310,7 @@ function openTeamAllocModal(shootId) {
       if (staff) shoot.team.push({ staffId:staff.id, name:staff.name, role:sel.value, initials:staff.initials, color:staff.color, phone:staff.phone });
     });
     if (shoot.team.length > 0 && shoot.status === 'pending') shoot.status = 'allocated';
+    saveShootAlloc();
     renderShootAllocTable(); ov.remove();
     showToast('Crew assigned for ' + shoot.shootName);
   });
@@ -303,7 +320,7 @@ function openTeamAllocModal(shootId) {
 // ── Plan Shoot Modal (Crew + Gear together) ───────────────────
 function openPlanShootModal(shootId) {
   // Plan Shoot just opens crew assignment first, then equipment
-  var shoot = SHOOT_ALLOC.find(function(s){ return s.id === shootId; });
+  var shoot = getShootAlloc().find(function(s){ return s.id === shootId; });
   if (!shoot) return;
   // Open team modal; after save it changes status to allocated and re-renders
   openTeamAllocModal(shootId);
@@ -311,8 +328,10 @@ function openPlanShootModal(shootId) {
 
 // ── Post-Shoot Log Modal ──────────────────────────────────────
 function openPostShootLog(shootId) {
-  var shoot=SHOOT_ALLOC.find(function(s){return s.id===shootId;});
-  if(!shoot||!shoot.gear.length){showToast('Allocate equipment first before logging usage.');return;}
+  var shoot=getShootAlloc().find(function(s){return s.id===shootId;});
+  var shootGear = shoot ? (shoot.gearItems && shoot.gearItems.length ? shoot.gearItems : (shoot.gear||[])) : [];
+  if(!shoot||!shootGear.length){showToast('Allocate equipment first before logging usage.');return;}
+  if(!shoot.usageLog)shoot.usageLog={};
   var ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;padding:20px;';
   ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
   var box=document.createElement('div');box.style.cssText='background:#fff;border-radius:16px;width:620px;max-width:100%;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.2);';
@@ -321,7 +340,9 @@ function openPostShootLog(shootId) {
   var xBtn2=document.createElement('button');xBtn2.innerHTML='&#x2715;';xBtn2.style.cssText='background:none;border:none;font-size:22px;cursor:pointer;color:#94a3b8;';xBtn2.addEventListener('click',function(){ov.remove();});hdr.appendChild(xBtn2);box.appendChild(hdr);
   var body2=document.createElement('div');body2.style.cssText='flex:1;overflow-y:auto;padding:20px 24px;';
   var intro=document.createElement('div');intro.style.cssText='background:#fefce8;border:1px solid #fde68a;border-radius:9px;padding:12px 16px;margin-bottom:16px;font-size:13.5px;color:#92400e;';intro.innerHTML='<strong>After the shoot:</strong> Enter shots taken per camera, confirm items returned, and note any issues.';body2.appendChild(intro);
-  shoot.gear.forEach(function(gear){
+  shootGear.forEach(function(gear){
+    /* gear may be an object {id,name,cat} or a plain string category */
+    if (typeof gear === 'string') return; /* skip bare category strings */
     var log=shoot.usageLog[gear.id]||{};var isCamera=gear.cat==='Camera';
     var card=document.createElement('div');card.style.cssText='border:1.5px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:12px;';
     card.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">' +
@@ -340,13 +361,23 @@ function openPostShootLog(shootId) {
   var cancel2=document.createElement('button');cancel2.textContent='Cancel';cancel2.style.cssText='padding:10px 20px;border:1.5px solid #e2e8f0;border-radius:9px;background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:#475569;';cancel2.addEventListener('click',function(){ov.remove();});
   var save2=document.createElement('button');save2.innerHTML='<i class="ti ti-check"></i> Save Usage Log';save2.style.cssText='padding:10px 22px;border:none;border-radius:9px;background:#22c55e;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;color:#fff;display:flex;align-items:center;gap:7px;';
   save2.addEventListener('click',function(){
-    shoot.gear.forEach(function(gear){
+    /* update usage log and shutter counts in ZPData */
+    var allEq = (typeof ZPData !== 'undefined') ? ZPData.get('equipment') : [];
+    shootGear.forEach(function(gear){
+      if (typeof gear === 'string') return;
       var sid2=gear.id.replace(/\W/g,'_');
       var shots=parseInt((document.getElementById('shots-'+sid2)||{value:'0'}).value)||0;
       shoot.usageLog[gear.id]={shots:shots,returned:(document.getElementById('ret-'+sid2)||{checked:true}).checked,condition:(document.getElementById('cond-'+sid2)||{value:'Good'}).value,notes:(document.getElementById('notes-'+sid2)||{value:''}).value};
-      if(gear.cat==='Camera'&&shots>0){var cam=CAMERAS.find(function(c){return c.id===gear.id;});if(cam){cam.totalShots+=shots;cam.shotsSince+=shots;}}
+      /* update shutter count in ZPData equipment */
+      if(gear.cat==='Camera'&&shots>0){
+        var eqIdx=allEq.findIndex(function(e){return e.id===gear.id;});
+        if(eqIdx>=0){ allEq[eqIdx].shutterCount=(allEq[eqIdx].shutterCount||0)+shots; }
+      }
     });
-    shoot.status='completed';renderShootAllocTable();renderServiceTable();ov.remove();
+    if(allEq.length && typeof ZPData !== 'undefined') ZPData.set('equipment', allEq);
+    shoot.status='completed';
+    saveShootAlloc();
+    renderShootAllocTable();renderServiceTable();ov.remove();
     showToast('Usage logged for '+shoot.shootName+'. Shutter counts updated.');
   });
   ftr2.appendChild(cancel2);ftr2.appendChild(save2);box.appendChild(ftr2);ov.appendChild(box);document.body.appendChild(ov);
@@ -354,15 +385,24 @@ function openPostShootLog(shootId) {
 
 // ── Usage Detail ──────────────────────────────────────────────
 function openUsageDetail(shootId){
-  var shoot=SHOOT_ALLOC.find(function(s){return s.id===shootId;});
+  var shoot=getShootAlloc().find(function(s){return s.id===shootId;});
   if(!shoot)return;
-  var lines=shoot.gear.map(function(g){var lg=shoot.usageLog[g.id]||{};return g.name+': '+(lg.shots?lg.shots+' shots':'—')+' | '+(lg.condition||'Good')+(lg.notes?' | '+lg.notes:'');});
+  var gearArr = shoot.gearItems && shoot.gearItems.length ? shoot.gearItems : (shoot.gear||[]);
+  var usageLog = shoot.usageLog || {};
+  var lines=gearArr.filter(function(g){return typeof g==='object';}).map(function(g){var lg=usageLog[g.id]||{};return g.name+': '+(lg.shots?lg.shots+' shots':'—')+' | '+(lg.condition||'Good')+(lg.notes?' | '+lg.notes:'');});
   showToast('<strong>'+shoot.shootName+'</strong> ('+shoot.date+')<br>'+lines.join('<br>'));
 }
 
 // ── Mark Serviced ─────────────────────────────────────────────
 function openMarkServiced(camId){
-  var cam=CAMERAS.find(function(c){return c.id===camId;});if(!cam)return;
+  /* look up in ZPData first; fall back to legacy CAMERAS array */
+  var allEqSvc = (typeof ZPData !== 'undefined') ? ZPData.get('equipment') : CAMERAS;
+  var cam = allEqSvc.find(function(c){return c.id===camId||c.serial===camId;});
+  if(!cam)return;
+  /* normalise field names so both schemas work */
+  if(cam.shutterCount!==undefined && cam.totalShots===undefined) cam.totalShots=cam.shutterCount;
+  if(cam.totalShots===undefined) cam.totalShots=0;
+  if(cam.shotsSince===undefined) cam.shotsSince=cam.totalShots;
   var today2=new Date().toISOString().split('T')[0];
   var ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif;';
   ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
@@ -382,8 +422,16 @@ function openMarkServiced(camId){
   var c3=document.createElement('button');c3.textContent='Cancel';c3.style.cssText='padding:10px 20px;border:1.5px solid #e2e8f0;border-radius:9px;background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:#475569;';c3.addEventListener('click',function(){ov.remove();});
   var s3=document.createElement('button');s3.innerHTML='<i class="ti ti-tool"></i> Confirm Serviced';s3.style.cssText='padding:10px 22px;border:none;border-radius:9px;background:#8b5cf6;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;color:#fff;display:flex;align-items:center;gap:7px;';
   s3.addEventListener('click',function(){
-    cam.lastSvcDate=(document.getElementById('svc-date')||{value:today2}).value;
-    cam.shotsSince=0;renderServiceTable();ov.remove();
+    var newDate=(document.getElementById('svc-date')||{value:today2}).value;
+    cam.lastSvcDate=newDate;
+    cam.shotsSince=0;
+    /* persist back to ZPData */
+    if(typeof ZPData !== 'undefined'){
+      var allEqSave=ZPData.get('equipment');
+      var idx=allEqSave.findIndex(function(e){return e.id===cam.id||e.serial===cam.id;});
+      if(idx>=0){allEqSave[idx].nextServiceDue=newDate;ZPData.set('equipment',allEqSave);}
+    }
+    renderServiceTable();ov.remove();
     showToast(cam.name+' marked as serviced. Shot counter reset to 0.');
   });
   ftr3.appendChild(c3);ftr3.appendChild(s3);box.appendChild(ftr3);ov.appendChild(box);document.body.appendChild(ov);
@@ -397,7 +445,7 @@ function openMarkServiced(camId){
 
 // ── Shoot Log Detail Overlay ──────────────────────────────────
 function openShootLogDetail(shootId) {
-  var shoot = SHOOT_ALLOC.find(function(s){ return s.id === shootId; });
+  var shoot = getShootAlloc().find(function(s){ return s.id === shootId; });
   if (!shoot) return;
 
   var sc = { completed:'#15803d', allocated:'#1d4ed8', pending:'#475569', in_progress:'#d97706' }[shoot.status] || '#475569';
@@ -491,13 +539,16 @@ function openShootLogDetail(shootId) {
   cw.appendChild(c2);
 
   /* Section 3: Allocated Equipment */
-  var c3 = mkSection('Allocated Equipment (' + shoot.gear.length + ' items)');
-  if (shoot.gear.length === 0) {
+  var detailGear = shoot.gearItems && shoot.gearItems.length ? shoot.gearItems : (shoot.gear||[]);
+  var detailGearItems = detailGear.filter(function(g){ return typeof g === 'object'; });
+  var c3 = mkSection('Allocated Equipment (' + detailGearItems.length + ' items)');
+  if (detailGearItems.length === 0) {
     var emp = document.createElement('div'); emp.style.cssText = 'padding:14px 0;font-size:14px;color:#9ca3af;';
     emp.textContent = 'No equipment allocated yet.'; c3.appendChild(emp);
   } else {
-    shoot.gear.forEach(function(g) {
-      var log = shoot.usageLog[g.id] || {};
+    var detailUsageLog = shoot.usageLog || {};
+    detailGearItems.forEach(function(g) {
+      var log = detailUsageLog[g.id] || {};
       var usage = '';
       if (shoot.status === 'completed' && log.shots !== undefined) {
         usage = (log.shots ? log.shots + ' shots' : '') + (log.condition ? ' · ' + log.condition : '') + (log.notes ? ' · ' + log.notes : '');
@@ -540,14 +591,19 @@ function openShootLogDetail(shootId) {
 
 // ── Service Due Tracker Detail Overlay ───────────────────────
 function openServiceDetail(camId) {
-  var cam = CAMERAS.find(function(c){ return c.id === camId; });
+  /* look up in ZPData first; fall back to legacy CAMERAS */
+  var svcPool = (typeof ZPData !== 'undefined')
+    ? ZPData.get('equipment').filter(function(e){ return e.cat==='Camera' && e.shutterCount!==undefined; })
+        .map(function(e){ return { id:e.id, serial:e.serial, name:e.name, cat:e.cat, totalShots:e.shutterCount||0, shotsSince:e.shutterCount||0, svcIntervalShots:e.serviceEvery||50000, lastSvcDate:e.nextServiceDue||'2026-01-01', svcIntervalDays:180 }; })
+    : CAMERAS;
+  var cam = svcPool.find(function(c){ return c.id===camId||c.serial===camId; });
   if (!cam) return;
 
-  var today   = new Date('2026-06-26');
+  var today   = new Date();
   var lastSvc = new Date(cam.lastSvcDate);
   var calDue  = new Date(lastSvc); calDue.setDate(calDue.getDate() + cam.svcIntervalDays);
   var daysLeft= Math.ceil((calDue - today) / 86400000);
-  var pct     = cam.svcIntervalShots > 0 ? Math.min(100, Math.round(cam.shotsSince / cam.svcIntervalShots * 100)) : 0;
+  var pct     = cam.svcIntervalShots > 0 ? Math.min(100, Math.round(cam.totalShots / cam.svcIntervalShots * 100)) : 0;
   var calSt   = daysLeft < 0 ? 'over' : daysLeft <= 30 ? 'soon' : 'ok';
   var cntSt   = cam.svcIntervalShots > 0 ? (pct >= 100 ? 'over' : pct >= 80 ? 'soon' : 'ok') : 'ok';
   var worst   = (calSt==='over'||cntSt==='over') ? 'over' : (calSt==='soon'||cntSt==='soon') ? 'soon' : 'ok';
@@ -638,8 +694,8 @@ function openServiceDetail(camId) {
     var c3 = mkSection('Shutter Counter');
     var g3 = mkGrid(c3);
     addRow(g3, 'Total Shots (Lifetime)',      cam.totalShots.toLocaleString());
-    addRow(g3, 'Shots Since Last Service',    cam.shotsSince.toLocaleString(), pct>=100?'#dc2626':pct>=80?'#d97706':'#111827');
-    addRow(g3, 'Shots Remaining to Service',  Math.max(0, cam.svcIntervalShots - cam.shotsSince).toLocaleString());
+    addRow(g3, 'Shots Toward Next Service',   cam.totalShots.toLocaleString(), pct>=100?'#dc2626':pct>=80?'#d97706':'#111827');
+    addRow(g3, 'Shots Remaining to Service',  Math.max(0, cam.svcIntervalShots - cam.totalShots).toLocaleString());
     addRow(g3, 'Counter Progress',            pct + '% used', pct>=100?'#dc2626':pct>=80?'#d97706':'#111827');
     cw.appendChild(c3);
   }

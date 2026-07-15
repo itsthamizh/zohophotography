@@ -354,7 +354,7 @@ a { text-decoration: none; }
         <i class="ti ti-crown" style="font-size:13px;"></i> Super Admin
       </button>
       <button class="role-btn r-studio" onclick="switchRole('studio-manager',this)" id="rbtn-studio">
-        <i class="ti ti-briefcase" style="font-size:13px;"></i> Studio Manager
+        <i class="ti ti-briefcase" style="font-size:13px;"></i> Studio Desk
       </button>
       <button class="role-btn r-photo" onclick="switchRole('photographer',this)" id="rbtn-photo">
         <i class="ti ti-camera" style="font-size:13px;"></i> Photographer
@@ -451,14 +451,14 @@ a { text-decoration: none; }
         <div class="mod-icon" style="background:rgba(201,168,76,0.1);">
           <i class="ti ti-calendar-event" style="color:#2563eb;font-size:24px;"></i>
         </div>
-        <div class="mod-name">Studio Manager</div>
+        <div class="mod-name">Studio Desk</div>
         <div class="mod-meta">34 bookings active</div>
       </a>
       <a href="ClientGallery/ClientGallery.html" class="mod-card">
         <div class="mod-icon" style="background:rgba(59,130,246,0.1);">
           <i class="ti ti-photo" style="color:#3b82f6;font-size:24px;"></i>
         </div>
-        <div class="mod-name">Client Gallery</div>
+        <div class="mod-name">Gallery Room</div>
         <div class="mod-meta">18 galleries live</div>
       </a>
       <a href="Website/Website.html" class="mod-card">
@@ -736,7 +736,7 @@ a { text-decoration: none; }
   <div id="view-studio-manager" class="role-view">
     <div class="page-header">
       <div class="page-title">Studio Operations</div>
-      <div class="page-sub">Ravi Singh · Studio Manager — Bookings, clients &amp; shoot coordination</div>
+      <div class="page-sub">Ravi Singh · Studio Desk — Bookings, clients &amp; shoot coordination</div>
     </div>
 
     <!-- Operational Stats -->
@@ -771,14 +771,14 @@ a { text-decoration: none; }
       </div>
     </div>
 
-    <!-- Modules available to Studio Manager -->
+    <!-- Modules available to Studio Desk -->
     <div class="sec-head" style="margin-bottom:14px;">
       <div class="sec-title">My Modules</div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px;">
       <a href="StudioManager/StudioManager.html" class="mod-card">
         <div class="mod-icon" style="background:rgba(37,99,235,0.1);"><i class="ti ti-calendar-event" style="color:#2563eb;font-size:24px;"></i></div>
-        <div class="mod-name">Studio Manager</div><div class="mod-meta">Bookings &amp; clients</div>
+        <div class="mod-name">Studio Desk</div><div class="mod-meta">Bookings &amp; clients</div>
       </a>
       <a href="ShootPlanning/ShootPlanning.html" class="mod-card">
         <div class="mod-icon" style="background:rgba(139,92,246,0.1);"><i class="ti ti-users" style="color:#7c3aed;font-size:24px;"></i></div>
@@ -790,7 +790,7 @@ a { text-decoration: none; }
       </a>
       <a href="ClientGallery/ClientGallery.html" class="mod-card">
         <div class="mod-icon" style="background:rgba(59,130,246,0.1);"><i class="ti ti-photo" style="color:#3b82f6;font-size:24px;"></i></div>
-        <div class="mod-name">Client Gallery</div><div class="mod-meta">18 galleries live</div>
+        <div class="mod-name">Gallery Room</div><div class="mod-meta">18 galleries live</div>
       </a>
     </div>
 
@@ -1152,7 +1152,7 @@ function dashSearch(q) {
 /* ══════════ ROLE SWITCHER ══════════ */
 var ROLE_META = {
   'super-admin':    { greeting:'Good morning, Thamizh', name:'Thamizh S.',  initials:'TS', color:'#2563eb', sub:'Studio CEO &amp; Super Admin' },
-  'studio-manager': { greeting:'Good morning, Ravi',    name:'Ravi Singh',   initials:'RS', color:'#d97706', sub:'Studio Manager' },
+  'studio-manager': { greeting:'Good morning, Ravi',    name:'Ravi Singh',   initials:'RS', color:'#d97706', sub:'Studio Desk' },
   'photographer':   { greeting:'Good morning, Alex',    name:'Alex Kumar',   initials:'AK', color:'#7c3aed', sub:'Lead Photographer' }
 };
 

@@ -468,30 +468,6 @@
     .cc-items { list-style: none; padding: 0; margin: 0; }
     .cc-items li { font-size: 0.8rem; color: #374151; padding: 3px 0; display: flex; align-items: center; gap: 6px; }
     .cc-items li::before { content: '•'; color: #2563eb; font-size: 1rem; }
-
-    /* ── Detail view navigation ── */
-    .module-detail-view { display: none; animation: slideInRight 0.18s ease; }
-    @keyframes slideInRight { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
-    .detail-back-btn { display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:1.5px solid #e2e8f0;background:#f8fafc;color:#475569;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;margin-bottom:20px; }
-    .detail-back-btn:hover { background:#f1f5f9; }
-    .detail-header { display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px; }
-    .detail-title { font-size:20px;font-weight:700;color:#1a1d2e; }
-    .detail-subtitle { font-size:13px;color:#64748b;margin-top:3px; }
-    .detail-actions { display:flex;gap:8px;flex-wrap:wrap; }
-    .detail-section { background:#fff;border:1px solid #e8edf3;border-radius:12px;padding:20px 24px;margin-bottom:16px; }
-    .detail-section-title { font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;gap:6px; }
-    .detail-grid { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
-    .detail-grid-3 { display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px; }
-    .detail-field-label { font-size:11px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px; }
-    .detail-field-value { font-size:14px;color:#1a1d2e;font-weight:500; }
-    .detail-timeline { list-style:none;padding:0;margin:0; }
-    .detail-timeline li { display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #f1f5f9; }
-    .detail-timeline li:last-child { border-bottom:none; }
-    .tl-icon { width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px; }
-    .tl-body { flex:1; }
-    .tl-text { font-size:13px;color:#1a1d2e; }
-    .tl-time { font-size:11.5px;color:#94a3b8;margin-top:2px; }
-    .detail-two-col { display:grid;grid-template-columns:2fr 1fr;gap:16px;align-items:start; }
   </style>
   <!-- Shared sidebar + layout (explicit link ensures consistent styling) -->
   <link rel="stylesheet" href="../shared/sidebar.css">
@@ -543,6 +519,7 @@
           <button class="subtab" onclick="switchTab('leads', this)">Lead Inbox <span id="lead-inbox-badge" style="display:inline-flex;align-items:center;justify-content:center;background:#ef4444;color:#fff;font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:9px;padding:0 4px;margin-left:5px;">6</span></button>
           <button class="subtab" onclick="switchTab('bookings', this)">Bookings</button>
           <button class="subtab" onclick="switchTab('clients', this)">Clients</button>
+          <button class="subtab" onclick="switchTab('invoices', this)">Invoices</button>
           <button class="subtab" onclick="switchTab('contracts', this)">Contracts</button>
         </nav>
       </div>
@@ -954,7 +931,6 @@
              TAB — LEAD INBOX
         ══════════════════════════════════════════ -->
         <div id="tab-leads" class="tab-panel hidden">
-          <div id="leads-list" class="module-list-view">
 
           <!-- Header row -->
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
@@ -1000,15 +976,12 @@
             </div>
           </div>
 
-          </div><!-- /leads-list -->
-          <div id="leads-detail" class="module-detail-view" style="display:none;"></div>
         </div><!-- /tab-leads -->
 
         <!-- ══════════════════════════════════════════
              TAB 2 — BOOKINGS
         ══════════════════════════════════════════ -->
         <div id="tab-bookings" class="tab-panel hidden">
-          <div id="bookings-list" class="module-list-view">
           <div class="card table-card">
             <div class="card-header">
               <div class="card-title"><i class="ti ti-calendar-event"></i> Booking Enquiries &amp; Pipeline</div>
@@ -1023,6 +996,54 @@
               <div class="pipe-seg pipe-seg--lost"><i class="ti ti-x"></i> Lost (12)</div>
             </div>
 
+            <!-- ── Phase Guide ── -->
+<div class="phase-guide" style="background:#fff;border:1px solid #e8edf3;border-radius:12px;padding:18px 22px;margin-bottom:20px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+    <div style="font-size:13.5px;font-weight:600;color:#1a1d2e;"><i class="ti ti-route" style="color:#2563eb;margin-right:6px;"></i> Enquiry-to-Delivery Pipeline</div>
+    <div style="font-size:12px;color:#64748b;">Click any phase to see required actions</div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:0;position:relative;">
+    <div class="phase-step phase-done" onclick="showPhase(1)" style="text-align:center;cursor:pointer;padding:10px 6px;position:relative;">
+      <div style="width:32px;height:32px;border-radius:50%;background:#dcfce7;border:2px solid #22c55e;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:14px;color:#16a34a;">✓</div>
+      <div style="font-size:11px;font-weight:600;color:#16a34a;">Ph 1</div>
+      <div style="font-size:10.5px;color:#64748b;margin-top:2px;">Inbound<br>Enquiry</div>
+      <div style="position:absolute;top:22px;left:50%;width:100%;height:2px;background:#22c55e;z-index:0;"></div>
+    </div>
+    <div class="phase-step phase-done" onclick="showPhase(2)" style="text-align:center;cursor:pointer;padding:10px 6px;position:relative;">
+      <div style="width:32px;height:32px;border-radius:50%;background:#dcfce7;border:2px solid #22c55e;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:14px;color:#16a34a;">✓</div>
+      <div style="font-size:11px;font-weight:600;color:#16a34a;">Ph 2</div>
+      <div style="font-size:10.5px;color:#64748b;margin-top:2px;">Enquiry<br>Record</div>
+      <div style="position:absolute;top:22px;left:0;width:100%;height:2px;background:#22c55e;z-index:0;"></div>
+    </div>
+    <div class="phase-step phase-active" onclick="showPhase(3)" style="text-align:center;cursor:pointer;padding:10px 6px;position:relative;">
+      <div style="width:32px;height:32px;border-radius:50%;background:#eff6ff;border:2px solid #2563eb;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:13px;color:#2563eb;font-weight:700;">3</div>
+      <div style="font-size:11px;font-weight:700;color:#2563eb;">Ph 3</div>
+      <div style="font-size:10.5px;color:#64748b;margin-top:2px;">Qualify<br>Decision</div>
+      <div style="position:absolute;top:22px;left:0;width:50%;height:2px;background:#22c55e;z-index:0;"></div>
+      <div style="position:absolute;top:22px;left:50%;width:50%;height:2px;background:#e2e8f0;z-index:0;"></div>
+    </div>
+    <div class="phase-step phase-pending" onclick="showPhase(4)" style="text-align:center;cursor:pointer;padding:10px 6px;position:relative;opacity:0.6;">
+      <div style="width:32px;height:32px;border-radius:50%;background:#f8fafc;border:2px solid #e2e8f0;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:13px;color:#94a3b8;font-weight:700;">4</div>
+      <div style="font-size:11px;font-weight:600;color:#94a3b8;">Ph 4</div>
+      <div style="font-size:10.5px;color:#94a3b8;margin-top:2px;">Convert<br>Booking</div>
+      <div style="position:absolute;top:22px;left:0;width:100%;height:2px;background:#e2e8f0;z-index:0;"></div>
+    </div>
+    <div class="phase-step phase-pending" onclick="showPhase(5)" style="text-align:center;cursor:pointer;padding:10px 6px;position:relative;opacity:0.6;">
+      <div style="width:32px;height:32px;border-radius:50%;background:#f8fafc;border:2px solid #e2e8f0;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:13px;color:#94a3b8;font-weight:700;">5</div>
+      <div style="font-size:11px;font-weight:600;color:#94a3b8;">Ph 5</div>
+      <div style="font-size:10.5px;color:#94a3b8;margin-top:2px;">Contracts<br>&amp; Invoices</div>
+      <div style="position:absolute;top:22px;left:0;width:100%;height:2px;background:#e2e8f0;z-index:0;"></div>
+    </div>
+    <div class="phase-step phase-pending" onclick="showPhase(6)" style="text-align:center;cursor:pointer;padding:10px 6px;position:relative;opacity:0.6;">
+      <div style="width:32px;height:32px;border-radius:50%;background:#f8fafc;border:2px solid #e2e8f0;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:13px;color:#94a3b8;font-weight:700;">6</div>
+      <div style="font-size:11px;font-weight:600;color:#94a3b8;">Ph 6</div>
+      <div style="font-size:10.5px;color:#94a3b8;margin-top:2px;">Shoot &amp;<br>Deliver</div>
+    </div>
+  </div>
+  <div id="phase-detail" style="margin-top:16px;padding:14px 16px;background:#f8fafc;border-radius:8px;border-left:3px solid #2563eb;display:none;">
+    <div id="phase-detail-content" style="font-size:13px;color:#1a1d2e;line-height:1.6;"></div>
+  </div>
+</div>
 
             <!-- Filter bar -->
             <div class="filter-bar">
@@ -1061,139 +1082,138 @@
                   </tr>
                 </thead>
                 <tbody id="bk-tbody">
-                  <tr data-status="confirmed" style="cursor:pointer;" onclick="showDetail('bookings','BK-001')">
-                    <td>BK-001</td>
-                    <td><strong>Emma &amp; Jake Wilson</strong></td>
+                  <tr data-status="confirmed">
+                    <td>1</td>
+                    <td><strong>Emma Wilson</strong></td>
                     <td>Website Form</td>
                     <td><span class="type-tag type-wedding">Wedding</span></td>
-                    <td>Jun 15, 2026</td>
+                    <td>Jun 15</td>
                     <td><strong>$3,800</strong></td>
                     <td><span class="status-badge badge-confirmed">Confirmed</span></td>
                     <td>Contract signed</td>
-                    <td><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('bookings','BK-001')">View</button></td>
+                    <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr data-status="confirmed" style="cursor:pointer;" onclick="showDetail('bookings','BK-002')">
-                    <td>BK-002</td>
+                  <tr data-status="confirmed">
+                    <td>2</td>
                     <td><strong>Nexus Corp</strong></td>
-                    <td>Social/Referral</td>
-                    <td><span class="type-tag type-corporate">Corporate</span></td>
-                    <td>Jun 17, 2026</td>
+                    <td>Social / Referral</td>
+                    <td><span class="type-tag type-corporate">Headshots</span></td>
+                    <td>Jun 17</td>
                     <td><strong>$1,200</strong></td>
                     <td><span class="status-badge badge-confirmed">Confirmed</span></td>
                     <td>Deposit due</td>
-                    <td><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('bookings','BK-002')">View</button></td>
+                    <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr data-status="confirmed" style="cursor:pointer;" onclick="showDetail('bookings','BK-003')">
-                    <td>BK-003</td>
+                  <tr data-status="confirmed">
+                    <td>3</td>
                     <td><strong>Liu Family</strong></td>
                     <td>Walk-in</td>
                     <td><span class="type-tag type-portrait">Portrait</span></td>
-                    <td>Jun 20, 2026</td>
+                    <td>Jun 20</td>
                     <td><strong>$650</strong></td>
                     <td><span class="status-badge badge-confirmed">Confirmed</span></td>
                     <td>—</td>
-                    <td><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('bookings','BK-003')">View</button></td>
+                    <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr data-status="confirmed" style="cursor:pointer;" onclick="showDetail('bookings','BK-004')">
-                    <td>BK-004</td>
-                    <td><strong>Sarah &amp; Tom Reed</strong></td>
+                  <tr data-status="confirmed">
+                    <td>4</td>
+                    <td><strong>Sarah Reed</strong></td>
                     <td>Website Form</td>
                     <td><span class="type-tag type-engagement">Engagement</span></td>
-                    <td>Jun 22, 2026</td>
+                    <td>Jun 22</td>
                     <td><strong>$950</strong></td>
                     <td><span class="status-badge badge-confirmed">Confirmed</span></td>
                     <td>—</td>
-                    <td><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('bookings','BK-004')">View</button></td>
+                    <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr data-status="confirmed" style="cursor:pointer;" onclick="showDetail('bookings','BK-005')">
-                    <td>BK-005</td>
+                  <tr data-status="confirmed">
+                    <td>5</td>
                     <td><strong>Horizon Events</strong></td>
                     <td>Referral</td>
                     <td><span class="type-tag type-event">Event</span></td>
-                    <td>Jun 28, 2026</td>
+                    <td>Jun 28</td>
                     <td><strong>$2,400</strong></td>
                     <td><span class="status-badge badge-confirmed">Confirmed</span></td>
                     <td>Contract sent</td>
-                    <td><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('bookings','BK-005')">View</button></td>
+                    <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr data-status="enquiry" style="cursor:pointer;" onclick="showDetail('bookings','BK-006')">
-                    <td>BK-006</td>
+                  <tr data-status="enquiry">
+                    <td>6</td>
                     <td><strong>Martinez Family</strong></td>
                     <td>Instagram</td>
                     <td><span class="type-tag type-portrait">Portrait</span></td>
-                    <td>Jul 4, 2026</td>
+                    <td>Jul 4</td>
                     <td><strong>$700</strong></td>
                     <td><span class="status-badge badge-enquiry">Enquiry</span></td>
                     <td>Call within 24h</td>
-                    <td><button class="btn-blue btn-sm" onclick="event.stopPropagation();openEnquiryModal();" style="font-size:12px;padding:5px 10px;">Convert</button></td>
+                    <td><button class="btn-convert">Convert</button></td>
                   </tr>
-                  <tr data-status="qualified" style="cursor:pointer;" onclick="showDetail('bookings','BK-007')">
-                    <td>BK-007</td>
+                  <tr data-status="qualified">
+                    <td>7</td>
                     <td><strong>Patel Wedding</strong></td>
                     <td>Website Form</td>
                     <td><span class="type-tag type-wedding">Wedding</span></td>
-                    <td>Jul 12, 2026</td>
+                    <td>Jul 12</td>
                     <td><strong>$4,200</strong></td>
                     <td><span class="status-badge badge-qualified">Qualified</span></td>
                     <td>Ready to convert</td>
-                    <td><button class="btn-blue btn-sm" onclick="event.stopPropagation();openEnquiryModal();" style="font-size:12px;padding:5px 10px;">Convert</button></td>
+                    <td><button class="btn-convert">Convert</button></td>
                   </tr>
-                  <tr data-status="qualified" style="cursor:pointer;" onclick="showDetail('bookings','BK-008')">
-                    <td>BK-008</td>
+                  <tr data-status="qualified">
+                    <td>8</td>
                     <td><strong>Chen Studio</strong></td>
-                    <td>Social/Referral</td>
+                    <td>Social / Referral</td>
                     <td><span class="type-tag type-corporate">Commercial</span></td>
-                    <td>Jul 18, 2026</td>
+                    <td>Jul 18</td>
                     <td><strong>$1,800</strong></td>
                     <td><span class="status-badge badge-qualified">Qualified</span></td>
                     <td>Awaiting budget</td>
-                    <td><button class="btn-blue btn-sm" onclick="event.stopPropagation();openEnquiryModal();" style="font-size:12px;padding:5px 10px;">Convert</button></td>
+                    <td><button class="btn-convert">Convert</button></td>
                   </tr>
-                  <tr data-status="completed" style="cursor:pointer;" onclick="showDetail('bookings','BK-009')">
-                    <td>BK-009</td>
+                  <tr data-status="completed">
+                    <td>9</td>
                     <td><strong>Thompson Family</strong></td>
                     <td>Walk-in</td>
                     <td><span class="type-tag type-portrait">Portrait</span></td>
-                    <td>May 28, 2026</td>
+                    <td>May 28</td>
                     <td><strong>$550</strong></td>
                     <td><span class="status-badge badge-completed">Completed</span></td>
                     <td>Gallery delivered</td>
-                    <td><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('bookings','BK-009')">View</button></td>
+                    <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr data-status="completed" style="cursor:pointer;" onclick="showDetail('bookings','BK-010')">
-                    <td>BK-010</td>
+                  <tr data-status="completed">
+                    <td>10</td>
                     <td><strong>Park Wedding</strong></td>
                     <td>Referral</td>
                     <td><span class="type-tag type-wedding">Wedding</span></td>
-                    <td>May 10, 2026</td>
+                    <td>May 10</td>
                     <td><strong>$3,500</strong></td>
                     <td><span class="status-badge badge-completed">Completed</span></td>
                     <td>Review requested</td>
-                    <td><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('bookings','BK-010')">View</button></td>
+                    <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr data-status="lost" style="cursor:pointer;" onclick="showDetail('bookings','BK-011')">
-                    <td>BK-011</td>
+                  <tr data-status="lost">
+                    <td>11</td>
                     <td><strong>Williams Corp</strong></td>
                     <td>Website Form</td>
-                    <td><span class="type-tag type-corporate">Corporate</span></td>
-                    <td>Apr 22, 2026</td>
+                    <td><span class="type-tag type-corporate">Headshots</span></td>
+                    <td>Apr 22</td>
                     <td><strong>$900</strong></td>
                     <td><span class="status-badge badge-lost">Lost</span></td>
                     <td>Nurture: 30 days</td>
-                    <td><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('bookings','BK-011')">View</button></td>
+                    <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr data-status="lost" style="cursor:pointer;" onclick="showDetail('bookings','BK-012')">
-                    <td>BK-012</td>
+                  <tr data-status="lost">
+                    <td>12</td>
                     <td><strong>Brown Family</strong></td>
                     <td>Instagram</td>
                     <td><span class="type-tag type-portrait">Portrait</span></td>
-                    <td>Apr 15, 2026</td>
+                    <td>Apr 15</td>
                     <td><strong>$600</strong></td>
                     <td><span class="status-badge badge-lost">Lost</span></td>
                     <td>Archived</td>
-                    <td><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('bookings','BK-012')">View</button></td>
-                  </tr>
-                </tbody>
+                    <td><button class="btn-view-sm">View</button></td>
+                  </tr></tbody>
               </table>
             </div>
 
@@ -1205,8 +1225,6 @@
               </div>
             </div>
           </div>
-          </div><!-- /bookings-list -->
-          <div id="bookings-detail" class="module-detail-view" style="display:none;"></div>
         </div><!-- /tab-bookings -->
 
 
@@ -1214,7 +1232,6 @@
              TAB 3 — CLIENTS
         ══════════════════════════════════════════ -->
         <div id="tab-clients" class="tab-panel hidden">
-          <div id="clients-list" class="module-list-view">
           <div class="card table-card">
             <div class="card-header">
               <div class="card-title"><i class="ti ti-users"></i> Client CRM</div>
@@ -1293,7 +1310,7 @@
                   </tr>
                 </thead>
                 <tbody id="cl-tbody">
-                  <tr data-status="active" onclick="showDetail('clients',0)" style="cursor:pointer;">
+                  <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-gold">EJ</div><strong>Emma &amp; Jake Wilson</strong></div></td>
                     <td>emma@example.com</td>
                     <td>(555) 234-5678</td>
@@ -1304,7 +1321,7 @@
                     <td><span class="status-badge badge-active-g">Active</span></td>
                     <td style="display:flex;gap:5px;"><button class="btn-view-sm" onclick="openClient360('Emma &amp; Jake Wilson','emma@example.com','(555) 234-5678')">View Profile</button><button class="btn-view-sm">Email</button></td>
                   </tr>
-                  <tr data-status="active" onclick="showDetail('clients',1)" style="cursor:pointer;">
+                  <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-blue">NC</div><strong>Nexus Corp</strong></div></td>
                     <td>hr@nexus.com</td>
                     <td>(555) 345-6789</td>
@@ -1315,7 +1332,7 @@
                     <td><span class="status-badge badge-active-g">Active</span></td>
                     <td style="display:flex;gap:5px;"><button class="btn-view-sm" onclick="openClient360('Nexus Corp','hr@nexus.com','(555) 345-6789')">View Profile</button><button class="btn-view-sm">Email</button></td>
                   </tr>
-                  <tr data-status="active" onclick="showDetail('clients',2)" style="cursor:pointer;">
+                  <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-green">LF</div><strong>Liu Family</strong></div></td>
                     <td>liu@example.com</td>
                     <td>(555) 456-7890</td>
@@ -1326,7 +1343,7 @@
                     <td><span class="status-badge badge-active-g">Active</span></td>
                     <td style="display:flex;gap:5px;"><button class="btn-view-sm" onclick="openClient360('Liu Family','liu@example.com','(555) 456-7890')">View Profile</button><button class="btn-view-sm">Email</button></td>
                   </tr>
-                  <tr data-status="active" onclick="showDetail('clients',3)" style="cursor:pointer;">
+                  <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-purple">SR</div><strong>Sarah &amp; Tom Reed</strong></div></td>
                     <td>sarah@example.com</td>
                     <td>(555) 567-8901</td>
@@ -1337,7 +1354,7 @@
                     <td><span class="status-badge badge-active-g">Active</span></td>
                     <td style="display:flex;gap:5px;"><button class="btn-view-sm" onclick="openClient360('Sarah &amp; Tom Reed','sarah@example.com','(555) 567-8901')">View Profile</button><button class="btn-view-sm">Email</button></td>
                   </tr>
-                  <tr data-status="active" onclick="showDetail('clients',4)" style="cursor:pointer;">
+                  <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-teal">RT</div><strong>Rachel Thompson</strong></div></td>
                     <td>rachel@example.com</td>
                     <td>(555) 678-9012</td>
@@ -1348,7 +1365,7 @@
                     <td><span class="status-badge badge-active-g">Active</span></td>
                     <td style="display:flex;gap:5px;"><button class="btn-view-sm" onclick="openClient360('Rachel Thompson','rachel@example.com','(555) 678-9012')">View Profile</button><button class="btn-view-sm">Email</button></td>
                   </tr>
-                  <tr data-status="inactive" onclick="showDetail('clients',5)" style="cursor:pointer;">
+                  <tr data-status="inactive">
                     <td><div class="client-cell"><div class="client-avatar ca-orange">CF</div><strong>Chen Family</strong></div></td>
                     <td>chen@example.com</td>
                     <td>(555) 789-0123</td>
@@ -1359,7 +1376,7 @@
                     <td><span class="status-badge badge-inactive">Inactive</span></td>
                     <td style="display:flex;gap:5px;"><button class="btn-view-sm" onclick="openClient360('Chen Family','chen@example.com','(555) 789-0123')">View Profile</button><button class="btn-view-sm">Email</button></td>
                   </tr>
-                  <tr data-status="active" onclick="showDetail('clients',6)" style="cursor:pointer;">
+                  <tr data-status="active">
                     <td><div class="client-cell"><div class="client-avatar ca-blue">HE</div><strong>Horizon Events</strong></div></td>
                     <td>events@horizon.com</td>
                     <td>(555) 890-1234</td>
@@ -1370,7 +1387,7 @@
                     <td><span class="status-badge badge-active-g">Active</span></td>
                     <td style="display:flex;gap:5px;"><button class="btn-view-sm" onclick="openClient360('Horizon Events','events@horizon.com','(555) 890-1234')">View Profile</button><button class="btn-view-sm">Email</button></td>
                   </tr>
-                  <tr data-status="inactive" onclick="showDetail('clients',7)" style="cursor:pointer;">
+                  <tr data-status="inactive">
                     <td><div class="client-cell"><div class="client-avatar ca-purple">PF</div><strong>Park Family</strong></div></td>
                     <td>park@example.com</td>
                     <td>(555) 901-2345</td>
@@ -1384,13 +1401,208 @@
               </table>
             </div>
           </div>
-          </div><!-- /clients-list -->
-          <div id="clients-detail" class="module-detail-view" style="display:none;"></div>
         </div><!-- /tab-clients -->
 
 
         <!-- ══════════════════════════════════════════
-<!-- TAB 4 — INVOICES removed: handled by main Invoices module in sidebar -->
+             TAB 4 — INVOICES
+        ══════════════════════════════════════════ -->
+        <div id="tab-invoices" class="tab-panel hidden">
+          <div class="card table-card">
+            <div class="card-header">
+              <div class="card-title"><i class="ti ti-file-invoice"></i> Invoice Management</div>
+            </div>
+
+            <!-- Stats -->
+            <div class="eq-kpi-row">
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(100,116,139,.1);color:#475569;">
+                  <i class="ti ti-file-description" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val" style="color:#475569;">$0</div>
+                  <div class="eq-kpi-lbl">Draft</div>
+                  <div class="eq-kpi-sub">0 invoices</div>
+                </div>
+              </div>
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(37,99,235,.1);color:#1d4ed8;">
+                  <i class="ti ti-send" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val" style="color:#1d4ed8;">$5,200</div>
+                  <div class="eq-kpi-lbl">Sent</div>
+                  <div class="eq-kpi-sub">3 invoices awaiting</div>
+                </div>
+              </div>
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(34,197,94,.1);color:#15803d;">
+                  <i class="ti ti-circle-check" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val" style="color:#15803d;">$19,240</div>
+                  <div class="eq-kpi-lbl">Paid</div>
+                  <div class="eq-kpi-sub">12 invoices collected</div>
+                </div>
+              </div>
+              <div class="eq-kpi-card">
+                <div class="eq-kpi-icon" style="background:rgba(220,38,38,.1);color:#dc2626;">
+                  <i class="ti ti-alert-circle" style="font-size:22px;"></i>
+                </div>
+                <div class="eq-kpi-body">
+                  <div class="eq-kpi-val" style="color:#dc2626;">$2,100</div>
+                  <div class="eq-kpi-lbl">Overdue</div>
+                  <div class="eq-kpi-sub">2 invoices past due</div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Filter bar -->
+            <div class="filter-bar">
+              <input type="text" id="inv-search" placeholder="Search invoices…" style="min-width:180px;" oninput="filterInvoices()" />
+              <select id="inv-status" onchange="filterInvoices()">
+                <option value="">All Statuses</option>
+                <option value="draft">Draft</option>
+                <option value="sent">Sent</option>
+                <option value="paid">Paid</option>
+                <option value="overdue">Overdue</option>
+              </select>
+              <div class="filter-spacer"></div>
+              <button class="btn-blue" onclick="openCreateInvoiceModal()"><i class="ti ti-plus"></i> Create Invoice</button>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Invoice #</th>
+                    <th>Client</th>
+                    <th>Type</th>
+                    <th>Issue Date</th>
+                    <th>Due Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Zoho Books</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="inv-tbody">
+                  <tr data-status="paid">
+                    <td><strong>INV-2847</strong></td>
+                    <td>Emma Wilson</td>
+                    <td>Balance Payment</td>
+                    <td>Jun 15</td>
+                    <td>Jun 15</td>
+                    <td><strong>$2,280</strong></td>
+                    <td><span class="status-badge badge-paid">Paid</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-view-sm">View</button><button class="btn-view-sm" onclick="printInvoice('INV-2847','Emma Wilson','$2,280.00','Jun 15','Balance Payment','Paid')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
+                  </tr>
+                  <tr data-status="paid">
+                    <td><strong>INV-2846</strong></td>
+                    <td>Emma Wilson</td>
+                    <td>Deposit (50%)</td>
+                    <td>May 28</td>
+                    <td>Jun 1</td>
+                    <td><strong>$1,520</strong></td>
+                    <td><span class="status-badge badge-paid">Paid</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-view-sm">View</button><button class="btn-view-sm" onclick="printInvoice('INV-2846','Emma Wilson','$1,520.00','Jun 1','Deposit (50%)','Paid')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
+                  </tr>
+                  <tr data-status="paid">
+                    <td><strong>INV-2845</strong></td>
+                    <td>Nexus Corp</td>
+                    <td>Deposit (30%)</td>
+                    <td>Jun 10</td>
+                    <td>Jun 14</td>
+                    <td><strong>$360</strong></td>
+                    <td><span class="status-badge badge-paid">Paid</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-view-sm">View</button><button class="btn-view-sm" onclick="printInvoice('INV-2845','Nexus Corp','$360.00','Jun 14','Deposit (30%)','Paid')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
+                  </tr>
+                  <tr data-status="sent">
+                    <td><strong>INV-2844</strong></td>
+                    <td>Nexus Corp</td>
+                    <td>Balance</td>
+                    <td>Jun 17</td>
+                    <td>Jun 17</td>
+                    <td><strong>$840</strong></td>
+                    <td><span class="status-badge badge-sent-inv">Sent</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-view-sm">View</button><button class="btn-view-sm" onclick="printInvoice('INV-2844','Nexus Corp','$840.00','Jun 17','Balance','Sent')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
+                  </tr>
+                  <tr data-status="paid">
+                    <td><strong>INV-2843</strong></td>
+                    <td>Horizon Events</td>
+                    <td>Deposit (30%)</td>
+                    <td>Jun 8</td>
+                    <td>Jun 12</td>
+                    <td><strong>$720</strong></td>
+                    <td><span class="status-badge badge-paid">Paid</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-view-sm">View</button><button class="btn-view-sm" onclick="printInvoice('INV-2843','Horizon Events','$720.00','Jun 12','Deposit (30%)','Paid')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
+                  </tr>
+                  <tr data-status="sent">
+                    <td><strong>INV-2842</strong></td>
+                    <td>Horizon Events</td>
+                    <td>Balance</td>
+                    <td>Jun 28</td>
+                    <td>Jun 28</td>
+                    <td><strong>$1,680</strong></td>
+                    <td><span class="status-badge badge-sent-inv">Sent</span></td>
+                    <td><span style="color:#6b7280;">Pending</span></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-view-sm">View</button><button class="btn-view-sm" onclick="printInvoice('INV-2842','Horizon Events','$1,680.00','Jun 28','Balance','Sent')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
+                  </tr>
+                  <tr data-status="sent">
+                    <td><strong>INV-2841</strong></td>
+                    <td>Liu Family</td>
+                    <td>Full Payment</td>
+                    <td>Jun 20</td>
+                    <td>Jun 25</td>
+                    <td><strong>$650</strong></td>
+                    <td><span class="status-badge badge-sent-inv">Sent</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-view-sm">View</button><button class="btn-view-sm" onclick="printInvoice('INV-2841','Liu Family','$650.00','Jun 25','Full Payment','Sent')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
+                  </tr>
+                  <tr data-status="draft">
+                    <td><strong>INV-2840</strong></td>
+                    <td>Martinez Family</td>
+                    <td>Deposit</td>
+                    <td>Jun 14</td>
+                    <td>Jun 18</td>
+                    <td><strong>$210</strong></td>
+                    <td><span class="status-badge badge-draft-inv">Draft</span></td>
+                    <td><span style="color:#9ca3af;">Not sent</span></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-send-sm">Send</button><button class="btn-view-sm" onclick="printInvoice('INV-2840','Martinez Family','$210.00','Jun 18','Deposit','Draft')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
+                  </tr>
+                  <tr data-status="overdue">
+                    <td><strong>INV-2839</strong></td>
+                    <td>Sarah Reed</td>
+                    <td>Balance</td>
+                    <td>May 22</td>
+                    <td>May 28</td>
+                    <td><strong>$570</strong></td>
+                    <td><span class="status-badge badge-overdue">Overdue</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-remind">Remind</button><button class="btn-view-sm" onclick="printInvoice('INV-2839','Sarah Reed','$570.00','May 28','Balance','Overdue')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
+                  </tr>
+                  <tr data-status="overdue">
+                    <td><strong>INV-2838</strong></td>
+                    <td>Williams Corp</td>
+                    <td>Full Payment</td>
+                    <td>Apr 15</td>
+                    <td>Apr 22</td>
+                    <td><strong>$900</strong></td>
+                    <td><span class="status-badge badge-overdue">Overdue</span></td>
+                    <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Synced</span></td>
+                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-remind">Remind</button><button class="btn-view-sm" onclick="printInvoice('INV-2838','Williams Corp','$900.00','Apr 22','Full Payment','Overdue')" style="margin-left:4px;" title="Print / Save PDF"><i class="ti ti-printer"></i></button></td>
+                  </tr></tbody>
+              </table>
+            </div>
+
+          </div>
+        </div><!-- /tab-invoices -->
 
 
         <!-- Equipment Inventory moved to standalone module -->
@@ -1716,7 +1928,6 @@
              TAB 6 — CONTRACTS
         ══════════════════════════════════════════ -->
         <div id="tab-contracts" class="tab-panel hidden">
-          <div id="contracts-list" class="module-list-view">
           <div class="card table-card">
             <div class="card-header">
               <div class="card-title"><i class="ti ti-file-text"></i> Contract Management</div>
@@ -1798,7 +2009,7 @@
                   </tr>
                 </thead>
                 <tbody id="con-tbody">
-                  <tr data-status="signed" style="cursor:pointer;" onclick="showDetail('contracts','CON-2847')">
+                  <tr data-status="signed">
                     <td><strong>CON-2847</strong></td>
                     <td>Emma &amp; Jake Wilson</td>
                     <td><span class="type-tag type-wedding">Wedding</span></td>
@@ -1807,9 +2018,9 @@
                     <td><strong>$3,800</strong></td>
                     <td><span class="status-badge badge-signed">Signed</span></td>
                     <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Signed</span></td>
-                    <td><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('contracts','CON-2847')">View</button></td>
+                    <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr data-status="signed" style="cursor:pointer;" onclick="showDetail('contracts','CON-2846')">
+                  <tr data-status="signed">
                     <td><strong>CON-2846</strong></td>
                     <td>Nexus Corp</td>
                     <td><span class="type-tag type-corporate">Headshots</span></td>
@@ -1818,9 +2029,9 @@
                     <td><strong>$1,200</strong></td>
                     <td><span class="status-badge badge-signed">Signed</span></td>
                     <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Signed</span></td>
-                    <td><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('contracts','CON-2846')">View</button></td>
+                    <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr data-status="sent" style="cursor:pointer;" onclick="showDetail('contracts','CON-2845')">
+                  <tr data-status="sent">
                     <td><strong>CON-2845</strong></td>
                     <td>Horizon Events</td>
                     <td><span class="type-tag type-event">Event</span></td>
@@ -1829,9 +2040,9 @@
                     <td><strong>$2,400</strong></td>
                     <td><span class="status-badge badge-sent-con">Sent</span></td>
                     <td><span style="color:#6b7280;">Awaiting sig.</span></td>
-                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-remind" onclick="event.stopPropagation();">Remind</button><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('contracts','CON-2845')">View</button></td>
+                    <td><button class="btn-remind">Remind</button></td>
                   </tr>
-                  <tr data-status="signed" style="cursor:pointer;" onclick="showDetail('contracts','CON-2844')">
+                  <tr data-status="signed">
                     <td><strong>CON-2844</strong></td>
                     <td>Sarah &amp; Tom Reed</td>
                     <td><span class="type-tag type-engagement">Engagement</span></td>
@@ -1840,9 +2051,9 @@
                     <td><strong>$950</strong></td>
                     <td><span class="status-badge badge-signed">Signed</span></td>
                     <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Signed</span></td>
-                    <td><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('contracts','CON-2844')">View</button></td>
+                    <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr data-status="signed" style="cursor:pointer;" onclick="showDetail('contracts','CON-2843')">
+                  <tr data-status="signed">
                     <td><strong>CON-2843</strong></td>
                     <td>Liu Family</td>
                     <td><span class="type-tag type-portrait">Portrait</span></td>
@@ -1851,9 +2062,9 @@
                     <td><strong>$650</strong></td>
                     <td><span class="status-badge badge-signed">Signed</span></td>
                     <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Signed</span></td>
-                    <td><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('contracts','CON-2843')">View</button></td>
+                    <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr data-status="sent" style="cursor:pointer;" onclick="showDetail('contracts','CON-2842')">
+                  <tr data-status="sent">
                     <td><strong>CON-2842</strong></td>
                     <td>Patel Wedding</td>
                     <td><span class="type-tag type-wedding">Wedding</span></td>
@@ -1862,9 +2073,9 @@
                     <td><strong>$4,200</strong></td>
                     <td><span class="status-badge badge-sent-con">Sent</span></td>
                     <td><span style="color:#6b7280;">Awaiting sig.</span></td>
-                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-remind" onclick="event.stopPropagation();">Remind</button><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('contracts','CON-2842')">View</button></td>
+                    <td><button class="btn-remind">Remind</button></td>
                   </tr>
-                  <tr data-status="sent" style="cursor:pointer;" onclick="showDetail('contracts','CON-2841')">
+                  <tr data-status="sent">
                     <td><strong>CON-2841</strong></td>
                     <td>Chen Studio</td>
                     <td><span class="type-tag type-corporate">Commercial</span></td>
@@ -1873,9 +2084,9 @@
                     <td><strong>$1,800</strong></td>
                     <td><span class="status-badge badge-sent-con">Sent</span></td>
                     <td><span style="color:#6b7280;">Awaiting sig.</span></td>
-                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-remind" onclick="event.stopPropagation();">Remind</button><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('contracts','CON-2841')">View</button></td>
+                    <td><button class="btn-remind">Remind</button></td>
                   </tr>
-                  <tr data-status="draft" style="cursor:pointer;" onclick="showDetail('contracts','CON-2840')">
+                  <tr data-status="draft">
                     <td><strong>CON-2840</strong></td>
                     <td>Martinez Family</td>
                     <td><span class="type-tag type-portrait">Portrait</span></td>
@@ -1884,9 +2095,9 @@
                     <td><strong>$700</strong></td>
                     <td><span class="status-badge badge-draft-con">Draft</span></td>
                     <td><span style="color:#9ca3af;">Not sent</span></td>
-                    <td style="display:flex;gap:4px;align-items:center;"><button class="btn-send-sm" onclick="event.stopPropagation();">Send</button><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('contracts','CON-2840')">View</button></td>
+                    <td><button class="btn-send-sm">Send</button></td>
                   </tr>
-                  <tr data-status="signed" style="cursor:pointer;" onclick="showDetail('contracts','CON-2839')">
+                  <tr data-status="signed">
                     <td><strong>CON-2839</strong></td>
                     <td>Park Wedding</td>
                     <td><span class="type-tag type-wedding">Wedding</span></td>
@@ -1895,9 +2106,9 @@
                     <td><strong>$3,500</strong></td>
                     <td><span class="status-badge badge-signed">Signed</span></td>
                     <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Signed</span></td>
-                    <td><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('contracts','CON-2839')">View</button></td>
+                    <td><button class="btn-view-sm">View</button></td>
                   </tr>
-                  <tr data-status="signed" style="cursor:pointer;" onclick="showDetail('contracts','CON-2838')">
+                  <tr data-status="signed">
                     <td><strong>CON-2838</strong></td>
                     <td>Thompson Family</td>
                     <td><span class="type-tag type-portrait">Portrait</span></td>
@@ -1906,7 +2117,7 @@
                     <td><strong>$550</strong></td>
                     <td><span class="status-badge badge-signed">Signed</span></td>
                     <td><span style="color:#15803d;display:inline-flex;align-items:center;gap:3px;"><i class="ph-fill ph-check-circle" style="font-size:14px;"></i> Signed</span></td>
-                    <td><button class="btn-view-sm" onclick="event.stopPropagation();showDetail('contracts','CON-2838')">View</button></td>
+                    <td><button class="btn-view-sm">View</button></td>
                   </tr></tbody>
               </table>
             </div>
@@ -1915,8 +2126,6 @@
               Contracts sent via Zoho Sign &nbsp;·&nbsp; e-sign link emailed to client automatically &nbsp;·&nbsp; Last sync: 5 minutes ago
             </div>
           </div>
-          </div><!-- /contracts-list -->
-          <div id="contracts-detail" class="module-detail-view" style="display:none;"></div>
         </div><!-- /tab-contracts -->
 
       </main>
@@ -2608,6 +2817,8 @@
       if (bkS) bkS.addEventListener('input', filterBookings);
       var clS = document.getElementById('cl-search');
       if (clS) clS.addEventListener('input', filterClients);
+      var inS = document.getElementById('inv-search');
+      if (inS) inS.addEventListener('input', filterInvoices);
       var coS = document.getElementById('con-search');
       if (coS) coS.addEventListener('input', filterContracts);
     });
@@ -2636,6 +2847,7 @@
       if (activeTab) {
         var tabName = activeTab.textContent.trim().toLowerCase();
         if (tabName.indexOf('booking') > -1) renderBookingsTable();
+        if (tabName.indexOf('invoice') > -1) renderInvoicesTable();
         if (tabName.indexOf('contract') > -1) renderContractsTable();
         if (tabName.indexOf('client') > -1) renderClientsTable();
       }
@@ -3155,16 +3367,8 @@ var DEMO_LEADS = [
 function getLeads() {
   var stored = localStorage.getItem('zpv4_leads');
   if (stored) {
-    try {
-      var parsed = JSON.parse(stored);
-      // Validate: if any required field is missing, reset to fresh DEMO_LEADS
-      if (Array.isArray(parsed) && parsed.length > 0 &&
-          parsed[0].message !== undefined && parsed[0].received !== undefined) {
-        return parsed;
-      }
-    } catch(e) {}
+    try { return JSON.parse(stored); } catch(e) {}
   }
-  // Reset stale / missing cache
   localStorage.setItem('zpv4_leads', JSON.stringify(DEMO_LEADS));
   return DEMO_LEADS.slice();
 }
@@ -3220,11 +3424,10 @@ function renderLeadsTable(channelFilter) {
   tbody.innerHTML = filtered.map(function(lead) {
     var ch = chMap[lead.channel] || { cls:'ch-walkin', icon:'ti-message', label:lead.channel };
     var st = stMap[lead.status]  || { cls:'lead-status-new', label:lead.status };
-    var _msg = lead.message || '';
-    var msgSnippet = _msg.length > 60 ? _msg.substring(0,60) + '…' : _msg;
+    var msgSnippet = lead.message.length > 60 ? lead.message.substring(0,60) + '…' : lead.message;
     var qualifyDisabled = (lead.status === 'qualified' || lead.status === 'lost') ? ' disabled style="opacity:.4;cursor:not-allowed;"' : '';
     var lostDisabled    = lead.status === 'lost' ? ' disabled style="opacity:.4;cursor:not-allowed;"' : '';
-    return '<tr style="border-bottom:1px solid #f1f5f9;cursor:pointer;" data-lead-id="' + lead.id + '" data-channel="' + lead.channel + '" onclick="showDetail(\'leads\',\'' + lead.id + '\')">' +
+    return '<tr style="border-bottom:1px solid #f1f5f9;" data-lead-id="' + lead.id + '" data-channel="' + lead.channel + '">' +
       '<td style="padding:14px 16px;">' +
         '<div style="font-weight:600;color:#1a1d2e;">' + lead.name + '</div>' +
         '<div style="font-size:11.5px;color:#94a3b8;margin-top:2px;">' + (lead.phone || lead.email || '—') + '</div>' +
@@ -3234,8 +3437,8 @@ function renderLeadsTable(channelFilter) {
       '</td>' +
       '<td style="padding:14px 16px;color:#475569;">' + lead.event + '</td>' +
       '<td style="padding:14px 16px;color:#475569;">' + (lead.date ? lead.date : '—') + '</td>' +
-      '<td style="padding:14px 16px;color:#64748b;font-size:12.5px;max-width:220px;" title="' + _msg.replace(/"/g, '&quot;') + '">' + msgSnippet + '</td>' +
-      '<td style="padding:14px 16px;color:#94a3b8;font-size:12px;white-space:nowrap;">' + (lead.received || '—') + '</td>' +
+      '<td style="padding:14px 16px;color:#64748b;font-size:12.5px;max-width:220px;" title="' + lead.message.replace(/"/g, '&quot;') + '">' + msgSnippet + '</td>' +
+      '<td style="padding:14px 16px;color:#94a3b8;font-size:12px;white-space:nowrap;">' + lead.received + '</td>' +
       '<td style="padding:14px 16px;">' +
         '<span class="lead-status-badge ' + st.cls + '">' + st.label + '</span>' +
       '</td>' +
@@ -3349,14 +3552,11 @@ function saveNewLead() {
 function renderBookingsTable() {
   var tbody = document.getElementById('bk-tbody');
   if (!tbody) return;
-  var bookings = (typeof ZPData !== 'undefined' && ZPData.get) ? ZPData.get('bookings') : [];
-  // If ZPData returned nothing, keep the static HTML rows — don't wipe them
-  if (!bookings || bookings.length === 0) return;
+  var bookings = ZPData.get('bookings');
   var statusColors = { confirmed:'badge-confirmed', enquiry:'badge-enquiry', qualified:'badge-qualified', completed:'badge-completed', lost:'badge-lost' };
   tbody.innerHTML = bookings.map(function(b) {
     var sc = statusColors[b.status] || 'badge-neutral';
-    var bid = b.id.replace(/'/g, '');
-    return '<tr data-status="' + b.status + '" style="cursor:pointer;" onclick="showDetail(\'bookings\',\'' + bid + '\')">' +
+    return '<tr data-status="' + b.status + '">' +
       '<td>' + b.id + '</td>' +
       '<td><div style="font-weight:600;">' + b.client + '</div></td>' +
       '<td>' + b.source + '</td>' +
@@ -3366,8 +3566,8 @@ function renderBookingsTable() {
       '<td><span class="status-badge ' + sc + '">' + b.status.charAt(0).toUpperCase() + b.status.slice(1) + '</span></td>' +
       '<td>' + b.followup + '</td>' +
       '<td>' + (b.action === 'convert' ?
-        '<button class="btn-blue btn-sm" onclick="event.stopPropagation();openEnquiryModal();" style="font-size:12px;padding:5px 10px;">Convert</button>' :
-        '<button class="btn-outline btn-sm" onclick="event.stopPropagation();showDetail(\'bookings\',\'' + bid + '\');" style="font-size:12px;padding:5px 10px;">View</button>') +
+        '<button class="btn-blue btn-sm" onclick="openEnquiryModal()" style="font-size:12px;padding:5px 10px;">Convert</button>' :
+        '<button class="btn-outline btn-sm" style="font-size:12px;padding:5px 10px;">View</button>') +
       '</td>' +
     '</tr>';
   }).join('');
@@ -3377,12 +3577,11 @@ function renderBookingsTable() {
 function renderInvoicesTable() {
   var tbody = document.getElementById('inv-tbody');
   if (!tbody) return;
-  var invoices = (typeof ZPData !== 'undefined' && ZPData.get) ? ZPData.get('invoices') : [];
-  if (!invoices || invoices.length === 0) return;
+  var invoices = ZPData.get('invoices');
   var statusMap = { paid:'badge-paid', sent:'badge-sent-inv', draft:'badge-draft-inv', overdue:'badge-overdue' };
   tbody.innerHTML = invoices.map(function(inv) {
     var sc = statusMap[inv.status] || 'badge-neutral';
-    return '<tr data-status="' + inv.status + '" onclick="showDetail(\'invoices\',\'' + inv.num + '\')" style="cursor:pointer;">' +
+    return '<tr data-status="' + inv.status + '">' +
       '<td style="font-family:monospace;font-size:12px;">' + inv.num + '</td>' +
       '<td><strong>' + inv.client + '</strong></td>' +
       '<td>' + inv.type + '</td>' +
@@ -3400,12 +3599,11 @@ function renderInvoicesTable() {
 function renderContractsTable() {
   var tbody = document.getElementById('con-tbody');
   if (!tbody) return;
-  var contracts = (typeof ZPData !== 'undefined' && ZPData.get) ? ZPData.get('contracts') : [];
-  if (!contracts || contracts.length === 0) return;
+  var contracts = ZPData.get('contracts');
   var statusMap = { signed:'badge-signed', sent:'badge-sent-con', draft:'badge-draft-con' };
   tbody.innerHTML = contracts.map(function(c) {
     var sc = statusMap[c.status] || 'badge-neutral';
-    return '<tr data-status="' + c.status + '" onclick="showDetail(\'contracts\',\'' + c.num + '\')" style="cursor:pointer;">' +
+    return '<tr data-status="' + c.status + '">' +
       '<td style="font-family:monospace;font-size:12px;">' + c.num + '</td>' +
       '<td><strong>' + c.client + '</strong></td>' +
       '<td>' + c.type + '</td>' +
@@ -3461,30 +3659,27 @@ function filterClients() {
 // Restore filter state when switching tabs
 var _origSwitchTab = switchTab;
 switchTab = function(name, btn) {
-  // Always reset list/detail visibility when switching tabs
-  ['leads','bookings','clients','invoices','contracts'].forEach(function(mod) {
-    var listEl = document.getElementById(mod + '-list');
-    var detEl  = document.getElementById(mod + '-detail');
-    if (listEl) listEl.style.display = '';
-    if (detEl)  detEl.style.display  = 'none';
-  });
   _origSwitchTab(name, btn);
   var bcEl = document.getElementById('bc-subtab');
   if (bcEl) bcEl.textContent = name.charAt(0).toUpperCase() + name.slice(1);
-  // Re-render tables on tab switch
-  if (name === 'bookings')  renderBookingsTable();
-  if (name === 'contracts') renderContractsTable();
-  if (name === 'equipment') {
-    var pb = document.getElementById('equip-planner-body');
-    if (pb) pb.style.display = 'none';
-    var ptb = document.getElementById('planner-toggle-btn');
-    if (ptb) ptb.innerHTML = '<i class="ti ti-chevron-down"></i> Check Availability';
-  }
+  setTimeout(function() {
+    var saved = ZPData.getFilter(name);
+    var sEl = document.getElementById(name.substring(0,2) + '-search') || document.getElementById(name + '-search');
+    var stEl = document.getElementById(name.substring(0,2) + '-status') || document.getElementById(name + '-status');
+    if (sEl && saved.search !== undefined) { sEl.value = saved.search; }
+    if (stEl && saved.status !== undefined) { stEl.value = saved.status; }
+    // Re-render from ZPData
+    if (name === 'bookings')  renderBookingsTable();
+    if (name === 'invoices')  renderInvoicesTable();
+    if (name === 'contracts') renderContractsTable();
+    if (name === 'equipment') { var pb = document.getElementById('equip-planner-body'); if (pb) pb.style.display='none'; var btn = document.getElementById('planner-toggle-btn'); if(btn) btn.innerHTML='<i class="ti ti-chevron-down"></i> Check Availability'; }
+  }, 50);
 };
 
 // Initial render on load
 document.addEventListener('DOMContentLoaded', function() {
   renderBookingsTable();
+  renderInvoicesTable();
   renderContractsTable();
   renderLeadsTable();
 });
@@ -3765,572 +3960,6 @@ function checkUnsaved(formSelector, closeFn) {
     if (confirm('You have unsaved changes. Are you sure you want to close?')) closeFn();
   } else { closeFn(); }
 }
-
-// ─────────────────────────────────────────────────────────────────
-//  DETAIL VIEW NAVIGATION
-// ─────────────────────────────────────────────────────────────────
-function showDetail(module, id) {
-  var listEl = document.getElementById(module + '-list');
-  if (listEl) listEl.style.display = 'none';
-  var dv = document.getElementById(module + '-detail');
-  if (!dv) return;
-  dv.style.display = 'block';
-  var cap = module.charAt(0).toUpperCase() + module.slice(1);
-  var fn = window['render' + cap + 'Detail'];
-  if (fn) { try { fn(id); } catch(e) { dv.innerHTML = '<div style="padding:40px;color:#ef4444;font-family:monospace;font-size:13px;">Detail render error: ' + e.message + '</div>'; } }
-}
-
-function backToList(module) {
-  var dv = document.getElementById(module + '-detail');
-  if (dv) dv.style.display = 'none';
-  var listEl = document.getElementById(module + '-list');
-  if (listEl) listEl.style.display = '';
-}
-
-// ─────────────────────────────────────────────────────────────────
-//  LEADS DETAIL
-// ─────────────────────────────────────────────────────────────────
-function renderLeadsDetail(id) {
-  var leads = getLeads();
-  var lead = leads.find(function(l) { return l.id === id; });
-  if (!lead) return;
-  var dv = document.getElementById('leads-detail');
-  var chMap = {
-    whatsapp:  { cls:'ch-whatsapp',  icon:'ti-brand-whatsapp', label:'WhatsApp' },
-    instagram: { cls:'ch-instagram', icon:'ti-brand-instagram', label:'Instagram' },
-    email:     { cls:'ch-email',     icon:'ti-mail',            label:'Email' },
-    website:   { cls:'ch-website',   icon:'ti-world',           label:'Website' },
-    walkin:    { cls:'ch-walkin',    icon:'ti-walk',            label:'Walk-in' }
-  };
-  var stMap = {
-    new:       { cls:'lead-status-new',       label:'New' },
-    replied:   { cls:'lead-status-replied',   label:'Replied' },
-    qualified: { cls:'lead-status-qualified', label:'Qualified' },
-    lost:      { cls:'lead-status-lost',      label:'Lost' }
-  };
-  var ch = chMap[lead.channel] || { cls:'ch-walkin', icon:'ti-message', label:lead.channel };
-  var st = stMap[lead.status]  || { cls:'lead-status-new', label:lead.status };
-  var tlHtml = '<li><div class="tl-icon" style="background:#eff6ff;color:#2563eb;"><i class="ti ti-inbox"></i></div><div class="tl-body"><div class="tl-text">Lead received via ' + ch.label + '</div><div class="tl-time">' + (lead.received || '—') + '</div></div></li>';
-  if (lead.status === 'replied' || lead.status === 'qualified') {
-    tlHtml += '<li><div class="tl-icon" style="background:#f0fdf4;color:#15803d;"><i class="ti ti-send"></i></div><div class="tl-body"><div class="tl-text">First reply sent to ' + lead.name + '</div><div class="tl-time">Within 24 hours</div></div></li>';
-  }
-  if (lead.status === 'qualified') {
-    tlHtml += '<li><div class="tl-icon" style="background:#dcfce7;color:#15803d;"><i class="ti ti-circle-check"></i></div><div class="tl-body"><div class="tl-text">Lead qualified</div><div class="tl-time">Today</div></div></li>';
-  }
-  if (lead.status === 'lost') {
-    tlHtml += '<li><div class="tl-icon" style="background:#fee2e2;color:#b91c1c;"><i class="ti ti-x"></i></div><div class="tl-body"><div class="tl-text">Lead marked as lost</div><div class="tl-time">Recent</div></div></li>';
-  }
-  var qualDisabled = (lead.status === 'qualified' || lead.status === 'lost') ? ' disabled style="opacity:.4;cursor:not-allowed;"' : '';
-  var lostDisabled = lead.status === 'lost' ? ' disabled style="opacity:.4;cursor:not-allowed;"' : '';
-  dv.innerHTML =
-    '<button class="detail-back-btn" onclick="backToList(\'leads\')"><i class="ti ti-arrow-left"></i> Back to Lead Inbox</button>' +
-    '<div class="detail-header">' +
-      '<div><div class="detail-title">' + lead.name + '</div>' +
-      '<div class="detail-subtitle" style="margin-top:6px;">' +
-        '<span class="ch-badge ' + ch.cls + '"><i class="ti ' + ch.icon + '"></i> ' + ch.label + '</span>' +
-        '&nbsp;&nbsp;<span class="lead-status-badge ' + st.cls + '">' + st.label + '</span>' +
-      '</div></div>' +
-      '<div class="detail-actions">' +
-        '<button class="lead-action-btn lead-qualify-btn"' + qualDisabled + ' onclick="qualifyLead(\'' + lead.id + '\');renderLeadsDetail(\'' + lead.id + '\')"><i class="ti ti-circle-check"></i> Qualify</button>' +
-        '<button class="lead-action-btn" onclick="openReplyLead(\'' + lead.id + '\')"><i class="ti ti-send"></i> Reply</button>' +
-        '<button class="lead-action-btn lead-lost-btn"' + lostDisabled + ' onclick="markLeadLost(\'' + lead.id + '\')"><i class="ti ti-x"></i> Mark Lost</button>' +
-        '<button class="btn-gold" style="font-size:13px;" onclick="showToast(\'Converting to booking!\')"><i class="ti ti-arrow-right"></i> Convert to Booking</button>' +
-      '</div>' +
-    '</div>' +
-    '<div class="detail-two-col">' +
-      '<div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-user"></i> Contact</div>' +
-          '<div class="detail-grid">' +
-            '<div><div class="detail-field-label">Phone</div><div class="detail-field-value">' + (lead.phone || '—') + '</div></div>' +
-            '<div><div class="detail-field-label">Email</div><div class="detail-field-value">' + (lead.email || '—') + '</div></div>' +
-            '<div><div class="detail-field-label">Channel</div><div class="detail-field-value"><span class="ch-badge ' + ch.cls + '"><i class="ti ' + ch.icon + '"></i> ' + ch.label + '</span></div></div>' +
-            '<div><div class="detail-field-label">Received</div><div class="detail-field-value">' + (lead.received || '—') + '</div></div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-camera"></i> Enquiry</div>' +
-          '<div class="detail-grid" style="margin-bottom:14px;">' +
-            '<div><div class="detail-field-label">Event Type</div><div class="detail-field-value">' + (lead.event || '—') + '</div></div>' +
-            '<div><div class="detail-field-label">Event Date</div><div class="detail-field-value">' + (lead.date || '—') + '</div></div>' +
-            '<div><div class="detail-field-label">Budget</div><div class="detail-field-value">—</div></div>' +
-            '<div><div class="detail-field-label">Status</div><div class="detail-field-value"><span class="lead-status-badge ' + st.cls + '">' + st.label + '</span></div></div>' +
-          '</div>' +
-          '<div class="detail-field-label">Message</div>' +
-          '<blockquote style="margin:8px 0 0;padding:12px 16px;background:#f8fafc;border-left:3px solid #e2e8f0;border-radius:0 8px 8px 0;font-size:13.5px;color:#374151;line-height:1.6;">' + (lead.message || '—') + '</blockquote>' +
-        '</div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-notes"></i> Notes</div>' +
-          '<textarea id="lead-note-ta-' + lead.id + '" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;color:#1a1d2e;resize:vertical;outline:none;box-sizing:border-box;" rows="3" placeholder="Add notes about this lead...">' + (lead.notes || '') + '</textarea>' +
-          '<button class="lead-action-btn" style="margin-top:8px;" onclick="saveLeadNote(\'' + lead.id + '\')"><i class="ti ti-device-floppy"></i> Save Note</button>' +
-        '</div>' +
-      '</div>' +
-      '<div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-clock"></i> Activity</div>' +
-          '<ul class="detail-timeline">' + tlHtml + '</ul>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-}
-
-function saveLeadNote(id) {
-  var leads = getLeads();
-  var lead = leads.find(function(l) { return l.id === id; });
-  if (!lead) return;
-  var ta = document.getElementById('lead-note-ta-' + id);
-  if (ta) lead.notes = ta.value;
-  saveLeads(leads);
-  showToast('Note saved!');
-}
-
-// ─────────────────────────────────────────────────────────────────
-//  STATIC FALLBACK DATA (used when ZPData/localStorage unavailable)
-// ─────────────────────────────────────────────────────────────────
-var _STATIC_BOOKINGS = [
-  { id:'BK-001', client:'Emma & Jake Wilson', email:'emma@example.com', source:'Website Form',    type:'Wedding',    date:'Jun 15, 2026', budget:'$3,800', status:'confirmed', followup:'Contract signed',  action:'view' },
-  { id:'BK-002', client:'Nexus Corp',          email:'hr@nexus.com',     source:'Social/Referral', type:'Corporate',  date:'Jun 17, 2026', budget:'$1,200', status:'confirmed', followup:'Deposit due',      action:'view' },
-  { id:'BK-003', client:'Liu Family',           email:'liu@example.com',  source:'Walk-in',         type:'Portrait',   date:'Jun 20, 2026', budget:'$650',   status:'confirmed', followup:'—',               action:'view' },
-  { id:'BK-004', client:'Sarah & Tom Reed',     email:'sarah@example.com',source:'Website Form',    type:'Engagement', date:'Jun 22, 2026', budget:'$950',   status:'confirmed', followup:'—',               action:'view' },
-  { id:'BK-005', client:'Horizon Events',       email:'events@horizon.com',source:'Referral',       type:'Event',      date:'Jun 28, 2026', budget:'$2,400', status:'confirmed', followup:'Contract sent',    action:'view' },
-  { id:'BK-006', client:'Martinez Family',      email:'m@example.com',    source:'Instagram',       type:'Portrait',   date:'Jul 4, 2026',  budget:'$700',   status:'enquiry',   followup:'Call within 24h',  action:'convert' },
-  { id:'BK-007', client:'Patel Wedding',        email:'p@example.com',    source:'Website Form',    type:'Wedding',    date:'Jul 12, 2026', budget:'$4,200', status:'qualified', followup:'Ready to convert', action:'convert' },
-  { id:'BK-008', client:'Chen Studio',          email:'c@example.com',    source:'Social/Referral', type:'Commercial', date:'Jul 18, 2026', budget:'$1,800', status:'qualified', followup:'Awaiting budget',  action:'convert' },
-  { id:'BK-009', client:'Thompson Family',      email:'t@example.com',    source:'Walk-in',         type:'Portrait',   date:'May 28, 2026', budget:'$550',   status:'completed', followup:'Gallery delivered',action:'view' },
-  { id:'BK-010', client:'Park Wedding',         email:'pw@example.com',   source:'Referral',        type:'Wedding',    date:'May 10, 2026', budget:'$3,500', status:'completed', followup:'Review requested', action:'view' },
-  { id:'BK-011', client:'Williams Corp',        email:'wc@example.com',   source:'Website Form',    type:'Corporate',  date:'Apr 22, 2026', budget:'$900',   status:'lost',      followup:'Nurture: 30 days', action:'view' },
-  { id:'BK-012', client:'Brown Family',         email:'bf@example.com',   source:'Instagram',       type:'Portrait',   date:'Apr 15, 2026', budget:'$600',   status:'lost',      followup:'Archived',         action:'view' }
-];
-
-var _STATIC_INVOICES = [
-  { num:'INV-2847', client:'Emma Wilson',    type:'Balance Payment', issued:'Jun 15', due:'Jun 15', amount:'$2,280', status:'paid',    zoho:'Synced',   zohoPending:false },
-  { num:'INV-2846', client:'Emma Wilson',    type:'Deposit (50%)',   issued:'May 28', due:'Jun 1',  amount:'$1,520', status:'paid',    zoho:'Synced',   zohoPending:false },
-  { num:'INV-2845', client:'Nexus Corp',     type:'Deposit (30%)',   issued:'Jun 10', due:'Jun 14', amount:'$360',   status:'paid',    zoho:'Synced',   zohoPending:false },
-  { num:'INV-2844', client:'Nexus Corp',     type:'Balance',         issued:'Jun 17', due:'Jun 17', amount:'$840',   status:'sent',    zoho:'Synced',   zohoPending:false },
-  { num:'INV-2843', client:'Horizon Events', type:'Deposit (30%)',   issued:'Jun 8',  due:'Jun 12', amount:'$720',   status:'paid',    zoho:'Synced',   zohoPending:false },
-  { num:'INV-2842', client:'Horizon Events', type:'Balance',         issued:'Jun 28', due:'Jun 28', amount:'$1,680', status:'sent',    zoho:'Pending',  zohoPending:true  },
-  { num:'INV-2841', client:'Liu Family',     type:'Full Payment',    issued:'Jun 20', due:'Jun 25', amount:'$650',   status:'sent',    zoho:'Synced',   zohoPending:false },
-  { num:'INV-2840', client:'Martinez Family',type:'Deposit',         issued:'Jun 14', due:'Jun 18', amount:'$210',   status:'draft',   zoho:'Not sent', zohoPending:false },
-  { num:'INV-2839', client:'Sarah Reed',     type:'Balance',         issued:'May 22', due:'May 28', amount:'$570',   status:'overdue', zoho:'Synced',   zohoPending:false },
-  { num:'INV-2838', client:'Williams Corp',  type:'Full Payment',    issued:'Apr 15', due:'Apr 22', amount:'$900',   status:'overdue', zoho:'Synced',   zohoPending:false }
-];
-
-var _STATIC_CONTRACTS = [
-  { num:'CON-2847', client:'Emma & Jake Wilson', type:'Wedding',    sent:'Jun 1',  signed:'Jun 3',  value:'$3,800', status:'signed', zoho:'Completed' },
-  { num:'CON-2846', client:'Nexus Corp',          type:'Headshots',  sent:'Jun 8',  signed:'Jun 10', value:'$1,200', status:'signed', zoho:'Completed' },
-  { num:'CON-2845', client:'Horizon Events',      type:'Event',      sent:'Jun 9',  signed:'',       value:'$2,400', status:'sent',   zoho:'Awaiting'  },
-  { num:'CON-2844', client:'Sarah & Tom Reed',    type:'Engagement', sent:'Jun 5',  signed:'Jun 6',  value:'$950',   status:'signed', zoho:'Completed' },
-  { num:'CON-2843', client:'Liu Family',          type:'Portrait',   sent:'Jun 12', signed:'Jun 13', value:'$650',   status:'signed', zoho:'Completed' },
-  { num:'CON-2842', client:'Patel Wedding',       type:'Wedding',    sent:'Jun 14', signed:'',       value:'$4,200', status:'sent',   zoho:'Awaiting'  },
-  { num:'CON-2841', client:'Chen Studio',         type:'Commercial', sent:'Jun 14', signed:'',       value:'$1,800', status:'sent',   zoho:'Awaiting'  },
-  { num:'CON-2840', client:'Martinez Family',     type:'Portrait',   sent:'',       signed:'',       value:'$700',   status:'draft',  zoho:'Not sent'  },
-  { num:'CON-2839', client:'Park Wedding',        type:'Wedding',    sent:'Mar 1',  signed:'Mar 4',  value:'$3,500', status:'signed', zoho:'Completed' },
-  { num:'CON-2838', client:'Thompson Family',     type:'Portrait',   sent:'Apr 10', signed:'Apr 12', value:'$550',   status:'signed', zoho:'Completed' }
-];
-
-var _STATIC_CLIENTS = [
-  { name:'Emma & Jake Wilson', email:'emma@example.com',  phone:'(555) 234-5678', types:'Wedding',           sessions:1, spent:'$3,800', lastSession:'Jun 15, 2026', status:'active' },
-  { name:'Nexus Corp',          email:'hr@nexus.com',      phone:'(555) 345-6789', types:'Corporate',         sessions:3, spent:'$3,600', lastSession:'Jun 17, 2026', status:'active' },
-  { name:'Liu Family',          email:'liu@example.com',   phone:'(555) 456-7890', types:'Portrait',          sessions:2, spent:'$1,300', lastSession:'Jun 20, 2026', status:'active' },
-  { name:'Sarah & Tom Reed',    email:'sarah@example.com', phone:'(555) 567-8901', types:'Engagement, Wedding',sessions:2, spent:'$5,750', lastSession:'Jun 22, 2026', status:'active' },
-  { name:'Rachel Thompson',     email:'rachel@example.com',phone:'(555) 678-9012', types:'Portrait',          sessions:4, spent:'$2,800', lastSession:'May 28, 2026', status:'active' },
-  { name:'Chen Family',         email:'chen@example.com',  phone:'(555) 789-0123', types:'Portrait',          sessions:3, spent:'$1,950', lastSession:'Apr 12, 2026', status:'inactive' },
-  { name:'Horizon Events',      email:'events@horizon.com',phone:'(555) 890-1234', types:'Event, Commercial', sessions:5, spent:'$8,400', lastSession:'Jun 28, 2026', status:'active' },
-  { name:'Park Family',         email:'park@example.com',  phone:'(555) 901-2345', types:'Wedding, Portrait', sessions:3, spent:'$4,200', lastSession:'Mar 10, 2026', status:'inactive' }
-];
-
-// ─────────────────────────────────────────────────────────────────
-//  BOOKINGS DETAIL
-// ─────────────────────────────────────────────────────────────────
-var _bkExtra = {
-  'BK-001': { time:'10:00 AM', venue:'Central Park',  pkg:'Wedding Premium',   phone:'(555) 234-5678', secondShooter:'James Lee' },
-  'BK-002': { time:'2:00 PM',  venue:'Studio 4',      pkg:'Corporate Half Day',phone:'(555) 345-6789', secondShooter:'—' },
-  'BK-003': { time:'11:00 AM', venue:'Riverside Park', pkg:'Portrait Family',  phone:'(555) 456-7890', secondShooter:'—' },
-  'BK-004': { time:'5:00 PM',  venue:'Brooklyn Bridge',pkg:'Engagement Basic',  phone:'(555) 567-8901', secondShooter:'—' },
-  'BK-005': { time:'9:00 AM',  venue:'Marriott Hotel', pkg:'Event Full Day',   phone:'(555) 890-1234', secondShooter:'Amy Patel' }
-};
-
-function renderBookingsDetail(id) {
-  var dv = document.getElementById('bookings-detail');
-  var bookings = (typeof ZPData !== 'undefined' && ZPData.get) ? ZPData.get('bookings') : [];
-  if (!bookings || !bookings.length) bookings = _STATIC_BOOKINGS;
-  var b = bookings.find(function(bk) { return bk.id === id; });
-  if (!b) { dv.innerHTML = '<button class="detail-back-btn" onclick="backToList(\'bookings\')"><i class="ti ti-arrow-left"></i> Back</button><p style="color:#94a3b8;padding:20px;">Booking not found.</p>'; return; }
-  var extra = _bkExtra[b.id] || {};
-  var statusMap = { confirmed:'badge-confirmed', enquiry:'badge-enquiry', qualified:'badge-qualified', completed:'badge-completed', lost:'badge-lost' };
-  var sc = statusMap[b.status] || 'badge-neutral';
-  var budgetStr = b.budget || b.value || '$0';
-  var bVal = parseFloat(budgetStr.replace(/[^0-9.]/g,'')) || 0;
-  var deposit = Math.round(bVal * 0.5);
-  var balance = bVal - deposit;
-  var isConfirmed = (b.status === 'confirmed' || b.status === 'completed');
-  var statusLabel = (b.status||'').charAt(0).toUpperCase() + (b.status||'').slice(1);
-  var typeClass = 'type-' + (b.type||'').toLowerCase().replace(/\s+/g,'-');
-  var tlHtml =
-    '<li><div class="tl-icon" style="background:#eff6ff;color:#2563eb;"><i class="ti ti-inbox"></i></div><div class="tl-body"><div class="tl-text">Booking enquiry received</div><div class="tl-time">' + (b.date||'Recent') + '</div></div></li>' +
-    '<li><div class="tl-icon" style="background:#f0fdf4;color:#15803d;"><i class="ti ti-send"></i></div><div class="tl-body"><div class="tl-text">Confirmation email sent to client</div><div class="tl-time">After enquiry</div></div></li>' +
-    (isConfirmed ? '<li><div class="tl-icon" style="background:#dcfce7;color:#15803d;"><i class="ti ti-circle-check"></i></div><div class="tl-body"><div class="tl-text">Booking confirmed</div><div class="tl-time">Current status</div></div></li>' : '');
-  dv.innerHTML =
-    '<button class="detail-back-btn" onclick="backToList(\'bookings\')"><i class="ti ti-arrow-left"></i> Back to Bookings</button>' +
-    '<div class="detail-header">' +
-      '<div><div class="detail-title">' + b.client + '</div>' +
-      '<div class="detail-subtitle" style="margin-top:6px;">' +
-        '<span class="type-tag ' + typeClass + '">' + (b.type||'') + '</span>' +
-        '&nbsp;&nbsp;<span class="status-badge ' + sc + '">' + statusLabel + '</span>' +
-      '</div></div>' +
-      '<div class="detail-actions">' +
-        '<button class="lead-action-btn" onclick="openCreateInvoiceModal()"><i class="ti ti-file-invoice"></i> Create Invoice</button>' +
-        '<button class="lead-action-btn" onclick="openNewContractModal()"><i class="ti ti-file-text"></i> Send Contract</button>' +
-        '<button class="lead-action-btn" onclick="showToast(\'Opening edit form!\')"><i class="ti ti-edit"></i> Edit</button>' +
-        '<button class="btn-gold" style="font-size:13px;" onclick="showToast(\'Booking confirmed!\')"><i class="ti ti-circle-check"></i> Mark Confirmed</button>' +
-      '</div>' +
-    '</div>' +
-    '<div class="detail-two-col">' +
-      '<div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-user"></i> Contact</div>' +
-          '<div class="detail-grid">' +
-            '<div><div class="detail-field-label">Phone</div><div class="detail-field-value">' + (extra.phone || '—') + '</div></div>' +
-            '<div><div class="detail-field-label">Email</div><div class="detail-field-value">' + (b.email || '—') + '</div></div>' +
-            '<div><div class="detail-field-label">Source</div><div class="detail-field-value">' + (b.source || '—') + '</div></div>' +
-            '<div><div class="detail-field-label">Second Shooter</div><div class="detail-field-value">' + (extra.secondShooter || '—') + '</div></div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-calendar-event"></i> Booking Details</div>' +
-          '<div class="detail-grid" style="margin-bottom:14px;">' +
-            '<div><div class="detail-field-label">Shoot Date</div><div class="detail-field-value">' + (b.date || '—') + '</div></div>' +
-            '<div><div class="detail-field-label">Time</div><div class="detail-field-value">' + (extra.time || '—') + '</div></div>' +
-            '<div><div class="detail-field-label">Venue</div><div class="detail-field-value">' + (extra.venue || b.location || '—') + '</div></div>' +
-            '<div><div class="detail-field-label">Package</div><div class="detail-field-value">' + (extra.pkg || '—') + '</div></div>' +
-          '</div>' +
-          '<div class="detail-field-label">Payment Summary</div>' +
-          '<div style="display:flex;gap:10px;margin-top:8px;">' +
-            '<div style="flex:1;background:#f8fafc;border-radius:8px;padding:10px 14px;text-align:center;">' +
-              '<div style="font-size:18px;font-weight:800;color:#1a1d2e;">$' + bVal.toFixed(0) + '</div>' +
-              '<div style="font-size:11px;color:#94a3b8;margin-top:2px;">Total Value</div>' +
-            '</div>' +
-            '<div style="flex:1;background:#f0fdf4;border-radius:8px;padding:10px 14px;text-align:center;">' +
-              '<div style="font-size:18px;font-weight:800;color:#15803d;">$' + deposit + '</div>' +
-              '<div style="font-size:11px;color:#94a3b8;margin-top:2px;">Deposit (50%)</div>' +
-            '</div>' +
-            '<div style="flex:1;background:' + (balance > 0 ? '#fff7ed' : '#f0fdf4') + ';border-radius:8px;padding:10px 14px;text-align:center;">' +
-              '<div style="font-size:18px;font-weight:800;color:' + (balance > 0 ? '#c2410c' : '#15803d') + ';">$' + balance + '</div>' +
-              '<div style="font-size:11px;color:#94a3b8;margin-top:2px;">Balance Due</div>' +
-            '</div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-notes"></i> Notes</div>' +
-          '<textarea style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;color:#1a1d2e;resize:vertical;outline:none;box-sizing:border-box;" rows="3" placeholder="Add notes about this booking...">' + (b.notes || '') + '</textarea>' +
-        '</div>' +
-      '</div>' +
-      '<div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-clock"></i> Activity</div>' +
-          '<ul class="detail-timeline">' + tlHtml + '</ul>' +
-        '</div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-link"></i> Linked Items</div>' +
-          '<div style="display:grid;gap:8px;">' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8fafc;border-radius:7px;"><span class="detail-field-label" style="margin:0;"><i class="ti ti-photo"></i> Gallery</span><span style="font-size:12px;color:#94a3b8;">Not linked</span></div>' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8fafc;border-radius:7px;"><span class="detail-field-label" style="margin:0;"><i class="ti ti-file-invoice"></i> Invoice</span><span style="font-size:12px;color:#94a3b8;">Not created</span></div>' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8fafc;border-radius:7px;"><span class="detail-field-label" style="margin:0;"><i class="ti ti-file-text"></i> Contract</span><span style="font-size:12px;color:#94a3b8;">Not sent</span></div>' +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-}
-
-// ─────────────────────────────────────────────────────────────────
-//  CLIENTS DETAIL
-// ─────────────────────────────────────────────────────────────────
-function renderClientsDetail(id) {
-  var idx = parseInt(id);
-  var clients = (typeof ZPData !== 'undefined' && ZPData.get) ? ZPData.get('clients') : [];
-  if (!clients || !clients.length) clients = _STATIC_CLIENTS;
-  var c = clients[idx];
-  var dv = document.getElementById('clients-detail');
-  if (!c) { dv.innerHTML = '<button class="detail-back-btn" onclick="backToList(\'clients\')"><i class="ti ti-arrow-left"></i> Back</button><p style="color:#94a3b8;padding:20px;">Client not found.</p>'; return; }
-  var isActive = c.status === 'active';
-  var statusBadge = isActive ? '<span class="status-badge badge-active-g">Active</span>' : '<span class="status-badge badge-inactive">Inactive</span>';
-  var clientType = (c.sessions && c.sessions > 1) ? 'Returning' : 'New';
-  var clientTypeBadge = '<span style="background:' + (clientType==='Returning'?'#eff6ff':'#f0fdf4') + ';color:' + (clientType==='Returning'?'#2563eb':'#15803d') + ';font-size:12px;font-weight:700;padding:2px 10px;border-radius:20px;">' + clientType + ' Client</span>';
-  var allBookings = (typeof ZPData !== 'undefined' && ZPData.get) ? ZPData.get('bookings') : [];
-  if (!allBookings || !allBookings.length) allBookings = _STATIC_BOOKINGS;
-  var firstName = (c.name||'').split(' ')[0].toLowerCase();
-  var clientBookings = allBookings.filter(function(b) { return b.client && b.client.toLowerCase().indexOf(firstName) > -1; }).slice(0, 5);
-  var bkHtml = clientBookings.length ? clientBookings.map(function(b) {
-    var bsc = { confirmed:'badge-confirmed', enquiry:'badge-enquiry', qualified:'badge-qualified', completed:'badge-completed', lost:'badge-lost' }[b.status] || 'badge-neutral';
-    var bStatus = (b.status||'').charAt(0).toUpperCase() + (b.status||'').slice(1);
-    return '<tr style="border-bottom:1px solid #f1f5f9;">' +
-      '<td style="padding:10px 12px;font-size:13px;color:#374151;">' + b.date + '</td>' +
-      '<td style="padding:10px 12px;font-size:13px;"><span class="type-tag type-' + (b.type||'').toLowerCase() + '">' + (b.type||'') + '</span></td>' +
-      '<td style="padding:10px 12px;font-size:13px;font-weight:600;color:#1a1d2e;">' + (b.budget || '—') + '</td>' +
-      '<td style="padding:10px 12px;font-size:13px;"><span class="status-badge ' + bsc + '">' + bStatus + '</span></td>' +
-    '</tr>';
-  }).join('') : '<tr><td colspan="4" style="padding:20px;text-align:center;color:#94a3b8;font-size:13px;">No bookings on record</td></tr>';
-  var tlHtml =
-    '<li><div class="tl-icon" style="background:#eff6ff;color:#2563eb;"><i class="ti ti-user-plus"></i></div><div class="tl-body"><div class="tl-text">Client profile created</div><div class="tl-time">' + (c.lastSession || 'Recent') + '</div></div></li>' +
-    (clientType === 'Returning' ? '<li><div class="tl-icon" style="background:#f0fdf4;color:#15803d;"><i class="ti ti-repeat"></i></div><div class="tl-body"><div class="tl-text">Returning client — ' + (c.sessions||0) + ' sessions booked</div><div class="tl-time">Total history</div></div></li>' : '') +
-    '<li><div class="tl-icon" style="background:#fdf4ff;color:#7c3aed;"><i class="ti ti-calendar-check"></i></div><div class="tl-body"><div class="tl-text">Last shoot completed</div><div class="tl-time">' + (c.lastSession || '—') + '</div></div></li>';
-  dv.innerHTML =
-    '<button class="detail-back-btn" onclick="backToList(\'clients\')"><i class="ti ti-arrow-left"></i> Back to Clients</button>' +
-    '<div class="detail-header">' +
-      '<div><div class="detail-title">' + c.name + '</div>' +
-      '<div class="detail-subtitle" style="margin-top:6px;">' + clientTypeBadge + '&nbsp;&nbsp;' + statusBadge + '</div></div>' +
-      '<div class="detail-actions">' +
-        '<button class="lead-action-btn" onclick="showToast(\'Opening email compose!\')"><i class="ti ti-mail"></i> Send Email</button>' +
-        '<button class="lead-action-btn" onclick="showToast(\'Note added!\')"><i class="ti ti-notes"></i> Add Note</button>' +
-        '<button class="btn-gold" style="font-size:13px;" onclick="openEnquiryModal()"><i class="ti ti-plus"></i> New Booking</button>' +
-      '</div>' +
-    '</div>' +
-    '<div class="detail-two-col">' +
-      '<div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-user"></i> Contact</div>' +
-          '<div class="detail-grid">' +
-            '<div><div class="detail-field-label">Phone</div><div class="detail-field-value">' + (c.phone || '—') + '</div></div>' +
-            '<div><div class="detail-field-label">Email</div><div class="detail-field-value">' + (c.email || '—') + '</div></div>' +
-            '<div><div class="detail-field-label">Shoot Types</div><div class="detail-field-value">' + (c.types || '—') + '</div></div>' +
-            '<div><div class="detail-field-label">Last Session</div><div class="detail-field-value">' + (c.lastSession || '—') + '</div></div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-calendar-event"></i> Booking History</div>' +
-          '<div style="display:flex;gap:10px;margin-bottom:14px;">' +
-            '<div style="flex:1;background:#eff6ff;border-radius:8px;padding:10px 14px;text-align:center;">' +
-              '<div style="font-size:24px;font-weight:800;color:#2563eb;">' + (c.sessions||0) + '</div>' +
-              '<div style="font-size:11px;color:#94a3b8;margin-top:2px;">Sessions</div>' +
-            '</div>' +
-            '<div style="flex:1;background:#f0fdf4;border-radius:8px;padding:10px 14px;text-align:center;">' +
-              '<div style="font-size:20px;font-weight:800;color:#15803d;">' + (c.spent||'—') + '</div>' +
-              '<div style="font-size:11px;color:#94a3b8;margin-top:2px;">Total Spent</div>' +
-            '</div>' +
-          '</div>' +
-          '<table style="width:100%;border-collapse:collapse;border:1px solid #f1f5f9;border-radius:8px;overflow:hidden;">' +
-            '<thead><tr style="background:#f8fafc;">' +
-              '<th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;">Date</th>' +
-              '<th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;">Type</th>' +
-              '<th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;">Value</th>' +
-              '<th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;">Status</th>' +
-            '</tr></thead>' +
-            '<tbody>' + bkHtml + '</tbody>' +
-          '</table>' +
-        '</div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-notes"></i> Notes</div>' +
-          '<textarea style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;color:#1a1d2e;resize:vertical;outline:none;box-sizing:border-box;" rows="3" placeholder="Add notes about this client..."></textarea>' +
-        '</div>' +
-      '</div>' +
-      '<div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-clock"></i> Activity</div>' +
-          '<ul class="detail-timeline">' + tlHtml + '</ul>' +
-        '</div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-link"></i> Quick Links</div>' +
-          '<div style="display:grid;gap:8px;">' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8fafc;border-radius:7px;"><span class="detail-field-label" style="margin:0;"><i class="ti ti-photo"></i> Gallery</span><span style="font-size:12px;color:#94a3b8;">Not linked</span></div>' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8fafc;border-radius:7px;"><span class="detail-field-label" style="margin:0;"><i class="ti ti-file-invoice"></i> Invoices</span><span style="font-size:12px;color:#2563eb;font-weight:600;">' + (c.sessions||0) + ' on record</span></div>' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8fafc;border-radius:7px;"><span class="detail-field-label" style="margin:0;"><i class="ti ti-file-text"></i> Contracts</span><span style="font-size:12px;color:#15803d;font-weight:600;">All signed</span></div>' +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-}
-
-// ─────────────────────────────────────────────────────────────────
-//  INVOICES DETAIL
-// ─────────────────────────────────────────────────────────────────
-function renderInvoicesDetail(id) {
-  var dv = document.getElementById('invoices-detail');
-  var invoices = (typeof ZPData !== 'undefined' && ZPData.get) ? ZPData.get('invoices') : [];
-  if (!invoices || !invoices.length) invoices = _STATIC_INVOICES;
-  var inv = invoices.find(function(i) { return i.num === id; });
-  if (!inv) { dv.innerHTML = '<button class="detail-back-btn" onclick="backToList(\'invoices\')"><i class="ti ti-arrow-left"></i> Back</button><p style="color:#94a3b8;padding:20px;">Invoice not found.</p>'; return; }
-  var statusMap = { paid:'badge-paid', sent:'badge-sent-inv', draft:'badge-draft-inv', overdue:'badge-overdue' };
-  var sc = statusMap[inv.status] || 'badge-neutral';
-  var statusLabel = (inv.status||'').charAt(0).toUpperCase() + (inv.status||'').slice(1);
-  var amt = parseFloat((inv.amount||'0').replace(/[^0-9.]/g,'')) || 0;
-  var pkgAmt  = (amt * 0.7).toFixed(2);
-  var editAmt = (amt * 0.2).toFixed(2);
-  var trvAmt  = (amt * 0.1).toFixed(2);
-  var isPaid = inv.status === 'paid';
-  var paidAmt = isPaid ? amt : 0;
-  var balance = amt - paidAmt;
-  var safeInvNum = inv.num.replace(/'/g, '');
-  var safeClient = inv.client.replace(/'/g, '');
-  var safeAmount = inv.amount.replace(/'/g, '');
-  var safeDue = (inv.due||'').replace(/'/g, '');
-  var safeType = (inv.type||'').replace(/'/g, '');
-  var safeStatus = (inv.status||'').replace(/'/g, '');
-  var tlHtml =
-    '<li><div class="tl-icon" style="background:#eff6ff;color:#2563eb;"><i class="ti ti-file-plus"></i></div><div class="tl-body"><div class="tl-text">Invoice created</div><div class="tl-time">' + (inv.issued||'—') + '</div></div></li>' +
-    (inv.status !== 'draft' ? '<li><div class="tl-icon" style="background:#f0fdf4;color:#15803d;"><i class="ti ti-send"></i></div><div class="tl-body"><div class="tl-text">Invoice sent to ' + inv.client + '</div><div class="tl-time">After issue</div></div></li>' : '') +
-    (isPaid ? '<li><div class="tl-icon" style="background:#dcfce7;color:#15803d;"><i class="ti ti-circle-check"></i></div><div class="tl-body"><div class="tl-text">Payment received — fully paid</div><div class="tl-time">' + (inv.due||'—') + '</div></div></li>' : '') +
-    (inv.status === 'overdue' ? '<li><div class="tl-icon" style="background:#fee2e2;color:#b91c1c;"><i class="ti ti-alert-triangle"></i></div><div class="tl-body"><div class="tl-text">Invoice overdue — follow-up needed</div><div class="tl-time">Past due ' + (inv.due||'') + '</div></div></li>' : '');
-  dv.innerHTML =
-    '<button class="detail-back-btn" onclick="backToList(\'invoices\')"><i class="ti ti-arrow-left"></i> Back to Invoices</button>' +
-    '<div class="detail-header">' +
-      '<div><div class="detail-title">' + inv.num + '</div>' +
-      '<div class="detail-subtitle" style="margin-top:6px;">' +
-        '<span style="font-size:13px;color:#64748b;">' + inv.client + '</span>' +
-        '&nbsp;&nbsp;<span class="status-badge ' + sc + '">' + statusLabel + '</span>' +
-        (inv.type ? '&nbsp;&nbsp;<span style="background:#f1f5f9;color:#64748b;font-size:12px;font-weight:600;padding:2px 10px;border-radius:20px;">' + inv.type + '</span>' : '') +
-      '</div></div>' +
-      '<div class="detail-actions">' +
-        '<button class="lead-action-btn" onclick="showToast(\'Invoice sent!\')"><i class="ti ti-send"></i> Send Invoice</button>' +
-        '<button class="lead-action-btn" style="border-color:#86efac;color:#15803d;background:#f0fdf4;" onclick="showToast(\'Invoice marked as paid!\')"><i class="ti ti-circle-check"></i> Mark Paid</button>' +
-        '<button class="lead-action-btn" onclick="printInvoice(\'' + safeInvNum + '\',\'' + safeClient + '\',\'' + safeAmount + '\',\'' + safeDue + '\',\'' + safeType + '\',\'' + safeStatus + '\')"><i class="ti ti-download"></i> Download PDF</button>' +
-      '</div>' +
-    '</div>' +
-    '<div class="detail-two-col">' +
-      '<div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-file-invoice"></i> Invoice Details</div>' +
-          '<div class="detail-grid">' +
-            '<div><div class="detail-field-label">Client</div><div class="detail-field-value">' + inv.client + '</div></div>' +
-            '<div><div class="detail-field-label">Issue Date</div><div class="detail-field-value">' + (inv.issued||'—') + '</div></div>' +
-            '<div><div class="detail-field-label">Due Date</div><div class="detail-field-value">' + (inv.due||'—') + '</div></div>' +
-            '<div><div class="detail-field-label">Zoho Books</div><div class="detail-field-value">' + (inv.zoho||'—') + '</div></div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-list"></i> Line Items</div>' +
-          '<table style="width:100%;border-collapse:collapse;border:1px solid #f1f5f9;border-radius:8px;overflow:hidden;">' +
-            '<thead><tr style="background:#f8fafc;">' +
-              '<th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;">Description</th>' +
-              '<th style="padding:10px 12px;text-align:right;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;">Amount</th>' +
-            '</tr></thead>' +
-            '<tbody>' +
-              '<tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:12px;font-size:13px;">Photography Package</td><td style="padding:12px;font-size:13px;text-align:right;font-weight:600;">$' + pkgAmt + '</td></tr>' +
-              '<tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:12px;font-size:13px;">Editing &amp; Retouching</td><td style="padding:12px;font-size:13px;text-align:right;font-weight:600;">$' + editAmt + '</td></tr>' +
-              '<tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:12px;font-size:13px;">Travel / Misc</td><td style="padding:12px;font-size:13px;text-align:right;font-weight:600;">$' + trvAmt + '</td></tr>' +
-              '<tr style="background:#f8fafc;"><td style="padding:12px;font-size:13px;font-weight:700;">Total</td><td style="padding:12px;font-size:16px;font-weight:800;text-align:right;color:#1a1d2e;">$' + amt.toFixed(2) + '</td></tr>' +
-            '</tbody>' +
-          '</table>' +
-        '</div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-notes"></i> Notes</div>' +
-          '<textarea style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;color:#1a1d2e;resize:vertical;outline:none;box-sizing:border-box;" rows="3" placeholder="Add notes about this invoice..."></textarea>' +
-        '</div>' +
-      '</div>' +
-      '<div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-currency-dollar"></i> Payment Summary</div>' +
-          '<div style="display:grid;gap:10px;margin-bottom:0;">' +
-            '<div style="background:#f8fafc;border-radius:8px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;">' +
-              '<span class="detail-field-label" style="margin:0;">Amount Due</span>' +
-              '<span style="font-size:20px;font-weight:800;color:#1a1d2e;">$' + amt.toFixed(2) + '</span>' +
-            '</div>' +
-            '<div style="background:#f0fdf4;border-radius:8px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;">' +
-              '<span class="detail-field-label" style="margin:0;">Amount Paid</span>' +
-              '<span style="font-size:20px;font-weight:800;color:#15803d;">$' + paidAmt.toFixed(2) + '</span>' +
-            '</div>' +
-            '<div style="background:' + (balance > 0 ? '#fff7ed' : '#f0fdf4') + ';border-radius:8px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;">' +
-              '<span class="detail-field-label" style="margin:0;">Balance</span>' +
-              '<span style="font-size:20px;font-weight:800;color:' + (balance > 0 ? '#c2410c' : '#15803d') + ';">$' + balance.toFixed(2) + '</span>' +
-            '</div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-clock"></i> Activity</div>' +
-          '<ul class="detail-timeline">' + tlHtml + '</ul>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-}
-
-// ─────────────────────────────────────────────────────────────────
-//  CONTRACTS DETAIL
-// ─────────────────────────────────────────────────────────────────
-function renderContractsDetail(id) {
-  var dv = document.getElementById('contracts-detail');
-  var contracts = (typeof ZPData !== 'undefined' && ZPData.get) ? ZPData.get('contracts') : [];
-  if (!contracts || !contracts.length) contracts = _STATIC_CONTRACTS;
-  var con = contracts.find(function(c) { return c.num === id; });
-  if (!con) { dv.innerHTML = '<button class="detail-back-btn" onclick="backToList(\'contracts\')"><i class="ti ti-arrow-left"></i> Back</button><p style="color:#94a3b8;padding:20px;">Contract not found.</p>'; return; }
-  var statusMap = { signed:'badge-signed', sent:'badge-sent-con', draft:'badge-draft-con' };
-  var sc = statusMap[con.status] || 'badge-neutral';
-  var statusLabel = (con.status||'').charAt(0).toUpperCase() + (con.status||'').slice(1);
-  var isSigned = con.status === 'signed';
-  var signedDisplay = isSigned ? (con.signed || '—') : '<span style="color:#d97706;">Awaiting signature</span>';
-  var zohoColor = con.zoho === 'Completed' ? '#15803d' : (con.zoho === 'Awaiting' ? '#1d4ed8' : '#94a3b8');
-  var tlHtml =
-    '<li><div class="tl-icon" style="background:#eff6ff;color:#2563eb;"><i class="ti ti-file-plus"></i></div><div class="tl-body"><div class="tl-text">Contract created</div><div class="tl-time">' + (con.sent||'—') + '</div></div></li>' +
-    (con.status !== 'draft' ? '<li><div class="tl-icon" style="background:#fdf4ff;color:#7c3aed;"><i class="ti ti-send"></i></div><div class="tl-body"><div class="tl-text">Contract sent via Zoho Sign</div><div class="tl-time">' + (con.sent||'—') + '</div></div></li>' : '') +
-    (isSigned ? '<li><div class="tl-icon" style="background:#dcfce7;color:#15803d;"><i class="ti ti-signature"></i></div><div class="tl-body"><div class="tl-text">Contract signed by ' + con.client + '</div><div class="tl-time">' + (con.signed||'—') + '</div></div></li>' : '<li><div class="tl-icon" style="background:#fff7ed;color:#d97706;"><i class="ti ti-clock"></i></div><div class="tl-body"><div class="tl-text">Awaiting client signature</div><div class="tl-time">Pending</div></div></li>');
-  dv.innerHTML =
-    '<button class="detail-back-btn" onclick="backToList(\'contracts\')"><i class="ti ti-arrow-left"></i> Back to Contracts</button>' +
-    '<div class="detail-header">' +
-      '<div><div class="detail-title">' + con.num + '</div>' +
-      '<div class="detail-subtitle" style="margin-top:6px;">' +
-        '<span style="font-size:13px;color:#64748b;">' + con.client + '</span>' +
-        '&nbsp;&nbsp;<span class="status-badge ' + sc + '">' + statusLabel + '</span>' +
-        (con.type ? '&nbsp;&nbsp;<span style="background:#f1f5f9;color:#64748b;font-size:12px;font-weight:600;padding:2px 10px;border-radius:20px;">' + con.type + '</span>' : '') +
-      '</div></div>' +
-      '<div class="detail-actions">' +
-        '<button class="lead-action-btn" onclick="showToast(\'Reminder sent!\')"><i class="ti ti-bell"></i> Send Reminder</button>' +
-        '<button class="lead-action-btn" onclick="showToast(\'Downloading contract PDF!\')"><i class="ti ti-download"></i> Download PDF</button>' +
-        '<button class="lead-action-btn" style="border-color:#86efac;color:#15803d;background:#f0fdf4;" onclick="showToast(\'Contract marked as signed!\')"><i class="ti ti-signature"></i> Mark Signed</button>' +
-      '</div>' +
-    '</div>' +
-    '<div class="detail-two-col">' +
-      '<div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-users"></i> Parties</div>' +
-          '<div class="detail-grid">' +
-            '<div><div class="detail-field-label">Photographer</div><div class="detail-field-value">Zoho Photography Studio</div></div>' +
-            '<div><div class="detail-field-label">Client</div><div class="detail-field-value">' + con.client + '</div></div>' +
-            '<div><div class="detail-field-label">Shoot Type</div><div class="detail-field-value">' + (con.type||'—') + '</div></div>' +
-            '<div><div class="detail-field-label">Contract Value</div><div class="detail-field-value" style="font-size:18px;font-weight:700;color:#1a1d2e;">' + (con.value||'—') + '</div></div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-signature"></i> Signature Status</div>' +
-          '<div class="detail-grid">' +
-            '<div><div class="detail-field-label">Sent Date</div><div class="detail-field-value">' + (con.sent||'—') + '</div></div>' +
-            '<div><div class="detail-field-label">Signed Date</div><div class="detail-field-value">' + signedDisplay + '</div></div>' +
-            '<div><div class="detail-field-label">Zoho Sign</div><div class="detail-field-value"><span style="font-weight:600;color:' + zohoColor + ';">' + (con.zoho||'—') + '</span></div></div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-file-text"></i> Key Terms</div>' +
-          '<div style="display:grid;gap:8px;">' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8fafc;border-radius:7px;"><span class="detail-field-label" style="margin:0;">Deposit</span><span style="font-size:13px;font-weight:600;color:#1a1d2e;">50% on signing</span></div>' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8fafc;border-radius:7px;"><span class="detail-field-label" style="margin:0;">Balance</span><span style="font-size:13px;font-weight:600;color:#1a1d2e;">Due on shoot day</span></div>' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8fafc;border-radius:7px;"><span class="detail-field-label" style="margin:0;">Cancellation</span><span style="font-size:13px;font-weight:600;color:#1a1d2e;">30-day notice</span></div>' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8fafc;border-radius:7px;"><span class="detail-field-label" style="margin:0;">Delivery</span><span style="font-size:13px;font-weight:600;color:#1a1d2e;">2–4 weeks post-shoot</span></div>' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8fafc;border-radius:7px;"><span class="detail-field-label" style="margin:0;">Usage Rights</span><span style="font-size:13px;font-weight:600;color:#1a1d2e;">Personal use only</span></div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-notes"></i> Notes</div>' +
-          '<textarea style="width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;color:#1a1d2e;resize:vertical;outline:none;box-sizing:border-box;" rows="3" placeholder="Add notes about this contract..."></textarea>' +
-        '</div>' +
-      '</div>' +
-      '<div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-clock"></i> Activity</div>' +
-          '<ul class="detail-timeline">' + tlHtml + '</ul>' +
-        '</div>' +
-        '<div class="detail-section">' +
-          '<div class="detail-section-title"><i class="ti ti-file"></i> Contract Preview</div>' +
-          '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;font-size:12.5px;color:#64748b;line-height:1.8;max-height:340px;overflow-y:auto;">' +
-            '<div style="font-weight:700;font-size:13.5px;color:#1a1d2e;margin-bottom:12px;text-align:center;">PHOTOGRAPHY SERVICES AGREEMENT</div>' +
-            '<p style="margin-bottom:8px;"><strong>Between:</strong> Zoho Photography Studio and ' + con.client + '.</p>' +
-            '<p style="margin-bottom:8px;"><strong>Services:</strong> Professional photography for the ' + (con.type||'photography') + ' session as per booking confirmation.</p>' +
-            '<p style="margin-bottom:8px;"><strong>Payment:</strong> 50% deposit on signing; balance due on shoot day. Non-refundable except per cancellation policy.</p>' +
-            '<p style="margin-bottom:8px;"><strong>Cancellation:</strong> 30 days written notice required. Within 14 days — full deposit forfeited.</p>' +
-            '<p style="margin-bottom:8px;"><strong>Delivery:</strong> Edited gallery delivered within 2–4 weeks via online link.</p>' +
-            '<p style="margin-bottom:0;color:#94a3b8;font-size:11px;text-align:center;border-top:1px solid #e2e8f0;padding-top:8px;margin-top:10px;">Full contract sent via Zoho Sign · ' + (con.zoho||'Pending') + '</p>' +
-          '</div>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-}
-
 </script>
 
 <!-- ══ VENDOR DETAILS MODAL ══ -->

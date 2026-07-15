@@ -89,8 +89,9 @@
     p.indexOf('/clientgallery/')      > -1 ||
     p.indexOf('/equipmentinventory/') > -1 ||
     p.indexOf('/shootplanning/')      > -1 ||
+    p.indexOf('/flatplan/')           > -1 ||
     p.indexOf('/website/')            > -1 ||
-    p.indexOf('/store/')              > -1 ||
+    p.indexOf('/invoices/')           > -1 ||
     p.indexOf('/mobilegalleryapp/')   > -1 ||
     p.indexOf('/settings/')           > -1
   );
@@ -126,10 +127,10 @@
       '<div class="nav-group" id="nav-group-core">' +
         '<div class="nav-group-label">Core Modules</div>' +
         '<a href="' + r + 'StudioManager/StudioManager.html" class="' + a('studiomanager') + '" data-roles="super-admin,studio-manager">' +
-          '<i class="ti ti-calendar-event"></i> Studio Manager' +
+          '<i class="ti ti-calendar-event"></i> Studio Desk' +
         '</a>' +
         '<a href="' + r + 'ClientGallery/ClientGallery.html" class="' + a('clientgallery') + '" data-roles="super-admin,studio-manager,photographer">' +
-          '<i class="ti ti-photo"></i> Client Gallery' +
+          '<i class="ti ti-photo"></i> Gallery Room' +
         '</a>' +
         '<a href="' + r + 'EquipmentInventory/EquipmentInventory.html" class="' + a('equipmentinventory') + '" data-roles="super-admin,studio-manager,photographer">' +
           '<i class="ti ti-camera"></i> Equipment Inventory' +
@@ -137,11 +138,14 @@
         '<a href="' + r + 'ShootPlanning/ShootPlanning.html" class="' + a('shootplanning') + '" data-roles="super-admin,studio-manager,photographer">' +
           '<i class="ti ti-users"></i> Shoot Planning' +
         '</a>' +
+        '<a href="' + r + 'FlatPlan/FlatPlan.html" class="' + a('flatplan') + '" data-roles="super-admin,studio-manager">' +
+          '<i class="ti ti-layout-columns"></i> Client Portal' +
+        '</a>' +
         '<a href="' + r + 'Website/Website.html" class="' + a('website') + '" data-roles="super-admin">' +
           '<i class="ti ti-world"></i> Website' +
         '</a>' +
-        '<a href="' + r + 'Store/Store.html" class="' + a('/store/') + '" data-roles="super-admin,studio-manager">' +
-          '<i class="ti ti-shopping-bag"></i> Store' +
+        '<a href="' + r + 'Invoices/Invoices.html" class="' + a('invoices') + '" data-roles="super-admin,studio-manager">' +
+          '<i class="ti ti-file-invoice"></i> Invoices' +
         '</a>' +
         '<a href="' + r + 'MobileGalleryApp/MobileGalleryApp.html" class="' + a('mobilegalleryapp') + '" data-roles="super-admin,studio-manager">' +
           '<i class="ti ti-device-mobile"></i> Mobile App' +
@@ -181,7 +185,7 @@
   /* ── 4b. Role-based sidebar access ──────────────────────────── */
   var SIDEBAR_ROLES = {
     'super-admin':    { name:'Thamizh S.',  sub:'Super Admin',      initials:'TS', color:'linear-gradient(135deg,#2563eb,#1d4ed8)', badgeBg:'rgba(37,99,235,.25)',  badgeColor:'#93c5fd' },
-    'studio-manager': { name:'Ravi Singh',  sub:'Studio Manager',   initials:'RS', color:'linear-gradient(135deg,#d97706,#b45309)', badgeBg:'rgba(217,119,6,.25)',   badgeColor:'#fcd34d' },
+    'studio-manager': { name:'Ravi Singh',  sub:'Studio Desk',   initials:'RS', color:'linear-gradient(135deg,#d97706,#b45309)', badgeBg:'rgba(217,119,6,.25)',   badgeColor:'#fcd34d' },
     'photographer':   { name:'Alex Kumar',  sub:'Lead Photographer',initials:'AK', color:'linear-gradient(135deg,#7c3aed,#6d28d9)', badgeBg:'rgba(124,58,237,.25)',  badgeColor:'#c4b5fd' }
   };
 
