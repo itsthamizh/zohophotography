@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DB Diagram — Zoho Photography Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',system-ui,sans-serif;background:#f0f2f5;color:#1a1d2e;overflow:hidden;}
+
+  /* ── Topbar ── */
+  #topbar{position:fixed;top:0;left:0;right:0;height:50px;background:#fff;border-bottom:1.5px solid #e2e8f0;display:flex;align-items:center;padding:0 18px;gap:10px;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+  #topbar h1{font-size:14.5px;font-weight:700;color:#1a1d2e;}
+  #topbar h1 span{color:#94a3b8;font-weight:400;font-size:13px;}
+  .tb-btn{padding:4px 12px;border-radius:7px;font-size:12px;font-weight:600;border:1.5px solid #e2e8f0;background:#f8fafc;color:#475569;cursor:pointer;}
+  .tb-btn:hover{background:#f1f5f9;}
+  .tb-divider{width:1px;height:22px;background:#e2e8f0;margin:0 4px;}
+  #zoom-val{font-size:12px;color:#64748b;min-width:36px;text-align:center;font-weight:600;}
+  .spacer{flex:1;}
+  #search-box{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:7px;padding:5px 12px;font-size:12.5px;color:#1a1d2e;outline:none;width:190px;font-family:inherit;}
+  #search-box:focus{border-color:#2563eb;background:#fff;}
+  #search-box::placeholder{color:#94a3b8;}
+
+  /* ── Legend ── */
+  #legend{position:fixed;top:58px;right:14px;background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:12px 14px;z-index:90;font-size:11.5px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+  #legend h3{font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;}
+  .leg-row{display:flex;align-items:center;gap:7px;margin-bottom:4px;font-size:11.5px;color:#475569;}
+  .leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+  .leg-divider{width:100%;height:1px;background:#f1f5f9;margin:7px 0;}
+  .leg-key{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;font-family:'Fira Code',monospace;}
+  .pk{background:#fef3c7;color:#92400e;}
+  .fk{background:#dbeafe;color:#1e40af;}
+
+  /* ── Info panel ── */
+  #info-panel{position:fixed;bottom:16px;left:16px;background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:12px 16px;z-index:90;font-size:12px;max-width:320px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+  #info-panel h3{font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;}
+  .flow-step{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:11.5px;color:#475569;line-height:1.5;}
+  .flow-num{width:18px;height:18px;border-radius:50%;background:#2563eb;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+  .flow-num.green{background:#16a34a;}
+  .flow-num.purple{background:#7c3aed;}
+  .flow-num.amber{background:#d97706;}
+
+  /* ── Canvas ── */
+  #canvas-wrap{position:fixed;top:50px;left:0;right:0;bottom:0;overflow:hidden;cursor:grab;}
+  #canvas-wrap.dragging{cursor:grabbing;}
+  #canvas{position:absolute;top:0;left:0;transform-origin:0 0;}
+  #relations-svg{position:absolute;top:0;left:0;pointer-events:none;}
+
+  /* ── Section labels ── */
+  .section-label{position:absolute;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:3px 10px;border-radius:4px;opacity:.7;}
+
+  /* ── Table cards ── */
+  .tbl-card{position:absolute;background:#fff;border-radius:10px;border:1.5px solid #e2e8f0;min-width:220px;max-width:255px;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:box-shadow .15s,border-color .15s;}
+  .tbl-card:hover{box-shadow:0 4px 18px rgba(0,0,0,.12);z-index:10;}
+  .tbl-head{padding:9px 12px 8px;border-radius:8px 8px 0 0;display:flex;align-items:center;gap:7px;}
+  .tbl-name{font-size:12px;font-weight:700;color:#fff;font-family:'Fira Code',monospace;letter-spacing:-.2px;}
+  .tbl-module-label{font-size:9.5px;font-weight:600;opacity:.8;color:#fff;margin-top:1px;}
+  .tbl-icon{font-size:15px;}
+  .tbl-row-count{margin-left:auto;font-size:9.5px;background:rgba(255,255,255,.2);color:#fff;border-radius:10px;padding:1px 7px;font-weight:600;}
+  .tbl-cols{padding:3px 0 5px;}
+  .col-row{display:flex;align-items:center;padding:3px 12px;font-size:11px;border-bottom:1px solid #f8fafc;}
+  .col-row:last-child{border-bottom:none;}
+  .col-row:hover{background:#f8fafc;}
+  .col-badge{font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;margin-right:6px;font-family:'Fira Code',monospace;flex-shrink:0;width:20px;text-align:center;}
+  .col-badge.pk{background:#fef3c7;color:#92400e;}
+  .col-badge.fk{background:#dbeafe;color:#1e40af;}
+  .col-badge.empty{background:transparent;}
+  .col-name{font-family:'Fira Code',monospace;font-size:10.5px;color:#334155;flex:1;}
+  .col-name.pk-name{color:#92400e;font-weight:600;}
+  .col-name.fk-name{color:#1e40af;font-weight:500;}
+  .col-type{font-size:9px;color:#94a3b8;margin-left:6px;font-family:'Fira Code',monospace;white-space:nowrap;}
+
+  /* module header colors */
+  .mod-studio  .tbl-head{background:linear-gradient(90deg,#1d4ed8,#3b82f6);}
+  .mod-gallery .tbl-head{background:linear-gradient(90deg,#15803d,#22c55e);}
+  .mod-equip   .tbl-head{background:linear-gradient(90deg,#b45309,#f59e0b);}
+  .mod-shoot   .tbl-head{background:linear-gradient(90deg,#6d28d9,#8b5cf6);}
+  .mod-portal  .tbl-head{background:linear-gradient(90deg,#be185d,#ec4899);}
+  .mod-invoice .tbl-head{background:linear-gradient(90deg,#0f766e,#14b8a6);}
+  .mod-website .tbl-head{background:linear-gradient(90deg,#374151,#6b7280);}
+  .mod-mobile  .tbl-head{background:linear-gradient(90deg,#0369a1,#0ea5e9);}
+
+  /* border color per module */
+  .mod-studio  {border-color:#bfdbfe;}
+  .mod-gallery {border-color:#bbf7d0;}
+  .mod-equip   {border-color:#fde68a;}
+  .mod-shoot   {border-color:#ddd6fe;}
+  .mod-portal  {border-color:#fbcfe8;}
+  .mod-invoice {border-color:#99f6e4;}
+  .mod-website {border-color:#e5e7eb;}
+  .mod-mobile  {border-color:#bae6fd;}
+
+  /* ── Relation lines ── */
+  .rel-line{stroke-width:1.5;fill:none;}
+  .rel-studio {stroke:#3b82f6;opacity:.6;}
+  .rel-gallery{stroke:#22c55e;opacity:.6;}
+  .rel-equip  {stroke:#f59e0b;opacity:.6;}
+  .rel-shoot  {stroke:#8b5cf6;opacity:.7;}
+  .rel-portal {stroke:#ec4899;opacity:.6;}
+  .rel-invoice{stroke:#14b8a6;opacity:.6;}
+  .rel-website{stroke:#6b7280;opacity:.5;}
+  .rel-mobile {stroke:#0ea5e9;opacity:.6;}
+
+  /* search dim/highlight */
+  .tbl-card.dimmed{opacity:.12;}
+  .tbl-card.highlighted{box-shadow:0 0 0 2.5px #2563eb,0 4px 18px rgba(37,99,235,.2);z-index:20;border-color:#2563eb;}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div id="topbar">
+  <h1>DB Schema <span>— Zoho Photography Platform</span></h1>
+  <div class="tb-divider"></div>
+  <button class="tb-btn" onclick="zoom(-0.1)">−</button>
+  <div id="zoom-val">75%</div>
+  <button class="tb-btn" onclick="zoom(0.1)">+</button>
+  <button class="tb-btn" onclick="resetView()">Fit</button>
+  <div class="tb-divider"></div>
+  <input id="search-box" type="text" placeholder="Search tables or columns…" oninput="searchTables(this.value)"/>
+  <div class="spacer"></div>
+  <span style="font-size:11.5px;color:#94a3b8;">24 tables · Drag to pan · Scroll to zoom</span>
+</div>
+
+<!-- Legend -->
+<div id="legend">
+  <h3>Modules</h3>
+  <div class="leg-row"><div class="leg-dot" style="background:#3b82f6;"></div>Studio Desk</div>
+  <div class="leg-row"><div class="leg-dot" style="background:#22c55e;"></div>Gallery Room</div>
+  <div class="leg-row"><div class="leg-dot" style="background:#f59e0b;"></div>Equipment Inventory</div>
+  <div class="leg-row"><div class="leg-dot" style="background:#8b5cf6;"></div>Shoot Planning</div>
+  <div class="leg-row"><div class="leg-dot" style="background:#ec4899;"></div>Client Portal</div>
+  <div class="leg-row"><div class="leg-dot" style="background:#14b8a6;"></div>Invoices</div>
+  <div class="leg-row"><div class="leg-dot" style="background:#6b7280;"></div>Website</div>
+  <div class="leg-row"><div class="leg-dot" style="background:#0ea5e9;"></div>Mobile App</div>
+  <div class="leg-divider"></div>
+  <div class="leg-row"><span class="leg-key pk">PK</span>&nbsp;Primary Key</div>
+  <div class="leg-row"><span class="leg-key fk">FK</span>&nbsp;Foreign Key</div>
+</div>
+
+<!-- Shoot Planning flow info -->
+<div id="info-panel">
+  <h3>How Shoot Planning connects everything</h3>
+  <div class="flow-step"><div class="flow-num">1</div><span><strong>Client books</strong> via Lead Inbox → creates a <em>lead</em> record linked to <em>clients</em></span></div>
+  <div class="flow-step"><div class="flow-num">2</div><span><strong>Shoot is planned</strong> from the booking → <em>shoots</em> references both <em>clients</em> &amp; <em>leads</em></span></div>
+  <div class="flow-step"><div class="flow-num purple">3</div><span><strong>Crew assigned</strong> via <em>shoot_team</em> (junction → <em>staff</em>)</span></div>
+  <div class="flow-step"><div class="flow-num amber">4</div><span><strong>Gear allocated</strong> via <em>shoot_gear</em> (junction → <em>equipment</em>); after shoot, <em>equipment_usage_log</em> records shutter count &amp; condition per item</span></div>
+  <div class="flow-step"><div class="flow-num green">5</div><span><strong>Output</strong>: <em>galleries</em>, <em>invoices</em>, <em>client_portal_albums</em> all FK → shoot_id</span></div>
+</div>
+
+<!-- Canvas -->
+<div id="canvas-wrap">
+  <div id="canvas">
+    <svg id="relations-svg" width="5000" height="4000"></svg>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// TABLE DEFINITIONS  — laid out so shoots sits at center
+// ═══════════════════════════════════════════════════════════════
+//
+//  ZONE MAP (approx):
+//
+//  [clients]  [leads]   [staff]         ← Studio Desk row
+//  [contracts][invoices]
+//
+//  [shoots] ←─ center of shoot zone
+//    ├── [shoot_team] ─→ staff
+//    ├── [shoot_gear] ─→ equipment
+//    └── [equipment_usage_log]
+//
+//  [equipment][service_records][consumables]   ← Equipment row
+//
+//  [galleries][gallery_photos][editing_queue]  ← Gallery row
+//  [client_portal_albums][client_portal_pages][client_portal_slots]
+//  [website_pages][store_products][store_orders]
+//  [mobile_app_sessions][push_notifications][app_branding]
+
+var TABLES = [
+
+  // ── STUDIO DESK ──────────────────────────────────────────────
+  { id:'clients', name:'clients', module:'studio', icon:'👤', label:'Studio Desk',
+    x:80, y:80,
+    cols:[
+      {k:'PK',n:'client_id',t:'VARCHAR(20)'},
+      {k:'',n:'name',t:'VARCHAR(120)'},
+      {k:'',n:'email',t:'VARCHAR(120)'},
+      {k:'',n:'phone',t:'VARCHAR(20)'},
+      {k:'',n:'shoot_types',t:'VARCHAR(200)'},
+      {k:'',n:'total_sessions',t:'INT'},
+      {k:'',n:'total_spent',t:'DECIMAL(10,2)'},
+      {k:'',n:'last_session_date',t:'DATE'},
+      {k:'',n:'status',t:"ENUM('active','inactive')"},
+      {k:'',n:'notes',t:'TEXT'},
+      {k:'',n:'created_at',t:'DATETIME'},
+    ]
+  },
+  { id:'leads', name:'leads', module:'studio', icon:'📥', label:'Studio Desk — Lead Inbox / Bookings',
+    x:360, y:80,
+    cols:[
+      {k:'PK',n:'lead_id',t:'VARCHAR(20)'},
+      {k:'FK',n:'client_id',t:'VARCHAR(20)'},
+      {k:'',n:'email',t:'VARCHAR(120)'},
+      {k:'',n:'source',t:"ENUM('Website Form','Social','Walk-in','Instagram','Referral')"},
+      {k:'',n:'shoot_type',t:"ENUM('Wedding','Portrait','Engagement','Corporate','Event','Commercial')"},
+      {k:'',n:'preferred_date',t:'DATE'},
+      {k:'',n:'budget',t:'DECIMAL(10,2)'},
+      {k:'',n:'status',t:"ENUM('enquiry','qualified','confirmed','completed','lost')"},
+      {k:'',n:'followup_note',t:'VARCHAR(200)'},
+      {k:'',n:'converted_at',t:'DATETIME'},
+      {k:'',n:'created_at',t:'DATETIME'},
+    ]
+  },
+  { id:'staff', name:'staff', module:'studio', icon:'🧑‍💼', label:'Studio Desk',
+    x:660, y:80,
+    cols:[
+      {k:'PK',n:'staff_id',t:'VARCHAR(20)'},
+      {k:'',n:'name',t:'VARCHAR(100)'},
+      {k:'',n:'role',t:"ENUM('Lead Photographer','Junior Photographer','Light Man','Lighting Assistant','Studio Manager')"},
+      {k:'',n:'email',t:'VARCHAR(120)'},
+      {k:'',n:'phone',t:'VARCHAR(20)'},
+      {k:'',n:'initials',t:'CHAR(3)'},
+      {k:'',n:'avatar_color',t:'CHAR(7)'},
+      {k:'',n:'is_active',t:'BOOLEAN'},
+    ]
+  },
+  { id:'contracts', name:'contracts', module:'studio', icon:'📝', label:'Studio Desk — Contracts',
+    x:80, y:420,
+    cols:[
+      {k:'PK',n:'contract_id',t:'VARCHAR(20)'},
+      {k:'FK',n:'client_id',t:'VARCHAR(20)'},
+      {k:'FK',n:'lead_id',t:'VARCHAR(20)'},
+      {k:'',n:'type',t:"ENUM('Wedding','Headshots','Event','Engagement','Portrait','Commercial')"},
+      {k:'',n:'contract_value',t:'DECIMAL(10,2)'},
+      {k:'',n:'sent_at',t:'DATE'},
+      {k:'',n:'signed_at',t:'DATE'},
+      {k:'',n:'status',t:"ENUM('draft','sent','signed','expired')"},
+      {k:'',n:'zoho_status',t:'VARCHAR(50)'},
+      {k:'',n:'pdf_url',t:'TEXT'},
+      {k:'',n:'created_at',t:'DATETIME'},
+    ]
+  },
+
+  // ── SHOOT PLANNING  (central zone) ───────────────────────────
+  { id:'shoots', name:'shoots', module:'shoot', icon:'📸', label:'Shoot Planning — Core',
+    x:960, y:280,
+    cols:[
+      {k:'PK',n:'shoot_id',t:'VARCHAR(20)'},
+      {k:'FK',n:'client_id',t:'VARCHAR(20)  → clients'},
+      {k:'FK',n:'lead_id',t:'VARCHAR(20)  → leads'},
+      {k:'',n:'shoot_name',t:'VARCHAR(200)'},
+      {k:'',n:'shoot_date',t:'DATE'},
+      {k:'',n:'call_time',t:'TIME'},
+      {k:'',n:'location',t:'VARCHAR(200)'},
+      {k:'',n:'address',t:'TEXT'},
+      {k:'',n:'shoot_type',t:"ENUM('Wedding','Portrait','Engagement','Corporate','Event','Commercial','Maternity','Newborn')"},
+      {k:'',n:'status',t:"ENUM('pending','allocated','in_progress','completed')"},
+      {k:'',n:'completion_notes',t:'TEXT'},
+      {k:'',n:'created_at',t:'DATETIME'},
+    ]
+  },
+  { id:'shoot_team', name:'shoot_team', module:'shoot', icon:'👥', label:'Shoot Planning — Crew',
+    x:1260, y:140,
+    cols:[
+      {k:'PK',n:'id',t:'INT AUTO_INCREMENT'},
+      {k:'FK',n:'shoot_id',t:'VARCHAR(20)  → shoots'},
+      {k:'FK',n:'staff_id',t:'VARCHAR(20)  → staff'},
+      {k:'',n:'role_override',t:'VARCHAR(100)'},
+    ]
+  },
+  { id:'shoot_gear', name:'shoot_gear', module:'shoot', icon:'🎒', label:'Shoot Planning — Gear Allocation',
+    x:1260, y:380,
+    cols:[
+      {k:'PK',n:'id',t:'INT AUTO_INCREMENT'},
+      {k:'FK',n:'shoot_id',t:'VARCHAR(20)  → shoots'},
+      {k:'FK',n:'equipment_id',t:'VARCHAR(20)  → equipment'},
+      {k:'',n:'allocated_at',t:'DATETIME'},
+      {k:'',n:'returned_at',t:'DATETIME'},
+    ]
+  },
+  { id:'equipment_usage_log', name:'equipment_usage_log', module:'shoot', icon:'📋', label:'Shoot Planning — Post-Shoot Log',
+    x:960, y:560,
+    cols:[
+      {k:'PK',n:'log_id',t:'INT AUTO_INCREMENT'},
+      {k:'FK',n:'shoot_id',t:'VARCHAR(20)  → shoots'},
+      {k:'FK',n:'equipment_id',t:'VARCHAR(20)  → equipment'},
+      {k:'',n:'shutter_shots_added',t:'INT'},
+      {k:'',n:'returned',t:'BOOLEAN'},
+      {k:'',n:'return_condition',t:"ENUM('Excellent','Good','Fair','Damaged')"},
+      {k:'',n:'notes',t:'TEXT'},
+      {k:'',n:'logged_at',t:'DATETIME'},
+    ]
+  },
+
+  // ── EQUIPMENT INVENTORY ──────────────────────────────────────
+  { id:'equipment', name:'equipment', module:'equip', icon:'📷', label:'Equipment Inventory',
+    x:1600, y:280,
+    cols:[
+      {k:'PK',n:'equipment_id',t:'VARCHAR(20)'},
+      {k:'',n:'name',t:'VARCHAR(150)'},
+      {k:'',n:'category',t:"ENUM('Camera','Lens','Lighting','Memory','Accessory')"},
+      {k:'',n:'serial_number',t:'VARCHAR(50)'},
+      {k:'',n:'brand',t:'VARCHAR(80)'},
+      {k:'',n:'status',t:"ENUM('available','checkout','service','damaged','lost')"},
+      {k:'',n:'condition',t:"ENUM('Excellent','Good','Fair','Needs Repair')"},
+      {k:'',n:'location',t:'VARCHAR(150)'},
+      {k:'',n:'purchase_year',t:'YEAR'},
+      {k:'',n:'insurance_value',t:'DECIMAL(10,2)'},
+      {k:'',n:'warranty_expires',t:'DATE'},
+      {k:'',n:'shutter_count',t:'INT  (cameras only)'},
+      {k:'',n:'service_every',t:'INT  (cameras only)'},
+      {k:'',n:'next_service_due',t:'DATE'},
+      {k:'',n:'created_at',t:'DATETIME'},
+    ]
+  },
+  { id:'service_records', name:'service_records', module:'equip', icon:'🔧', label:'Equipment — Service Due Tracker',
+    x:1600, y:680,
+    cols:[
+      {k:'PK',n:'service_id',t:'INT AUTO_INCREMENT'},
+      {k:'FK',n:'equipment_id',t:'VARCHAR(20)  → equipment'},
+      {k:'',n:'service_date',t:'DATE'},
+      {k:'',n:'service_type',t:"ENUM('Routine','Repair','Calibration','Sensor Clean')"},
+      {k:'',n:'provider',t:'VARCHAR(150)'},
+      {k:'',n:'cost',t:'DECIMAL(8,2)'},
+      {k:'',n:'notes',t:'TEXT'},
+      {k:'',n:'next_due_date',t:'DATE'},
+    ]
+  },
+  { id:'consumables', name:'consumables', module:'equip', icon:'📦', label:'Equipment — Consumables Stock',
+    x:1900, y:680,
+    cols:[
+      {k:'PK',n:'consumable_id',t:'INT AUTO_INCREMENT'},
+      {k:'',n:'name',t:'VARCHAR(100)'},
+      {k:'',n:'category',t:'VARCHAR(60)'},
+      {k:'',n:'sku',t:'VARCHAR(50)'},
+      {k:'',n:'current_stock',t:'INT'},
+      {k:'',n:'reorder_level',t:'INT'},
+      {k:'',n:'unit',t:'VARCHAR(20)'},
+      {k:'',n:'cost_per_unit',t:'DECIMAL(8,2)'},
+      {k:'',n:'supplier',t:'VARCHAR(150)'},
+      {k:'',n:'last_restocked',t:'DATE'},
+    ]
+  },
+
+  // ── INVOICES ─────────────────────────────────────────────────
+  { id:'invoices', name:'invoices', module:'invoice', icon:'🧾', label:'Invoices',
+    x:360, y:420,
+    cols:[
+      {k:'PK',n:'invoice_num',t:'VARCHAR(20)'},
+      {k:'FK',n:'client_id',t:'VARCHAR(20)  → clients'},
+      {k:'FK',n:'shoot_id',t:'VARCHAR(20)  → shoots'},
+      {k:'FK',n:'contract_id',t:'VARCHAR(20)  → contracts'},
+      {k:'',n:'invoice_type',t:"ENUM('shoot','store','package','retainer')"},
+      {k:'',n:'description',t:'TEXT'},
+      {k:'',n:'issued_at',t:'DATE'},
+      {k:'',n:'due_at',t:'DATE'},
+      {k:'',n:'amount',t:'DECIMAL(10,2)'},
+      {k:'',n:'tax_amount',t:'DECIMAL(10,2)'},
+      {k:'',n:'discount',t:'DECIMAL(10,2)'},
+      {k:'',n:'status',t:"ENUM('draft','sent','paid','overdue','partial')"},
+      {k:'',n:'payment_method',t:'VARCHAR(60)'},
+      {k:'',n:'notes',t:'TEXT'},
+      {k:'',n:'zoho_synced',t:'BOOLEAN'},
+      {k:'',n:'created_at',t:'DATETIME'},
+    ]
+  },
+
+  // ── GALLERY ROOM ─────────────────────────────────────────────
+  { id:'galleries', name:'galleries', module:'gallery', icon:'🖼', label:'Gallery Room',
+    x:80, y:920,
+    cols:[
+      {k:'PK',n:'gallery_id',t:'VARCHAR(20)'},
+      {k:'FK',n:'shoot_id',t:'VARCHAR(20)  → shoots'},
+      {k:'FK',n:'client_id',t:'VARCHAR(20)  → clients'},
+      {k:'',n:'name',t:'VARCHAR(200)'},
+      {k:'',n:'gallery_type',t:"ENUM('Wedding','Engagement','Portrait','Corporate','Maternity','Newborn','Commercial','Event')"},
+      {k:'',n:'status',t:"ENUM('active','pending','delivered','archived')"},
+      {k:'',n:'total_photos',t:'INT'},
+      {k:'',n:'share_link',t:'VARCHAR(255)'},
+      {k:'',n:'password_hash',t:'VARCHAR(255)'},
+      {k:'',n:'watermark_enabled',t:'BOOLEAN'},
+      {k:'',n:'download_enabled',t:'BOOLEAN'},
+      {k:'',n:'expires_at',t:'DATETIME'},
+      {k:'',n:'delivered_at',t:'DATETIME'},
+      {k:'',n:'created_at',t:'DATETIME'},
+    ]
+  },
+  { id:'gallery_photos', name:'gallery_photos', module:'gallery', icon:'🌄', label:'Gallery Room — Photos',
+    x:380, y:920,
+    cols:[
+      {k:'PK',n:'photo_id',t:'INT AUTO_INCREMENT'},
+      {k:'FK',n:'gallery_id',t:'VARCHAR(20)  → galleries'},
+      {k:'',n:'filename',t:'VARCHAR(255)'},
+      {k:'',n:'storage_url',t:'TEXT'},
+      {k:'',n:'width_px',t:'INT'},
+      {k:'',n:'height_px',t:'INT'},
+      {k:'',n:'file_size_kb',t:'INT'},
+      {k:'',n:'is_favorited',t:'BOOLEAN'},
+      {k:'',n:'is_selected',t:'BOOLEAN'},
+      {k:'',n:'uploaded_at',t:'DATETIME'},
+    ]
+  },
+  { id:'editing_queue', name:'editing_queue', module:'gallery', icon:'✂️', label:'Gallery Room — Editing Queue',
+    x:660, y:920,
+    cols:[
+      {k:'PK',n:'edit_id',t:'VARCHAR(20)'},
+      {k:'FK',n:'gallery_id',t:'VARCHAR(20)  → galleries'},
+      {k:'FK',n:'shoot_id',t:'VARCHAR(20)  → shoots'},
+      {k:'',n:'stage',t:"ENUM('raw','culling','editing','export','delivered')"},
+      {k:'',n:'total_raw',t:'INT'},
+      {k:'',n:'culled',t:'INT'},
+      {k:'',n:'edited',t:'INT'},
+      {k:'',n:'editor',t:"ENUM('sarah','mike','extern','')"},
+      {k:'',n:'due_date',t:'DATE'},
+      {k:'',n:'is_priority',t:'BOOLEAN'},
+      {k:'',n:'notes',t:'TEXT'},
+    ]
+  },
+
+  // ── CLIENT PORTAL ─────────────────────────────────────────────
+  { id:'client_portal_albums', name:'client_portal_albums', module:'portal', icon:'📒', label:'Client Portal — Albums',
+    x:80, y:1280,
+    cols:[
+      {k:'PK',n:'album_id',t:'VARCHAR(20)'},
+      {k:'FK',n:'shoot_id',t:'VARCHAR(20)  → shoots'},
+      {k:'FK',n:'client_id',t:'VARCHAR(20)  → clients'},
+      {k:'',n:'name',t:'VARCHAR(200)'},
+      {k:'',n:'cover_style',t:"ENUM('gradient','minimal','dark','rose')"},
+      {k:'',n:'total_pages',t:'INT'},
+      {k:'',n:'is_locked',t:'BOOLEAN'},
+      {k:'',n:'created_at',t:'DATETIME'},
+      {k:'',n:'updated_at',t:'DATETIME'},
+    ]
+  },
+  { id:'client_portal_pages', name:'client_portal_pages', module:'portal', icon:'📄', label:'Client Portal — Album Pages',
+    x:360, y:1280,
+    cols:[
+      {k:'PK',n:'page_id',t:'INT AUTO_INCREMENT'},
+      {k:'FK',n:'album_id',t:'VARCHAR(20)  → client_portal_albums'},
+      {k:'',n:'page_num',t:'INT'},
+      {k:'',n:'title',t:'VARCHAR(150)'},
+      {k:'',n:'layout',t:"ENUM('full','split-h','split-v','featured','grid4','triple','text-left','text-right')"},
+      {k:'',n:'status',t:"ENUM('done','in-progress','pending')"},
+      {k:'',n:'is_cover',t:'BOOLEAN'},
+    ]
+  },
+  { id:'client_portal_slots', name:'client_portal_slots', module:'portal', icon:'🔲', label:'Client Portal — Page Slots',
+    x:660, y:1280,
+    cols:[
+      {k:'PK',n:'slot_id',t:'INT AUTO_INCREMENT'},
+      {k:'FK',n:'page_id',t:'INT  → client_portal_pages'},
+      {k:'FK',n:'photo_id',t:'INT  → gallery_photos'},
+      {k:'',n:'slot_type',t:"ENUM('photo','text','cover')"},
+      {k:'',n:'position',t:'INT'},
+      {k:'',n:'caption',t:'VARCHAR(300)'},
+      {k:'',n:'text_content',t:'TEXT'},
+    ]
+  },
+
+  // ── WEBSITE ───────────────────────────────────────────────────
+  { id:'website_pages', name:'website_pages', module:'website', icon:'🌐', label:'Website — Pages',
+    x:980, y:920,
+    cols:[
+      {k:'PK',n:'page_id',t:'INT AUTO_INCREMENT'},
+      {k:'',n:'title',t:'VARCHAR(150)'},
+      {k:'',n:'slug',t:'VARCHAR(100)'},
+      {k:'',n:'status',t:"ENUM('published','draft')"},
+      {k:'',n:'views',t:'INT'},
+      {k:'',n:'meta_title',t:'VARCHAR(200)'},
+      {k:'',n:'meta_desc',t:'VARCHAR(300)'},
+      {k:'',n:'last_edited',t:'DATETIME'},
+      {k:'',n:'published_at',t:'DATETIME'},
+    ]
+  },
+  { id:'store_products', name:'store_products', module:'website', icon:'🛍', label:'Website — Store Products',
+    x:1260, y:920,
+    cols:[
+      {k:'PK',n:'product_id',t:'VARCHAR(20)'},
+      {k:'',n:'name',t:'VARCHAR(150)'},
+      {k:'',n:'category',t:"ENUM('fine_art_print','photo_album','digital_download','package')"},
+      {k:'',n:'price',t:'DECIMAL(10,2)'},
+      {k:'',n:'description',t:'TEXT'},
+      {k:'',n:'sku',t:'VARCHAR(50)'},
+      {k:'',n:'stock_qty',t:'INT'},
+      {k:'',n:'is_active',t:'BOOLEAN'},
+      {k:'',n:'image_url',t:'TEXT'},
+      {k:'',n:'created_at',t:'DATETIME'},
+    ]
+  },
+  { id:'store_orders', name:'store_orders', module:'website', icon:'🧺', label:'Website — Store Orders',
+    x:1560, y:920,
+    cols:[
+      {k:'PK',n:'order_id',t:'VARCHAR(20)'},
+      {k:'FK',n:'client_id',t:'VARCHAR(20)  → clients'},
+      {k:'FK',n:'product_id',t:'VARCHAR(20)  → store_products'},
+      {k:'FK',n:'invoice_num',t:'VARCHAR(20)  → invoices'},
+      {k:'',n:'quantity',t:'INT'},
+      {k:'',n:'unit_price',t:'DECIMAL(10,2)'},
+      {k:'',n:'total_amount',t:'DECIMAL(10,2)'},
+      {k:'',n:'status',t:"ENUM('pending','processing','fulfilled','shipped','cancelled')"},
+      {k:'',n:'shipping_address',t:'TEXT'},
+      {k:'',n:'ordered_at',t:'DATETIME'},
+      {k:'',n:'fulfilled_at',t:'DATETIME'},
+    ]
+  },
+
+  // ── MOBILE APP ────────────────────────────────────────────────
+  { id:'mobile_app_sessions', name:'mobile_app_sessions', module:'mobile', icon:'📱', label:'Mobile App — Client Sessions',
+    x:980, y:1280,
+    cols:[
+      {k:'PK',n:'session_id',t:'INT AUTO_INCREMENT'},
+      {k:'FK',n:'client_id',t:'VARCHAR(20)  → clients'},
+      {k:'FK',n:'gallery_id',t:'VARCHAR(20)  → galleries'},
+      {k:'',n:'device_type',t:"ENUM('iOS','Android')"},
+      {k:'',n:'app_version',t:'VARCHAR(20)'},
+      {k:'',n:'device_model',t:'VARCHAR(100)'},
+      {k:'',n:'session_start',t:'DATETIME'},
+      {k:'',n:'session_end',t:'DATETIME'},
+      {k:'',n:'photos_downloaded',t:'INT'},
+      {k:'',n:'photos_favorited',t:'INT'},
+    ]
+  },
+  { id:'push_notifications', name:'push_notifications', module:'mobile', icon:'🔔', label:'Mobile App — Push Notifications',
+    x:1260, y:1280,
+    cols:[
+      {k:'PK',n:'notif_id',t:'INT AUTO_INCREMENT'},
+      {k:'FK',n:'client_id',t:'VARCHAR(20)  → clients'},
+      {k:'FK',n:'gallery_id',t:'VARCHAR(20)  → galleries'},
+      {k:'',n:'title',t:'VARCHAR(150)'},
+      {k:'',n:'body',t:'TEXT'},
+      {k:'',n:'notif_type',t:"ENUM('new_photos','download_reminder','gallery_expiry','promo')"},
+      {k:'',n:'sent_at',t:'DATETIME'},
+      {k:'',n:'opened_at',t:'DATETIME'},
+      {k:'',n:'device_token',t:'VARCHAR(255)'},
+    ]
+  },
+  { id:'app_branding', name:'app_branding', module:'mobile', icon:'🎨', label:'Mobile App — Branding Settings',
+    x:1560, y:1280,
+    cols:[
+      {k:'PK',n:'branding_id',t:'INT'},
+      {k:'',n:'studio_name',t:'VARCHAR(100)'},
+      {k:'',n:'primary_color',t:'CHAR(7)'},
+      {k:'',n:'accent_color',t:'CHAR(7)'},
+      {k:'',n:'logo_url',t:'TEXT'},
+      {k:'',n:'font_family',t:'VARCHAR(80)'},
+      {k:'',n:'welcome_message',t:'TEXT'},
+      {k:'',n:'updated_at',t:'DATETIME'},
+    ]
+  },
+];
+
+// ═══════════════════════════════════════════════════════════════
+// RELATIONSHIPS
+// ═══════════════════════════════════════════════════════════════
+var RELS = [
+  // Studio Desk internal
+  ['leads','clients','rel-studio'],
+  ['contracts','clients','rel-studio'],
+  ['contracts','leads','rel-studio'],
+
+  // Shoots — the central hub
+  ['shoots','clients','rel-shoot'],
+  ['shoots','leads','rel-shoot'],
+
+  // Shoot crew (junction)
+  ['shoot_team','shoots','rel-shoot'],
+  ['shoot_team','staff','rel-shoot'],
+
+  // Shoot gear (junction) — shows Equipment ↔ Shoot Planning link
+  ['shoot_gear','shoots','rel-shoot'],
+  ['shoot_gear','equipment','rel-shoot'],
+
+  // Post-shoot equipment log — shows Equipment ↔ Shoot Planning link
+  ['equipment_usage_log','shoots','rel-shoot'],
+  ['equipment_usage_log','equipment','rel-equip'],
+
+  // Equipment service
+  ['service_records','equipment','rel-equip'],
+
+  // Invoices
+  ['invoices','clients','rel-invoice'],
+  ['invoices','shoots','rel-invoice'],
+  ['invoices','contracts','rel-invoice'],
+
+  // Galleries
+  ['galleries','shoots','rel-gallery'],
+  ['galleries','clients','rel-gallery'],
+  ['gallery_photos','galleries','rel-gallery'],
+  ['editing_queue','galleries','rel-gallery'],
+  ['editing_queue','shoots','rel-gallery'],
+
+  // Client Portal
+  ['client_portal_albums','shoots','rel-portal'],
+  ['client_portal_albums','clients','rel-portal'],
+  ['client_portal_pages','client_portal_albums','rel-portal'],
+  ['client_portal_slots','client_portal_pages','rel-portal'],
+  ['client_portal_slots','gallery_photos','rel-portal'],
+
+  // Website / Store
+  ['store_orders','clients','rel-website'],
+  ['store_orders','store_products','rel-website'],
+  ['store_orders','invoices','rel-website'],
+
+  // Mobile App
+  ['mobile_app_sessions','clients','rel-mobile'],
+  ['mobile_app_sessions','galleries','rel-mobile'],
+  ['push_notifications','clients','rel-mobile'],
+  ['push_notifications','galleries','rel-mobile'],
+];
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════════════
+var canvas  = document.getElementById('canvas');
+var svgEl   = document.getElementById('relations-svg');
+var tblEls  = {};
+
+// Section background zones
+var zones = [
+  {label:'STUDIO DESK',     x:60,   y:55,   w:780,  h:150, color:'#eff6ff'},
+  {label:'SHOOT PLANNING',  x:920,  y:55,   w:580,  h:220, color:'#f5f3ff'},
+  {label:'EQUIPMENT INVENTORY', x:1560, y:55, w:420, h:220, color:'#fffbeb'},
+  {label:'INVOICES',        x:340,  y:395,  w:260,  h:185, color:'#f0fdfa'},
+  {label:'STUDIO DESK — CONTRACTS', x:60, y:395, w:260, h:185, color:'#eff6ff'},
+  {label:'SHOOT PLANNING (gear & crew)', x:920, y:275, w:580, h:480, color:'#f5f3ff'},
+  {label:'EQUIPMENT INVENTORY (service)', x:1560, y:650, w:420, h:240, color:'#fffbeb'},
+  {label:'GALLERY ROOM',    x:60,   y:895,  w:880,  h:250, color:'#f0fdf4'},
+  {label:'WEBSITE / STORE', x:960,  y:895,  w:880,  h:250, color:'#f9fafb'},
+  {label:'CLIENT PORTAL',   x:60,   y:1255, w:880,  h:200, color:'#fdf2f8'},
+  {label:'MOBILE APP',      x:960,  y:1255, w:880,  h:200, color:'#f0f9ff'},
+];
+
+zones.forEach(function(z){
+  var div = document.createElement('div');
+  div.style.cssText = 'position:absolute;left:'+z.x+'px;top:'+z.y+'px;width:'+z.w+'px;height:'+z.h+'px;background:'+z.color+';border-radius:12px;border:1.5px solid rgba(0,0,0,.06);';
+  var lbl = document.createElement('div');
+  lbl.style.cssText = 'position:absolute;top:6px;left:14px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:#94a3b8;font-family:Inter,sans-serif;';
+  lbl.textContent = z.label;
+  div.appendChild(lbl);
+  canvas.insertBefore(div, canvas.firstChild);
+});
+
+TABLES.forEach(function(t){
+  var card = document.createElement('div');
+  card.className = 'tbl-card mod-' + t.module;
+  card.id = 'tbl-' + t.id;
+  card.style.left = t.x + 'px';
+  card.style.top  = t.y + 'px';
+
+  var head = '<div class="tbl-head">'
+    + '<span class="tbl-icon">' + t.icon + '</span>'
+    + '<div><div class="tbl-name">' + t.name + '</div>'
+    + '<div class="tbl-module-label">' + t.label + '</div></div>'
+    + '</div>';
+
+  var cols = '<div class="tbl-cols">';
+  t.cols.forEach(function(c){
+    var isPK = c.k==='PK', isFK = c.k==='FK';
+    var typeShort = c.t.replace(/ENUM\([^)]+\)/,'ENUM(…)');
+    cols += '<div class="col-row">'
+      + '<span class="col-badge '+(isPK?'pk':isFK?'fk':'empty')+'">'+(c.k||'')+'</span>'
+      + '<span class="col-name'+(isPK?' pk-name':isFK?' fk-name':'')+'">'+ c.n.split(' ')[0] +'</span>'
+      + '<span class="col-type">'+typeShort+'</span>'
+      + '</div>';
+  });
+  cols += '</div>';
+  card.innerHTML = head + cols;
+  canvas.appendChild(card);
+  tblEls[t.id] = card;
+});
+
+// ── draw relations ──────────────────────────────────────────────
+function getCenter(el){
+  var l=parseInt(el.style.left)||0, t2=parseInt(el.style.top)||0;
+  var w=el.offsetWidth, h=el.offsetHeight;
+  return {x:l+w/2,y:t2+h/2,l:l,r:l+w,t:t2,b:t2+h,w:w,h:h};
+}
+
+var colMap={studio:'#3b82f6',gallery:'#22c55e',equip:'#f59e0b',shoot:'#8b5cf6',portal:'#ec4899',invoice:'#14b8a6',website:'#6b7280',mobile:'#0ea5e9'};
+
+function drawRels(){
+  svgEl.innerHTML='';
+  RELS.forEach(function(r){
+    var a=tblEls[r[0]], b=tblEls[r[1]];
+    if(!a||!b) return;
+    var ac=getCenter(a), bc=getCenter(b);
+    var x1,y1,x2,y2;
+    if(Math.abs(ac.x-bc.x)>Math.abs(ac.y-bc.y)){
+      if(ac.x<bc.x){x1=ac.r;y1=ac.y;x2=bc.l;y2=bc.y;}
+      else          {x1=ac.l;y1=ac.y;x2=bc.r;y2=bc.y;}
+    } else {
+      if(ac.y<bc.y){x1=ac.x;y1=ac.b;x2=bc.x;y2=bc.t;}
+      else          {x1=ac.x;y1=ac.t;x2=bc.x;y2=bc.b;}
+    }
+    var mx=(x1+x2)/2, my=(y1+y2)/2;
+    var path=document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d','M'+x1+','+y1+' C'+mx+','+y1+' '+mx+','+y2+' '+x2+','+y2);
+    path.setAttribute('class','rel-line '+r[2]);
+    svgEl.appendChild(path);
+    // arrowhead
+    var ang=Math.atan2(y2-my,x2-mx);
+    var arr=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    var ax=x2,ay=y2;
+    arr.setAttribute('points',ax+','+ay+' '+(ax-8*Math.cos(ang-.4))+','+(ay-8*Math.sin(ang-.4))+' '+(ax-8*Math.cos(ang+.4))+','+(ay-8*Math.sin(ang+.4)));
+    var cls=r[2].replace('rel-','');
+    arr.setAttribute('fill',colMap[cls]||'#94a3b8');
+    arr.setAttribute('opacity','0.65');
+    svgEl.appendChild(arr);
+  });
+}
+setTimeout(drawRels,120);
+
+// ── pan + zoom ──────────────────────────────────────────────────
+var wrap=document.getElementById('canvas-wrap');
+var scale=0.65, tx=30, ty=30;
+var dragging=false, startX, startY, startTx, startTy;
+
+function applyTransform(){
+  canvas.style.transform='translate('+tx+'px,'+ty+'px) scale('+scale+')';
+  document.getElementById('zoom-val').textContent=Math.round(scale*100)+'%';
+}
+applyTransform();
+
+wrap.addEventListener('mousedown',function(e){
+  if(e.target.closest('.tbl-card')) return;
+  dragging=true; startX=e.clientX; startY=e.clientY; startTx=tx; startTy=ty;
+  wrap.classList.add('dragging');
+});
+document.addEventListener('mousemove',function(e){
+  if(!dragging)return; tx=startTx+(e.clientX-startX); ty=startTy+(e.clientY-startY); applyTransform();
+});
+document.addEventListener('mouseup',function(){dragging=false;wrap.classList.remove('dragging');});
+wrap.addEventListener('wheel',function(e){
+  e.preventDefault();
+  var d=e.deltaY>0?-0.07:0.07;
+  var rect=wrap.getBoundingClientRect();
+  var mx=e.clientX-rect.left, my=e.clientY-rect.top;
+  var prev=scale; scale=Math.min(2,Math.max(0.15,scale+d));
+  tx+=mx*(1-scale/prev); ty+=my*(1-scale/prev); applyTransform();
+},{passive:false});
+function zoom(d){scale=Math.min(2,Math.max(0.15,scale+d));applyTransform();}
+function resetView(){scale=0.65;tx=30;ty=30;applyTransform();}
+
+// ── search ─────────────────────────────────────────────────────
+function searchTables(q){
+  q=q.toLowerCase().trim();
+  Object.keys(tblEls).forEach(function(id){
+    var el=tblEls[id];
+    if(!q){el.classList.remove('dimmed','highlighted');return;}
+    var tbl=TABLES.find(function(t){return t.id===id;});
+    var match=tbl.name.toLowerCase().includes(q)||tbl.label.toLowerCase().includes(q)
+      ||tbl.cols.some(function(c){return c.n.toLowerCase().includes(q)||c.t.toLowerCase().includes(q);});
+    el.classList.toggle('dimmed',!match);
+    el.classList.toggle('highlighted',match);
+  });
+}
+
+// touch
+var tlx,tly;
+wrap.addEventListener('touchstart',function(e){tlx=e.touches[0].clientX;tly=e.touches[0].clientY;});
+wrap.addEventListener('touchmove',function(e){
+  e.preventDefault();
+  tx+=e.touches[0].clientX-tlx; ty+=e.touches[0].clientY-tly;
+  tlx=e.touches[0].clientX;tly=e.touches[0].clientY;applyTransform();
+},{passive:false});
+</script>
+</body>
+</html>

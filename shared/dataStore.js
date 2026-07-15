@@ -6,7 +6,8 @@
 (function () {
   'use strict';
 
-  var INIT_KEY = 'zp_v2_initialized';
+  var INIT_KEY = 'zp_v4_initialized';
+  var BOOKINGS_VERSION = 'v3'; /* bump this to force-reseed bookings */
 
   var defaults = {
 
@@ -64,6 +65,41 @@
 
     equipment_status: {},  // key: serial → { status, assignedTo }
 
+    /* ── Shoots — single source of truth for ShootPlanning + Shoot Equipment Log ── */
+    shoots: [
+      { id:'SA-001', shootName:'Emma & Jake — Wedding',    date:'Jun 15, 2026', location:'Central Park',   type:'Wedding',    status:'completed',
+        team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-002',name:'Priya Nair',role:'Junior Photographer',initials:'PN',color:'#7c3aed'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'},{staffId:'STF-004',name:'Maya Chen',role:'Lighting Assistant',initials:'MC',color:'#059669'}],
+        gearItems:[{id:'EQ-001',name:'Sony A7R V',cat:'Camera',serial:'SON-A7RV-001'},{id:'EQ-002',name:'Sony A7R V (Backup)',cat:'Camera',serial:'SON-A7RV-002'},{id:'EQ-007',name:'Profoto B10X Plus',cat:'Lighting',serial:'PRO-B10X-001'},{id:'EQ-008',name:'Profoto B10X Plus (2nd)',cat:'Lighting',serial:'PRO-B10X-002'},{id:'EQ-004',name:'Sony 24-70mm f/2.8 GM II',cat:'Lens',serial:'SON-2470-001'},{id:'EQ-012',name:'Manfrotto 055 Tripod',cat:'Accessory',serial:'MAN-055-001'}],
+        rentalNeeds:[],
+        usageLog:{'EQ-001':{shots:847,returned:true,condition:'Excellent',notes:'Battery 40% on return'},'EQ-002':{shots:412,returned:true,condition:'Good',notes:''}},
+        completionNotes:'Clean shoot, client very happy' },
+      { id:'SA-002', shootName:'Nexus Corp — Headshots',   date:'Jun 17, 2026', location:'Studio 4',       type:'Corporate',  status:'allocated',
+        team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'}],
+        gearItems:[{id:'EQ-003',name:'Sony A1',cat:'Camera',serial:'SON-A1-001'},{id:'EQ-009',name:'Godox AD600 Pro',cat:'Lighting',serial:'GOD-600-001'},{id:'EQ-005',name:'Sony 85mm f/1.4 GM',cat:'Lens',serial:'SON-85GM-001'}],
+        rentalNeeds:[], usageLog:{}, completionNotes:'' },
+      { id:'SA-003', shootName:'Liu Family — Portrait',    date:'Jun 20, 2026', location:'Riverside Park', type:'Portrait',   status:'pending',
+        team:[{staffId:'STF-002',name:'Priya Nair',role:'Lead Photographer',initials:'PN',color:'#7c3aed'}],
+        gearItems:[], rentalNeeds:[], usageLog:{}, completionNotes:'' },
+      { id:'SA-004', shootName:'Sarah & Tom — Engagement', date:'Jun 22, 2026', location:'TBD',            type:'Engagement', status:'pending',
+        team:[], gearItems:[], rentalNeeds:[], usageLog:{}, completionNotes:'' },
+      { id:'SA-005', shootName:'Horizon Events — Gala',   date:'Jun 28, 2026', location:'Marriott Hotel',  type:'Event',      status:'pending',
+        team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-002',name:'Priya Nair',role:'Junior Photographer',initials:'PN',color:'#7c3aed'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'},{staffId:'STF-004',name:'Maya Chen',role:'Lighting Assistant',initials:'MC',color:'#059669'}],
+        gearItems:[], rentalNeeds:[], usageLog:{}, completionNotes:'' },
+      { id:'SA-006', shootName:'Patel — Wedding',          date:'Jul 1, 2026',  location:'ITC Hotel',       type:'Wedding',    status:'allocated',
+        team:[{staffId:'STF-001',name:'Alex Kumar',role:'Lead Photographer',initials:'AK',color:'#2563eb'},{staffId:'STF-002',name:'Priya Nair',role:'Junior Photographer',initials:'PN',color:'#7c3aed'},{staffId:'STF-003',name:'Ravi Singh',role:'Light Man',initials:'RS',color:'#d97706'},{staffId:'STF-004',name:'Maya Chen',role:'Lighting Assistant',initials:'MC',color:'#059669'}],
+        gearItems:[{id:'EQ-006',name:'Sony 135mm f/1.8 GM',cat:'Lens',serial:'SON-135G-001'},{id:'EQ-010',name:'SanDisk 256GB CFexpress ×3',cat:'Memory',serial:'SD-256-SET'},{id:'EQ-013',name:'Rode VideoMic Pro+',cat:'Accessory',serial:'ROD-VMP-001'},{id:'EQ-011',name:'Sony UHS-II 128GB',cat:'Memory',serial:'SON-128-001'}],
+        rentalNeeds:[], usageLog:{}, completionNotes:'' }
+    ],
+
+    /* ── Staff directory ── */
+    staff: [
+      { id:'STF-001', name:'Alex Kumar',   role:'Lead Photographer',   phone:'+65 9123 4567', initials:'AK', color:'#2563eb' },
+      { id:'STF-002', name:'Priya Nair',   role:'Junior Photographer', phone:'+65 8765 4321', initials:'PN', color:'#7c3aed' },
+      { id:'STF-003', name:'Ravi Singh',   role:'Light Man',           phone:'+65 9876 5432', initials:'RS', color:'#d97706' },
+      { id:'STF-004', name:'Maya Chen',    role:'Lighting Assistant',  phone:'+65 9111 2222', initials:'MC', color:'#059669' },
+      { id:'STF-005', name:'Thamizh S.',   role:'Studio Manager',      phone:'+65 9000 0001', initials:'TS', color:'#dc2626' }
+    ]
+
     /* ── Master equipment list — single source of truth ── */
     equipment: [
       { id:'EQ-001', name:'Sony A7R V',             cat:'Camera',    serial:'SON-A7RV-001', status:'available', condition:'Excellent', location:'Studio Cabinet A',  purchaseYear:2023, insuranceValue:'$3,800', warrantyExpires:'Dec 2026', shutterCount:45230, serviceEvery:50000, nextServiceDue:'Mar 2026' },
@@ -84,26 +120,40 @@
 
   /* ── Public API ────────────────────────────────────────────── */
   window.ZPData = {
-    _key: function (k) { return 'zp_' + k; },
+    _key: function (k) { return 'zpv4_' + k; },
 
     init: function () {
       var self = this;
-      /* always seed any key that doesn't exist yet (handles new keys added after first init) */
-      Object.keys(defaults).forEach(function (k) {
-        if (!localStorage.getItem(self._key(k))) {
-          localStorage.setItem(self._key(k), JSON.stringify(defaults[k]));
+      try {
+        /* Force-reseed bookings if version doesn't match */
+        if (localStorage.getItem('zpv4_bookings_ver') !== BOOKINGS_VERSION) {
+          try { localStorage.setItem(self._key('bookings'), JSON.stringify(defaults.bookings)); } catch(e) {}
+          try { localStorage.setItem('zpv4_bookings_ver', BOOKINGS_VERSION); } catch(e) {}
         }
-      });
-      localStorage.setItem(INIT_KEY, '1');
+        /* Seed any key that doesn't exist yet */
+        Object.keys(defaults).forEach(function (k) {
+          try {
+            if (!localStorage.getItem(self._key(k))) {
+              localStorage.setItem(self._key(k), JSON.stringify(defaults[k]));
+            }
+          } catch(e) {}
+        });
+        try { localStorage.setItem(INIT_KEY, '1'); } catch(e) {}
+      } catch(e) {}
     },
 
     get: function (k) {
-      try { return JSON.parse(localStorage.getItem(this._key(k))) || defaults[k] || []; }
-      catch (e) { return defaults[k] || []; }
+      try {
+        var v = JSON.parse(localStorage.getItem(this._key(k)));
+        /* treat null or empty array as missing — return defaults */
+        if (v === null || v === undefined) return defaults[k] || [];
+        if (Array.isArray(v) && v.length === 0 && defaults[k] && defaults[k].length) return defaults[k];
+        return v;
+      } catch (e) { return defaults[k] || []; }
     },
 
     set: function (k, v) {
-      localStorage.setItem(this._key(k), JSON.stringify(v));
+      try { localStorage.setItem(this._key(k), JSON.stringify(v)); } catch(e) {}
     },
 
     add: function (k, item) {

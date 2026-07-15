@@ -1105,46 +1105,65 @@ var OWNED_GEAR = [
   { name:'Manfrotto 055 Tripod', cat:'accessories',serial:'MAN-055-001',  status:'available' },
 ];
 
+/* ── Shoot type → how many of each category are needed ── */
 var SHOOT_NEEDS = {
-  'Wedding':    { cameras:2, lenses:2, lighting:2, memory:4, accessories:1 },
-  'Engagement': { cameras:1, lenses:1, lighting:1, memory:2, accessories:1 },
-  'Portrait':   { cameras:1, lenses:2, lighting:2, memory:2, accessories:1 },
-  'Corporate':  { cameras:1, lenses:1, lighting:1, memory:2, accessories:1 },
-  'Event':      { cameras:2, lenses:2, lighting:1, memory:4, accessories:0 },
-  'Commercial': { cameras:1, lenses:1, lighting:3, memory:2, accessories:1 },
+  'Wedding':    { Camera:2, Lens:2, Lighting:2, Memory:2, Accessory:1 },
+  'Engagement': { Camera:1, Lens:1, Lighting:1, Memory:1, Accessory:1 },
+  'Portrait':   { Camera:1, Lens:2, Lighting:2, Memory:1, Accessory:1 },
+  'Corporate':  { Camera:1, Lens:1, Lighting:1, Memory:1, Accessory:0 },
+  'Event':      { Camera:2, Lens:2, Lighting:1, Memory:2, Accessory:0 },
+  'Commercial': { Camera:1, Lens:1, Lighting:3, Memory:1, Accessory:1 },
 };
+var RENTAL_RATES = { Camera:250, Lens:120, Lighting:150, Memory:40, Accessory:60 };
+var CAT_LABEL    = { Camera:'Camera body', Lens:'Lens', Lighting:'Light / Flash', Memory:'Memory card', Accessory:'Accessory' };
 
-var RENTAL_RATES = { cameras:250, lenses:120, lighting:150, memory:40, accessories:60 };
+/* Load upcoming shoots from ZPData bookings (confirmed/qualified) */
+function getUpcomingShoots() {
+  if (typeof ZPData === 'undefined') return [];
+  return ZPData.get('bookings').filter(function(b){
+    return b.status === 'confirmed' || b.status === 'qualified';
+  });
+}
 
-// Static upcoming shoots for standalone page
-var UPCOMING_SHOOTS = [
-  { client:'Emma & Jake', date:'Jun 28, 2026', type:'Wedding',    budget:'$3,200' },
-  { client:'Nexus Corp',  date:'Jun 30, 2026', type:'Corporate',  budget:'$1,200' },
-  { client:'Liu Family',  date:'Jul 2, 2026',  type:'Portrait',   budget:'$650'  },
-  { client:'Sarah & Tom', date:'Jul 5, 2026',  type:'Engagement', budget:'$950'  },
-];
-
-function calcEquipForShoot(type) {
+/* ── Core check: given a shoot type, return per-item readiness from real inventory ── */
+function checkGearForShoot(type) {
   var needs = SHOOT_NEEDS[type] || SHOOT_NEEDS['Portrait'];
-  var avail = {
-    cameras:     OWNED_GEAR.filter(function(g){ return g.cat==='cameras'     && g.status==='available'; }).length,
-    lenses:      OWNED_GEAR.filter(function(g){ return g.cat==='lenses'      && g.status==='available'; }).length,
-    lighting:    OWNED_GEAR.filter(function(g){ return g.cat==='lighting'    && g.status==='available'; }).length,
-    memory:      OWNED_GEAR.filter(function(g){ return g.cat==='memory'      && g.status==='available'; }).length,
-    accessories: OWNED_GEAR.filter(function(g){ return g.cat==='accessories' && g.status==='available'; }).length,
-  };
-  var result = { own:[], rental:[], short:[], rentalCost:0 };
-  ['cameras','lenses','lighting','memory','accessories'].forEach(function(cat) {
-    var need = needs[cat]; var have = avail[cat];
-    var catLabel = { cameras:'Camera body', lenses:'Lens', lighting:'Light/Flash', memory:'Memory card', accessories:'Tripod/Accessory' }[cat];
-    if (have >= need) {
-      if (need > 0) result.own.push({ cat:cat, have:have, need:need, label:catLabel });
-    } else {
-      var owned = have; var short = need - have;
-      if (owned > 0) result.own.push({ cat:cat, have:owned, need:owned, label:catLabel });
-      result.rental.push({ cat:cat, qty:short, label:catLabel, cost:short*RENTAL_RATES[cat] });
-      result.rentalCost += short * RENTAL_RATES[cat];
-      result.short.push(cat);
+  var inventory = (typeof ZPData !== 'undefined') ? ZPData.get('equipment') : [];
+
+  var result = { items:[], conflicts:[], rentals:[], rentalCost:0, ready:true };
+
+  Object.keys(needs).forEach(function(cat) {
+    var qty = needs[cat];
+    if (!qty) return;
+
+    /* get all items of this category, sorted: available first */
+    var catItems = inventory.filter(function(e){ return e.cat === cat; });
+    var available = catItems.filter(function(e){ return e.status === 'available'; });
+    var unavailable = catItems.filter(function(e){ return e.status !== 'available'; });
+
+    for (var i = 0; i < qty; i++) {
+      if (i < available.length) {
+        /* we have a good item for slot i */
+        result.items.push({ cat:cat, name:available[i].name, serial:available[i].serial, status:'ready', statusLabel:'Available' });
+      } else {
+        /* check if there's an unavailable item that shows WHY */
+        var conflict = unavailable[i - available.length];
+        if (conflict) {
+          var why = conflict.status === 'damaged'  ? 'Damaged — needs repair' :
+                    conflict.status === 'checkout' ? 'Checked out to another shoot' :
+                    conflict.status === 'service'  ? 'In service / repair' :
+                    conflict.status === 'lost'     ? 'Reported lost' : 'Not available';
+          result.items.push({ cat:cat, name:conflict.name, serial:conflict.serial, status:'conflict', statusLabel:why });
+          result.conflicts.push({ cat:cat, name:conflict.name, why:why });
+          result.ready = false;
+        } else {
+          /* not in inventory at all — need to rent */
+          result.items.push({ cat:cat, name:'Rental — ' + CAT_LABEL[cat], serial:'', status:'rental', statusLabel:'Not in inventory — rent' });
+          result.rentals.push({ cat:cat, label:CAT_LABEL[cat], cost:RENTAL_RATES[cat] });
+          result.rentalCost += RENTAL_RATES[cat];
+          result.ready = false;
+        }
+      }
     }
   });
   return result;
@@ -1154,137 +1173,206 @@ function calcEquipForShoot(type) {
 function renderPlannerTable() {
   var tbody = document.getElementById('planner-tbody');
   if (!tbody) return;
+  var shoots = getUpcomingShoots();
   var typeColors = { Wedding:'#e11d48', Portrait:'#8b5cf6', Engagement:'#ec4899', Corporate:'#2563eb', Event:'#f59e0b', Commercial:'#0891b2' };
-  tbody.innerHTML = UPCOMING_SHOOTS.map(function(b, i) {
-    var eq = calcEquipForShoot(b.type);
-    var hasRental = eq.rental.length > 0;
+
+  if (!shoots.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="padding:32px;text-align:center;color:#94a3b8;font-size:14px;">No upcoming confirmed shoots.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = shoots.map(function(b, i) {
+    var check = checkGearForShoot(b.type);
     var tc = typeColors[b.type] || '#64748b';
-    var gearBadge = hasRental
-      ? '<span class="tbl-badge svc-soon"><span class="dot"></span>Rental Needed</span>'
-      : '<span class="tbl-badge svc-ok"><span class="dot"></span>All Gear Ready</span>';
-    var rentalCost = hasRental ? 'S$' + eq.rentalCost : '—';
-    return '<tr style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openShootDetail(' + i + ')" onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\'\'">' +
-      '<td style="padding:15px 20px;"><div style="font-size:15px;font-weight:700;color:#1a1d2e;">' + b.client + '</div><div style="font-size:12.5px;color:#94a3b8;margin-top:3px;">' + b.budget + ' session budget</div></td>' +
-      '<td style="padding:15px 20px;font-size:14px;font-weight:600;color:#1a1d2e;">' + b.date + '</td>' +
-      '<td style="padding:15px 20px;"><span style="font-size:13px;font-weight:700;background:' + tc + '18;color:' + tc + ';padding:5px 12px;border-radius:6px;">' + b.type + '</span></td>' +
-      '<td style="padding:15px 20px;">' + gearBadge + '</td>' +
-      '<td style="padding:15px 20px;font-size:15px;font-weight:700;color:' + (hasRental ? '#c2410c' : '#15803d') + ';">' + rentalCost + '</td>' +
-      '<td style="padding:15px 20px;text-align:center;"><button onclick="event.stopPropagation();openShootDetail(' + i + ')" class="tbl-btn primary"><i class="ti ti-eye"></i> Check Gear</button></td>' +
-    '</tr>';
+    var hasConflict = check.conflicts.length > 0;
+    var hasRental   = check.rentals.length > 0;
+
+    var gearBadge, gearCost;
+    if (check.ready) {
+      gearBadge = '<span class="tbl-badge svc-ok"><span class="dot"></span>All Gear Ready</span>';
+      gearCost  = '<span style="color:#15803d;font-weight:600;">—</span>';
+    } else if (hasConflict) {
+      gearBadge = '<span class="tbl-badge svc-overdue"><span class="dot"></span>' + check.conflicts.length + ' Item' + (check.conflicts.length>1?'s':'') + ' Unavailable</span>';
+      gearCost  = '<span style="color:#dc2626;font-weight:700;">Action needed</span>';
+    } else {
+      gearBadge = '<span class="tbl-badge svc-soon"><span class="dot"></span>Rental Needed</span>';
+      gearCost  = '<span style="color:#d97706;font-weight:700;">~S$' + check.rentalCost + '</span>';
+    }
+
+    /* mini conflict preview — show names of problem items */
+    var conflictPreview = '';
+    if (!check.ready) {
+      var issues = check.conflicts.concat(check.rentals.map(function(r){ return { name: CAT_LABEL[r.cat] + ' (not in inventory)', why:'' }; }));
+      conflictPreview = '<div style="font-size:11.5px;color:#dc2626;margin-top:4px;">'
+        + issues.slice(0,2).map(function(c){ return '⚠ ' + c.name; }).join(' · ')
+        + (issues.length > 2 ? ' +' + (issues.length-2) + ' more' : '')
+        + '</div>';
+    }
+
+    return '<tr style="border-bottom:1px solid #f1f5f9;cursor:pointer;" onclick="openShootGearDetail(' + i + ')" onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\'\'">'
+      + '<td style="padding:15px 20px;">'
+        + '<div style="font-size:15px;font-weight:700;color:#1a1d2e;">' + b.client + '</div>'
+        + '<div style="font-size:12px;color:#94a3b8;margin-top:2px;">' + (b.budget||'') + (b.budget?' · ':' ') + b.type + '</div>'
+        + conflictPreview
+      + '</td>'
+      + '<td style="padding:15px 20px;font-size:14px;font-weight:600;color:#374151;">' + b.date + '</td>'
+      + '<td style="padding:15px 20px;"><span style="font-size:12.5px;font-weight:700;background:' + tc + '18;color:' + tc + ';padding:5px 11px;border-radius:6px;">' + b.type + '</span></td>'
+      + '<td style="padding:15px 20px;">' + gearBadge + '</td>'
+      + '<td style="padding:15px 20px;">' + gearCost + '</td>'
+      + '<td style="padding:15px 20px;text-align:center;"><button onclick="event.stopPropagation();openShootGearDetail(' + i + ')" class="tbl-btn primary"><i class="ti ti-eye"></i> View Gear Plan</button></td>'
+    + '</tr>';
   }).join('');
 }
 
-/* ── Shoot gear detail overlay ── */
-function openShootDetail(idx) {
-  var b  = UPCOMING_SHOOTS[idx];
-  var eq = calcEquipForShoot(b.type);
-  var hasRental = eq.rental.length > 0;
-  var needs = SHOOT_NEEDS[b.type] || {};
-  var catLabels = { cameras:'Camera Bodies', lenses:'Lenses', lighting:'Lights / Flash', memory:'Memory Cards', accessories:'Tripods / Accessories' };
-  var gearStatusLbl = hasRental ? 'Rental Needed' : 'All Gear Ready';
-  var gearStatusCol = hasRental ? '#d97706' : '#15803d';
+/* ── Shoot gear detail overlay — shows specific item status ── */
+function openShootGearDetail(idx) {
+  var shoots = getUpcomingShoots();
+  var b = shoots[idx];
+  if (!b) return;
+  var check = checkGearForShoot(b.type);
+  var typeColors = { Wedding:'#e11d48', Portrait:'#8b5cf6', Engagement:'#ec4899', Corporate:'#2563eb', Event:'#f59e0b', Commercial:'#0891b2' };
+  var tc = typeColors[b.type] || '#64748b';
 
   var ex = document.getElementById('eq-detail-overlay'); if (ex) ex.remove();
   var ov = document.createElement('div');
   ov.id = 'eq-detail-overlay';
-  ov.style.cssText = 'position:fixed;top:0;left:250px;right:0;bottom:0;background:#fff;z-index:9990;overflow-y:auto;font-family:Inter,sans-serif;';
+  ov.style.cssText = 'position:fixed;top:0;left:250px;right:0;bottom:0;background:#f8fafc;z-index:9990;overflow-y:auto;font-family:Inter,sans-serif;';
   function closeOv() { ov.remove(); }
 
-  /* Top bar */
+  /* ── Top bar ── */
   var tb = document.createElement('div');
-  tb.style.cssText = 'background:#fff;border-bottom:1px solid #e2e8f0;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:2;';
+  tb.style.cssText = 'background:#fff;border-bottom:1px solid #e2e8f0;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:2;';
   var tLeft = document.createElement('div'); tLeft.style.cssText = 'display:flex;align-items:center;gap:12px;';
   var backBtn = document.createElement('button');
   backBtn.innerHTML = '<i class="ti ti-arrow-left" style="font-size:14px;"></i> Back';
-  backBtn.style.cssText = 'background:#f1f5f9;border:none;border-radius:8px;padding:8px 14px;cursor:pointer;color:#374151;font-size:13px;font-weight:600;font-family:Inter,sans-serif;display:flex;align-items:center;gap:6px;';
+  backBtn.style.cssText = 'background:#f1f5f9;border:none;border-radius:9px;padding:9px 16px;cursor:pointer;color:#374151;font-size:13px;font-weight:600;font-family:Inter,sans-serif;display:flex;align-items:center;gap:6px;';
   backBtn.addEventListener('click', closeOv);
   var titleDiv = document.createElement('div');
-  titleDiv.innerHTML = '<div style="font-size:16px;font-weight:700;color:#111827;">' + b.client + '</div>'
-    + '<div style="font-size:13px;color:#9ca3af;margin-top:1px;">' + b.date + ' · ' + b.type + ' Shoot</div>';
+  titleDiv.innerHTML = '<div style="font-size:16px;font-weight:800;color:#111827;">' + b.client + '</div>'
+    + '<div style="font-size:12.5px;color:#9ca3af;margin-top:1px;">' + b.date + ' · ' + b.type + '</div>';
   tLeft.appendChild(backBtn); tLeft.appendChild(titleDiv);
   var tRight = document.createElement('div'); tRight.style.cssText = 'display:flex;align-items:center;gap:10px;';
-  var gBadge = document.createElement('span');
-  gBadge.textContent = gearStatusLbl;
-  gBadge.style.cssText = 'font-size:13px;font-weight:600;color:' + gearStatusCol + ';border:1px solid ' + gearStatusCol + ';padding:5px 12px;border-radius:6px;';
+  var statusLabel = check.ready ? 'All Gear Ready' : (check.conflicts.length ? check.conflicts.length + ' Conflict' + (check.conflicts.length>1?'s':'') : 'Rental Needed');
+  var statusCol   = check.ready ? '#15803d' : '#dc2626';
+  var statusBg    = check.ready ? '#dcfce7'  : '#fee2e2';
+  var sBadge = document.createElement('span');
+  sBadge.innerHTML = (check.ready ? '<i class="ti ti-circle-check" style="font-size:13px;"></i> ' : '<i class="ti ti-alert-triangle" style="font-size:13px;"></i> ') + statusLabel;
+  sBadge.style.cssText = 'font-size:13px;font-weight:700;background:' + statusBg + ';color:' + statusCol + ';padding:7px 14px;border-radius:8px;display:flex;align-items:center;gap:6px;';
   var closeB = document.createElement('button');
   closeB.innerHTML = '<i class="ti ti-x" style="font-size:15px;"></i>';
-  closeB.style.cssText = 'padding:8px 10px;border:none;border-radius:8px;background:#f1f5f9;cursor:pointer;color:#6b7280;display:flex;align-items:center;';
+  closeB.style.cssText = 'padding:9px 12px;border:none;border-radius:9px;background:#f1f5f9;cursor:pointer;color:#6b7280;display:flex;align-items:center;';
   closeB.addEventListener('click', closeOv);
-  tRight.appendChild(gBadge); tRight.appendChild(closeB);
+  tRight.appendChild(sBadge); tRight.appendChild(closeB);
   tb.appendChild(tLeft); tb.appendChild(tRight);
   ov.appendChild(tb);
 
-  var cw = document.createElement('div'); cw.style.cssText = 'padding:0 0 40px;';
+  var cw = document.createElement('div'); cw.style.cssText = 'padding:20px 28px 50px;';
   ov.appendChild(cw);
 
-  function mkSection(title) {
-    var sec = document.createElement('div'); sec.style.cssText = 'padding:0 28px 20px;border-bottom:1px solid #edf0f5;';
-    var sh = document.createElement('div'); sh.style.cssText = 'padding:18px 0 10px;border-bottom:2px solid #e2e8f0;margin-bottom:4px;';
-    sh.innerHTML = '<span style="font-size:11px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:0.8px;">' + title + '</span>';
-    sec.appendChild(sh); return sec;
+  function mkCard(title, ico, icoColor) {
+    var card = document.createElement('div');
+    card.style.cssText = 'background:#fff;border:1px solid #e8edf3;border-radius:14px;margin-bottom:14px;overflow:hidden;';
+    var hdr = document.createElement('div');
+    hdr.style.cssText = 'padding:14px 20px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:8px;';
+    hdr.innerHTML = '<i class="ti ' + ico + '" style="font-size:15px;color:' + icoColor + ';"></i>'
+      + '<span style="font-size:13px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.6px;">' + title + '</span>';
+    card.appendChild(hdr);
+    return card;
   }
-  function mkGrid(sec) { var w = document.createElement('div'); w._rc = 0; sec.appendChild(w); return w; }
-  function addRow(w, label, value, valCol) {
-    if (w._rc % 2 === 0) { var row = document.createElement('div'); row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;column-gap:40px;padding:13px 0;border-bottom:1px solid #f0f2f5;'; w.appendChild(row); }
-    w._rc++;
-    var cell = document.createElement('div');
-    cell.innerHTML = '<div style="font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;">' + label + '</div>'
-      + '<div style="font-size:14px;color:' + (valCol||'#111827') + ';">' + (value||'—') + '</div>';
-    w.lastElementChild.appendChild(cell);
+
+  /* ── Summary banner ── */
+  if (!check.ready) {
+    var banner = document.createElement('div');
+    var isConflict = check.conflicts.length > 0;
+    banner.style.cssText = 'background:' + (isConflict?'#fff1f2':'#fffbeb') + ';border:1.5px solid ' + (isConflict?'#fecdd3':'#fde68a') + ';border-radius:12px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:flex-start;gap:12px;';
+    var issueList = check.conflicts.map(function(c){ return '<li style="margin-bottom:3px;"><strong>' + c.name + '</strong> — ' + c.why + '</li>'; }).join('')
+      + check.rentals.map(function(r){ return '<li style="margin-bottom:3px;">Need to rent: <strong>' + r.label + '</strong> (~S$' + r.cost + '/day)</li>'; }).join('');
+    banner.innerHTML = '<i class="ti ti-alert-triangle" style="font-size:20px;color:' + (isConflict?'#dc2626':'#d97706') + ';flex-shrink:0;margin-top:2px;"></i>'
+      + '<div><div style="font-size:14px;font-weight:700;color:#1a1d2e;margin-bottom:6px;">'
+        + (isConflict ? 'Action required before this shoot' : 'Some items need to be rented')
+      + '</div><ul style="font-size:13px;color:#374151;padding-left:16px;margin:0;">' + issueList + '</ul></div>';
+    cw.appendChild(banner);
   }
+
+  /* ── Per-item gear table ── */
+  var gearCard = mkCard('Gear Plan — ' + b.type + ' (' + check.items.length + ' items)', 'ti-camera', '#2563eb');
+  var table = document.createElement('table');
+  table.style.cssText = 'width:100%;border-collapse:collapse;';
+  table.innerHTML = '<thead><tr style="background:#f8fafc;">'
+    + '<th style="padding:10px 20px;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;text-align:left;border-bottom:1px solid #e8edf3;">Equipment</th>'
+    + '<th style="padding:10px 20px;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid #e8edf3;">Category</th>'
+    + '<th style="padding:10px 20px;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid #e8edf3;">Serial</th>'
+    + '<th style="padding:10px 20px;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid #e8edf3;">Status</th>'
+    + '</tr></thead>';
+  var tbody2 = document.createElement('tbody');
+  check.items.forEach(function(item, i) {
+    var isLast = i === check.items.length - 1;
+    var sc = item.status === 'ready'    ? '#15803d' :
+             item.status === 'conflict' ? '#dc2626' : '#d97706';
+    var sb = item.status === 'ready'    ? '#dcfce7' :
+             item.status === 'conflict' ? '#fee2e2' : '#fef9c3';
+    var icon = item.status === 'ready' ? 'ti-circle-check' : item.status === 'conflict' ? 'ti-alert-circle' : 'ti-shopping-cart';
+    var tr = document.createElement('tr');
+    tr.style.cssText = (isLast?'':'border-bottom:1px solid #f4f6fa;') + (item.status!=='ready'?'background:#fffcf5;':'');
+    tr.innerHTML = '<td style="padding:13px 20px;font-size:14px;font-weight:600;color:#111827;">' + item.name + '</td>'
+      + '<td style="padding:13px 20px;font-size:13px;color:#64748b;">' + item.cat + '</td>'
+      + '<td style="padding:13px 20px;font-size:12.5px;color:#94a3b8;font-family:monospace;">' + (item.serial||'—') + '</td>'
+      + '<td style="padding:13px 20px;">'
+        + '<span style="display:inline-flex;align-items:center;gap:5px;background:' + sb + ';color:' + sc + ';padding:4px 10px;border-radius:6px;font-size:12.5px;font-weight:600;">'
+          + '<i class="ti ' + icon + '" style="font-size:12px;"></i>' + item.statusLabel
+        + '</span>'
+      + '</td>';
+    tbody2.appendChild(tr);
+  });
+  table.appendChild(tbody2);
+  gearCard.appendChild(table);
+  cw.appendChild(gearCard);
+
+  /* ── Rental list card (if needed) ── */
+  if (check.rentals.length || check.conflicts.length) {
+    var rentalCard = mkCard('What to Rent / Resolve', 'ti-shopping-cart', '#d97706');
+    var rentalBody = document.createElement('div'); rentalBody.style.cssText = 'padding:4px 0;';
+
+    var allActions = check.conflicts.map(function(c){
+      return { icon:'ti-alert-circle', color:'#dc2626', bg:'#fff1f2', text:'<strong>' + c.name + '</strong> is ' + c.why, sub:'Find a replacement rental or resolve before shoot' };
+    }).concat(check.rentals.map(function(r){
+      return { icon:'ti-shopping-cart', color:'#d97706', bg:'#fffbeb', text:'Rent: <strong>1× ' + r.label + '</strong>', sub:'~S$' + r.cost + '/day · Contact rental store to book' };
+    }));
+
+    allActions.forEach(function(a, i) {
+      var row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:flex-start;gap:14px;padding:14px 20px;' + (i<allActions.length-1?'border-bottom:1px solid #f4f6fa;':'');
+      row.innerHTML = '<div style="width:36px;height:36px;border-radius:9px;background:' + a.bg + ';display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
+          + '<i class="ti ' + a.icon + '" style="font-size:17px;color:' + a.color + ';"></i></div>'
+        + '<div><div style="font-size:14px;color:#111827;">' + a.text + '</div>'
+          + '<div style="font-size:12.5px;color:#64748b;margin-top:3px;">' + a.sub + '</div></div>';
+      rentalBody.appendChild(row);
+    });
+
+    /* rental total */
+    if (check.rentalCost > 0) {
+      var totalRow = document.createElement('div');
+      totalRow.style.cssText = 'padding:12px 20px;border-top:2px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;background:#fffbeb;';
+      totalRow.innerHTML = '<span style="font-size:13px;color:#374151;font-weight:600;">Estimated rental cost</span>'
+        + '<span style="font-size:18px;font-weight:800;color:#d97706;">~S$' + check.rentalCost + '</span>';
+      rentalBody.appendChild(totalRow);
+    }
+    rentalCard.appendChild(rentalBody);
+    cw.appendChild(rentalCard);
+  }
+
+  /* ── Actions ── */
+  var actDiv = document.createElement('div'); actDiv.style.cssText = 'display:flex;flex-wrap:wrap;gap:10px;';
   function mkBtn(lbl, ico, primary, cb) {
     var btn = document.createElement('button');
-    btn.innerHTML = '<i class="ti ' + ico + '" style="font-size:14px;"></i><span>' + lbl + '</span>';
-    btn.style.cssText = 'padding:9px 18px;background:' + (primary?'#2563eb':'#fff') + ';color:' + (primary?'#fff':'#374151') + ';border:1px solid ' + (primary?'#2563eb':'#d1d5db') + ';border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;font-family:Inter,sans-serif;display:inline-flex;align-items:center;gap:7px;';
+    btn.innerHTML = '<i class="ti ' + ico + '" style="font-size:14px;"></i> ' + lbl;
+    btn.style.cssText = 'padding:10px 18px;background:' + (primary?'#2563eb':'#fff') + ';color:' + (primary?'#fff':'#374151') + ';border:1.5px solid ' + (primary?'#2563eb':'#d1d5db') + ';border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;display:inline-flex;align-items:center;gap:7px;';
     btn.addEventListener('click', cb); return btn;
   }
-
-  /* Section 1: Session Details */
-  var c1 = mkSection('Session Details');
-  var g1 = mkGrid(c1);
-  addRow(g1, 'Client / Event',  b.client);
-  addRow(g1, 'Shoot Date',      b.date);
-  addRow(g1, 'Shoot Type',      b.type);
-  addRow(g1, 'Session Budget',  b.budget);
-  addRow(g1, 'Photographer',    'Sarah Kim');
-  addRow(g1, 'Gear Status',     gearStatusLbl, gearStatusCol);
-  cw.appendChild(c1);
-
-  /* Section 2: Equipment Required */
-  var c2 = mkSection('Equipment Required — ' + b.type + ' Shoot');
-  var g2 = mkGrid(c2);
-  ['cameras','lenses','lighting','memory','accessories'].forEach(function(cat) {
-    addRow(g2, catLabels[cat], (needs[cat]||0) + ' needed');
-  });
-  cw.appendChild(c2);
-
-  /* Section 3: Own Gear Available */
-  var c3 = mkSection('Own Gear Available (' + eq.own.length + ' categories covered)');
-  if (eq.own.length === 0) {
-    var emp = document.createElement('div'); emp.style.cssText = 'padding:14px 0;font-size:14px;color:#9ca3af;';
-    emp.textContent = 'No owned gear fully available for this shoot type.'; c3.appendChild(emp);
-  } else {
-    var g3 = mkGrid(c3);
-    eq.own.forEach(function(item) { addRow(g3, catLabels[item.cat], item.need + '× ' + item.label + ' — in stock', '#15803d'); });
-  }
-  cw.appendChild(c3);
-
-  /* Section 4: Rental Required (if any) */
-  if (hasRental) {
-    var c4 = mkSection('Rental Required — ' + eq.rental.length + ' items · Total S$' + eq.rentalCost);
-    var g4 = mkGrid(c4);
-    eq.rental.forEach(function(r) { addRow(g4, catLabels[r.cat], r.qty + '× ' + r.label + ' — ~S$' + r.cost, '#d97706'); });
-    cw.appendChild(c4);
-  }
-
-  /* Section 5: Actions */
-  var c5 = mkSection('Actions');
-  var actBody = document.createElement('div'); actBody.style.cssText = 'padding-top:14px;display:flex;flex-wrap:wrap;gap:10px;';
-  actBody.appendChild(mkBtn('Go to Shoot Equipment Log', 'ti-arrow-right', true,  function(){ closeOv(); }));
-  if (hasRental) actBody.appendChild(mkBtn('Contact Rental Store', 'ti-phone', false, function(){ showToast('Rental store: +65 6123 4567 — Photo Rental SG'); }));
-  actBody.appendChild(mkBtn('Export Gear List', 'ti-download', false, function(){ showToast('Gear list exported for: ' + b.client); }));
-  c5.appendChild(actBody);
-  cw.appendChild(c5);
+  if (!check.ready) actDiv.appendChild(mkBtn('Contact Rental Store', 'ti-phone', true, function(){ showToast('Rental store: +65 6123 4567 — Photo Rental SG'); }));
+  actDiv.appendChild(mkBtn('Export Gear List', 'ti-download', false, function(){ showToast('Gear list exported for ' + b.client); }));
+  actDiv.appendChild(mkBtn('Go to Shoot Planning', 'ti-calendar', false, function(){ window.location.href='../ShootPlanning/ShootPlanning.html'; }));
+  cw.appendChild(actDiv);
 
   document.body.appendChild(ov);
 }
@@ -1433,9 +1521,9 @@ function openConsumableDetail(row) {
 function renderPlannerOnSwitch() { renderPlannerTable(); }
 </script>
 
+<script src="../shared/dataStore.js"></script>
 <script src="shootlog.js"></script>
 <script src="../shared/sidebar.js"></script>
-<script src="../shared/dataStore.js"></script>
 <script>
 /* ── Inject shutter count bars into camera rows from shared dataStore ── */
 (function injectShutterCounts() {
